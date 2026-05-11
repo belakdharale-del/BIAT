@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BIAT Risk Monitor | Système de Prédiction</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(17, 34, 64, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(35, 53, 84, 0.5);
+        }
+        .glass-card:hover {
+            border-color: rgba(100, 255, 218, 0.3);
+        }
+        .glow-text {
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#2a344e",
+                    "surface-container-low": "#101b33",
+                    "on-surface": "#d9e2ff",
+                    "inverse-on-surface": "#263049",
+                    "on-secondary-container": "#a5b5db",
+                    "outline": "#85948e",
+                    "error": "#ffb4ab",
+                    "primary-container": "#5ffbd6",
+                    "tertiary-container": "#fbe273",
+                    "on-tertiary-fixed": "#211b00",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#5ffbd6",
+                    "surface": "#07122a",
+                    "primary": "#ffffff",
+                    "on-tertiary-container": "#756400",
+                    "surface-container-lowest": "#030d25",
+                    "background": "#07122a",
+                    "surface-tint": "#38debb",
+                    "error-container": "#93000a",
+                    "on-secondary": "#20304f",
+                    "on-tertiary": "#393000",
+                    "on-surface-variant": "#bacac3",
+                    "secondary-fixed": "#d8e2ff",
+                    "tertiary-fixed": "#fbe273",
+                    "tertiary-fixed-dim": "#dec65a",
+                    "tertiary": "#ffffff",
+                    "secondary-container": "#374767",
+                    "surface-dim": "#07122a",
+                    "on-primary": "#00382d",
+                    "secondary": "#b6c6ed",
+                    "surface-container-high": "#1f2942",
+                    "surface-container-highest": "#2a344e",
+                    "on-primary-fixed": "#002019",
+                    "on-primary-fixed-variant": "#005142",
+                    "inverse-surface": "#d9e2ff",
+                    "on-error": "#690005",
+                    "outline-variant": "#3c4a45",
+                    "on-secondary-fixed-variant": "#374767",
+                    "secondary-fixed-dim": "#b6c6ed",
+                    "on-primary-container": "#00725e",
+                    "on-secondary-fixed": "#091b39",
+                    "on-background": "#d9e2ff",
+                    "surface-container": "#151f37",
+                    "inverse-primary": "#006b58",
+                    "on-tertiary-fixed-variant": "#534600",
+                    "surface-bright": "#2f3952",
+                    "primary-fixed-dim": "#38debb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "gutter": "16px",
+                    "container-padding": "24px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col h-full py-stack-lg z-50">
+<div class="px-gutter mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Vigilant Professionalism</p>
+</div>
+<nav class="flex-1 space-y-1 px-base">
+<a class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Global Dashboard</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">Risk Evolution</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Client Profiles</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Model Performance</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">AI Assistant</span>
+</a>
+</nav>
+<div class="px-gutter mb-stack-lg">
+<button class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-bold flex items-center justify-center gap-base">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                Critical Alerts
+            </button>
+</div>
+<div class="mt-auto px-base border-t border-outline-variant pt-stack-lg">
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 h-16 ml-[280px] bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant shadow-sm z-40 flex justify-between items-center px-container-padding">
+<div class="flex items-center gap-gutter">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-surface-container-lowest border-outline-variant rounded-full pl-10 pr-gutter py-2 text-sm focus:ring-2 focus:ring-primary-container outline-none transition-all w-64 focus:w-80" placeholder="Rechercher un dossier client..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-gutter">
+<button class="bg-primary text-on-primary px-gutter py-2 rounded-lg font-bold text-sm transition-transform active:scale-95">
+                Quick Action
+            </button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-base border-l border-outline-variant pl-gutter">
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-primary/20" data-alt="A professional headshot of a corporate banking executive in a modern workspace. The lighting is crisp and cool-toned, reflecting a high-authority financial environment. The background is a softly blurred office with blue accent lighting, maintaining the vigilant and professional aesthetic of the bank's internal tools." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2poofvlZjmVY5akOFqpoQ8oaJGRrFf8TGmE_gPucWRzCi91I5DoGPSxUywoiA60bghotQVJZZctDm2s8xf_lyhGz8NgjNtqHBE4Ic1riF4pXIUymzW4BEY2kOY9b_00s-aqTf5Xt6cE-RQazDC556JA_R6VyW2i6mCPx-vqVJFIjktY5WvV1pIZNDtF69osj_Tby8YTak01n1hhUREhDM2hydSGFi6cckrBMciA5Cfiqb6StERf7ECWRKDQeesImwdKQY3RQpvjY"/>
+<span class="font-label-md text-label-md text-primary">D. Ben Salem</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] mt-16 p-container-padding min-h-screen space-y-stack-lg">
+<!-- Hero Section -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container-high p-stack-lg border border-outline-variant">
+<div class="relative z-10 max-w-3xl">
+<span class="inline-block px-3 py-1 rounded-full bg-primary-container/10 border border-primary-container/20 text-primary-container font-label-sm text-xs mb-stack-md">PROJET STRATÉGIQUE</span>
+<h2 class="font-display-lg text-display-lg text-primary mb-stack-md leading-tight">
+                    BIAT Risk Monitor — <span class="text-primary-container">Système de prédiction</span> du risque de dépassement de découvert
+                </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-gutter max-w-2xl">
+                    Une architecture prédictive de pointe permettant d'identifier les défaillances de trésorerie 30 jours à l'avance pour une gestion proactive du portefeuille client.
+                </p>
+<div class="flex gap-gutter">
+<button class="bg-primary-container text-on-primary-container px-gutter py-3 rounded-lg font-bold flex items-center gap-base hover:shadow-[0_0_20px_rgba(95,251,214,0.3)] transition-all">
+                        Consulter les alertes
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="border border-outline text-primary px-gutter py-3 rounded-lg font-bold hover:bg-surface-variant/30 transition-all">
+                        Documentation technique
+                    </button>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-20 pointer-events-none bg-gradient-to-l from-primary-container/30 to-transparent"></div>
+<div class="absolute -right-20 -top-20 w-80 h-80 bg-primary-container/5 blur-[120px] rounded-full"></div>
+</section>
+<!-- KPI Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
+<div class="glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="text-primary-container material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-xs font-label-sm text-primary-container bg-primary-container/10 px-2 py-0.5 rounded">+0.2%</span>
+</div>
+<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">ROC-AUC</p>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">0.9889</h3>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="text-secondary material-symbols-outlined" data-icon="target">target</span>
+<span class="text-xs font-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded">Target</span>
+</div>
+<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Recall</p>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">0.9372</h3>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="text-tertiary-fixed material-symbols-outlined" data-icon="verified">verified</span>
+<span class="text-xs font-label-sm text-tertiary-fixed bg-tertiary-fixed/10 px-2 py-0.5 rounded">High</span>
+</div>
+<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">F1-Score</p>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">0.9450</h3>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="text-on-surface-variant material-symbols-outlined" data-icon="group">group</span>
+</div>
+<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Clients Scorés</p>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">1,240</h3>
+</div>
+<div class="glass-card p-gutter rounded-xl border-error/30">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="text-error material-symbols-outlined" data-icon="report_problem">report_problem</span>
+<span class="text-xs font-label-sm text-error bg-error/10 px-2 py-0.5 rounded">Alert</span>
+</div>
+<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Critiques</p>
+<h3 class="font-headline-md text-headline-md font-bold text-error">45</h3>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="text-on-surface-variant material-symbols-outlined" data-icon="speed">speed</span>
+</div>
+<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Score Moyen</p>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">28%</h3>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- About Section -->
+<div class="lg:col-span-2 space-y-gutter">
+<div class="glass-card p-stack-lg rounded-xl">
+<h3 class="font-headline-md text-headline-md text-primary mb-gutter border-b border-outline-variant pb-stack-md">À propos du projet</h3>
+<div class="grid md:grid-cols-2 gap-stack-lg">
+<div class="space-y-stack-md">
+<p class="font-body-md text-on-surface">Le système exploite l'algorithme <span class="text-primary-container font-bold">LightGBM</span> pour analyser des milliers de variables comportementales et transactionnelles.</p>
+<p class="font-body-sm text-on-surface-variant">L'objectif principal est la détection précoce des signes de fragilité financière, permettant aux chargés d'affaires de proposer des solutions de restructuration avant que le dépassement ne devienne critique.</p>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
+                                    Prévision à horizon 30 jours
+                                </li>
+<li class="flex items-center gap-2 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
+                                    Analyse granulaire par client
+                                </li>
+<li class="flex items-center gap-2 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
+                                    Explicabilité du score (SHAP)
+                                </li>
+</ul>
+</div>
+<div class="relative rounded-lg overflow-hidden group">
+<img alt="Data Visualization" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A sophisticated data visualization dashboard showing complex line charts with glowing neon paths and statistical heatmaps. The image represents the LightGBM model output in a financial context, using a palette of deep navy blues, vibrant cyan accents, and high-contrast labels. The mood is analytical, high-tech, and precise, symbolizing the vigilant professionalism of the BIAT risk department." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-dnSnm6i8UMSRHR6cSqxESzOvxQ-7Y1FvtHQ2nmD-R1ScA6mWE6VzPrXSUurka8He44EPSn3ssL-Rb0I1cItUJMfRHEpo6LUpEj_aGWFFu5DLcOjv3VCz5-in0xRZpXI_mHvRgxgngHYDeHjVxik9OMOwiwLhDDclvHL6l6Wq7y33BMDSVE6TnPTB7jTKBWmz1dlRlnYyaLRJqgukp2ZRs7ZEla9FhSFtUUGG4B3M3jlebrCS7Jwy_0xXpzJIw3rUvqALKooFxx4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Navigation -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-3xl text-secondary mb-stack-md block" data-icon="query_stats">query_stats</span>
+<h4 class="font-label-md text-label-md text-primary mb-1">Évolution du Risque</h4>
+<p class="text-xs text-on-surface-variant">Tendances macro et analyses sectorielles.</p>
+</a>
+<a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-3xl text-primary-container mb-stack-md block" data-icon="mail">mail</span>
+<h4 class="font-label-md text-label-md text-primary mb-1">Clients à Notifier</h4>
+<p class="text-xs text-on-surface-variant">Alertes automatiques et workflows prioritaires.</p>
+</a>
+<a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-3xl text-tertiary-fixed mb-stack-md block" data-icon="person_search">person_search</span>
+<h4 class="font-label-md text-label-md text-primary mb-1">Fiche Client</h4>
+<p class="text-xs text-on-surface-variant">Vue 360° et historique transactionnel.</p>
+</a>
+</div>
+</div>
+<!-- Side Sidebar (Model Performance) -->
+<div class="space-y-gutter">
+<div class="glass-card p-gutter rounded-xl">
+<div class="flex items-center justify-between mb-gutter">
+<h3 class="font-label-md text-label-md text-primary font-bold">État du Modèle</h3>
+<span class="flex h-2 w-2 rounded-full bg-primary-container animate-pulse"></span>
+</div>
+<div class="space-y-stack-lg">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Précision Moyenne</span>
+<span class="text-primary-container">98.9%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[98.9%] shadow-[0_0_8px_#5ffbd6]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Stabilité (PSI)</span>
+<span class="text-secondary">Optimal</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[85%] shadow-[0_0_8px_#b6c6ed]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl bg-gradient-to-br from-secondary-container/20 to-transparent">
+<div class="flex gap-base mb-stack-md">
+<span class="material-symbols-outlined text-primary-container" data-icon="smart_toy">smart_toy</span>
+<h3 class="font-label-md text-label-md text-primary font-bold">Assistant IA</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-stack-lg italic">"Dernière analyse : Le segment 'PME Import-Export' montre une volatilité accrue ce trimestre (+12%)."</p>
+<button class="w-full py-2 border border-outline-variant text-sm font-label-md hover:bg-surface-variant/30 rounded-lg transition-colors">
+                        Ouvrir le Chatbot
+                    </button>
+</div>
+<div class="rounded-xl overflow-hidden relative h-48 border border-outline-variant">
+<img alt="Network Status" class="w-full h-full object-cover" data-alt="A futuristic digital grid representing a global financial network, with glowing data nodes and interconnected light paths over a dark navy background. The visual style is abstract, using banking blues and subtle greens to convey a sense of vast, high-speed data processing and artificial intelligence surveillance. The mood is sophisticated and technically superior." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbK3LWyxM1vykg9RuAWzLqiLbD_XbVzDeYfplMzDs-GIUEFhzGBmGaph8i8QsDzp0N-zOm9D1nqjVz864SIaKlnXnV-V8UkZWtBeyF7EZRKE45V3e6y6_TVcTpwXfI1vvmy6VP4geAw4FYXFGl8pATb5eFcE_abonQpG34FN5Xj0OZKeWdVRlZiDdohH-Z47T5__iGhZ-JeqKmPnisNNJI9c9R7QJmILy2gAHmWhzZJGtUAZ7Gt0IttpiEwgviylA93HFE8yzixDY"/>
+<div class="absolute inset-0 bg-surface/40 flex items-center justify-center p-gutter">
+<div class="text-center">
+<p class="font-label-sm text-xs text-primary mb-stack-sm">Rapport de Performance</p>
+<button class="text-primary-container font-bold text-sm flex items-center gap-2 mx-auto">
+                                Télécharger PDF <span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Alerts Table (Sample) -->
+<section class="glass-card rounded-xl overflow-hidden border border-outline-variant">
+<div class="p-gutter border-b border-outline-variant flex justify-between items-center bg-surface-container-highest/20">
+<h3 class="font-headline-md text-headline-md text-primary">Alertes Récentes Haute Priorité</h3>
+<button class="text-primary-container text-sm font-bold flex items-center gap-1">
+                    Voir tout le registre <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-highest/10">
+<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Client ID</th>
+<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Segment</th>
+<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider text-center">Score de Risque</th>
+<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Dernière Transaction</th>
+<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Statut</th>
+<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-variant/20 transition-colors">
+<td class="px-gutter py-stack-md font-label-md text-primary">#TR-2904</td>
+<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Entreprise Industrielle</td>
+<td class="px-gutter py-stack-md text-center">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-bold text-xs">92%</span>
+</td>
+<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Aujourd'hui, 09:42</td>
+<td class="px-gutter py-stack-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-xs text-on-surface">Critique</span>
+</div>
+</td>
+<td class="px-gutter py-stack-md">
+<button class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/20 transition-colors">
+<td class="px-gutter py-stack-md font-label-md text-primary">#TR-1182</td>
+<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Services Tech</td>
+<td class="px-gutter py-stack-md text-center">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-xs">78%</span>
+</td>
+<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Hier, 16:15</td>
+<td class="px-gutter py-stack-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed"></span>
+<span class="text-xs text-on-surface">Avertissement</span>
+</div>
+</td>
+<td class="px-gutter py-stack-md">
+<button class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/20 transition-colors">
+<td class="px-gutter py-stack-md font-label-md text-primary">#TR-8843</td>
+<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Agro-Business</td>
+<td class="px-gutter py-stack-md text-center">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-bold text-xs">88%</span>
+</td>
+<td class="px-gutter py-stack-md text-sm text-on-surface-variant">24/10/2023</td>
+<td class="px-gutter py-stack-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-xs text-on-surface">Critique</span>
+</div>
+</td>
+<td class="px-gutter py-stack-md">
+<button class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- Contextual FAB for quick reporting -->
+<button class="fixed bottom-gutter right-gutter w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" data-icon="add_chart" style="font-variation-settings: 'FILL' 1;">add_chart</span>
+</button>
+</body></html>

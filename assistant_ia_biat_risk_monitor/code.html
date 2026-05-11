@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#2a344e",
+                    "surface-container-low": "#101b33",
+                    "on-surface": "#d9e2ff",
+                    "inverse-on-surface": "#263049",
+                    "on-secondary-container": "#a5b5db",
+                    "outline": "#85948e",
+                    "error": "#ffb4ab",
+                    "primary-container": "#5ffbd6",
+                    "tertiary-container": "#fbe273",
+                    "on-tertiary-fixed": "#211b00",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#5ffbd6",
+                    "surface": "#07122a",
+                    "primary": "#ffffff",
+                    "on-tertiary-container": "#756400",
+                    "surface-container-lowest": "#030d25",
+                    "background": "#07122a",
+                    "surface-tint": "#38debb",
+                    "error-container": "#93000a",
+                    "on-secondary": "#20304f",
+                    "on-tertiary": "#393000",
+                    "on-surface-variant": "#bacac3",
+                    "secondary-fixed": "#d8e2ff",
+                    "tertiary-fixed": "#fbe273",
+                    "tertiary-fixed-dim": "#dec65a",
+                    "tertiary": "#ffffff",
+                    "secondary-container": "#374767",
+                    "surface-dim": "#07122a",
+                    "on-primary": "#00382d",
+                    "secondary": "#b6c6ed",
+                    "surface-container-high": "#1f2942",
+                    "surface-container-highest": "#2a344e",
+                    "on-primary-fixed": "#002019",
+                    "on-primary-fixed-variant": "#005142",
+                    "inverse-surface": "#d9e2ff",
+                    "on-error": "#690005",
+                    "outline-variant": "#3c4a45",
+                    "on-secondary-fixed-variant": "#374767",
+                    "secondary-fixed-dim": "#b6c6ed",
+                    "on-primary-container": "#00725e",
+                    "on-secondary-fixed": "#091b39",
+                    "on-background": "#d9e2ff",
+                    "surface-container": "#151f37",
+                    "inverse-primary": "#006b58",
+                    "on-tertiary-fixed-variant": "#534600",
+                    "surface-bright": "#2f3952",
+                    "primary-fixed-dim": "#38debb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "gutter": "16px",
+                    "container-padding": "24px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(17, 34, 64, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(35, 53, 84, 0.5);
+        }
+        .message-glow {
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen overflow-hidden flex">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col py-stack-lg z-50">
+<div class="px-container-padding mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Vigilant Professionalism</p>
+</div>
+<nav class="flex-grow px-gutter space-y-stack-sm overflow-y-auto">
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Global Dashboard</span>
+</div>
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">Risk Evolution</span>
+</div>
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</div>
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Client Profiles</span>
+</div>
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Model Performance</span>
+</div>
+<div class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">AI Assistant</span>
+</div>
+</nav>
+<div class="px-gutter mt-auto pt-stack-lg border-t border-outline-variant/30 space-y-stack-sm">
+<button class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-label-md text-label-md flex items-center justify-center gap-base mb-stack-md">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                Critical Alerts
+            </button>
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</div>
+<div class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200 cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<main class="ml-[280px] w-full flex flex-col h-screen">
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center h-16 px-container-padding sticky top-0 z-50 bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-gutter">
+<span class="font-headline-md text-headline-md font-extrabold text-primary">AI Assistant</span>
+<div class="bg-surface-container-highest px-stack-md py-1 rounded-full border border-outline-variant">
+<span class="font-label-sm text-label-sm text-primary-container uppercase tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                        Direct Portfolio Sync
+                    </span>
+</div>
+</div>
+<div class="flex items-center gap-gutter">
+<div class="relative group">
+<span class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<div class="flex items-center gap-base pl-gutter border-l border-outline-variant">
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-primary-fixed/30 object-cover" data-alt="A professional portrait of a senior financial risk officer in a tailored charcoal suit, looking confident and focused. The background is a blurred high-end corporate office with soft blue and silver lighting. The photography is sharp with a shallow depth of field, emphasizing the subject's expert and vigilant persona in a dark mode banking environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEkFdL-6c0smuxE44sUWWHSYCt8NSg7WjisicQVqDipgYp6rS-dmxlXiLo9P2zxBzsaROcvoGbcbR5Kh5p2ZVFTAoDQlLXx2hkb549voerCEdfDOOsYawk8cXS6YwlGasm00w9zPe5iSW14R0tPcUDS1u5OSNigGj6oCiSApIpQc7NMsaXTgZKnMPm6xNtMpj9fDsFg_7TLKPUdiczts_Imc-kTAQ00MC5_DT-JAyPZHSubFnxyHeJGa6muWIIzLF3qhWz01dHA4U"/>
+<span class="font-label-md text-label-md text-on-surface-variant">R. Dupont</span>
+</div>
+</div>
+</header>
+<!-- Assistant Workspace Container -->
+<section class="flex flex-1 overflow-hidden">
+<!-- Sidebar: Context & Suggestions -->
+<aside class="w-80 border-r border-outline-variant bg-surface-container-lowest flex flex-col p-gutter gap-stack-lg">
+<div>
+<h3 class="font-label-sm text-label-sm text-outline mb-stack-md uppercase tracking-wider">Suggested Queries</h3>
+<div class="space-y-stack-md">
+<button class="w-full text-left glass-panel p-stack-md rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:text-primary-container hover:border-primary-container/30 transition-all">
+                            Comment évolue le risque global?
+                        </button>
+<button class="w-full text-left glass-panel p-stack-md rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:text-primary-container hover:border-primary-container/30 transition-all">
+                            Quels sont les clients prioritaires?
+                        </button>
+<button class="w-full text-left glass-panel p-stack-md rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:text-primary-container hover:border-primary-container/30 transition-all">
+                            Analyse le client CPTE_0015
+                        </button>
+</div>
+</div>
+<div class="mt-auto glass-panel p-gutter rounded-xl border-dashed border-outline-variant">
+<div class="flex items-center gap-base mb-stack-sm text-primary-container">
+<span class="material-symbols-outlined text-[20px]" data-icon="info">info</span>
+<h4 class="font-label-md text-label-md font-bold">System Status</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        Assistant métier basé sur les données du portefeuille. Mis à jour il y a 4 minutes.
+                    </p>
+</div>
+</aside>
+<!-- Chat Window -->
+<div class="flex-1 flex flex-col bg-surface-dim relative">
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-container-padding space-y-gutter">
+<!-- User Message -->
+<div class="flex justify-end mb-stack-lg">
+<div class="max-w-[70%] bg-secondary-container text-on-secondary px-gutter py-stack-md rounded-xl rounded-tr-none">
+<p class="font-body-md text-body-md">Peux-tu me faire un résumé de l'évolution du risque sur le secteur Retail ce mois-ci ?</p>
+</div>
+</div>
+<!-- AI Response -->
+<div class="flex justify-start items-start gap-base">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-primary-container/20 flex items-center justify-center text-primary-container shrink-0">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="max-w-[85%] glass-panel p-gutter rounded-xl rounded-tl-none message-glow">
+<div class="flex items-center justify-between mb-stack-md">
+<span class="font-label-sm text-label-sm text-primary-container">ANALYSE DU PORTEFEUILLE RETAIL</span>
+<span class="font-label-sm text-label-sm text-outline opacity-50">INSTANTANÉ : 14 OCT 2023</span>
+</div>
+<div class="space-y-stack-md font-body-md text-body-md text-on-surface">
+<p>D'après les données consolidées à J-1, l'évolution du risque pour le segment Retail présente une **stabilité relative** avec des poches de vigilance accrues :</p>
+<ul class="list-none space-y-stack-sm pl-0">
+<li class="flex gap-base">
+<span class="text-primary-container">•</span>
+<span>Indice de Défaillance Global : **+0.4%** (Variation marginale par rapport au mois précédent).</span>
+</li>
+<li class="flex gap-base">
+<span class="text-error">•</span>
+<span>Encours sous surveillance : **84.2 MDT**, soit une hausse de **2.1%** concentrée sur les crédits à la consommation.</span>
+</li>
+<li class="flex gap-base">
+<span class="text-primary-container">•</span>
+<span>Taux de recouvrement : Amélioration de **3 points** grâce aux nouveaux modèles de scoring IA.</span>
+</li>
+</ul>
+<div class="bg-surface-container-low p-stack-md rounded-lg border border-outline-variant/30 mt-gutter">
+<div class="flex items-center gap-base mb-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="priority_high">priority_high</span>
+<span class="font-label-md text-label-md text-tertiary">POINT D'ATTENTION</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                        Le client **CPTE_0015** a franchi le seuil d'alerte orange suite à trois rejets successifs. Je recommande un examen immédiat du dossier.
+                                    </p>
+</div>
+</div>
+<div class="mt-gutter pt-stack-md border-t border-outline-variant/20 flex gap-gutter">
+<button class="flex items-center gap-stack-sm font-label-sm text-label-sm text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="thumb_up">thumb_up</span>
+                                    Utile
+                                </button>
+<button class="flex items-center gap-stack-sm font-label-sm text-label-sm text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+                                    Copier
+                                </button>
+<button class="flex items-center gap-stack-sm font-label-sm text-label-sm text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="share">share</span>
+                                    Exporter PDF
+                                </button>
+</div>
+</div>
+</div>
+<!-- AI is Typing (Placeholder for dynamic feel) -->
+<div class="flex justify-start items-center gap-base opacity-40">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 bg-on-surface-variant rounded-full"></div>
+<div class="w-1.5 h-1.5 bg-on-surface-variant rounded-full"></div>
+<div class="w-1.5 h-1.5 bg-on-surface-variant rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-container-padding bg-surface-container-lowest/50 backdrop-blur-md border-t border-outline-variant">
+<div class="max-w-4xl mx-auto relative">
+<textarea class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-gutter py-stack-lg pr-32 focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none text-on-surface resize-none font-body-md h-16 min-h-[64px]" placeholder="Interroger l'assistant sur un client ou une tendance..."></textarea>
+<div class="absolute right-stack-md bottom-stack-md flex gap-base">
+<button class="p-2 text-on-surface-variant hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+<button class="bg-primary-container text-on-primary-container px-gutter py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:brightness-110 transition-all">
+                                Envoyer
+                                <span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+</button>
+</div>
+</div>
+<p class="text-center font-label-sm text-label-sm text-outline mt-stack-md">
+                        L'IA peut générer des erreurs. Vérifiez les informations critiques dans les profils clients.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for Quick Actions (Suppressed on Chat/Settings pages according to rules, but kept for context if desired elsewhere. Here it is omitted as per UX guidelines for focused journey) -->
+</body></html>

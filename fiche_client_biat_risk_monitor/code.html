@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#2a344e",
+                    "surface-container-low": "#101b33",
+                    "on-surface": "#d9e2ff",
+                    "inverse-on-surface": "#263049",
+                    "on-secondary-container": "#a5b5db",
+                    "outline": "#85948e",
+                    "error": "#ffb4ab",
+                    "primary-container": "#5ffbd6",
+                    "tertiary-container": "#fbe273",
+                    "on-tertiary-fixed": "#211b00",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#5ffbd6",
+                    "surface": "#07122a",
+                    "primary": "#ffffff",
+                    "on-tertiary-container": "#756400",
+                    "surface-container-lowest": "#030d25",
+                    "background": "#07122a",
+                    "surface-tint": "#38debb",
+                    "error-container": "#93000a",
+                    "on-secondary": "#20304f",
+                    "on-tertiary": "#393000",
+                    "on-surface-variant": "#bacac3",
+                    "secondary-fixed": "#d8e2ff",
+                    "tertiary-fixed": "#fbe273",
+                    "tertiary-fixed-dim": "#dec65a",
+                    "tertiary": "#ffffff",
+                    "secondary-container": "#374767",
+                    "surface-dim": "#07122a",
+                    "on-primary": "#00382d",
+                    "secondary": "#b6c6ed",
+                    "surface-container-high": "#1f2942",
+                    "surface-container-highest": "#2a344e",
+                    "on-primary-fixed": "#002019",
+                    "on-primary-fixed-variant": "#005142",
+                    "inverse-surface": "#d9e2ff",
+                    "on-error": "#690005",
+                    "outline-variant": "#3c4a45",
+                    "on-secondary-fixed-variant": "#374767",
+                    "secondary-fixed-dim": "#b6c6ed",
+                    "on-primary-container": "#00725e",
+                    "on-secondary-fixed": "#091b39",
+                    "on-background": "#d9e2ff",
+                    "surface-container": "#151f37",
+                    "inverse-primary": "#006b58",
+                    "on-tertiary-fixed-variant": "#534600",
+                    "surface-bright": "#2f3952",
+                    "primary-fixed-dim": "#38debb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "gutter": "16px",
+                    "container-padding": "24px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(21, 31, 55, 0.7) 0%, rgba(7, 18, 42, 0.7) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(60, 74, 69, 0.5);
+        }
+        .risk-glow-red {
+            box-shadow: 0 0 15px rgba(255, 180, 171, 0.2);
+        }
+        .risk-border-pulse {
+            border-color: rgba(255, 180, 171, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col h-full py-stack-lg z-50">
+<div class="px-container-padding mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Vigilant Professionalism</p>
+</div>
+<nav class="flex-1 px-base space-y-stack-sm">
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Global Dashboard</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">Risk Evolution</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Client Profiles</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Model Performance</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">AI Assistant</span>
+</a>
+</nav>
+<div class="px-gutter mb-stack-lg">
+<button class="w-full bg-error text-on-error font-label-md py-stack-md rounded-lg flex items-center justify-center gap-base">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                Critical Alerts
+            </button>
+</div>
+<div class="px-base pt-stack-md border-t border-outline-variant/30">
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-container-padding ml-[280px] bg-surface-dim/80 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-gutter w-full max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-surface-container-lowest border-outline-variant border rounded-full py-2 pl-10 pr-4 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary-container outline-none transition-all" placeholder="Rechercher Client ou Compte (CPTE)..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-gutter">
+<button class="bg-primary text-on-primary font-label-md px-gutter py-2 rounded-lg hover:opacity-90 transition-opacity">Quick Action</button>
+<div class="flex gap-stack-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] p-container-padding max-w-[1600px]">
+<!-- Header Profile Section -->
+<section class="mb-stack-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-gutter">
+<div>
+<div class="flex items-center gap-base mb-stack-sm">
+<span class="bg-surface-container-high px-2 py-0.5 rounded font-label-sm text-label-sm text-primary">CPTE: 001294857201</span>
+<span class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span>
+<span class="font-label-sm text-label-sm">Aggravation</span>
+</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">STE LUXURY TEXTILE SA</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Secteur: Industrie Manufacturière | Agence: Tunis-Marine</p>
+</div>
+<div class="flex gap-gutter">
+<div class="glass-card risk-border-pulse p-gutter rounded-xl text-center min-w-[140px]">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">RISK SCORE</p>
+<p class="font-display-lg text-display-lg text-error leading-none">89.5<span class="text-headline-md">%</span></p>
+</div>
+<div class="glass-card p-gutter rounded-xl text-center min-w-[140px] border-error-container">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">ALERT LEVEL</p>
+<div class="bg-error text-on-error font-label-md px-2 py-1 rounded inline-block">CRITIQUE</div>
+</div>
+</div>
+</section>
+<!-- KPI Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-stack-lg">
+<div class="glass-card p-gutter rounded-xl flex flex-col justify-between border-l-4 border-l-primary-fixed">
+<span class="font-label-sm text-label-sm text-on-surface-variant">NBRJDEP</span>
+<div class="mt-base">
+<p class="font-headline-md text-headline-md text-primary">35 Jours</p>
+<p class="font-label-sm text-label-sm text-error mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_upward">arrow_upward</span> +12 vs M-1
+                    </p>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl flex flex-col justify-between border-l-4 border-l-error">
+<span class="font-label-sm text-label-sm text-on-surface-variant">RISK_BRUT</span>
+<div class="mt-base">
+<p class="font-headline-md text-headline-md text-primary">845,200 <span class="text-body-sm opacity-60">TND</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Exposition Totale</p>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">AVG_DEP_3M</span>
+<div class="mt-base">
+<p class="font-headline-md text-headline-md text-primary">612,450 <span class="text-body-sm opacity-60">TND</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Moyenne trimestrielle</p>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">DELTA_NBRJDEP</span>
+<div class="mt-base">
+<p class="font-headline-md text-headline-md text-primary">+150%</p>
+<p class="font-label-sm text-label-sm text-error mt-1">Accélération critique</p>
+</div>
+</div>
+</section>
+<!-- Charts Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-stack-lg">
+<!-- Score Evolution -->
+<div class="lg:col-span-2 glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-center mb-stack-lg">
+<h3 class="font-headline-md text-headline-md text-primary">Score Evolution (6M)</h3>
+<div class="flex gap-base">
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary-fixed"></span> Target
+                        </span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-error"></span> Actual
+                        </span>
+</div>
+</div>
+<div class="h-[300px] flex items-end justify-between gap-gutter px-base">
+<!-- Faking a chart with CSS bars/lines -->
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full relative h-[300px] flex items-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[40%] transition-all group-hover:h-[45%]"></div>
+<div class="absolute bottom-0 w-1/2 left-1/4 bg-primary-fixed/40 h-[60%] rounded-t blur-[2px]"></div>
+</div>
+<span class="mt-base font-label-sm text-label-sm text-on-surface-variant">JAN</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full relative h-[300px] flex items-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[55%] transition-all"></div>
+</div>
+<span class="mt-base font-label-sm text-label-sm text-on-surface-variant">FEB</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full relative h-[300px] flex items-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[65%] transition-all"></div>
+</div>
+<span class="mt-base font-label-sm text-label-sm text-on-surface-variant">MAR</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full relative h-[300px] flex items-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[75%] transition-all"></div>
+</div>
+<span class="mt-base font-label-sm text-label-sm text-on-surface-variant">APR</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full relative h-[300px] flex items-end">
+<div class="w-full bg-surface-container-highest rounded-t h-[80%] transition-all"></div>
+</div>
+<span class="mt-base font-label-sm text-label-sm text-on-surface-variant">MAY</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full relative h-[300px] flex items-end">
+<div class="w-full bg-error/40 rounded-t h-[89.5%] border-t-2 border-error"></div>
+</div>
+<span class="mt-base font-label-sm text-label-sm text-primary font-bold">JUN</span>
+</div>
+</div>
+</div>
+<!-- Risk Explanation -->
+<div class="glass-card p-gutter rounded-xl flex flex-col">
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-lg">Risk Explanation</h3>
+<div class="space-y-stack-md flex-1">
+<div class="p-stack-md bg-surface-container-highest/50 rounded-lg border-l-2 border-error">
+<p class="font-label-md text-label-md text-primary mb-1">Aggravation NBRJDEP</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Passage de 23 à 35 jours consécutifs à découvert sur les 30 derniers jours.</p>
+</div>
+<div class="p-stack-md bg-surface-container-highest/50 rounded-lg border-l-2 border-tertiary-fixed">
+<p class="font-label-md text-label-md text-primary mb-1">Incohérence Flux/Engagement</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Baisse des flux créditeurs de 15% alors que l'utilisation du CMT augmente.</p>
+</div>
+<div class="p-stack-md bg-surface-container-highest/50 rounded-lg border-l-2 border-tertiary-fixed">
+<p class="font-label-md text-label-md text-primary mb-1">Dépassement Limite</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Utilisation de la facilité de caisse à 108% de la limite autorisée.</p>
+</div>
+</div>
+<button class="mt-stack-lg text-primary-container font-label-md flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[18px]" data-icon="description">description</span>
+                    Voir rapport d'audit complet
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Trend Combined Chart Placeholder -->
+<div class="glass-card p-gutter rounded-xl">
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-lg">Combined Trend: NBRJDEP &amp; RISK_BRUT</h3>
+<div class="relative h-[240px] bg-surface-container-lowest rounded-lg border border-outline-variant overflow-hidden">
+<!-- Conceptual wave representation -->
+<svg class="absolute bottom-0 w-full h-[150px]" preserveaspectratio="none" viewbox="0 0 400 150">
+<path d="M0 150 L0 80 C 100 120 200 20 300 100 L 400 40 L 400 150 Z" fill="rgba(95, 251, 214, 0.1)"></path>
+<path d="M0 80 C 100 120 200 20 300 100 L 400 40" fill="none" stroke="#5ffbd6" stroke-width="2"></path>
+<path d="M0 120 C 50 130 150 150 250 100 L 350 140 L 400 130" fill="none" stroke="#ffb4ab" stroke-dasharray="4" stroke-width="2"></path>
+</svg>
+<div class="absolute top-4 left-4 flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<div class="w-3 h-1 bg-primary-fixed"></div>
+<span class="text-[10px] font-label-sm text-on-surface-variant">RISK_BRUT (MTND)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-1 bg-error border-dashed border"></div>
+<span class="text-[10px] font-label-sm text-on-surface-variant">NBRJDEP</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recommended Action Box -->
+<div class="glass-card p-gutter rounded-xl border-error/30 ring-1 ring-error/10">
+<div class="flex items-center gap-base mb-stack-md text-error">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<h3 class="font-headline-md text-headline-md">Action Recommandée</h3>
+</div>
+<div class="bg-error/10 p-stack-md rounded-lg mb-stack-lg">
+<p class="font-body-md text-body-md text-error font-bold mb-1">INTERVENTION IMMÉDIATE</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Contacter le chargé d'affaires pour justifier l'augmentation du découvert et demander une régularisation sous 48h.</p>
+</div>
+<form class="space-y-stack-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Status de l'Action</label>
+<select class="w-full bg-surface-container-lowest border-outline-variant text-on-surface rounded-lg focus:ring-primary-container">
+<option>En attente</option>
+<option>Action initiée</option>
+<option>Régularisé</option>
+<option>Dossier Contentieux</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Priorité</label>
+<select class="w-full bg-surface-container-lowest border-outline-variant text-on-surface rounded-lg focus:ring-primary-container">
+<option>Haute (P1)</option>
+<option>Moyenne (P2)</option>
+<option>Basse (P3)</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Commentaires de suivi</label>
+<textarea class="w-full bg-surface-container-lowest border-outline-variant text-on-surface rounded-lg focus:ring-primary-container placeholder:text-on-surface-variant/40" placeholder="Saisir les observations..." rows="3"></textarea>
+</div>
+<div class="flex justify-end gap-stack-md pt-stack-sm">
+<button class="px-gutter py-2 border border-outline-variant text-on-surface-variant rounded-lg font-label-md hover:bg-surface-variant/30" type="button">Annuler</button>
+<button class="px-gutter py-2 bg-primary-fixed text-on-primary-fixed rounded-lg font-label-md font-bold hover:opacity-90" type="button">Enregistrer l'action</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Footer / Notes -->
+<footer class="mt-stack-lg flex justify-between items-center text-on-surface-variant border-t border-outline-variant/30 pt-gutter">
+<p class="font-label-sm text-label-sm">Dernière mise à jour: Aujourd'hui, 08:42</p>
+<div class="flex gap-gutter">
+<button class="flex items-center gap-1 font-label-sm text-label-sm hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="share">share</span> Partager la fiche
+                </button>
+<button class="flex items-center gap-1 font-label-sm text-label-sm hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span> Exporter PDF
+                </button>
+</div>
+</footer>
+</main>
+</body></html>
