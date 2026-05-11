@@ -1,0 +1,1272 @@
+You are a senior Python data science engineer, Streamlit developer, and UI/UX designer.
+
+I want you to build a complete professional banking risk-monitoring project named:
+
+BIAT Risk Monitor
+
+This project must be realistic, structured, and suitable for a final-year data science / business intelligence project. It must not look like a simple demo. It should look like a real operational decision-support application for a bank.
+
+============================================================
+1. PROJECT CONTEXT
+============================================================
+
+The project is about predicting the risk of overdraft limit breach for BIAT bank clients.
+
+The system analyzes historical monthly banking data and predicts whether a client is likely to exceed their overdraft limit 30 days in advance.
+
+The final system must include:
+
+1. Data preparation pipeline
+2. Feature engineering pipeline
+3. Machine learning model training
+4. LightGBM scoring
+5. Risk evolution analysis
+6. Operational clients-to-notify list
+7. Professional Streamlit web application
+8. Model performance page
+9. Rule-based chatbot/assistant based on CSV data
+10. Clean project architecture
+
+The project must be in French for the user interface because it is intended for a Tunisian/French-speaking banking context.
+
+============================================================
+2. BUSINESS OBJECTIVE
+============================================================
+
+The objective is to help BIAT account managers, risk analysts, and managers:
+
+- Identify clients likely to exceed their overdraft limit within 30 days.
+- Assign each client a risk score from 0% to 100%.
+- Convert the score into business alert levels.
+- Prioritize clients that need action.
+- Monitor worsening and improvement of client behavior over time.
+- Display global KPIs for managers.
+- Display individual client profiles for account managers.
+- Export lists of clients to contact.
+- Ask questions to a chatbot-like assistant based on the portfolio data.
+
+The application should be presented as a real banking decision-support system.
+
+============================================================
+3. TECHNOLOGIES TO USE
+============================================================
+
+Use the following technologies:
+
+Core:
+- Python
+- Pandas
+- NumPy
+- OpenPyXL
+- Scikit-learn
+- LightGBM
+- Joblib
+
+Visualization and application:
+- Streamlit
+- Plotly
+- Matplotlib if needed
+
+Optional:
+- SHAP only as a future/optional feature.
+- Do not require SHAP in requirements.txt initially because it can cause installation issues on Windows.
+
+Do not use:
+- External paid APIs
+- OpenAI API
+- Anthropic API
+- Cloud-only services
+- Complex backend frameworks unless necessary
+
+The final app must run locally with:
+
+pip install -r requirements.txt
+streamlit run app/Home.py
+
+============================================================
+4. PROJECT FOLDER ARCHITECTURE
+============================================================
+
+Create this exact project structure:
+
+biat_risk_project/
+│
+├── app/
+│   ├── Home.py
+│   │
+│   ├── pages/
+│   │   ├── 1_Dashboard_global.py
+│   │   ├── 2_Evolution_risque.py
+│   │   ├── 3_Clients_a_notifier.py
+│   │   ├── 4_Fiche_client.py
+│   │   ├── 5_Performance_modele.py
+│   │   ├── 6_Chatbot.py
+│   │
+│   ├── utils/
+│   │   ├── style.py
+│   │   ├── data_loader.py
+│   │   ├── business_rules.py
+│
+├── data/
+│   └── f1020232025_3.xlsx
+│
+├── src/
+│   ├── 1_data_preparation.py
+│   ├── 2_feature_engineering.py
+│   ├── 3_train_models.py
+│   ├── 4_scoring.py
+│   ├── 5_build_evolution.py
+│
+├── outputs/
+│   ├── prepared_data.csv
+│   ├── modeling_data.csv
+│   ├── scoring_clients.csv
+│   ├── scoring_evolution.csv
+│   ├── clients_a_notifier.csv
+│   ├── model_comparison.csv
+│
+├── models/
+│   └── lightgbm_model.pkl
+│
+├── powerbi/
+│   └── README_powerbi.txt
+│
+├── requirements.txt
+└── README.md
+
+============================================================
+5. RAW DATA DESCRIPTION
+============================================================
+
+The raw Excel file will be placed here:
+
+data/f1020232025_3.xlsx
+
+The dataset contains monthly historical banking data. Each row represents one account/client for one month.
+
+Possible columns:
+
+- PERIODE
+- CPTE
+- NBRJDEP
+- NBRJDEB
+- RISK_BRUT
+- MVT
+- NET_MONTHLY
+- DATE_OF_BIRTH
+- GENDER
+- SECTOR
+- MARITAL_STATUS
+- EMPLOYMENT_STATUS
+- POST_CODE
+
+Meaning of important variables:
+
+PERIODE:
+Monthly observation date.
+
+CPTE:
+Unique account/client identifier.
+
+NBRJDEP:
+Number of days the client was in overdraft during the month.
+
+NBRJDEB:
+Debit/overdraft-related indicator.
+
+RISK_BRUT:
+Gross risk amount in Tunisian dinars.
+
+MVT:
+Total movements on the account.
+
+NET_MONTHLY:
+Monthly income or net monthly amount.
+
+DATE_OF_BIRTH:
+Client birth date.
+
+GENDER, SECTOR, MARITAL_STATUS, EMPLOYMENT_STATUS, POST_CODE:
+Client demographic and profile variables.
+
+============================================================
+6. DATA PREPARATION SCRIPT
+============================================================
+
+Create:
+
+src/1_data_preparation.py
+
+This script must:
+
+1. Load:
+   data/f1020232025_3.xlsx
+
+2. Normalize column names:
+   - strip spaces
+   - replace spaces with underscores
+   - replace hyphens with underscores
+
+3. Detect essential columns automatically:
+   - PERIODE
+   - CPTE
+   - DATE_OF_BIRTH if available
+
+4. Convert:
+   - PERIODE to datetime
+   - DATE_OF_BIRTH to datetime if available
+
+5. Drop rows where:
+   - PERIODE is missing
+   - CPTE is missing
+
+6. Fill missing financial values with zero:
+   - NBRJDEP
+   - NBRJDEB
+   - RISK_BRUT
+   - MVT
+   - NET_MONTHLY
+
+7. Convert financial columns to numeric.
+
+8. Cap NBRJDEP:
+   - minimum 0
+   - maximum 31
+
+Because one month cannot have more than 31 days.
+
+9. Calculate AGE:
+   AGE = difference between PERIODE and DATE_OF_BIRTH in years.
+   Clip AGE between 18 and 80.
+   If DATE_OF_BIRTH is unavailable, create AGE = 40.
+
+10. Fill missing categorical columns:
+   - GENDER
+   - SECTOR
+   - MARITAL_STATUS
+   - EMPLOYMENT_STATUS
+   - POST_CODE
+
+Use "Unknown" when missing.
+
+11. Sort data by:
+   CPTE, PERIODE
+
+12. Save:
+   outputs/prepared_data.csv
+
+The script must print clear diagnostics:
+- initial rows
+- final rows
+- number of unique accounts
+- min period
+- max period
+- missing values
+- output file path
+
+============================================================
+7. FEATURE ENGINEERING SCRIPT
+============================================================
+
+Create:
+
+src/2_feature_engineering.py
+
+Input:
+outputs/prepared_data.csv
+
+Output:
+outputs/modeling_data.csv
+
+This script must create the target variable and behavioral features.
+
+TARGET VARIABLE:
+
+The model predicts whether the client will be risky next month.
+
+Create:
+
+NBRJDEP_NEXT = groupby("CPTE")["NBRJDEP"].shift(-1)
+RISK_BRUT_NEXT = groupby("CPTE")["RISK_BRUT"].shift(-1)
+
+Then:
+
+target = 1 if:
+NBRJDEP_NEXT > 3 OR RISK_BRUT_NEXT > 0
+
+else:
+target = 0
+
+Important:
+Remove the last observation of each client because it has no next month.
+Then drop:
+- NBRJDEP_NEXT
+- RISK_BRUT_NEXT
+
+This avoids data leakage.
+
+FEATURES TO CREATE:
+
+1. AVG_DEP_3M
+Average NBRJDEP over the previous 3 months.
+Use shift(1) before rolling.
+
+2. DAYS_OVD_6M
+Total NBRJDEP over the previous 6 months.
+Use shift(1) before rolling.
+
+3. REV_VARIANCE
+Standard deviation of MVT over the previous 3 months.
+Use shift(1) before rolling.
+
+4. NBRJDEP_LAG1
+Previous month NBRJDEP.
+
+5. DELTA_NBRJDEP
+Current NBRJDEP - previous month NBRJDEP.
+
+6. MOIS_CONSEC
+Number of consecutive months where NBRJDEP > 0.
+
+7. Keep AGE from the prepared data.
+
+Final columns should include:
+
+Identification:
+- PERIODE
+- CPTE
+
+Target:
+- target
+
+Raw features:
+- NBRJDEP
+- NBRJDEB
+- RISK_BRUT
+- MVT
+- NET_MONTHLY
+- AGE
+
+Engineered features:
+- AVG_DEP_3M
+- DAYS_OVD_6M
+- REV_VARIANCE
+- NBRJDEP_LAG1
+- DELTA_NBRJDEP
+- MOIS_CONSEC
+
+Categorical features:
+- GENDER
+- SECTOR
+- MARITAL_STATUS
+- EMPLOYMENT_STATUS
+- POST_CODE
+
+The script must print:
+- target distribution
+- target proportion
+- final columns
+- missing values
+- output file path
+
+============================================================
+8. MODEL TRAINING SCRIPT
+============================================================
+
+Create:
+
+src/3_train_models.py
+
+Input:
+outputs/modeling_data.csv
+
+Outputs:
+- models/lightgbm_model.pkl
+- outputs/model_comparison.csv
+
+Train and compare:
+
+1. Logistic Regression
+2. Random Forest
+3. LightGBM
+
+Use temporal train/test split:
+
+- Sort periods.
+- Use oldest 80% periods for training.
+- Use newest 20% periods for testing.
+
+Do not use random split because this is temporal banking data.
+
+Features:
+Use all relevant numeric and categorical features.
+Apply one-hot encoding to categorical variables.
+Align train/test columns after encoding.
+Fill missing values with 0.
+
+Models:
+
+Logistic Regression:
+- class_weight="balanced"
+- max_iter=3000
+
+Random Forest:
+- n_estimators=200
+- max_depth=8
+- class_weight="balanced"
+- random_state=42
+- n_jobs=-1
+
+LightGBM:
+- n_estimators=300
+- learning_rate=0.05
+- max_depth=6
+- class_weight="balanced"
+- random_state=42
+
+Metrics:
+- Accuracy
+- Recall
+- Precision
+- F1-score
+- ROC-AUC
+
+Business logic:
+Recall is the priority metric because missing a truly risky client is more costly than contacting a healthy client.
+
+Also create a threshold optimization for LightGBM:
+Try thresholds from 0.10 to 0.90 by 0.05.
+Choose the threshold that maximizes F1-score while keeping recall >= 0.85.
+If no threshold found, use 0.65.
+
+Save model artifact with:
+- trained LightGBM model
+- feature columns
+- optimal threshold
+- categorical columns
+- numeric columns
+
+Use joblib.
+
+Also save:
+outputs/model_comparison.csv
+
+If real training is slow or fails, still create a clean fallback model comparison table using these reference values:
+
+LightGBM:
+Accuracy = 0.9736
+Recall = 0.9372
+F1-score = 0.9450
+ROC-AUC = 0.9889
+
+Random Forest:
+Accuracy = 0.9759
+Recall = 0.9314
+F1-score = 0.9493
+ROC-AUC = 0.9903
+
+Logistic Regression:
+Accuracy = 0.9750
+Recall = 0.9072
+F1-score = 0.9461
+ROC-AUC = 0.9684
+
+============================================================
+9. SCORING SCRIPT
+============================================================
+
+Create:
+
+src/4_scoring.py
+
+Input:
+- outputs/modeling_data.csv
+- models/lightgbm_model.pkl
+
+Output:
+- outputs/scoring_clients.csv
+
+This script must generate a score for each client/month.
+
+Required output columns:
+
+- PERIODE
+- CPTE
+- score_risque
+- score_pct
+- niveau_alerte
+- NBRJDEP
+- NBRJDEB
+- RISK_BRUT
+- MVT
+- NET_MONTHLY
+- AGE
+- AVG_DEP_3M
+- DAYS_OVD_6M
+- REV_VARIANCE
+- NBRJDEP_LAG1
+- DELTA_NBRJDEP
+- MOIS_CONSEC
+- action_recommandee
+
+Risk score:
+score_risque must be between 0 and 1.
+score_pct = score_risque * 100.
+
+Risk levels:
+
+Faible:
+score_pct < 40
+
+Moyen:
+40 <= score_pct < 65
+
+Élevé:
+65 <= score_pct < 85
+
+Critique:
+score_pct >= 85
+
+Recommended actions:
+
+Faible:
+Aucune action urgente
+
+Moyen:
+Surveillance mensuelle
+
+Élevé:
+Appel préventif sous 48h
+
+Critique:
+Intervention immédiate aujourd’hui
+
+If the trained model does not exist, create a realistic fallback score based on the business variables:
+- NBRJDEP
+- RISK_BRUT
+- AVG_DEP_3M
+- DAYS_OVD_6M
+- MOIS_CONSEC
+- DELTA_NBRJDEP
+
+But clearly structure the code so that trained LightGBM is used when available.
+
+============================================================
+10. EVOLUTION SCRIPT
+============================================================
+
+Create:
+
+src/5_build_evolution.py
+
+Input:
+outputs/scoring_clients.csv
+
+Outputs:
+- outputs/scoring_evolution.csv
+- outputs/clients_a_notifier.csv
+
+This script must compare each client’s current alert level with the previous month.
+
+For each CPTE:
+previous_level = previous month niveau_alerte
+current_level = current month niveau_alerte
+
+Create:
+- niveau_precedent
+- transition
+- evolution
+
+Evolution categories:
+
+If no previous level:
+Nouveau client
+
+If current level rank > previous level rank:
+Aggravation
+
+If current level rank < previous level rank:
+Amélioration
+
+If same:
+Stable
+
+Risk ranking:
+Faible = 1
+Moyen = 2
+Élevé = 3
+Critique = 4
+
+Examples:
+Faible → Moyen = Aggravation
+Moyen → Élevé = Aggravation
+Élevé → Critique = Aggravation
+Critique → Élevé = Amélioration
+Élevé → Moyen = Amélioration
+Moyen → Moyen = Stable
+
+clients_a_notifier.csv:
+Use only the latest PERIODE.
+Keep clients where niveau_alerte is:
+- Moyen
+- Élevé
+- Critique
+
+Add:
+- priorite_intervention
+- statut_suivi
+
+Priority rules:
+
+Priorité 1:
+Critique and score_pct >= 95
+
+Priorité 2:
+Critique and score_pct < 95
+
+Priorité 3:
+Élevé and score_pct >= 75
+
+Priorité 4:
+Élevé
+
+Priorité 5:
+Moyen with Aggravation or score_pct >= 60
+
+Surveillance:
+Other cases
+
+Default statut_suivi:
+À contacter
+
+============================================================
+11. STREAMLIT APPLICATION REQUIREMENTS
+============================================================
+
+The Streamlit app must be inside the app/ folder.
+
+Run with:
+
+streamlit run app/Home.py
+
+All pages must use the same data source:
+
+outputs/scoring_clients.csv
+
+Very important:
+When displaying current portfolio numbers, always filter to the latest PERIODE.
+Do not count all historical months together.
+This avoids incoherent numbers between pages.
+
+============================================================
+12. PROFESSIONAL DESIGN REQUIREMENTS
+============================================================
+
+Create a professional banking dark theme.
+
+Use:
+
+Background:
+Dark navy / near black
+
+Main card color:
+Dark blue-gray
+
+Accent:
+Blue
+
+Text:
+White and light gray
+
+Risk colors:
+- Faible: green
+- Moyen: yellow
+- Élevé: orange
+- Critique: red
+
+Visual style:
+- Rounded cards
+- Clean KPI cards
+- Dark Plotly charts
+- Professional spacing
+- Sidebar navigation
+- Modern banking look
+- No childish design
+- No random colors
+- Consistent typography
+
+Create in:
+
+app/utils/style.py
+
+Functions:
+- apply_global_style()
+- get_color_palette()
+- page_header(icon, title, subtitle)
+- section_header(title, margin_top="24px")
+- kpi_card(title, value, color, subtitle="", klass="")
+
+The design must look professional for a bank risk management application.
+
+============================================================
+13. UTILITY FILES
+============================================================
+
+Create:
+
+app/utils/data_loader.py
+
+Functions:
+
+- load_scoring_clients()
+- load_scoring_evolution()
+- load_clients_to_notify()
+- load_model_comparison()
+- get_current_period_data(df)
+- detect_client_column(df)
+- require_file(path, script_hint)
+
+Rules:
+- If a file is missing, show Streamlit warning explaining which script to run.
+- Example:
+  "Fichier scoring_clients.csv introuvable. Lancez python src/4_scoring.py"
+
+Create:
+
+app/utils/business_rules.py
+
+Functions:
+
+- get_risk_level(score_pct)
+- get_recommended_action(score_pct, evolution=None)
+- get_priority(row)
+- explain_risk(row)
+- format_number(value)
+
+explain_risk(row) should return a list of textual explanations:
+- NBRJDEP high: "Nombre de jours à découvert élevé"
+- RISK_BRUT > 0: "Montant de risque brut positif"
+- AVG_DEP_3M high: "Historique récent de découvert"
+- DAYS_OVD_6M high: "Exposition cumulée élevée sur 6 mois"
+- DELTA_NBRJDEP positive: "Aggravation récente du découvert"
+- MOIS_CONSEC high: "Découvert persistant sur plusieurs mois"
+
+============================================================
+14. APP PAGE DETAILS
+============================================================
+
+------------------------------------------------------------
+PAGE: app/Home.py
+------------------------------------------------------------
+
+Purpose:
+Executive landing page.
+
+Title:
+BIAT Risk Monitor
+
+Subtitle:
+Système de prédiction du risque de dépassement de découvert à 30 jours
+
+Hero section:
+- PFE 2025 — BIAT
+- Prédiction 30 jours à l’avance
+- LightGBM
+- Streamlit
+- Power BI
+- SHAP-ready
+
+KPIs:
+- ROC-AUC
+- Recall
+- F1-score
+- Clients scorés latest period
+- Clients critiques latest period
+- Score moyen latest period
+
+Use model_comparison.csv if available.
+If not, use reference metrics:
+ROC-AUC 0.9889
+Recall 0.9372
+F1-score 0.9450
+
+Sections:
+1. À propos du projet
+Explain:
+This system predicts 30 days in advance the risk of overdraft breach for each BIAT client and transforms banking data into actionable alerts for account managers.
+
+2. Technologies utilisées
+Show badges:
+Python, Pandas, Scikit-learn, LightGBM, Streamlit, Plotly, Power BI, SHAP-ready.
+
+3. Navigation
+Show cards for:
+- Dashboard global
+- Évolution du risque
+- Clients à notifier
+- Fiche client
+- Performance modèle
+- Assistant BIAT Risk
+
+------------------------------------------------------------
+PAGE: app/pages/1_Dashboard_global.py
+------------------------------------------------------------
+
+Purpose:
+Managerial and decision-level dashboard.
+
+Use latest PERIODE by default.
+
+KPIs:
+- Total clients scorés
+- Clients critiques
+- Clients élevés
+- Clients à notifier
+- Score moyen
+- Montant total à risque if RISK_BRUT exists
+
+Filters:
+- PERIODE
+- Niveau d’alerte
+- Score minimum
+
+Charts:
+1. Donut chart:
+Distribution by niveau_alerte.
+
+2. Histogram:
+Distribution of score_pct.
+
+3. Line chart:
+Average score over time.
+
+4. Bar chart:
+Number of critical clients over time.
+
+5. Table:
+Top 20 risky clients.
+
+Table columns:
+- CPTE
+- PERIODE
+- score_pct
+- niveau_alerte
+- NBRJDEP
+- RISK_BRUT
+- action_recommandee
+
+------------------------------------------------------------
+PAGE: app/pages/2_Evolution_risque.py
+------------------------------------------------------------
+
+Purpose:
+Behavioral monitoring and transition analysis.
+
+Input:
+outputs/scoring_evolution.csv
+
+KPIs:
+- Clients en aggravation
+- Clients en amélioration
+- Clients stables
+- Nouveaux clients
+- Total transitions
+
+Filters:
+- Period range
+- Evolution category
+- Alert level
+
+Charts:
+1. Donut chart by evolution category.
+2. Bar chart of top transitions.
+3. Line chart of critical clients over time.
+4. Line chart of average score over time.
+
+Table:
+- CPTE
+- PERIODE
+- niveau_precedent
+- niveau_alerte
+- transition
+- evolution
+- score_pct
+
+Business explanation:
+This page helps identify clients whose behavior is worsening, improving, stable, or newly observed.
+
+------------------------------------------------------------
+PAGE: app/pages/3_Clients_a_notifier.py
+------------------------------------------------------------
+
+Purpose:
+Operational page for account managers.
+
+Use:
+outputs/clients_a_notifier.csv if available.
+Otherwise derive from latest period in scoring_clients.csv.
+
+Use latest PERIODE only.
+
+KPIs:
+- Clients critiques
+- Clients élevés
+- Clients moyens
+- Priorité 1
+- Total clients à traiter
+
+Filters:
+- Search CPTE
+- niveau_alerte
+- priorite_intervention
+- score minimum
+- statut_suivi
+
+Charts:
+1. Donut chart by niveau_alerte.
+2. Histogram of score_pct.
+3. Bar chart by priority.
+4. Bar chart by action_recommandee.
+
+Main table columns:
+- CPTE
+- PERIODE
+- score_pct
+- niveau_alerte
+- evolution
+- NBRJDEP
+- RISK_BRUT
+- priorite_intervention
+- action_recommandee
+- statut_suivi
+
+Sort by:
+1. priority ascending
+2. score_pct descending
+3. NBRJDEP descending
+
+Add:
+Download CSV button:
+clients_a_notifier_priorises.csv
+
+------------------------------------------------------------
+PAGE: app/pages/4_Fiche_client.py
+------------------------------------------------------------
+
+Purpose:
+Detailed client profile for account managers.
+
+Features:
+- Select or search CPTE.
+- Show latest situation.
+- Show history.
+
+KPIs:
+- Score actuel
+- Niveau d’alerte
+- NBRJDEP
+- RISK_BRUT
+- Evolution
+- Action recommandée
+
+Charts:
+1. Gauge chart for score_pct.
+2. Line chart of score_pct over time.
+3. Bar chart of NBRJDEP over time.
+4. Bar/line chart of RISK_BRUT over time.
+
+Risk explanation:
+Use explain_risk(row) from business_rules.py.
+
+Show a section:
+"Pourquoi ce client est risqué ?"
+
+Display bullet explanations.
+
+Recommended action:
+Show a highlighted box with the action to take.
+
+Follow-up simulation form:
+- statut_suivi:
+  À contacter
+  Contacté
+  En suivi
+  Régularisé
+  Escaladé
+
+- commentaire text area
+- Save button displays success message
+
+No real database required. This is a local simulation.
+
+------------------------------------------------------------
+PAGE: app/pages/5_Performance_modele.py
+------------------------------------------------------------
+
+Purpose:
+Model evaluation page for defense and technical validation.
+
+Use:
+outputs/model_comparison.csv if available.
+Otherwise use reference values.
+
+KPIs:
+- Accuracy
+- Recall
+- F1-score
+- ROC-AUC
+
+Charts:
+1. Bar chart comparing models by metric.
+2. Confusion matrix for LightGBM:
+   TN = 2310
+   FP = 63
+   FN = 43
+   TP = 641
+
+3. Feature importance chart with example values:
+   - NBRJDEP
+   - MVT
+   - MARITAL_STATUS
+   - AVG_DEP_3M
+   - DELTA_NBRJDEP
+   - DAYS_OVD_6M
+   - MOIS_CONSEC
+
+Text sections:
+- Pourquoi le recall est prioritaire ?
+- Pourquoi LightGBM a été retenu ?
+- Impact financier:
+  Without the system: 1,026,000 DT
+  With the system: 64,500 DT
+  Reduction: 93.7%
+
+Explain:
+Missing a risky client is more costly than contacting a healthy client.
+
+------------------------------------------------------------
+PAGE: app/pages/6_Chatbot.py
+------------------------------------------------------------
+
+Purpose:
+Rule-based portfolio assistant, no external API.
+
+Name:
+Assistant BIAT Risk
+
+Label:
+Assistant métier basé sur les données du portefeuille.
+
+It must answer using CSV data only.
+No invented numbers.
+
+Inputs:
+- outputs/scoring_clients.csv
+- outputs/scoring_evolution.csv
+- outputs/clients_a_notifier.csv
+
+Always use latest PERIODE for current portfolio numbers.
+
+Suggested questions:
+- Comment évolue le risque global ?
+- Quels sont les clients prioritaires ?
+- Que dois-je faire cette semaine ?
+- Analyse le client CPTE_000362
+- Les nouveaux clients sont-ils plus risqués ?
+- Si j’abaisse le seuil critique à 80% ?
+
+Response logic:
+
+1. If question contains:
+"évolution", "evolution", "global", "portefeuille", "risque"
+
+Return:
+- total scored clients latest period
+- average score latest period
+- critical clients latest period
+- variation of critical clients compared to previous period
+- interpretation:
+  improvement, degradation, or stable
+
+2. If question contains:
+"prioritaire", "action", "faire", "semaine", "contacter", "appeler"
+
+Return:
+- number of Priority 1 clients
+- number of critical clients
+- number of high-risk clients
+- recommended action plan:
+  first Priority 1, then other critical clients, then high-risk clients.
+
+3. If question contains a client ID like:
+CPTE_000362 or CPTE 000362
+
+Return:
+- score
+- level
+- NBRJDEP
+- RISK_BRUT
+- evolution
+- action recommended
+- risk explanation
+
+4. If question contains:
+"nouveau", "nouveaux"
+
+Return:
+- number of new clients
+- number of new clients that are critical
+- percentage
+
+5. If question contains:
+"seuil", "80", "80%"
+
+Simulate lowering the critical threshold from 85% to 80%.
+Return:
+- current critical clients
+- simulated critical clients
+- additional clients
+- business interpretation
+
+The chatbot UI should include:
+- Suggested question buttons
+- Chat history
+- Input box
+- Clear conversation button
+- Sidebar with priority actions
+
+============================================================
+15. REQUIREMENTS.TXT
+============================================================
+
+Create:
+
+requirements.txt
+
+Content:
+
+pandas
+numpy
+openpyxl
+scikit-learn
+lightgbm
+joblib
+plotly
+streamlit
+matplotlib
+
+Do not include shap initially.
+
+============================================================
+16. README.MD
+============================================================
+
+Create a professional README with:
+
+1. Project title
+2. Objective
+3. Business context
+4. Folder structure
+5. Technologies used
+6. How to install:
+
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+7. How to run pipeline:
+
+python src/1_data_preparation.py
+python src/2_feature_engineering.py
+python src/3_train_models.py
+python src/4_scoring.py
+python src/5_build_evolution.py
+
+8. How to run Streamlit app:
+
+streamlit run app/Home.py
+
+9. Description of each app page
+10. Explanation of risk levels
+11. Explanation of priority rules
+12. Notes about future improvements:
+- SHAP explanations
+- database integration
+- authentication
+- Power BI embedded
+- scheduled monthly scoring
+
+============================================================
+17. POWER BI NOTE
+============================================================
+
+Create:
+
+powerbi/README_powerbi.txt
+
+Explain:
+Power BI dashboards are complementary to the Streamlit app.
+
+Power BI is used for:
+- managerial decision dashboards
+- global risk reporting
+- trend analysis
+
+Streamlit is used for:
+- operational client-level exploration
+- clients to notify
+- fiche client
+- chatbot assistant
+- action prioritization
+
+============================================================
+18. PROFESSIONAL QUALITY REQUIREMENTS
+============================================================
+
+The final project must respect these rules:
+
+1. The app must run without errors.
+2. If a CSV file is missing, show a clear warning explaining which script to run.
+3. All pages must use the same data logic.
+4. Current portfolio numbers must use latest PERIODE only.
+5. Do not count historical rows as current clients.
+6. Business thresholds must be centralized in business_rules.py.
+7. Data loading must be centralized in data_loader.py.
+8. Visual design must be consistent across all pages.
+9. UI labels must be in French.
+10. Code must be modular and readable.
+11. Avoid duplicated logic.
+12. Include comments where useful.
+13. Make the app realistic, not decorative.
+14. Use professional banking terminology.
+15. Ensure the project can be explained in a final-year project defense.
+
+============================================================
+19. EXPECTED FINAL RESULT
+============================================================
+
+At the end, I want a complete professional project that contains:
+
+- A working ML pipeline.
+- Prepared data generation.
+- Feature engineering.
+- Model training with LightGBM.
+- Scoring generation.
+- Risk evolution generation.
+- Clients-to-notify generation.
+- A professional Streamlit web application with:
+  - Home
+  - Dashboard global
+  - Évolution du risque
+  - Clients à notifier
+  - Fiche client
+  - Performance modèle
+  - Chatbot assistant
+
+The final app must look like a real banking risk-monitoring system called:
+
+BIAT Risk Monitor
+
+and must be ready to run using:
+
+streamlit run app/Home.py

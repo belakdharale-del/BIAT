@@ -1,0 +1,17 @@
+[server]
+port = 5000
+address = "0.0.0.0"
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "dark"
+backgroundColor = "#0a0f1e"
+secondaryBackgroundColor = "#111827"
+primaryColor = "#3b82f6"
+textColor = "#f1f5f9"
+font = "sans serif"
