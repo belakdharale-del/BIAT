@@ -313,12 +313,42 @@
 <!-- FAB for Quick Actions (Suppressed on Chat/Settings pages according to rules, but kept for context if desired elsewhere. Here it is omitted as per UX guidelines for focused journey) -->
 
 
-
-
-<!-- BIAT_AUTO_NAV_PATCH -->
+<!-- BIAT_AI_ASSISTANT_CLEAN_FIX -->
 <script>
-(() => {
-  const navigationMap = {
+document.addEventListener("DOMContentLoaded", () => {
+  const portfolioData = {
+    totalClients: 12842,
+    criticalClients: 45,
+    highRiskClients: 120,
+    pendingNotifications: 216,
+    averageScore: 84.7,
+    totalExposure: "4.2M TND",
+    recall: 0.9372,
+    rocAuc: 0.9889,
+    priorityClients: [
+      {
+        cpte: "CPTE_0015",
+        score: 96.5,
+        reason: "trois rejets successifs et aggravation récente",
+        action: "examen immédiat du dossier"
+      },
+      {
+        cpte: "CPTE_000362",
+        score: 94.2,
+        reason: "hausse rapide du nombre de jours en dépassement",
+        action: "notification juridique et appel du chargé de compte"
+      },
+      {
+        cpte: "CPTE_0025",
+        score: 91.4,
+        reason: "exposition élevée et score supérieur au seuil critique",
+        action: "revue risque sous 24h"
+      }
+    ]
+  };
+
+  /* Navigation */
+  const routes = {
     "Global Dashboard": "/dashboard",
     "Risk Evolution": "/evolution",
     "Notifications": "/notifications",
@@ -328,127 +358,253 @@
     "Critical Alerts": "/notifications"
   };
 
-  const activeByPath = {
-    "/dashboard": "Global Dashboard",
-    "/evolution": "Risk Evolution",
-    "/notifications": "Notifications",
-    "/client": "Client Profiles",
-    "/performance": "Model Performance",
-    "/assistant": "AI Assistant"
-  };
+  document.querySelectorAll("aside nav div, aside button").forEach((el) => {
+    const text = el.innerText.trim();
 
-  const activeLabel = activeByPath[window.location.pathname];
-
-  document.querySelectorAll("a, button").forEach((element) => {
-    const text = element.innerText.trim();
-
-    Object.keys(navigationMap).forEach((label) => {
+    Object.entries(routes).forEach(([label, url]) => {
       if (text.includes(label)) {
-        const url = navigationMap[label];
-
-        if (element.tagName.toLowerCase() === "a") {
-          element.setAttribute("href", url);
-        } else {
-          element.style.cursor = "pointer";
-          element.onclick = () => {
-            window.location.href = url;
-          };
-        }
-
-        // Remove wrong active state
-        element.classList.remove(
-          "bg-secondary-container",
-          "text-on-secondary-container",
-          "font-bold",
-          "scale-[0.98]"
-        );
-
-        element.classList.add(
-          "text-on-surface-variant",
-          "hover:text-on-surface",
-          "hover:bg-surface-variant/30"
-        );
-
-        // Apply correct active state
-        if (label === activeLabel) {
-          element.classList.remove(
-            "text-on-surface-variant",
-            "hover:text-on-surface",
-            "hover:bg-surface-variant/30"
-          );
-
-          element.classList.add(
-            "bg-secondary-container",
-            "text-on-secondary-container",
-            "rounded-lg",
-            "font-bold",
-            "scale-[0.98]"
-          );
-        }
-      }
-    });
-  });
-})();
-</script>
-
-
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  const activeClasses = [
-    "bg-secondary-container",
-    "text-on-secondary-container",
-    "rounded-lg",
-    "font-bold",
-    "scale-[0.98]"
-  ];
-
-  const inactiveClasses = [
-    "text-on-surface-variant",
-    "hover:text-on-surface",
-    "hover:bg-surface-variant/30"
-  ];
-
-  const currentPath = window.location.pathname;
-
-  document.querySelectorAll("aside a").forEach((link) => {
-    const text = link.innerText.trim();
-
-    Object.entries(navigationMap).forEach(([label, url]) => {
-      if (text.includes(label)) {
-        link.setAttribute("href", url);
-
-        activeClasses.forEach((cls) => link.classList.remove(cls));
-        inactiveClasses.forEach((cls) => link.classList.add(cls));
-
-        if (currentPath === url) {
-          inactiveClasses.forEach((cls) => link.classList.remove(cls));
-          activeClasses.forEach((cls) => link.classList.add(cls));
-        }
+        el.style.cursor = "pointer";
+        el.onclick = () => {
+          window.location.href = url;
+        };
       }
     });
   });
 
-  document.querySelectorAll("button, a").forEach((element) => {
-    const text = element.innerText.trim();
+  function normalize(text) {
+    return String(text)
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  }
 
-    if (text.includes("Critical Alerts")) {
-      element.style.cursor = "pointer";
-      element.onclick = () => {
-        window.location.href = "/notifications";
+  function escapeHtml(text) {
+    return String(text)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function getMessagesContainer() {
+    const containers = Array.from(document.querySelectorAll("div"));
+
+    return (
+      containers.find((el) =>
+        String(el.className).includes("overflow-y-auto") &&
+        String(el.className).includes("p-container-padding") &&
+        el.innerText.includes("ANALYSE DU PORTEFEUILLE")
+      ) ||
+      containers.find((el) =>
+        String(el.className).includes("overflow-y-auto") &&
+        String(el.className).includes("space-y-gutter")
+      )
+    );
+  }
+
+  const messagesContainer = getMessagesContainer();
+  const input = Array.from(document.querySelectorAll("textarea, input")).find((el) =>
+    (el.placeholder || "").toLowerCase().includes("interroger")
+  );
+
+  const sendButton = Array.from(document.querySelectorAll("button")).find((btn) =>
+    btn.innerText.trim().toLowerCase().includes("envoyer")
+  );
+
+  if (!messagesContainer || !input || !sendButton) {
+    console.error("AI Assistant elements not found.");
+    return;
+  }
+
+  messagesContainer.style.display = "flex";
+  messagesContainer.style.flexDirection = "column";
+  messagesContainer.style.gap = "16px";
+
+  function getAnswer(question) {
+    const q = normalize(question);
+
+    if (q.includes("prioritaire") || q.includes("prioritaires")) {
+      return {
+        title: "CLIENTS PRIORITAIRES À TRAITER",
+        body: "Les clients prioritaires sont les clients critiques avec score élevé, aggravation récente et exposition importante.",
+        points: portfolioData.priorityClients.map(
+          (c) => `${c.cpte} — score ${c.score}% — ${c.reason}. Action recommandée : ${c.action}.`
+        )
+      };
+    }
+
+    if (q.includes("000362") || q.includes("cpte_000362")) {
+      return {
+        title: "ANALYSE CLIENT CPTE_000362",
+        body: "Le client CPTE_000362 présente un risque critique avec un score estimé à 94.2%. Le profil montre une hausse du nombre de jours en dépassement.",
+        points: [
+          "Niveau d’alerte : Critique.",
+          "Priorité : P2, proche du seuil P1.",
+          "Action recommandée : appel du chargé de compte et notification préventive.",
+          "Surveillance conseillée : quotidienne pendant 7 jours."
+        ]
+      };
+    }
+
+    if (q.includes("0015") || q.includes("cpte_0015")) {
+      return {
+        title: "ANALYSE CLIENT CPTE_0015",
+        body: "Le client CPTE_0015 est critique. Le signal principal est une succession de rejets et une aggravation comportementale.",
+        points: [
+          "Score estimé : 96.5%.",
+          "Priorité : P1.",
+          "Action recommandée : examen immédiat du dossier.",
+          "Contacter le client aujourd’hui."
+        ]
+      };
+    }
+
+    if (q.includes("global") || q.includes("evolue") || q.includes("risque")) {
+      return {
+        title: "ÉVOLUTION DU RISQUE GLOBAL",
+        body: `Le portefeuille présente une pression modérée. Le score moyen est actuellement de ${portfolioData.averageScore}%, avec ${portfolioData.criticalClients} clients critiques et ${portfolioData.highRiskClients} clients à risque élevé.`,
+        points: [
+          `Exposition totale estimée : ${portfolioData.totalExposure}.`,
+          `${portfolioData.pendingNotifications} notifications sont encore en attente de traitement.`,
+          "La priorité doit rester sur les clients critiques en aggravation."
+        ]
+      };
+    }
+
+    if (q.includes("seuil") || q.includes("80")) {
+      return {
+        title: "SIMULATION DU SEUIL CRITIQUE À 80%",
+        body: "Abaisser le seuil critique à 80% augmente le nombre de clients à traiter. Cela améliore la détection préventive mais augmente aussi la charge opérationnelle.",
+        points: [
+          "Avantage : moins de clients risqués non détectés.",
+          "Inconvénient : plus de faux positifs.",
+          "Recommandation : garder 85% comme seuil critique principal."
+        ]
+      };
+    }
+
+    if (q.includes("modele") || q.includes("lightgbm") || q.includes("recall")) {
+      return {
+        title: "PERFORMANCE DU MODÈLE LIGHTGBM",
+        body: `Le modèle LightGBM est adapté aux données bancaires tabulaires. Le recall actuel est de ${portfolioData.recall}, ce qui est prioritaire pour éviter de manquer les clients risqués.`,
+        points: [
+          `ROC-AUC : ${portfolioData.rocAuc}.`,
+          "Le recall est plus important que la précision dans ce cas métier.",
+          "Un faux négatif peut coûter plus cher qu’un faux positif."
+        ]
+      };
+    }
+
+    return {
+      title: "ANALYSE GÉNÉRALE DU PORTEFEUILLE",
+      body: "Je peux analyser le risque global, les clients prioritaires, un client spécifique, les seuils critiques ou les performances du modèle.",
+      points: [
+        "Essayez : Comment évolue le risque global ?",
+        "Essayez : Quels sont les clients prioritaires ?",
+        "Essayez : Analyse le client CPTE_000362"
+      ]
+    };
+  }
+
+  function addUserMessage(text) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "flex justify-end mb-stack-lg";
+
+    wrapper.innerHTML = `
+      <div class="max-w-[70%] bg-secondary-container text-on-secondary px-gutter py-stack-md rounded-xl rounded-tr-none">
+        <p class="font-body-md text-body-md">${escapeHtml(text)}</p>
+      </div>
+    `;
+
+    messagesContainer.appendChild(wrapper);
+  }
+
+  function addAssistantMessage(answer) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "flex justify-start items-start gap-base mb-stack-lg";
+
+    const pointsHtml = answer.points
+      .map(
+        (point) => `
+          <li class="flex gap-base">
+            <span class="text-primary-container">•</span>
+            <span>${escapeHtml(point)}</span>
+          </li>
+        `
+      )
+      .join("");
+
+    wrapper.innerHTML = `
+      <div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-primary-container/20 flex items-center justify-center text-primary-container shrink-0">
+        <span class="material-symbols-outlined">smart_toy</span>
+      </div>
+
+      <div class="max-w-[85%] glass-panel p-gutter rounded-xl rounded-tl-none message-glow">
+        <div class="flex items-center justify-between mb-stack-md">
+          <span class="font-label-sm text-label-sm text-primary-container">${escapeHtml(answer.title)}</span>
+          <span class="font-label-sm text-label-sm text-outline opacity-50">RÉPONSE MOCK</span>
+        </div>
+
+        <div class="space-y-stack-md font-body-md text-body-md text-on-surface">
+          <p>${escapeHtml(answer.body)}</p>
+          <ul class="list-none space-y-stack-sm pl-0 mt-stack-md">
+            ${pointsHtml}
+          </ul>
+        </div>
+      </div>
+    `;
+
+    messagesContainer.appendChild(wrapper);
+  }
+
+  function ask(question) {
+    const text = question.trim();
+    if (!text) return;
+
+    addUserMessage(text);
+
+    const thinking = document.createElement("div");
+    thinking.className = "text-on-surface-variant font-body-sm mb-stack-lg";
+    thinking.innerText = "Analyse en cours...";
+    messagesContainer.appendChild(thinking);
+
+    setTimeout(() => {
+      thinking.remove();
+      addAssistantMessage(getAnswer(text));
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 300);
+
+    input.value = "";
+    input.focus();
+  }
+
+  sendButton.onclick = () => ask(input.value);
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      ask(input.value);
+    }
+  });
+
+  document.querySelectorAll("aside button").forEach((button) => {
+    const text = button.innerText.trim();
+
+    if (
+      text.includes("Comment évolue le risque global") ||
+      text.includes("Quels sont les clients prioritaires") ||
+      text.includes("Analyse le client")
+    ) {
+      button.onclick = () => {
+        input.value = text;
+        ask(text);
       };
     }
   });
 });
 </script>
 
-</body></html>
+</body>
+</html>
