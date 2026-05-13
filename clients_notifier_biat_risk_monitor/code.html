@@ -534,4 +534,144 @@
 </div>
 </div>
 </main>
+
+
+
+
+<!-- BIAT_AUTO_NAV_PATCH -->
+<script>
+(() => {
+  const navigationMap = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant",
+    "Critical Alerts": "/notifications"
+  };
+
+  const activeByPath = {
+    "/dashboard": "Global Dashboard",
+    "/evolution": "Risk Evolution",
+    "/notifications": "Notifications",
+    "/client": "Client Profiles",
+    "/performance": "Model Performance",
+    "/assistant": "AI Assistant"
+  };
+
+  const activeLabel = activeByPath[window.location.pathname];
+
+  document.querySelectorAll("a, button").forEach((element) => {
+    const text = element.innerText.trim();
+
+    Object.keys(navigationMap).forEach((label) => {
+      if (text.includes(label)) {
+        const url = navigationMap[label];
+
+        if (element.tagName.toLowerCase() === "a") {
+          element.setAttribute("href", url);
+        } else {
+          element.style.cursor = "pointer";
+          element.onclick = () => {
+            window.location.href = url;
+          };
+        }
+
+        // Remove wrong active state
+        element.classList.remove(
+          "bg-secondary-container",
+          "text-on-secondary-container",
+          "font-bold",
+          "scale-[0.98]"
+        );
+
+        element.classList.add(
+          "text-on-surface-variant",
+          "hover:text-on-surface",
+          "hover:bg-surface-variant/30"
+        );
+
+        // Apply correct active state
+        if (label === activeLabel) {
+          element.classList.remove(
+            "text-on-surface-variant",
+            "hover:text-on-surface",
+            "hover:bg-surface-variant/30"
+          );
+
+          element.classList.add(
+            "bg-secondary-container",
+            "text-on-secondary-container",
+            "rounded-lg",
+            "font-bold",
+            "scale-[0.98]"
+          );
+        }
+      }
+    });
+  });
+})();
+</script>
+
+
+<!-- BIAT_AUTO_NAV_PATCH -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const navigationMap = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant"
+  };
+
+  const activeClasses = [
+    "bg-secondary-container",
+    "text-on-secondary-container",
+    "rounded-lg",
+    "font-bold",
+    "scale-[0.98]"
+  ];
+
+  const inactiveClasses = [
+    "text-on-surface-variant",
+    "hover:text-on-surface",
+    "hover:bg-surface-variant/30"
+  ];
+
+  const currentPath = window.location.pathname;
+
+  document.querySelectorAll("aside a").forEach((link) => {
+    const text = link.innerText.trim();
+
+    Object.entries(navigationMap).forEach(([label, url]) => {
+      if (text.includes(label)) {
+        link.setAttribute("href", url);
+
+        activeClasses.forEach((cls) => link.classList.remove(cls));
+        inactiveClasses.forEach((cls) => link.classList.add(cls));
+
+        if (currentPath === url) {
+          inactiveClasses.forEach((cls) => link.classList.remove(cls));
+          activeClasses.forEach((cls) => link.classList.add(cls));
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("button, a").forEach((element) => {
+    const text = element.innerText.trim();
+
+    if (text.includes("Critical Alerts")) {
+      element.style.cursor = "pointer";
+      element.onclick = () => {
+        window.location.href = "/notifications";
+      };
+    }
+  });
+});
+</script>
+
 </body></html>

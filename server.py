@@ -14,7 +14,7 @@ ROUTES = {
     "/evolution": "risk_evolution_biat_risk_monitor/code.html",
     "/notifications": "clients_notifier_biat_risk_monitor/code.html",
     "/client": "fiche_client_biat_risk_monitor/code.html",
-    "/performance": "performance_modele_biat_risk_monitor/code.html",
+    "/performance": "performance_mod_le_biat_risk_monitor/code.html",
     "/assistant": "assistant_ia_biat_risk_monitor/code.html",
 }
 
@@ -31,9 +31,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_header("Content-type", "text/html; charset=utf-8")
                 self.end_headers()
 
-                with open(file_path, "rb") as f:
-                    self.wfile.write(f.read())
+                with open(file_path, "rb") as file:
+                    self.wfile.write(file.read())
                 return
+
+            self.send_error(404, f"Page file not found: {ROUTES[clean_path]}")
+            return
 
         return super().do_GET()
 
@@ -41,16 +44,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         print(f"{self.address_string()} - {format % args}")
 
 
-os.chdir(BASE_DIR)
+if __name__ == "__main__":
+    os.chdir(BASE_DIR)
 
-with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
-    print(f"Serving BIAT Risk Monitor at http://localhost:{PORT}")
-    print("Available pages:")
-    print(f"  Home:          http://localhost:{PORT}/")
-    print(f"  Dashboard:     http://localhost:{PORT}/dashboard")
-    print(f"  Evolution:     http://localhost:{PORT}/evolution")
-    print(f"  Notifications: http://localhost:{PORT}/notifications")
-    print(f"  Client:        http://localhost:{PORT}/client")
-    print(f"  Performance:   http://localhost:{PORT}/performance")
-    print(f"  Assistant:     http://localhost:{PORT}/assistant")
-    httpd.serve_forever()
+    with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+        print(f"Serving BIAT Risk Monitor at http://localhost:{PORT}")
+        print("Available pages:")
+        print(f"  Home:          http://localhost:{PORT}/")
+        print(f"  Dashboard:     http://localhost:{PORT}/dashboard")
+        print(f"  Evolution:     http://localhost:{PORT}/evolution")
+        print(f"  Notifications: http://localhost:{PORT}/notifications")
+        print(f"  Client:        http://localhost:{PORT}/client")
+        print(f"  Performance:   http://localhost:{PORT}/performance")
+        print(f"  Assistant:     http://localhost:{PORT}/assistant")
+        httpd.serve_forever()
