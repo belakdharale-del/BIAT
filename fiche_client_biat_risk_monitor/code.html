@@ -3,625 +3,732 @@
 Puis clique sur la sidebar.
 
 <!DOCTYPE html>
+<html class="dark" lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIAT Risk Monitor | Fiche Client</title>
 
-<html class="dark" lang="fr"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>BIAT Risk Monitor | Système de Prédiction</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-card {
-            background: rgba(17, 34, 64, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(35, 53, 84, 0.5);
-        }
-        .glass-card:hover {
-            border-color: rgba(100, 255, 218, 0.3);
-        }
-        .glow-text {
-            text-shadow: 0 0 15px rgba(100, 255, 218, 0.4);
-        }
-    </style>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "surface-variant": "#2a344e",
-                    "surface-container-low": "#101b33",
-                    "on-surface": "#d9e2ff",
-                    "inverse-on-surface": "#263049",
-                    "on-secondary-container": "#a5b5db",
-                    "outline": "#85948e",
-                    "error": "#ffb4ab",
-                    "primary-container": "#5ffbd6",
-                    "tertiary-container": "#fbe273",
-                    "on-tertiary-fixed": "#211b00",
-                    "on-error-container": "#ffdad6",
-                    "primary-fixed": "#5ffbd6",
-                    "surface": "#07122a",
-                    "primary": "#ffffff",
-                    "on-tertiary-container": "#756400",
-                    "surface-container-lowest": "#030d25",
-                    "background": "#07122a",
-                    "surface-tint": "#38debb",
-                    "error-container": "#93000a",
-                    "on-secondary": "#20304f",
-                    "on-tertiary": "#393000",
-                    "on-surface-variant": "#bacac3",
-                    "secondary-fixed": "#d8e2ff",
-                    "tertiary-fixed": "#fbe273",
-                    "tertiary-fixed-dim": "#dec65a",
-                    "tertiary": "#ffffff",
-                    "secondary-container": "#374767",
-                    "surface-dim": "#07122a",
-                    "on-primary": "#00382d",
-                    "secondary": "#b6c6ed",
-                    "surface-container-high": "#1f2942",
-                    "surface-container-highest": "#2a344e",
-                    "on-primary-fixed": "#002019",
-                    "on-primary-fixed-variant": "#005142",
-                    "inverse-surface": "#d9e2ff",
-                    "on-error": "#690005",
-                    "outline-variant": "#3c4a45",
-                    "on-secondary-fixed-variant": "#374767",
-                    "secondary-fixed-dim": "#b6c6ed",
-                    "on-primary-container": "#00725e",
-                    "on-secondary-fixed": "#091b39",
-                    "on-background": "#d9e2ff",
-                    "surface-container": "#151f37",
-                    "inverse-primary": "#006b58",
-                    "on-tertiary-fixed-variant": "#534600",
-                    "surface-bright": "#2f3952",
-                    "primary-fixed-dim": "#38debb"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "spacing": {
-                    "base": "8px",
-                    "stack-md": "12px",
-                    "stack-sm": "4px",
-                    "gutter": "16px",
-                    "container-padding": "24px",
-                    "stack-lg": "32px"
-            },
-            "fontFamily": {
-                    "label-sm": ["JetBrains Mono"],
-                    "label-md": ["JetBrains Mono"],
-                    "headline-lg": ["Hanken Grotesk"],
-                    "body-md": ["Inter"],
-                    "headline-lg-mobile": ["Hanken Grotesk"],
-                    "body-sm": ["Inter"],
-                    "headline-md": ["Hanken Grotesk"],
-                    "body-lg": ["Inter"],
-                    "display-lg": ["Hanken Grotesk"]
-            },
-            "fontSize": {
-                    "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
-                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
-            }
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#07122a",
+            surface: "#07122a",
+            "surface-container-lowest": "#030d25",
+            "surface-container-low": "#101b33",
+            "surface-container": "#151f37",
+            "surface-container-high": "#1f2942",
+            "surface-container-highest": "#2a344e",
+            "surface-variant": "#2a344e",
+            "on-surface": "#d9e2ff",
+            "on-surface-variant": "#bacac3",
+            outline: "#85948e",
+            "outline-variant": "#3c4a45",
+            primary: "#ffffff",
+            "primary-container": "#5ffbd6",
+            "on-primary-container": "#00382d",
+            secondary: "#b6c6ed",
+            "secondary-container": "#374767",
+            "on-secondary-container": "#d9e2ff",
+            error: "#ffb4ab",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            tertiary: "#fbe273"
           },
-        },
-      }
-    </script>
-</head>
-<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
-<!-- SideNavBar -->
-<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col h-full py-stack-lg z-50">
-<div class="px-gutter mb-stack-lg">
-<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Vigilant Professionalism</p>
-</div>
-<nav class="flex-1 space-y-1 px-base">
-<a class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform" href="#">
-<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span class="font-label-md text-label-md">Global Dashboard</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
-<span class="font-label-md text-label-md">Risk Evolution</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span class="font-label-md text-label-md">Notifications</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="group">group</span>
-<span class="font-label-md text-label-md">Client Profiles</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
-<span class="font-label-md text-label-md">Model Performance</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
-<span class="font-label-md text-label-md">AI Assistant</span>
-</a>
-</nav>
-<div class="px-gutter mb-stack-lg">
-<button class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-bold flex items-center justify-center gap-base">
-<span class="material-symbols-outlined" data-icon="warning">warning</span>
-                Critical Alerts
-            </button>
-</div>
-<div class="mt-auto px-base border-t border-outline-variant pt-stack-lg">
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-<span class="font-label-md text-label-md">Settings</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
-<span class="material-symbols-outlined" data-icon="help">help</span>
-<span class="font-label-md text-label-md">Support</span>
-</a>
-</div>
-</aside>
-<!-- TopAppBar -->
-<header class="fixed top-0 left-0 right-0 h-16 ml-[280px] bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant shadow-sm z-40 flex justify-between items-center px-container-padding">
-<div class="flex items-center gap-gutter">
-<div class="relative group">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
-<input class="bg-surface-container-lowest border-outline-variant rounded-full pl-10 pr-gutter py-2 text-sm focus:ring-2 focus:ring-primary-container outline-none transition-all w-64 focus:w-80" placeholder="Rechercher un dossier client..." type="text"/>
-</div>
-</div>
-<div class="flex items-center gap-gutter">
-<button class="bg-primary text-on-primary px-gutter py-2 rounded-lg font-bold text-sm transition-transform active:scale-95">
-                Quick Action
-            </button>
-<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-</button>
-<div class="flex items-center gap-base border-l border-outline-variant pl-gutter">
-<img alt="User Profile" class="w-8 h-8 rounded-full border border-primary/20" data-alt="A professional headshot of a corporate banking executive in a modern workspace. The lighting is crisp and cool-toned, reflecting a high-authority financial environment. The background is a softly blurred office with blue accent lighting, maintaining the vigilant and professional aesthetic of the bank's internal tools." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2poofvlZjmVY5akOFqpoQ8oaJGRrFf8TGmE_gPucWRzCi91I5DoGPSxUywoiA60bghotQVJZZctDm2s8xf_lyhGz8NgjNtqHBE4Ic1riF4pXIUymzW4BEY2kOY9b_00s-aqTf5Xt6cE-RQazDC556JA_R6VyW2i6mCPx-vqVJFIjktY5WvV1pIZNDtF69osj_Tby8YTak01n1hhUREhDM2hydSGFi6cckrBMciA5Cfiqb6StERf7ECWRKDQeesImwdKQY3RQpvjY"/>
-<span class="font-label-md text-label-md text-primary">D. Ben Salem</span>
-</div>
-</div>
-</header>
-<!-- Main Content -->
-<main class="ml-[280px] mt-16 p-container-padding min-h-screen space-y-stack-lg">
-<!-- Hero Section -->
-<section class="relative overflow-hidden rounded-xl bg-surface-container-high p-stack-lg border border-outline-variant">
-<div class="relative z-10 max-w-3xl">
-<span class="inline-block px-3 py-1 rounded-full bg-primary-container/10 border border-primary-container/20 text-primary-container font-label-sm text-xs mb-stack-md">PROJET STRATÉGIQUE</span>
-<h2 class="font-display-lg text-display-lg text-primary mb-stack-md leading-tight">
-                    BIAT Risk Monitor — <span class="text-primary-container">Système de prédiction</span> du risque de dépassement de découvert
-                </h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant mb-gutter max-w-2xl">
-                    Une architecture prédictive de pointe permettant d'identifier les défaillances de trésorerie 30 jours à l'avance pour une gestion proactive du portefeuille client.
-                </p>
-<div class="flex gap-gutter">
-<button class="bg-primary-container text-on-primary-container px-gutter py-3 rounded-lg font-bold flex items-center gap-base hover:shadow-[0_0_20px_rgba(95,251,214,0.3)] transition-all">
-                        Consulter les alertes
-                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-</button>
-<button class="border border-outline text-primary px-gutter py-3 rounded-lg font-bold hover:bg-surface-variant/30 transition-all">
-                        Documentation technique
-                    </button>
-</div>
-</div>
-<!-- Decorative Element -->
-<div class="absolute top-0 right-0 w-1/3 h-full opacity-20 pointer-events-none bg-gradient-to-l from-primary-container/30 to-transparent"></div>
-<div class="absolute -right-20 -top-20 w-80 h-80 bg-primary-container/5 blur-[120px] rounded-full"></div>
-</section>
-<!-- KPI Grid -->
-<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
-<div class="glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-start mb-stack-md">
-<span class="text-primary-container material-symbols-outlined" data-icon="analytics">analytics</span>
-<span class="text-xs font-label-sm text-primary-container bg-primary-container/10 px-2 py-0.5 rounded">+0.2%</span>
-</div>
-<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">ROC-AUC</p>
-<h3 class="font-headline-md text-headline-md font-bold text-primary">0.9889</h3>
-</div>
-<div class="glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-start mb-stack-md">
-<span class="text-secondary material-symbols-outlined" data-icon="target">target</span>
-<span class="text-xs font-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded">Target</span>
-</div>
-<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Recall</p>
-<h3 class="font-headline-md text-headline-md font-bold text-primary">0.9372</h3>
-</div>
-<div class="glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-start mb-stack-md">
-<span class="text-tertiary-fixed material-symbols-outlined" data-icon="verified">verified</span>
-<span class="text-xs font-label-sm text-tertiary-fixed bg-tertiary-fixed/10 px-2 py-0.5 rounded">High</span>
-</div>
-<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">F1-Score</p>
-<h3 class="font-headline-md text-headline-md font-bold text-primary">0.9450</h3>
-</div>
-<div class="glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-start mb-stack-md">
-<span class="text-on-surface-variant material-symbols-outlined" data-icon="group">group</span>
-</div>
-<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Clients Scorés</p>
-<h3 class="font-headline-md text-headline-md font-bold text-primary">1,240</h3>
-</div>
-<div class="glass-card p-gutter rounded-xl border-error/30">
-<div class="flex justify-between items-start mb-stack-md">
-<span class="text-error material-symbols-outlined" data-icon="report_problem">report_problem</span>
-<span class="text-xs font-label-sm text-error bg-error/10 px-2 py-0.5 rounded">Alert</span>
-</div>
-<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Critiques</p>
-<h3 class="font-headline-md text-headline-md font-bold text-error">45</h3>
-</div>
-<div class="glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-start mb-stack-md">
-<span class="text-on-surface-variant material-symbols-outlined" data-icon="speed">speed</span>
-</div>
-<p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Score Moyen</p>
-<h3 class="font-headline-md text-headline-md font-bold text-primary">28%</h3>
-</div>
-</section>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-<!-- About Section -->
-<div class="lg:col-span-2 space-y-gutter">
-<div class="glass-card p-stack-lg rounded-xl">
-<h3 class="font-headline-md text-headline-md text-primary mb-gutter border-b border-outline-variant pb-stack-md">À propos du projet</h3>
-<div class="grid md:grid-cols-2 gap-stack-lg">
-<div class="space-y-stack-md">
-<p class="font-body-md text-on-surface">Le système exploite l'algorithme <span class="text-primary-container font-bold">LightGBM</span> pour analyser des milliers de variables comportementales et transactionnelles.</p>
-<p class="font-body-sm text-on-surface-variant">L'objectif principal est la détection précoce des signes de fragilité financière, permettant aux chargés d'affaires de proposer des solutions de restructuration avant que le dépassement ne devienne critique.</p>
-<ul class="space-y-2">
-<li class="flex items-center gap-2 text-sm text-on-surface-variant">
-<span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
-                                    Prévision à horizon 30 jours
-                                </li>
-<li class="flex items-center gap-2 text-sm text-on-surface-variant">
-<span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
-                                    Analyse granulaire par client
-                                </li>
-<li class="flex items-center gap-2 text-sm text-on-surface-variant">
-<span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
-                                    Explicabilité du score (SHAP)
-                                </li>
-</ul>
-</div>
-<div class="relative rounded-lg overflow-hidden group">
-<img alt="Data Visualization" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A sophisticated data visualization dashboard showing complex line charts with glowing neon paths and statistical heatmaps. The image represents the LightGBM model output in a financial context, using a palette of deep navy blues, vibrant cyan accents, and high-contrast labels. The mood is analytical, high-tech, and precise, symbolizing the vigilant professionalism of the BIAT risk department." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-dnSnm6i8UMSRHR6cSqxESzOvxQ-7Y1FvtHQ2nmD-R1ScA6mWE6VzPrXSUurka8He44EPSn3ssL-Rb0I1cItUJMfRHEpo6LUpEj_aGWFFu5DLcOjv3VCz5-in0xRZpXI_mHvRgxgngHYDeHjVxik9OMOwiwLhDDclvHL6l6Wq7y33BMDSVE6TnPTB7jTKBWmz1dlRlnYyaLRJqgukp2ZRs7ZEla9FhSFtUUGG4B3M3jlebrCS7Jwy_0xXpzJIw3rUvqALKooFxx4"/>
-<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
-</div>
-</div>
-</div>
-<!-- Bento Grid Navigation -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-<a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="#">
-<span class="material-symbols-outlined text-3xl text-secondary mb-stack-md block" data-icon="query_stats">query_stats</span>
-<h4 class="font-label-md text-label-md text-primary mb-1">Évolution du Risque</h4>
-<p class="text-xs text-on-surface-variant">Tendances macro et analyses sectorielles.</p>
-</a>
-<a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="#">
-<span class="material-symbols-outlined text-3xl text-primary-container mb-stack-md block" data-icon="mail">mail</span>
-<h4 class="font-label-md text-label-md text-primary mb-1">Clients à Notifier</h4>
-<p class="text-xs text-on-surface-variant">Alertes automatiques et workflows prioritaires.</p>
-</a>
-<a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="#">
-<span class="material-symbols-outlined text-3xl text-tertiary-fixed mb-stack-md block" data-icon="person_search">person_search</span>
-<h4 class="font-label-md text-label-md text-primary mb-1">Fiche Client</h4>
-<p class="text-xs text-on-surface-variant">Vue 360° et historique transactionnel.</p>
-</a>
-</div>
-</div>
-<!-- Side Sidebar (Model Performance) -->
-<div class="space-y-gutter">
-<div class="glass-card p-gutter rounded-xl">
-<div class="flex items-center justify-between mb-gutter">
-<h3 class="font-label-md text-label-md text-primary font-bold">État du Modèle</h3>
-<span class="flex h-2 w-2 rounded-full bg-primary-container animate-pulse"></span>
-</div>
-<div class="space-y-stack-lg">
-<div>
-<div class="flex justify-between text-xs mb-1">
-<span class="text-on-surface-variant">Précision Moyenne</span>
-<span class="text-primary-container">98.9%</span>
-</div>
-<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-primary-container w-[98.9%] shadow-[0_0_8px_#5ffbd6]"></div>
-</div>
-</div>
-<div>
-<div class="flex justify-between text-xs mb-1">
-<span class="text-on-surface-variant">Stabilité (PSI)</span>
-<span class="text-secondary">Optimal</span>
-</div>
-<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-[85%] shadow-[0_0_8px_#b6c6ed]"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl bg-gradient-to-br from-secondary-container/20 to-transparent">
-<div class="flex gap-base mb-stack-md">
-<span class="material-symbols-outlined text-primary-container" data-icon="smart_toy">smart_toy</span>
-<h3 class="font-label-md text-label-md text-primary font-bold">Assistant IA</h3>
-</div>
-<p class="text-sm text-on-surface-variant mb-stack-lg italic">"Dernière analyse : Le segment 'PME Import-Export' montre une volatilité accrue ce trimestre (+12%)."</p>
-<button class="w-full py-2 border border-outline-variant text-sm font-label-md hover:bg-surface-variant/30 rounded-lg transition-colors">
-                        Ouvrir le Chatbot
-                    </button>
-</div>
-<div class="rounded-xl overflow-hidden relative h-48 border border-outline-variant">
-<img alt="Network Status" class="w-full h-full object-cover" data-alt="A futuristic digital grid representing a global financial network, with glowing data nodes and interconnected light paths over a dark navy background. The visual style is abstract, using banking blues and subtle greens to convey a sense of vast, high-speed data processing and artificial intelligence surveillance. The mood is sophisticated and technically superior." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbK3LWyxM1vykg9RuAWzLqiLbD_XbVzDeYfplMzDs-GIUEFhzGBmGaph8i8QsDzp0N-zOm9D1nqjVz864SIaKlnXnV-V8UkZWtBeyF7EZRKE45V3e6y6_TVcTpwXfI1vvmy6VP4geAw4FYXFGl8pATb5eFcE_abonQpG34FN5Xj0OZKeWdVRlZiDdohH-Z47T5__iGhZ-JeqKmPnisNNJI9c9R7QJmILy2gAHmWhzZJGtUAZ7Gt0IttpiEwgviylA93HFE8yzixDY"/>
-<div class="absolute inset-0 bg-surface/40 flex items-center justify-center p-gutter">
-<div class="text-center">
-<p class="font-label-sm text-xs text-primary mb-stack-sm">Rapport de Performance</p>
-<button class="text-primary-container font-bold text-sm flex items-center gap-2 mx-auto">
-                                Télécharger PDF <span class="material-symbols-outlined text-sm" data-icon="download">download</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Recent Alerts Table (Sample) -->
-<section class="glass-card rounded-xl overflow-hidden border border-outline-variant">
-<div class="p-gutter border-b border-outline-variant flex justify-between items-center bg-surface-container-highest/20">
-<h3 class="font-headline-md text-headline-md text-primary">Alertes Récentes Haute Priorité</h3>
-<button class="text-primary-container text-sm font-bold flex items-center gap-1">
-                    Voir tout le registre <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
-</button>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-highest/10">
-<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Client ID</th>
-<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Segment</th>
-<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider text-center">Score de Risque</th>
-<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Dernière Transaction</th>
-<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Statut</th>
-<th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Action</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-outline-variant">
-<tr class="hover:bg-surface-variant/20 transition-colors">
-<td class="px-gutter py-stack-md font-label-md text-primary">#TR-2904</td>
-<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Entreprise Industrielle</td>
-<td class="px-gutter py-stack-md text-center">
-<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-bold text-xs">92%</span>
-</td>
-<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Aujourd'hui, 09:42</td>
-<td class="px-gutter py-stack-md">
-<div class="flex items-center gap-2">
-<span class="w-2 h-2 rounded-full bg-error"></span>
-<span class="text-xs text-on-surface">Critique</span>
-</div>
-</td>
-<td class="px-gutter py-stack-md">
-<button class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</button>
-</td>
-</tr>
-<tr class="hover:bg-surface-variant/20 transition-colors">
-<td class="px-gutter py-stack-md font-label-md text-primary">#TR-1182</td>
-<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Services Tech</td>
-<td class="px-gutter py-stack-md text-center">
-<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-xs">78%</span>
-</td>
-<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Hier, 16:15</td>
-<td class="px-gutter py-stack-md">
-<div class="flex items-center gap-2">
-<span class="w-2 h-2 rounded-full bg-tertiary-fixed"></span>
-<span class="text-xs text-on-surface">Avertissement</span>
-</div>
-</td>
-<td class="px-gutter py-stack-md">
-<button class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</button>
-</td>
-</tr>
-<tr class="hover:bg-surface-variant/20 transition-colors">
-<td class="px-gutter py-stack-md font-label-md text-primary">#TR-8843</td>
-<td class="px-gutter py-stack-md text-sm text-on-surface-variant">Agro-Business</td>
-<td class="px-gutter py-stack-md text-center">
-<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-bold text-xs">88%</span>
-</td>
-<td class="px-gutter py-stack-md text-sm text-on-surface-variant">24/10/2023</td>
-<td class="px-gutter py-stack-md">
-<div class="flex items-center gap-2">
-<span class="w-2 h-2 rounded-full bg-error"></span>
-<span class="text-xs text-on-surface">Critique</span>
-</div>
-</td>
-<td class="px-gutter py-stack-md">
-<button class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</button>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</main>
-<!-- Contextual FAB for quick reporting -->
-<button class="fixed bottom-gutter right-gutter w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
-<span class="material-symbols-outlined" data-icon="add_chart" style="font-variation-settings: 'FILL' 1;">add_chart</span>
-</button>
-
-
-<script>
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant",
-    "Critical Alerts": "/notifications"
-  };
-
-  document.querySelectorAll("a, button").forEach((element) => {
-    const text = element.innerText.trim();
-
-    Object.keys(navigationMap).forEach((label) => {
-      if (text.includes(label)) {
-        const url = navigationMap[label];
-
-        if (element.tagName.toLowerCase() === "a") {
-          element.setAttribute("href", url);
-        } else {
-          element.style.cursor = "pointer";
-          element.addEventListener("click", () => {
-            window.location.href = url;
-          });
+          fontFamily: {
+            mono: ["JetBrains Mono"],
+            display: ["Hanken Grotesk"],
+            body: ["Inter"]
+          }
         }
       }
-    });
-  });
-</script>
+    };
+  </script>
 
-
-
-
-
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-(() => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant",
-    "Critical Alerts": "/notifications"
-  };
-
-  const activeByPath = {
-    "/dashboard": "Global Dashboard",
-    "/evolution": "Risk Evolution",
-    "/notifications": "Notifications",
-    "/client": "Client Profiles",
-    "/performance": "Model Performance",
-    "/assistant": "AI Assistant"
-  };
-
-  const activeLabel = activeByPath[window.location.pathname];
-
-  document.querySelectorAll("a, button").forEach((element) => {
-    const text = element.innerText.trim();
-
-    Object.keys(navigationMap).forEach((label) => {
-      if (text.includes(label)) {
-        const url = navigationMap[label];
-
-        if (element.tagName.toLowerCase() === "a") {
-          element.setAttribute("href", url);
-        } else {
-          element.style.cursor = "pointer";
-          element.onclick = () => {
-            window.location.href = url;
-          };
-        }
-
-        // Remove wrong active state
-        element.classList.remove(
-          "bg-secondary-container",
-          "text-on-secondary-container",
-          "font-bold",
-          "scale-[0.98]"
-        );
-
-        element.classList.add(
-          "text-on-surface-variant",
-          "hover:text-on-surface",
-          "hover:bg-surface-variant/30"
-        );
-
-        // Apply correct active state
-        if (label === activeLabel) {
-          element.classList.remove(
-            "text-on-surface-variant",
-            "hover:text-on-surface",
-            "hover:bg-surface-variant/30"
-          );
-
-          element.classList.add(
-            "bg-secondary-container",
-            "text-on-secondary-container",
-            "rounded-lg",
-            "font-bold",
-            "scale-[0.98]"
-          );
-        }
-      }
-    });
-  });
-})();
-</script>
-
-
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  const activeClasses = [
-    "bg-secondary-container",
-    "text-on-secondary-container",
-    "rounded-lg",
-    "font-bold",
-    "scale-[0.98]"
-  ];
-
-  const inactiveClasses = [
-    "text-on-surface-variant",
-    "hover:text-on-surface",
-    "hover:bg-surface-variant/30"
-  ];
-
-  const currentPath = window.location.pathname;
-
-  document.querySelectorAll("aside a").forEach((link) => {
-    const text = link.innerText.trim();
-
-    Object.entries(navigationMap).forEach(([label, url]) => {
-      if (text.includes(label)) {
-        link.setAttribute("href", url);
-
-        activeClasses.forEach((cls) => link.classList.remove(cls));
-        inactiveClasses.forEach((cls) => link.classList.add(cls));
-
-        if (currentPath === url) {
-          inactiveClasses.forEach((cls) => link.classList.remove(cls));
-          activeClasses.forEach((cls) => link.classList.add(cls));
-        }
-      }
-    });
-  });
-
-  document.querySelectorAll("button, a").forEach((element) => {
-    const text = element.innerText.trim();
-
-    if (text.includes("Critical Alerts")) {
-      element.style.cursor = "pointer";
-      element.onclick = () => {
-        window.location.href = "/notifications";
-      };
+  <style>
+    body {
+      font-family: Inter, sans-serif;
     }
-  });
-});
-</script>
 
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .display {
+      font-family: "Hanken Grotesk", sans-serif;
+    }
+
+    .glass-card {
+      background: rgba(17, 34, 64, 0.45);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(60, 74, 69, 0.7);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .score-ring {
+      background:
+        radial-gradient(circle at center, #101b33 58%, transparent 59%),
+        conic-gradient(#5ffbd6 var(--score), #2a344e 0);
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-low border-r border-outline-variant flex flex-col z-50">
+    <div class="p-6">
+      <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-2">
+      <div data-route="/dashboard" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="mono text-sm">Global Dashboard</span>
+      </div>
+
+      <div data-route="/evolution" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">trending_up</span>
+        <span class="mono text-sm">Risk Evolution</span>
+      </div>
+
+      <div data-route="/notifications" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="mono text-sm">Notifications</span>
+      </div>
+
+      <div data-route="/client" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold">
+        <span class="material-symbols-outlined">group</span>
+        <span class="mono text-sm">Client Profiles</span>
+      </div>
+
+      <div data-route="/performance" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">analytics</span>
+        <span class="mono text-sm">Model Performance</span>
+      </div>
+
+      <div data-route="/assistant" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span class="mono text-sm">AI Assistant</span>
+      </div>
+    </nav>
+
+    <div class="p-4 border-t border-outline-variant/40 space-y-3">
+      <button data-route="/notifications" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">warning</span>
+        Critical Alerts
+      </button>
+
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="mono text-sm">Settings</span>
+      </div>
+
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
+        <span class="material-symbols-outlined">help</span>
+        <span class="mono text-sm">Support</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="ml-[280px] h-screen overflow-y-auto bg-background">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant flex items-center justify-between px-6">
+      <div class="relative w-[420px]">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input
+          id="globalSearch"
+          class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
+          placeholder="Rechercher un dossier client..."
+        />
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button data-route="/notifications" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">
+          Quick Action
+        </button>
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+          <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+          <div>
+            <p class="mono text-sm font-bold">D. Ben Salem</p>
+            <p class="mono text-xs text-on-surface-variant">Risk Officer</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="p-6 space-y-6">
+
+      <!-- Page title -->
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="mono text-xs text-primary-container uppercase tracking-widest">Analyse individuelle</p>
+          <h2 class="display text-4xl font-bold mt-2">Fiche Client</h2>
+          <p class="text-on-surface-variant mt-2 max-w-3xl">
+            Vue 360° du profil de risque, score de dépassement de découvert, jours en dépassement, exposition brute et actions recommandées.
+          </p>
+        </div>
+
+        <button id="exportProfile" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold flex items-center gap-2">
+          <span class="material-symbols-outlined">download</span>
+          Exporter fiche
+        </button>
+      </div>
+
+      <!-- Client selector -->
+      <div class="glass-card rounded-2xl p-5">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div class="lg:col-span-2">
+            <label class="mono text-xs text-on-surface-variant uppercase">Rechercher client</label>
+            <input
+              id="clientSearch"
+              class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
+              placeholder="Exemple : CPTE_0015 ou 0015"
+            />
+          </div>
+
+          <div>
+            <label class="mono text-xs text-on-surface-variant uppercase">Sélection rapide</label>
+            <select id="clientSelect" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
+              <option value="CPTE_0015">CPTE_0015</option>
+              <option value="CPTE_000362">CPTE_000362</option>
+              <option value="CPTE_0025">CPTE_0025</option>
+              <option value="CPTE_0088">CPTE_0088</option>
+              <option value="CPTE_0071">CPTE_0071</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <button id="loadClient" class="w-full bg-secondary-container text-on-secondary-container rounded-xl px-4 py-3 mono text-sm font-bold">
+              Charger le profil
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile top -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+        <!-- Score card -->
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <p class="mono text-xs text-on-surface-variant uppercase">Score actuel</p>
+              <h3 id="clientIdTitle" class="display text-2xl font-bold mt-1">CPTE_0015</h3>
+            </div>
+            <span id="riskBadge" class="px-3 py-1 rounded-full mono text-xs font-bold bg-red-500/20 text-red-300 border border-red-400/30">Critique</span>
+          </div>
+
+          <div class="flex items-center justify-center">
+            <div id="scoreRing" class="score-ring w-44 h-44 rounded-full flex items-center justify-center" style="--score: 96.5%;">
+              <div class="text-center">
+                <p id="scoreValue" class="display text-4xl font-bold">96.5%</p>
+                <p class="mono text-xs text-on-surface-variant">probabilité</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-6">
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant">NBRJDEP</p>
+              <p id="nbrjdepValue" class="display text-2xl font-bold mt-1">42</p>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant">RISK_BRUT</p>
+              <p id="riskBrutValue" class="display text-2xl font-bold mt-1">1.42M</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Client identity -->
+        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="mono text-xs text-on-surface-variant uppercase">Profil client</p>
+              <h3 id="clientName" class="display text-3xl font-bold mt-1">Société Retail Alpha</h3>
+            </div>
+            <button id="notifyClient" class="bg-error-container text-on-error-container px-4 py-2 rounded-lg mono text-sm font-bold">
+              Notifier
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant">Segment</p>
+              <p id="segmentValue" class="font-semibold mt-1">Retail</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant">Agence</p>
+              <p id="agencyValue" class="font-semibold mt-1">Tunis Centre</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant">Évolution</p>
+              <p id="evolutionValue" class="font-semibold mt-1 text-red-300">Aggravation +12.4%</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant">Priorité</p>
+              <p id="priorityValue" class="font-semibold mt-1 text-tertiary">P1</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant uppercase">Explication du risque</p>
+              <p id="riskExplanation" class="mt-2 text-on-surface leading-relaxed">
+                Trois rejets successifs, score supérieur à 95% et exposition brute élevée.
+              </p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs text-on-surface-variant uppercase">Action recommandée</p>
+              <p id="recommendedAction" class="mt-2 text-on-surface leading-relaxed">
+                Intervention immédiate aujourd’hui, appel du chargé de compte et revue du dossier.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="display text-2xl font-bold">Historique du score</h3>
+            <span class="mono text-xs text-on-surface-variant">6 derniers mois</span>
+          </div>
+          <div id="scoreHistory" class="h-64 flex items-end gap-4"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="display text-2xl font-bold">Jours en dépassement</h3>
+            <span class="mono text-xs text-on-surface-variant">NBRJDEP</span>
+          </div>
+          <div id="daysHistory" class="h-64 flex items-end gap-4"></div>
+        </div>
+      </div>
+
+      <!-- Follow up -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
+          <h3 class="display text-2xl font-bold mb-4">Notes de suivi</h3>
+
+          <textarea
+            id="notesArea"
+            class="w-full h-36 bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container resize-none"
+            placeholder="Ajouter une note de suivi pour ce client..."
+          ></textarea>
+
+          <div class="flex items-center gap-3 mt-4">
+            <button id="saveNote" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold">
+              Enregistrer la note
+            </button>
+            <span id="noteStatus" class="text-sm text-on-surface-variant"></span>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="display text-2xl font-bold mb-4">Timeline</h3>
+          <div id="timeline" class="space-y-4"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const clients = {
+        "CPTE_0015": {
+          id: "CPTE_0015",
+          name: "Société Retail Alpha",
+          segment: "Retail",
+          agency: "Tunis Centre",
+          score: 96.5,
+          riskLevel: "Critique",
+          priority: "P1",
+          nbrjdep: 42,
+          riskBrut: 1420000,
+          evolution: "Aggravation +12.4%",
+          explanation: "Trois rejets successifs, score supérieur à 95% et exposition brute élevée.",
+          action: "Intervention immédiate aujourd’hui, appel du chargé de compte et revue du dossier.",
+          scoreHistory: [61, 66, 72, 81, 89, 96.5],
+          daysHistory: [8, 14, 19, 25, 34, 42],
+          timeline: [
+            "Aujourd’hui : passage en risque critique.",
+            "J-3 : troisième rejet successif détecté.",
+            "J-7 : hausse importante du score.",
+            "J-30 : profil classé en surveillance renforcée."
+          ]
+        },
+        "CPTE_000362": {
+          id: "CPTE_000362",
+          name: "Client Particulier 000362",
+          segment: "Retail Particulier",
+          agency: "Sfax Sud",
+          score: 94.2,
+          riskLevel: "Critique",
+          priority: "P2",
+          nbrjdep: 38,
+          riskBrut: 980000,
+          evolution: "Aggravation +8.6%",
+          explanation: "Hausse rapide du nombre de jours en dépassement et comportement de compte irrégulier.",
+          action: "Appel préventif, notification juridique et surveillance quotidienne pendant 7 jours.",
+          scoreHistory: [55, 63, 70, 78, 86, 94.2],
+          daysHistory: [6, 10, 17, 22, 31, 38],
+          timeline: [
+            "Aujourd’hui : score proche du seuil P1.",
+            "J-5 : évolution défavorable détectée.",
+            "J-12 : augmentation du NBRJDEP.",
+            "J-30 : client classé à risque élevé."
+          ]
+        },
+        "CPTE_0025": {
+          id: "CPTE_0025",
+          name: "Compte Commercial 0025",
+          segment: "Retail Pro",
+          agency: "Ariana",
+          score: 91.4,
+          riskLevel: "Critique",
+          priority: "P2",
+          nbrjdep: 39,
+          riskBrut: 1120000,
+          evolution: "Aggravation +7.7%",
+          explanation: "Exposition élevée et score supérieur au seuil critique.",
+          action: "Revue risque sous 24h et contact du gestionnaire de compte.",
+          scoreHistory: [64, 69, 73, 80, 86, 91.4],
+          daysHistory: [12, 17, 21, 29, 35, 39],
+          timeline: [
+            "Aujourd’hui : revue risque demandée.",
+            "J-4 : exposition brute en hausse.",
+            "J-10 : dépassement prolongé.",
+            "J-30 : entrée en suivi renforcé."
+          ]
+        },
+        "CPTE_0088": {
+          id: "CPTE_0088",
+          name: "Client Retail 0088",
+          segment: "Retail",
+          agency: "Sousse",
+          score: 84.7,
+          riskLevel: "Élevé",
+          priority: "P3",
+          nbrjdep: 21,
+          riskBrut: 690000,
+          evolution: "Aggravation +5.6%",
+          explanation: "Client en aggravation avec score élevé mais encore sous le seuil critique.",
+          action: "Appel préventif sous 48h et suivi hebdomadaire.",
+          scoreHistory: [48, 53, 61, 69, 77, 84.7],
+          daysHistory: [4, 6, 9, 13, 18, 21],
+          timeline: [
+            "Aujourd’hui : passage en risque élevé.",
+            "J-6 : tendance défavorable confirmée.",
+            "J-15 : score au-dessus de 75%.",
+            "J-30 : client stable."
+          ]
+        },
+        "CPTE_0071": {
+          id: "CPTE_0071",
+          name: "Client Particulier 0071",
+          segment: "Retail",
+          agency: "Nabeul",
+          score: 58.3,
+          riskLevel: "Moyen",
+          priority: "P5",
+          nbrjdep: 9,
+          riskBrut: 190000,
+          evolution: "Stable +1.4%",
+          explanation: "Risque moyen avec légère aggravation, exposition limitée.",
+          action: "Surveillance mensuelle et relance préventive si le score dépasse 65%.",
+          scoreHistory: [44, 46, 49, 52, 56, 58.3],
+          daysHistory: [1, 2, 3, 5, 7, 9],
+          timeline: [
+            "Aujourd’hui : risque moyen.",
+            "J-10 : légère hausse du score.",
+            "J-20 : comportement stable.",
+            "J-30 : aucune action urgente."
+          ]
+        }
+      };
+
+      let currentClientId = "CPTE_0015";
+
+      const $ = (id) => document.getElementById(id);
+
+      function formatMoney(value) {
+        if (value >= 1000000) {
+          return (value / 1000000).toFixed(2).replace(".", ",") + "M";
+        }
+        return Math.round(value / 1000) + "K";
+      }
+
+      function riskBadgeClass(level) {
+        if (level === "Critique") return "bg-red-500/20 text-red-300 border border-red-400/30";
+        if (level === "Élevé") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
+        if (level === "Moyen") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
+        return "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+      }
+
+      function renderBars(containerId, values, suffix = "%") {
+        const container = $(containerId);
+        container.innerHTML = "";
+
+        const max = Math.max(...values);
+        const labels = ["M-5", "M-4", "M-3", "M-2", "M-1", "M"];
+
+        values.forEach((value, index) => {
+          const height = Math.max(12, (value / max) * 210);
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "flex-1 flex flex-col items-center justify-end gap-3";
+
+          wrapper.innerHTML = `
+            <div class="mono text-xs text-on-surface-variant">${value}${suffix}</div>
+            <div class="w-full max-w-[46px] rounded-t-xl bg-primary-container/80" style="height:${height}px"></div>
+            <div class="mono text-xs text-on-surface-variant">${labels[index]}</div>
+          `;
+
+          container.appendChild(wrapper);
+        });
+      }
+
+      function renderTimeline(items) {
+        const timeline = $("timeline");
+        timeline.innerHTML = "";
+
+        items.forEach((item) => {
+          const div = document.createElement("div");
+          div.className = "flex gap-3";
+
+          div.innerHTML = `
+            <div class="mt-1 w-2 h-2 rounded-full bg-primary-container shrink-0"></div>
+            <p class="text-sm text-on-surface-variant">${item}</p>
+          `;
+
+          timeline.appendChild(div);
+        });
+      }
+
+      function renderClient(clientId) {
+        const client = clients[clientId] || clients["CPTE_0015"];
+        currentClientId = client.id;
+
+        $("clientIdTitle").innerText = client.id;
+        $("clientName").innerText = client.name;
+        $("scoreValue").innerText = client.score.toFixed(1) + "%";
+        $("scoreRing").style.setProperty("--score", client.score + "%");
+        $("riskBadge").innerText = client.riskLevel;
+        $("riskBadge").className = "px-3 py-1 rounded-full mono text-xs font-bold " + riskBadgeClass(client.riskLevel);
+        $("nbrjdepValue").innerText = client.nbrjdep;
+        $("riskBrutValue").innerText = formatMoney(client.riskBrut);
+        $("segmentValue").innerText = client.segment;
+        $("agencyValue").innerText = client.agency;
+        $("evolutionValue").innerText = client.evolution;
+        $("evolutionValue").className = client.evolution.includes("Aggravation")
+          ? "font-semibold mt-1 text-red-300"
+          : "font-semibold mt-1 text-emerald-300";
+        $("priorityValue").innerText = client.priority;
+        $("riskExplanation").innerText = client.explanation;
+        $("recommendedAction").innerText = client.action;
+
+        $("clientSelect").value = client.id;
+        $("clientSearch").value = "";
+
+        renderBars("scoreHistory", client.scoreHistory, "%");
+        renderBars("daysHistory", client.daysHistory, "j");
+        renderTimeline(client.timeline);
+
+        $("noteStatus").innerText = "";
+        $("notesArea").value = localStorage.getItem("note_" + client.id) || "";
+      }
+
+      function findClientFromInput() {
+        const q = $("clientSearch").value.trim().toUpperCase();
+
+        if (!q) {
+          return $("clientSelect").value;
+        }
+
+        const found = Object.keys(clients).find((id) =>
+          id.includes(q) || id.replace("CPTE_", "").includes(q.replace("CPTE_", ""))
+        );
+
+        return found || null;
+      }
+
+      document.querySelectorAll("[data-route]").forEach((el) => {
+        el.addEventListener("click", () => {
+          window.location.href = el.dataset.route;
+        });
+      });
+
+      $("clientSelect").addEventListener("change", () => {
+        renderClient($("clientSelect").value);
+      });
+
+      $("loadClient").addEventListener("click", () => {
+        const clientId = findClientFromInput();
+
+        if (!clientId) {
+          alert("Client introuvable dans les données mock.");
+          return;
+        }
+
+        renderClient(clientId);
+      });
+
+      $("clientSearch").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          $("loadClient").click();
+        }
+      });
+
+      $("globalSearch").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          $("clientSearch").value = $("globalSearch").value;
+          $("loadClient").click();
+        }
+      });
+
+      $("saveNote").addEventListener("click", () => {
+        localStorage.setItem("note_" + currentClientId, $("notesArea").value);
+        $("noteStatus").innerText = "Note enregistrée localement.";
+      });
+
+      $("notifyClient").addEventListener("click", () => {
+        window.location.href = "/notifications";
+      });
+
+      $("exportProfile").addEventListener("click", () => {
+        const client = clients[currentClientId];
+
+        const content = [
+          ["Client", client.id],
+          ["Nom", client.name],
+          ["Segment", client.segment],
+          ["Agence", client.agency],
+          ["Score", client.score + "%"],
+          ["Niveau de risque", client.riskLevel],
+          ["Priorité", client.priority],
+          ["NBRJDEP", client.nbrjdep],
+          ["RISK_BRUT", client.riskBrut],
+          ["Évolution", client.evolution],
+          ["Explication", client.explanation],
+          ["Action recommandée", client.action]
+        ];
+
+        const csv = content.map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(",")).join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `fiche_${client.id}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
+
+      renderClient(currentClientId);
+    });
+  </script>
 </body>
 </html>
+<!-- BIAT_RISK_TREND_CHART_FIX -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const chartCard = Array.from(document.querySelectorAll("div")).find(el =>
+    el.innerText &&
+    el.innerText.includes("Risk Trend Analysis")
+  );
+
+  if (!chartCard) {
+    console.warn("Risk Trend Analysis card not found.");
+    return;
+  }
+
+  const oldContent = chartCard.innerHTML;
+
+  chartCard.innerHTML = `
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="font-bold text-lg text-on-surface">Risk Trend Analysis</h3>
+      <div class="flex items-center gap-4 text-xs">
+        <span class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-red-300"></span>
+          CRITICAL
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-yellow-300"></span>
+          HIGH
+        </span>
+      </div>
+    </div>
+
+    <div class="h-64 flex items-end justify-between gap-6 px-4">
+      ${[
+        { day: "MON", critical: 18, high: 42 },
+        { day: "TUE", critical: 21, high: 48 },
+        { day: "WED", critical: 26, high: 55 },
+        { day: "THU", critical: 23, high: 51 },
+        { day: "FRI", critical: 31, high: 64 }
+      ].map(item => `
+        <div class="flex-1 flex flex-col items-center justify-end gap-3">
+          <div class="flex items-end gap-2 h-48">
+            <div 
+              class="w-6 rounded-t-lg bg-red-300/80" 
+              style="height:${item.critical * 3}px"
+              title="Critical: ${item.critical}"
+            ></div>
+            <div 
+              class="w-6 rounded-t-lg bg-yellow-300/80" 
+              style="height:${item.high * 2}px"
+              title="High: ${item.high}"
+            ></div>
+          </div>
+
+          <div class="text-xs font-mono text-on-surface-variant">${item.day}</div>
+          <div class="text-xs text-on-surface-variant">
+            <span class="text-red-300">${item.critical}</span> /
+            <span class="text-yellow-300">${item.high}</span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="mt-6 grid grid-cols-3 gap-4">
+      <div class="bg-surface-container-low rounded-xl p-4">
+        <p class="text-xs font-mono text-on-surface-variant">Peak Critical</p>
+        <p class="text-xl font-bold text-red-300 mt-1">31</p>
+      </div>
+
+      <div class="bg-surface-container-low rounded-xl p-4">
+        <p class="text-xs font-mono text-on-surface-variant">Weekly High Risk</p>
+        <p class="text-xl font-bold text-yellow-300 mt-1">260</p>
+      </div>
+
+      <div class="bg-surface-container-low rounded-xl p-4">
+        <p class="text-xs font-mono text-on-surface-variant">Trend</p>
+        <p class="text-xl font-bold text-red-300 mt-1">+18%</p>
+      </div>
+    </div>
+  `;
+});
+</script>

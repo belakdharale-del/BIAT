@@ -1,15 +1,15 @@
 import http.server
 import socketserver
 import os
-from pathlib import Path
+from urllib.parse import urlparse
 
 PORT = 5000
 HOST = "0.0.0.0"
-
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 ROUTES = {
     "/": "home_biat_risk_monitor/code.html",
+    "/home": "home_biat_risk_monitor/code.html",
     "/dashboard": "global_dashboard_biat_risk_monitor/code.html",
     "/evolution": "risk_evolution_biat_risk_monitor/code.html",
     "/notifications": "clients_notifier_biat_risk_monitor/code.html",
@@ -21,22 +21,10 @@ ROUTES = {
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        clean_path = self.path.split("?")[0].split("#")[0]
+        parsed_path = urlparse(self.path).path
 
-        if clean_path in ROUTES:
-            file_path = BASE_DIR / ROUTES[clean_path]
-
-            if file_path.exists():
-                self.send_response(200)
-                self.send_header("Content-type", "text/html; charset=utf-8")
-                self.end_headers()
-
-                with open(file_path, "rb") as file:
-                    self.wfile.write(file.read())
-                return
-
-            self.send_error(404, f"Page file not found: {ROUTES[clean_path]}")
-            return
+        if parsed_path in ROUTES:
+            self.path = "/" + ROUTES[parsed_path]
 
         return super().do_GET()
 
@@ -44,17 +32,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         print(f"{self.address_string()} - {format % args}")
 
 
-if __name__ == "__main__":
-    os.chdir(BASE_DIR)
+os.chdir(BASE_DIR)
 
-    with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
-        print(f"Serving BIAT Risk Monitor at http://localhost:{PORT}")
-        print("Available pages:")
-        print(f"  Home:          http://localhost:{PORT}/")
-        print(f"  Dashboard:     http://localhost:{PORT}/dashboard")
-        print(f"  Evolution:     http://localhost:{PORT}/evolution")
-        print(f"  Notifications: http://localhost:{PORT}/notifications")
-        print(f"  Client:        http://localhost:{PORT}/client")
-        print(f"  Performance:   http://localhost:{PORT}/performance")
-        print(f"  Assistant:     http://localhost:{PORT}/assistant")
-        httpd.serve_forever()
+with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+    print(f"Serving BIAT Risk Monitor at http://localhost:{PORT}")
+    print("Available pages:")
+    print(f"  Home:          http://localhost:{PORT}/")
+    print(f"  Dashboard:     http://localhost:{PORT}/dashboard")
+    print(f"  Evolution:     http://localhost:{PORT}/evolution")
+    print(f"  Notifications: http://localhost:{PORT}/notifications")
+    print(f"  Client:        http://localhost:{PORT}/client")
+    print(f"  Performance:   http://localhost:{PORT}/performance")
+    print(f"  Assistant:     http://localhost:{PORT}/assistant")
+
+    httpd.serve_forever()
