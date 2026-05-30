@@ -1,606 +1,819 @@
 <!DOCTYPE html>
 <html class="dark" lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>BIAT Risk Monitor | Système de Prédiction</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIAT Risk Monitor - Global Dashboard</title>
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
-  <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-    .glass-card {
-      background: rgba(17, 34, 64, 0.4);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(35, 53, 84, 0.5);
-    }
-    .glass-card:hover {
-      border-color: rgba(100, 255, 218, 0.3);
-    }
-    .glow-text {
-      text-shadow: 0 0 15px rgba(100, 255, 218, 0.4);
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <script id="tailwind-config">
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "surface-variant": "#2a344e",
-            "surface-container-low": "#101b33",
-            "on-surface": "#d9e2ff",
-            "inverse-on-surface": "#263049",
-            "on-secondary-container": "#a5b5db",
-            "outline": "#85948e",
-            "error": "#ffb4ab",
-            "primary-container": "#5ffbd6",
-            "tertiary-container": "#fbe273",
-            "on-tertiary-fixed": "#211b00",
-            "on-error-container": "#ffdad6",
-            "primary-fixed": "#5ffbd6",
-            "surface": "#07122a",
-            "primary": "#ffffff",
-            "on-tertiary-container": "#756400",
+            background: "#07122a",
+            surface: "#07122a",
             "surface-container-lowest": "#030d25",
-            "background": "#07122a",
-            "surface-tint": "#38debb",
-            "error-container": "#93000a",
-            "on-secondary": "#20304f",
-            "on-tertiary": "#393000",
-            "on-surface-variant": "#bacac3",
-            "secondary-fixed": "#d8e2ff",
-            "tertiary-fixed": "#fbe273",
-            "tertiary-fixed-dim": "#dec65a",
-            "tertiary": "#ffffff",
-            "secondary-container": "#374767",
-            "surface-dim": "#07122a",
-            "on-primary": "#00382d",
-            "secondary": "#b6c6ed",
+            "surface-container-low": "#101b33",
+            "surface-container": "#151f37",
             "surface-container-high": "#1f2942",
             "surface-container-highest": "#2a344e",
-            "on-primary-fixed": "#002019",
-            "on-primary-fixed-variant": "#005142",
-            "inverse-surface": "#d9e2ff",
-            "on-error": "#690005",
+            "surface-variant": "#2a344e",
+            "on-surface": "#d9e2ff",
+            "on-surface-variant": "#bacac3",
+            outline: "#85948e",
             "outline-variant": "#3c4a45",
-            "on-secondary-fixed-variant": "#374767",
-            "secondary-fixed-dim": "#b6c6ed",
-            "on-primary-container": "#00725e",
-            "on-secondary-fixed": "#091b39",
-            "on-background": "#d9e2ff",
-            "surface-container": "#151f37",
-            "inverse-primary": "#006b58",
-            "on-tertiary-fixed-variant": "#534600",
-            "surface-bright": "#2f3952",
-            "primary-fixed-dim": "#38debb"
-          },
-          borderRadius: {
-            DEFAULT: "0.25rem",
-            lg: "0.5rem",
-            xl: "0.75rem",
-            full: "9999px"
-          },
-          spacing: {
-            base: "8px",
-            "stack-md": "12px",
-            "stack-sm": "4px",
-            gutter: "16px",
-            "container-padding": "24px",
-            "stack-lg": "32px"
+            primary: "#ffffff",
+            "primary-container": "#5ffbd6",
+            "on-primary-container": "#00382d",
+            secondary: "#b6c6ed",
+            "secondary-container": "#374767",
+            "on-secondary-container": "#d9e2ff",
+            error: "#ffb4ab",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            tertiary: "#fbe273"
           },
           fontFamily: {
-            "label-sm": ["JetBrains Mono"],
-            "label-md": ["JetBrains Mono"],
-            "headline-lg": ["Hanken Grotesk"],
-            "body-md": ["Inter"],
-            "headline-lg-mobile": ["Hanken Grotesk"],
-            "body-sm": ["Inter"],
-            "headline-md": ["Hanken Grotesk"],
-            "body-lg": ["Inter"],
-            "display-lg": ["Hanken Grotesk"]
-          },
-          fontSize: {
-            "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-            "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-            "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
-            "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            mono: ["JetBrains Mono"],
+            display: ["Hanken Grotesk"],
+            body: ["Inter"]
           }
         }
       }
-    }
+    };
   </script>
+
+  <style>
+    body { font-family: Inter, sans-serif; }
+    .mono { font-family: "JetBrains Mono", monospace; }
+    .display { font-family: "Hanken Grotesk", sans-serif; }
+    .glass-card {
+      background: rgba(17, 34, 64, 0.45);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(60, 74, 69, 0.7);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .donut {
+      background:
+        radial-gradient(circle at center, #101b33 58%, transparent 59%),
+        conic-gradient(#ffb4ab 0 14%, #fbe273 14% 50%, #5ffbd6 50% 82%, #2a344e 82% 100%);
+    }
+  </style>
 </head>
 
-<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
-  <!-- SideNavBar -->
-  <aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col py-stack-lg z-50">
-    <div class="px-gutter mb-stack-lg">
-      <h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Vigilant Professionalism</p>
+<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-low border-r border-outline-variant flex flex-col z-50">
+    <div class="p-6">
+      <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
     </div>
 
-    <!-- Navigation corrigée -->
-    <nav class="flex-1 space-y-1 px-base">
-      <a class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform" href="/">
-        <span class="material-symbols-outlined" data-icon="home">home</span>
-        <span class="font-label-md text-label-md">Accueil</span>
-      </a>
+    <nav class="flex-1 px-4 space-y-2">
+      <div data-route="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold cursor-pointer">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="mono text-sm">Global Dashboard</span>
+      </div>
 
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/dashboard">
-        <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-        <span class="font-label-md text-label-md">Global Dashboard</span>
-      </a>
+      <div data-route="/evolution" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">trending_up</span>
+        <span class="mono text-sm">Risk Evolution</span>
+      </div>
 
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/evolution">
-        <span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
-        <span class="font-label-md text-label-md">Risk Evolution</span>
-      </a>
+      <div data-route="/notifications" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="mono text-sm">Notifications</span>
+      </div>
 
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/notifications">
-        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-        <span class="font-label-md text-label-md">Notifications</span>
-      </a>
+      <div data-route="/client" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">group</span>
+        <span class="mono text-sm">Client Profiles</span>
+      </div>
 
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/client">
-        <span class="material-symbols-outlined" data-icon="group">group</span>
-        <span class="font-label-md text-label-md">Client Profiles</span>
-      </a>
+      <div data-route="/performance" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">analytics</span>
+        <span class="mono text-sm">Model Performance</span>
+      </div>
 
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/performance">
-        <span class="material-symbols-outlined" data-icon="analytics">analytics</span>
-        <span class="font-label-md text-label-md">Model Performance</span>
-      </a>
-
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/assistant">
-        <span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
-        <span class="font-label-md text-label-md">AI Assistant</span>
-      </a>
+      <div data-route="/assistant" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span class="mono text-sm">AI Assistant</span>
+      </div>
     </nav>
 
-    <div class="px-gutter mb-stack-lg">
-      <a href="/notifications" class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-bold flex items-center justify-center gap-base">
-        <span class="material-symbols-outlined" data-icon="warning">warning</span>
+    <div class="p-4 border-t border-outline-variant/40 space-y-3">
+      <button data-route="/notifications" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">warning</span>
         Critical Alerts
-      </a>
-    </div>
+      </button>
 
-    <div class="mt-auto px-base border-t border-outline-variant pt-stack-lg">
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
-        <span class="material-symbols-outlined" data-icon="settings">settings</span>
-        <span class="font-label-md text-label-md">Settings</span>
-      </a>
-      <a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
-        <span class="material-symbols-outlined" data-icon="help">help</span>
-        <span class="font-label-md text-label-md">Support</span>
-      </a>
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="mono text-sm">Settings</span>
+      </div>
+
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
+        <span class="material-symbols-outlined">help</span>
+        <span class="mono text-sm">Support</span>
+      </div>
     </div>
   </aside>
 
-  <!-- TopAppBar -->
-  <header class="fixed top-0 left-0 right-0 h-16 ml-[280px] bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant shadow-sm z-40 flex justify-between items-center px-container-padding">
-    <div class="flex items-center gap-gutter">
-      <div class="relative group">
-        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
-        <input class="bg-surface-container-lowest border-outline-variant rounded-full pl-10 pr-gutter py-2 text-sm focus:ring-2 focus:ring-primary-container outline-none transition-all w-64 focus:w-80" placeholder="Rechercher un dossier client..." type="text"/>
-      </div>
-    </div>
+  <!-- Main -->
+  <main class="ml-[280px] h-screen overflow-y-auto bg-background">
 
-    <div class="flex items-center gap-gutter">
-      <a href="/notifications" class="bg-primary text-on-primary px-gutter py-2 rounded-lg font-bold text-sm transition-transform active:scale-95">
-        Quick Action
-      </a>
-      <a href="/notifications" class="p-2 text-on-surface-variant hover:text-primary transition-colors">
-        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-      </a>
-      <div class="flex items-center gap-base border-l border-outline-variant pl-gutter">
-        <img alt="User Profile" class="w-8 h-8 rounded-full border border-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2poofvlZjmVY5akOFqpoQ8oaJGRrFf8TGmE_gPucWRzCi91I5DoGPSxUywoiA60bghotQVJZZctDm2s8xf_lyhGz8NgjNtqHBE4Ic1riF4pXIUymzW4BEY2kOY9b_00s-aqTf5Xt6cE-RQazDC556JA_R6VyW2i6mCPx-vqVJFIjktY5WvV1pIZNDtF69osj_Tby8YTak01n1hhUREhDM2hydSGFi6cckrBMciA5Cfiqb6StERf7ECWRKDQeesImwdKQY3RQpvjY"/>
-        <span class="font-label-md text-label-md text-primary">D. Ben Salem</span>
+    <!-- Header -->
+    <header class="sticky top-0 z-40 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant flex items-center justify-between px-6">
+      <div class="relative w-[520px]">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input
+          id="topSearch"
+          class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
+          placeholder="Search risky CPTE, clients or alerts..."
+        />
       </div>
-    </div>
-  </header>
 
-  <!-- Main Content -->
-  <main class="ml-[280px] mt-16 p-container-padding min-h-screen space-y-stack-lg">
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden rounded-xl bg-surface-container-high p-stack-lg border border-outline-variant">
-      <div class="relative z-10 max-w-3xl">
-        <span class="inline-block px-3 py-1 rounded-full bg-primary-container/10 border border-primary-container/20 text-primary-container font-label-sm text-xs mb-stack-md">PROJET STRATÉGIQUE</span>
-        <h2 class="font-display-lg text-display-lg text-primary mb-stack-md leading-tight">
-          BIAT Risk Monitor — <span class="text-primary-container">Système de prédiction</span> du risque de dépassement de découvert
-        </h2>
-        <p class="font-body-lg text-body-lg text-on-surface-variant mb-gutter max-w-2xl">
-          Une architecture prédictive de pointe permettant d'identifier les défaillances de trésorerie 30 jours à l'avance pour une gestion proactive du portefeuille client.
-        </p>
-        <div class="flex gap-gutter">
-          <a href="/notifications" class="bg-primary-container text-on-primary-container px-gutter py-3 rounded-lg font-bold flex items-center gap-base hover:shadow-[0_0_20px_rgba(95,251,214,0.3)] transition-all">
-            Consulter les alertes
-            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
-          </a>
-          <a href="/performance" class="border border-outline text-primary px-gutter py-3 rounded-lg font-bold hover:bg-surface-variant/30 transition-all">
-            Documentation technique
-          </a>
+      <div class="flex items-center gap-4">
+        <button id="quickAction" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">
+          Quick Action
+        </button>
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+          <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+          <div>
+            <p class="mono text-sm font-bold">A. Mansour</p>
+            <p class="mono text-xs text-on-surface-variant">Chief Risk Manager</p>
+          </div>
         </div>
       </div>
-      <div class="absolute top-0 right-0 w-1/3 h-full opacity-20 pointer-events-none bg-gradient-to-l from-primary-container/30 to-transparent"></div>
-      <div class="absolute -right-20 -top-20 w-80 h-80 bg-primary-container/5 blur-[120px] rounded-full"></div>
-    </section>
+    </header>
 
-    <!-- KPI Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
-      <div class="glass-card p-gutter rounded-xl">
-        <div class="flex justify-between items-start mb-stack-md">
-          <span class="text-primary-container material-symbols-outlined" data-icon="analytics">analytics</span>
-          <span class="text-xs font-label-sm text-primary-container bg-primary-container/10 px-2 py-0.5 rounded">+0.2%</span>
+    <section class="p-6 space-y-6">
+
+      <!-- Title and filters -->
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="mono text-xs text-primary-container uppercase tracking-widest">Executive Overview</p>
+          <h2 class="display text-4xl font-bold mt-2">Global Dashboard</h2>
+          <p class="text-on-surface-variant mt-2 max-w-3xl">
+            Vue globale du portefeuille : exposition, niveaux d’alerte, clients critiques et actions opérationnelles.
+          </p>
         </div>
-        <p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">ROC-AUC</p>
-        <h3 class="font-headline-md text-headline-md font-bold text-primary">0.9889</h3>
+
+        <div class="flex items-center gap-3">
+          <button id="exportReport" class="border border-outline-variant text-on-surface px-5 py-3 rounded-lg mono text-sm font-bold hover:bg-surface-variant/30">
+            Export Report
+          </button>
+          <button id="applyFilters" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold">
+            Apply Filters
+          </button>
+        </div>
       </div>
 
-      <div class="glass-card p-gutter rounded-xl">
-        <div class="flex justify-between items-start mb-stack-md">
-          <span class="text-secondary material-symbols-outlined" data-icon="target">target</span>
-          <span class="text-xs font-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded">Target</span>
-        </div>
-        <p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Recall</p>
-        <h3 class="font-headline-md text-headline-md font-bold text-primary">0.9372</h3>
-      </div>
+      <!-- Filters -->
+      <div class="glass-card rounded-2xl p-5">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="mono text-xs text-on-surface-variant uppercase">Period</label>
+            <select id="periodFilter" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
+              <option value="30">Last 30 Days</option>
+              <option value="7">Last 7 Days</option>
+              <option value="90">Last 90 Days</option>
+            </select>
+          </div>
 
-      <div class="glass-card p-gutter rounded-xl">
-        <div class="flex justify-between items-start mb-stack-md">
-          <span class="text-tertiary-fixed material-symbols-outlined" data-icon="verified">verified</span>
-          <span class="text-xs font-label-sm text-tertiary-fixed bg-tertiary-fixed/10 px-2 py-0.5 rounded">High</span>
-        </div>
-        <p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">F1-Score</p>
-        <h3 class="font-headline-md text-headline-md font-bold text-primary">0.9450</h3>
-      </div>
+          <div>
+            <label class="mono text-xs text-on-surface-variant uppercase">Alert Level</label>
+            <select id="alertFilter" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
+              <option value="">All Levels</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="WARNING">Warning</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="STABLE">Stable</option>
+            </select>
+          </div>
 
-      <div class="glass-card p-gutter rounded-xl">
-        <div class="flex justify-between items-start mb-stack-md">
-          <span class="text-on-surface-variant material-symbols-outlined" data-icon="group">group</span>
-        </div>
-        <p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Clients Scorés</p>
-        <h3 class="font-headline-md text-headline-md font-bold text-primary">1,240</h3>
-      </div>
-
-      <div class="glass-card p-gutter rounded-xl border-error/30">
-        <div class="flex justify-between items-start mb-stack-md">
-          <span class="text-error material-symbols-outlined" data-icon="report_problem">report_problem</span>
-          <span class="text-xs font-label-sm text-error bg-error/10 px-2 py-0.5 rounded">Alert</span>
-        </div>
-        <p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Critiques</p>
-        <h3 class="font-headline-md text-headline-md font-bold text-error">45</h3>
-      </div>
-
-      <div class="glass-card p-gutter rounded-xl">
-        <div class="flex justify-between items-start mb-stack-md">
-          <span class="text-on-surface-variant material-symbols-outlined" data-icon="speed">speed</span>
-        </div>
-        <p class="font-label-sm text-xs text-on-surface-variant uppercase mb-stack-sm">Score Moyen</p>
-        <h3 class="font-headline-md text-headline-md font-bold text-primary">28%</h3>
-      </div>
-    </section>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-      <!-- About Section -->
-      <div class="lg:col-span-2 space-y-gutter">
-        <div class="glass-card p-stack-lg rounded-xl">
-          <h3 class="font-headline-md text-headline-md text-primary mb-gutter border-b border-outline-variant pb-stack-md">À propos du projet</h3>
-          <div class="grid md:grid-cols-2 gap-stack-lg">
-            <div class="space-y-stack-md">
-              <p class="font-body-md text-on-surface">Le système exploite l'algorithme <span class="text-primary-container font-bold">LightGBM</span> pour analyser des milliers de variables comportementales et transactionnelles.</p>
-              <p class="font-body-sm text-on-surface-variant">L'objectif principal est la détection précoce des signes de fragilité financière, permettant aux chargés d'affaires de proposer des solutions de restructuration avant que le dépassement ne devienne critique.</p>
-              <ul class="space-y-2">
-                <li class="flex items-center gap-2 text-sm text-on-surface-variant">
-                  <span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
-                  Prévision à horizon 30 jours
-                </li>
-                <li class="flex items-center gap-2 text-sm text-on-surface-variant">
-                  <span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
-                  Analyse granulaire par client
-                </li>
-                <li class="flex items-center gap-2 text-sm text-on-surface-variant">
-                  <span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span>
-                  Explicabilité du score (SHAP)
-                </li>
-              </ul>
+          <div>
+            <label class="mono text-xs text-on-surface-variant uppercase">Minimum Score</label>
+            <input id="scoreFilter" type="range" min="50" max="95" value="65" class="mt-5 w-full accent-[#5ffbd6]" />
+            <div class="flex justify-between mono text-xs text-on-surface-variant mt-2">
+              <span>50%</span>
+              <span id="scoreFilterValue">65%</span>
+              <span>95%</span>
             </div>
+          </div>
 
-            <div class="relative rounded-lg overflow-hidden group">
-              <img alt="Data Visualization" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-dnSnm6i8UMSRHR6cSqxESzOvxQ-7Y1FvtHQ2nmD-R1ScA6mWE6VzPrXSUurka8He44EPSn3ssL-Rb0I1cItUJMfRHEpo6LUpEj_aGWFFu5DLcOjv3VCz5-in0xRZpXI_mHvRgxgngHYDeHjVxik9OMOwiwLhDDclvHL6l6Wq7y33BMDSVE6TnPTB7jTKBWmz1dlRlnYyaLRJqgukp2ZRs7ZEla9FhSFtUUGG4B3M3jlebrCS7Jwy_0xXpzJIw3rUvqALKooFxx4"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
-            </div>
+          <button id="resetFilters" class="self-end border border-outline-variant text-on-surface px-5 py-3 rounded-lg mono text-sm font-bold hover:bg-surface-variant/30">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">Total Scored</p>
+          <p id="kpiTotal" class="display text-2xl font-bold mt-3">12,842</p>
+          <p class="text-sm text-primary-container mt-2">+3.2%</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border-error/40">
+          <p class="mono text-xs uppercase text-error">Critical Clients</p>
+          <p id="kpiCritical" class="display text-2xl font-bold text-error mt-3">45</p>
+          <p class="text-sm text-error mt-2">Action Required</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border-tertiary/40">
+          <p class="mono text-xs uppercase text-tertiary">High Risk</p>
+          <p id="kpiWarning" class="display text-2xl font-bold text-tertiary mt-3">120</p>
+          <p class="text-sm text-tertiary mt-2">Monitor Daily</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">To Notify</p>
+          <p id="kpiNotify" class="display text-2xl font-bold mt-3">165</p>
+          <p class="text-sm text-on-surface-variant mt-2">Compliance Queue</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">Avg Score</p>
+          <p id="kpiAvgScore" class="display text-2xl font-bold mt-3">28%</p>
+          <div class="mt-4 h-1 bg-surface-container-high rounded-full">
+            <div id="avgBar" class="h-1 bg-primary-container rounded-full" style="width:28%"></div>
           </div>
         </div>
 
-        <!-- Bento Grid Navigation corrigée -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          <a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="/evolution">
-            <span class="material-symbols-outlined text-3xl text-secondary mb-stack-md block" data-icon="query_stats">query_stats</span>
-            <h4 class="font-label-md text-label-md text-primary mb-1">Évolution du Risque</h4>
-            <p class="text-xs text-on-surface-variant">Tendances macro et analyses sectorielles.</p>
-          </a>
-
-          <a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="/notifications">
-            <span class="material-symbols-outlined text-3xl text-primary-container mb-stack-md block" data-icon="mail">mail</span>
-            <h4 class="font-label-md text-label-md text-primary mb-1">Clients à Notifier</h4>
-            <p class="text-xs text-on-surface-variant">Alertes automatiques et workflows prioritaires.</p>
-          </a>
-
-          <a class="glass-card p-gutter rounded-xl group hover:bg-surface-container-high transition-all" href="/client">
-            <span class="material-symbols-outlined text-3xl text-tertiary-fixed mb-stack-md block" data-icon="person_search">person_search</span>
-            <h4 class="font-label-md text-label-md text-primary mb-1">Fiche Client</h4>
-            <p class="text-xs text-on-surface-variant">Vue 360° et historique transactionnel.</p>
-          </a>
+        <div class="glass-card rounded-2xl p-5 bg-surface-container-high">
+          <p class="mono text-xs uppercase text-on-surface-variant">Amount at Risk</p>
+          <p id="kpiAmount" class="display text-2xl font-bold mt-3">4.2M TND</p>
+          <p class="text-sm text-on-surface-variant mt-2">Total exposure</p>
         </div>
       </div>
 
-      <!-- Side Sidebar -->
-      <div class="space-y-gutter">
-        <div class="glass-card p-gutter rounded-xl">
-          <div class="flex items-center justify-between mb-gutter">
-            <h3 class="font-label-md text-label-md text-primary font-bold">État du Modèle</h3>
-            <span class="flex h-2 w-2 rounded-full bg-primary-container animate-pulse"></span>
+      <!-- Charts -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="display text-2xl font-bold">Alert Distribution</h3>
+            <span class="material-symbols-outlined text-on-surface-variant">info</span>
           </div>
 
-          <div class="space-y-stack-lg">
-            <div>
-              <div class="flex justify-between text-xs mb-1">
-                <span class="text-on-surface-variant">Précision Moyenne</span>
-                <span class="text-primary-container">98.9%</span>
-              </div>
-              <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                <div class="h-full bg-primary-container w-[98.9%] shadow-[0_0_8px_#5ffbd6]"></div>
-              </div>
-            </div>
-
-            <div>
-              <div class="flex justify-between text-xs mb-1">
-                <span class="text-on-surface-variant">Stabilité (PSI)</span>
-                <span class="text-secondary">Optimal</span>
-              </div>
-              <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                <div class="h-full bg-secondary w-[85%] shadow-[0_0_8px_#b6c6ed]"></div>
+          <div class="flex items-center justify-center">
+            <div class="donut w-48 h-48 rounded-full flex items-center justify-center">
+              <div class="text-center">
+                <p id="donutTotal" class="display text-3xl font-bold">330</p>
+                <p class="mono text-xs text-on-surface-variant">Active</p>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="glass-card p-gutter rounded-xl bg-gradient-to-br from-secondary-container/20 to-transparent">
-          <div class="flex gap-base mb-stack-md">
-            <span class="material-symbols-outlined text-primary-container" data-icon="smart_toy">smart_toy</span>
-            <h3 class="font-label-md text-label-md text-primary font-bold">Assistant IA</h3>
-          </div>
-          <p class="text-sm text-on-surface-variant mb-stack-lg italic">"Dernière analyse : Le segment 'PME Import-Export' montre une volatilité accrue ce trimestre (+12%)."</p>
-          <a href="/assistant" class="block text-center w-full py-2 border border-outline-variant text-sm font-label-md hover:bg-surface-variant/30 rounded-lg transition-colors">
-            Ouvrir le Chatbot
-          </a>
-        </div>
-
-        <div class="rounded-xl overflow-hidden relative h-48 border border-outline-variant">
-          <img alt="Network Status" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbK3LWyxM1vykg9RuAWzLqiLbD_XbVzDeYfplMzDs-GIUEFhzGBmGaph8i8QsDzp0N-zOm9D1nqjVz864SIaKlnXnV-V8UkZWtBeyF7EZRKE45V3e6y6_TVcTpwXfI1vvmy6VP4geAw4FYXFGl8pATb5eFcE_abonQpG34FN5Xj0OZKeWdVRlZiDdohH-Z47T5__iGhZ-JeqKmPnisNNJI9c9R7QJmILy2gAHmWhzZJGtUAZ7Gt0IttpiEwgviylA93HFE8yzixDY"/>
-          <div class="absolute inset-0 bg-surface/40 flex items-center justify-center p-gutter">
-            <div class="text-center">
-              <p class="font-label-sm text-xs text-primary mb-stack-sm">Rapport de Performance</p>
-              <a href="/performance" class="text-primary-container font-bold text-sm flex items-center gap-2 mx-auto">
-                Télécharger PDF <span class="material-symbols-outlined text-sm" data-icon="download">download</span>
-              </a>
-            </div>
+          <div class="grid grid-cols-2 gap-3 mt-6 mono text-xs">
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span> Critique <span id="legendCritical">(45)</span></div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary"></span> Élevé <span id="legendWarning">(120)</span></div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary-container"></span> Moyen <span id="legendMedium">(105)</span></div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-surface-container-highest"></span> Faible <span id="legendStable">(60)</span></div>
           </div>
         </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="display text-2xl font-bold">Risk Score Distribution</h3>
+            <span class="material-symbols-outlined text-on-surface-variant">bar_chart</span>
+          </div>
+
+          <div id="riskDistribution" class="h-64 flex items-end gap-4"></div>
+
+          <div class="flex justify-between mono text-xs text-on-surface-variant mt-4">
+            <span>0%</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="display text-2xl font-bold">Monthly Score Trends</h3>
+            <select id="yearFilter" class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 mono text-xs text-on-surface">
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+
+          <div id="monthlyTrends" class="h-64 flex items-end gap-4"></div>
+        </div>
       </div>
-    </div>
 
-    <!-- Recent Alerts Table -->
-    <section class="glass-card rounded-xl overflow-hidden border border-outline-variant">
-      <div class="p-gutter border-b border-outline-variant flex justify-between items-center bg-surface-container-highest/20">
-        <h3 class="font-headline-md text-headline-md text-primary">Alertes Récentes Haute Priorité</h3>
-        <a href="/notifications" class="text-primary-container text-sm font-bold flex items-center gap-1">
-          Voir tout le registre <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
-        </a>
+      <!-- Table -->
+      <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="px-5 py-4 flex items-center justify-between border-b border-outline-variant">
+          <h3 class="display text-2xl font-bold">Top Critical Exposure Clients</h3>
+
+          <div class="flex items-center gap-4">
+            <span class="mono text-xs text-error flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-error"></span>
+              High Priority
+            </span>
+            <button id="viewAllCritical" class="text-primary-container mono text-sm font-bold">
+              View All
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-surface-container-high/50">
+              <tr>
+                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE / Client</th>
+                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score %</th>
+                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Alert Level</th>
+                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Exposure (TND)</th>
+                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Recommended Action</th>
+                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Open</th>
+              </tr>
+            </thead>
+
+            <tbody id="criticalTable" class="divide-y divide-outline-variant/30"></tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-surface-container-highest/10">
-              <th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Client ID</th>
-              <th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Segment</th>
-              <th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider text-center">Score de Risque</th>
-              <th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Dernière Transaction</th>
-              <th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Statut</th>
-              <th class="px-gutter py-stack-md font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">Action</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-outline-variant">
-            <tr class="hover:bg-surface-variant/20 transition-colors">
-              <td class="px-gutter py-stack-md font-label-md text-primary">#TR-2904</td>
-              <td class="px-gutter py-stack-md text-sm text-on-surface-variant">Entreprise Industrielle</td>
-              <td class="px-gutter py-stack-md text-center"><span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-bold text-xs">92%</span></td>
-              <td class="px-gutter py-stack-md text-sm text-on-surface-variant">Aujourd'hui, 09:42</td>
-              <td class="px-gutter py-stack-md">
-                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span><span class="text-xs text-on-surface">Critique</span></div>
-              </td>
-              <td class="px-gutter py-stack-md"><a href="/client" class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</a></td>
-            </tr>
+      <!-- Bottom section -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
+        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
+          <h3 class="display text-2xl font-bold mb-5">Recent High-Priority Alerts</h3>
+          <div id="alertFeed" class="space-y-4"></div>
+        </div>
 
-            <tr class="hover:bg-surface-variant/20 transition-colors">
-              <td class="px-gutter py-stack-md font-label-md text-primary">#TR-1182</td>
-              <td class="px-gutter py-stack-md text-sm text-on-surface-variant">Services Tech</td>
-              <td class="px-gutter py-stack-md text-center"><span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-xs">78%</span></td>
-              <td class="px-gutter py-stack-md text-sm text-on-surface-variant">Hier, 16:15</td>
-              <td class="px-gutter py-stack-md">
-                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary-fixed"></span><span class="text-xs text-on-surface">Avertissement</span></div>
-              </td>
-              <td class="px-gutter py-stack-md"><a href="/client" class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</a></td>
-            </tr>
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="display text-2xl font-bold mb-5">AI Portfolio Insight</h3>
 
-            <tr class="hover:bg-surface-variant/20 transition-colors">
-              <td class="px-gutter py-stack-md font-label-md text-primary">#TR-8843</td>
-              <td class="px-gutter py-stack-md text-sm text-on-surface-variant">Agro-Business</td>
-              <td class="px-gutter py-stack-md text-center"><span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-bold text-xs">88%</span></td>
-              <td class="px-gutter py-stack-md text-sm text-on-surface-variant">24/10/2023</td>
-              <td class="px-gutter py-stack-md">
-                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span><span class="text-xs text-on-surface">Critique</span></div>
-              </td>
-              <td class="px-gutter py-stack-md"><a href="/client" class="text-primary-container material-symbols-outlined" data-icon="visibility">visibility</a></td>
-            </tr>
-          </tbody>
-        </table>
+          <div class="bg-surface-container-low rounded-xl p-4">
+            <p id="aiInsight" class="text-sm leading-relaxed text-on-surface">
+              Le portefeuille montre une pression modérée. Les clients critiques restent concentrés sur les dossiers avec NBRJDEP élevé et forte exposition.
+            </p>
+          </div>
+
+          <button id="openAssistant" class="mt-4 w-full bg-primary-container text-on-primary-container rounded-xl py-3 mono text-sm font-bold">
+            Open AI Assistant
+          </button>
+        </div>
       </div>
+
     </section>
   </main>
 
-  <!-- Contextual FAB -->
-  <a href="/dashboard" class="fixed bottom-gutter right-gutter w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
-    <span class="material-symbols-outlined" data-icon="add_chart" style="font-variation-settings: 'FILL' 1;">add_chart</span>
-  </a>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const baseClients = [
+        { cpte: "CPTE-902342", name: "SOCIÉTÉ AL-AZIZA IND.", score: 94.2, alert: "CRITICAL", amount: 1420000, action: "Immediate Asset Freeze recommended", nbrjdep: 42 },
+        { cpte: "CPTE-455219", name: "BEN SALEM MOURAD", score: 89.5, alert: "CRITICAL", amount: 845200, action: "Pending AML Verification", nbrjdep: 35 },
+        { cpte: "CPTE-002577", name: "COMMERCE RETAIL 25", score: 91.4, alert: "CRITICAL", amount: 1120000, action: "Risk Committee Review", nbrjdep: 39 },
+        { cpte: "CPTE-000398", name: "GLOBAL SERVICES TUNIS", score: 96.5, alert: "CRITICAL", amount: 2100000, action: "Immediate Intervention Today", nbrjdep: 49 },
+        { cpte: "CPTE-008823", name: "CLIENT RETAIL 88", score: 84.7, alert: "WARNING", amount: 690000, action: "Preventive Call Within 48h", nbrjdep: 21 },
+        { cpte: "CPTE-009410", name: "SARL MEDINA PLUS", score: 72.6, alert: "WARNING", amount: 430000, action: "Account Manager Follow-up", nbrjdep: 16 },
+        { cpte: "CPTE-006744", name: "CLIENT PRO SFAX", score: 66.9, alert: "MEDIUM", amount: 255000, action: "Monthly Monitoring", nbrjdep: 14 },
+        { cpte: "CPTE-007155", name: "CLIENT PARTICULIER", score: 58.3, alert: "MEDIUM", amount: 190000, action: "Standard Monitoring", nbrjdep: 9 }
+      ];
 
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-(() => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant",
-    "Critical Alerts": "/notifications"
-  };
-
-  const activeByPath = {
-    "/dashboard": "Global Dashboard",
-    "/evolution": "Risk Evolution",
-    "/notifications": "Notifications",
-    "/client": "Client Profiles",
-    "/performance": "Model Performance",
-    "/assistant": "AI Assistant"
-  };
-
-  const activeLabel = activeByPath[window.location.pathname];
-
-  document.querySelectorAll("a, button").forEach((element) => {
-    const text = element.innerText.trim();
-
-    Object.keys(navigationMap).forEach((label) => {
-      if (text.includes(label)) {
-        const url = navigationMap[label];
-
-        if (element.tagName.toLowerCase() === "a") {
-          element.setAttribute("href", url);
-        } else {
-          element.style.cursor = "pointer";
-          element.onclick = () => {
-            window.location.href = url;
-          };
-        }
-
-        // Remove wrong active state
-        element.classList.remove(
-          "bg-secondary-container",
-          "text-on-secondary-container",
-          "font-bold",
-          "scale-[0.98]"
-        );
-
-        element.classList.add(
-          "text-on-surface-variant",
-          "hover:text-on-surface",
-          "hover:bg-surface-variant/30"
-        );
-
-        // Apply correct active state
-        if (label === activeLabel) {
-          element.classList.remove(
-            "text-on-surface-variant",
-            "hover:text-on-surface",
-            "hover:bg-surface-variant/30"
-          );
-
-          element.classList.add(
-            "bg-secondary-container",
-            "text-on-secondary-container",
-            "rounded-lg",
-            "font-bold",
-            "scale-[0.98]"
-          );
-        }
-      }
-    });
-  });
-})();
-</script>
-
-
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  const activeClasses = [
-    "bg-secondary-container",
-    "text-on-secondary-container",
-    "rounded-lg",
-    "font-bold",
-    "scale-[0.98]"
-  ];
-
-  const inactiveClasses = [
-    "text-on-surface-variant",
-    "hover:text-on-surface",
-    "hover:bg-surface-variant/30"
-  ];
-
-  const currentPath = window.location.pathname;
-
-  document.querySelectorAll("aside a").forEach((link) => {
-    const text = link.innerText.trim();
-
-    Object.entries(navigationMap).forEach(([label, url]) => {
-      if (text.includes(label)) {
-        link.setAttribute("href", url);
-
-        activeClasses.forEach((cls) => link.classList.remove(cls));
-        inactiveClasses.forEach((cls) => link.classList.add(cls));
-
-        if (currentPath === url) {
-          inactiveClasses.forEach((cls) => link.classList.remove(cls));
-          activeClasses.forEach((cls) => link.classList.add(cls));
-        }
-      }
-    });
-  });
-
-  document.querySelectorAll("button, a").forEach((element) => {
-    const text = element.innerText.trim();
-
-    if (text.includes("Critical Alerts")) {
-      element.style.cursor = "pointer";
-      element.onclick = () => {
-        window.location.href = "/notifications";
+      const state = {
+        period: "30",
+        alert: "",
+        score: 65,
+        year: "2024"
       };
-    }
-  });
-});
-</script>
+
+      const $ = (id) => document.getElementById(id);
+
+      function formatMoney(value) {
+        if (value >= 1000000) return (value / 1000000).toFixed(2) + "M TND";
+        return value.toLocaleString("fr-FR") + " TND";
+      }
+
+      function filteredClients() {
+        return baseClients.filter(client => {
+          return (
+            (!state.alert || client.alert === state.alert) &&
+            client.score >= Number(state.score)
+          );
+        });
+      }
+
+      function getDashboardNumbers() {
+        const multiplier = state.period === "7" ? 0.45 : state.period === "90" ? 1.35 : 1;
+
+        const critical = Math.round(45 * multiplier);
+        const warning = Math.round(120 * multiplier);
+        const medium = Math.round(105 * multiplier);
+        const stable = Math.round(60 * multiplier);
+        const notify = critical + warning;
+        const total = Math.round(12842 * multiplier);
+        const amount = 4.2 * multiplier;
+        const avg = state.period === "7" ? 31 : state.period === "90" ? 26 : 28;
+
+        return { critical, warning, medium, stable, notify, total, amount, avg };
+      }
+
+      function renderKpis() {
+        const n = getDashboardNumbers();
+
+        $("kpiTotal").innerText = n.total.toLocaleString("en-US");
+        $("kpiCritical").innerText = n.critical;
+        $("kpiWarning").innerText = n.warning;
+        $("kpiNotify").innerText = n.notify;
+        $("kpiAvgScore").innerText = n.avg + "%";
+        $("avgBar").style.width = n.avg + "%";
+        $("kpiAmount").innerText = n.amount.toFixed(1) + "M TND";
+
+        $("donutTotal").innerText = n.critical + n.warning + n.medium + n.stable;
+        $("legendCritical").innerText = "(" + n.critical + ")";
+        $("legendWarning").innerText = "(" + n.warning + ")";
+        $("legendMedium").innerText = "(" + n.medium + ")";
+        $("legendStable").innerText = "(" + n.stable + ")";
+      }
+
+      function renderRiskDistribution() {
+        const values = [24, 38, 55, 44, 68, 51, 29, 19];
+        const container = $("riskDistribution");
+        container.innerHTML = "";
+
+        values.forEach((value, index) => {
+          const bar = document.createElement("div");
+          bar.className = "flex-1 flex flex-col items-center justify-end gap-3";
+
+          bar.innerHTML = `
+            <div class="w-full rounded-t-lg ${index >= 4 ? "bg-error/45" : "bg-surface-container-highest"}" style="height:${Math.max(20, value * 2.2)}px"></div>
+            <span class="mono text-xs text-on-surface-variant">${index * 12}-${index * 12 + 12}</span>
+          `;
+
+          container.appendChild(bar);
+        });
+      }
+
+      function renderMonthlyTrends() {
+        const data2024 = [
+          ["JAN", 31], ["FEB", 36], ["MAR", 51], ["APR", 42], ["MAY", 68], ["JUN", 57]
+        ];
+        const data2025 = [
+          ["JAN", 29], ["FEB", 33], ["MAR", 44], ["APR", 49], ["MAY", 61], ["JUN", 73]
+        ];
+
+        const data = state.year === "2024" ? data2024 : data2025;
+        const container = $("monthlyTrends");
+        container.innerHTML = "";
+
+        data.forEach(([month, value]) => {
+          const bar = document.createElement("div");
+          bar.className = "flex-1 flex flex-col items-center justify-end gap-3";
+
+          bar.innerHTML = `
+            <div class="w-full rounded-t-lg bg-primary-container/70 border-t border-primary-container" style="height:${value * 2.3}px"></div>
+            <span class="mono text-xs text-on-surface-variant">${month}</span>
+          `;
+
+          container.appendChild(bar);
+        });
+      }
+
+      function alertClass(alert) {
+        if (alert === "CRITICAL") return "bg-red-500/20 text-red-300 border border-red-400/30";
+        if (alert === "WARNING") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
+        if (alert === "MEDIUM") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
+        return "bg-slate-500/20 text-slate-300 border border-slate-400/30";
+      }
+
+      function renderCriticalTable() {
+        const data = filteredClients().slice(0, 6);
+        const tbody = $("criticalTable");
+        tbody.innerHTML = "";
+
+        data.forEach(client => {
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-surface-variant/10 transition-colors";
+
+          tr.innerHTML = `
+            <td class="px-4 py-5">
+              <p class="mono text-sm font-bold text-primary">${client.cpte}</p>
+              <p class="text-xs text-on-surface-variant">${client.name}</p>
+            </td>
+            <td class="px-4 py-5 mono text-sm ${client.score >= 85 ? "text-red-300" : "text-tertiary"}">${client.score.toFixed(1)}%</td>
+            <td class="px-4 py-5">
+              <span class="px-2 py-1 rounded text-xs font-bold ${alertClass(client.alert)}">${client.alert}</span>
+            </td>
+            <td class="px-4 py-5 mono text-sm">${formatMoney(client.amount)}</td>
+            <td class="px-4 py-5 text-sm">${client.action}</td>
+            <td class="px-4 py-5">
+              <button class="openClient text-primary-container mono text-sm font-bold" data-cpte="${client.cpte}">
+                Open
+              </button>
+            </td>
+          `;
+
+          tbody.appendChild(tr);
+        });
+
+        document.querySelectorAll(".openClient").forEach(button => {
+          button.addEventListener("click", () => {
+            window.location.href = "/client";
+          });
+        });
+      }
+
+      function renderAlerts() {
+        const alerts = [
+          ["Critical exposure increased", "4 clients crossed the 90% score threshold today.", "warning"],
+          ["Notification queue pending", "165 clients need operational treatment.", "notifications"],
+          ["Model signal stable", "No material drift detected on the current scoring batch.", "analytics"]
+        ];
+
+        const container = $("alertFeed");
+        container.innerHTML = "";
+
+        alerts.forEach(([title, text, icon]) => {
+          const row = document.createElement("div");
+          row.className = "bg-surface-container-low rounded-xl p-4 flex gap-4";
+
+          row.innerHTML = `
+            <div class="w-10 h-10 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center">
+              <span class="material-symbols-outlined">${icon}</span>
+            </div>
+            <div>
+              <p class="mono font-bold">${title}</p>
+              <p class="text-sm text-on-surface-variant mt-1">${text}</p>
+            </div>
+          `;
+
+          container.appendChild(row);
+        });
+      }
+
+      function updateInsight() {
+        const n = getDashboardNumbers();
+
+        if (state.alert === "CRITICAL") {
+          $("aiInsight").innerText = "Filtre critique activé : la priorité doit être donnée aux clients dont le score dépasse 85% et dont l’exposition brute est élevée.";
+        } else if (Number(state.score) >= 80) {
+          $("aiInsight").innerText = "Le seuil élevé réduit le nombre de dossiers mais concentre l’analyse sur les cas à forte probabilité de défaut.";
+        } else {
+          $("aiInsight").innerText = `Le portefeuille montre ${n.critical} clients critiques et ${n.warning} clients à risque élevé. Les actions doivent prioriser les expositions supérieures à 1M TND.`;
+        }
+      }
+
+      function renderAll() {
+        renderKpis();
+        renderRiskDistribution();
+        renderMonthlyTrends();
+        renderCriticalTable();
+        renderAlerts();
+        updateInsight();
+      }
+
+      function exportReport() {
+        const n = getDashboardNumbers();
+
+        const rows = [
+          ["Period", state.period + " days"],
+          ["Alert Filter", state.alert || "All"],
+          ["Minimum Score", state.score + "%"],
+          ["Total Scored", n.total],
+          ["Critical Clients", n.critical],
+          ["High Risk Clients", n.warning],
+          ["To Notify", n.notify],
+          ["Average Score", n.avg + "%"],
+          ["Amount at Risk", n.amount.toFixed(1) + "M TND"]
+        ];
+
+        const csv = rows.map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(",")).join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "biat_global_dashboard_report.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        URL.revokeObjectURL(url);
+      }
+
+      $("scoreFilter").addEventListener("input", event => {
+        state.score = event.target.value;
+        $("scoreFilterValue").innerText = state.score + "%";
+      });
+
+      $("applyFilters").addEventListener("click", () => {
+        state.period = $("periodFilter").value;
+        state.alert = $("alertFilter").value;
+        state.score = $("scoreFilter").value;
+
+        const button = $("applyFilters");
+        const old = button.innerText;
+        button.innerText = "Filters Applied ✓";
+
+        renderAll();
+
+        setTimeout(() => {
+          button.innerText = old;
+        }, 1200);
+      });
+
+      $("resetFilters").addEventListener("click", () => {
+        $("periodFilter").value = "30";
+        $("alertFilter").value = "";
+        $("scoreFilter").value = "65";
+        $("scoreFilterValue").innerText = "65%";
+
+        state.period = "30";
+        state.alert = "";
+        state.score = 65;
+
+        renderAll();
+      });
+
+      $("yearFilter").addEventListener("change", event => {
+        state.year = event.target.value;
+        renderMonthlyTrends();
+      });
+
+      $("exportReport").addEventListener("click", exportReport);
+
+      $("quickAction").addEventListener("click", () => {
+        window.location.href = "/notifications";
+      });
+
+      $("openAssistant").addEventListener("click", () => {
+        window.location.href = "/assistant";
+      });
+
+      $("viewAllCritical").addEventListener("click", () => {
+        window.location.href = "/notifications";
+      });
+
+      $("topSearch").addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          window.location.href = "/notifications";
+        }
+      });
+
+      document.querySelectorAll("[data-route]").forEach(el => {
+        const route = el.getAttribute("data-route");
+        if (!route) return;
+
+        el.addEventListener("click", () => {
+          window.location.href = route;
+        });
+      });
+
+      renderAll();
+    });
+  </script>
+  <script src="/attached_assets/auth.js"></script>
 
 </body>
+<!-- BIAT BACKGROUND SAFE PATCH -->
+<style>
+  html {
+    background: #07122a !important;
+  }
+
+  body {
+    position: relative;
+    background: #07122a !important;
+    min-height: 100vh;
+  }
+
+  #biat-background-safe {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 88% 8%, rgba(245,146,30,0.18) 0%, rgba(245,146,30,0.08) 25%, transparent 48%),
+      radial-gradient(circle at 10% 90%, rgba(30,58,158,0.22) 0%, rgba(30,58,158,0.08) 30%, transparent 55%),
+      linear-gradient(135deg, #061024 0%, #07122a 45%, #0b1b38 100%);
+  }
+
+  #biat-background-safe::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,146,30,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,146,30,0.03) 1px, transparent 1px),
+      linear-gradient(rgba(95,251,214,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,251,214,0.018) 1px, transparent 1px);
+    background-size: 90px 90px, 90px 90px, 24px 24px, 24px 24px;
+  }
+
+  .biat-safe-curve {
+    position: absolute;
+    top: -100px;
+    right: -180px;
+    width: 720px;
+    height: 560px;
+    opacity: 0.22;
+  }
+
+  .biat-safe-accent {
+    position: absolute;
+    left: 260px;
+    bottom: -190px;
+    width: 680px;
+    height: 390px;
+    opacity: 0.10;
+  }
+
+  .biat-safe-watermark {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.12;
+    user-select: none;
+  }
+
+  .biat-safe-logo {
+    width: 78px;
+    height: 66px;
+    background: #00537a;
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .biat-safe-logo::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 65px;
+    height: 46px;
+    background: #f5921e;
+    border-radius: 80% 90% 0 0;
+    transform: skewX(-26deg);
+  }
+
+  .biat-safe-logo::after {
+    content: "";
+    position: absolute;
+    left: 32px;
+    bottom: 18px;
+    width: 58px;
+    height: 11px;
+    background: white;
+    border-radius: 20px;
+    transform: skewX(-28deg);
+  }
+
+  .biat-safe-text {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 4px;
+    margin-top: 6px;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  aside,
+  header,
+  main,
+  section {
+    position: relative;
+    z-index: 2;
+  }
+
+  main {
+    background: transparent !important;
+  }
+</style>
+
+<div id="biat-background-safe">
+  <svg class="biat-safe-curve" viewBox="0 0 720 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M720 0 C540 5 295 95 85 330 C5 420 -45 500 -90 560 H720 Z" fill="#f5921e"/>
+    <path d="M720 0 C610 35 405 140 235 330 C145 430 105 505 80 560 H720 Z" fill="#1e3a9e"/>
+    <path d="M700 8 C525 45 315 155 130 380 C70 455 28 515 0 560" stroke="rgba(255,255,255,0.45)" stroke-width="4"/>
+  </svg>
+
+  <svg class="biat-safe-accent" viewBox="0 0 680 390" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 390 C160 230 370 105 680 0 L680 390 Z" fill="#f5921e"/>
+    <path d="M170 390 C315 245 500 130 680 55 L680 390 Z" fill="#1e3a9e"/>
+  </svg>
+</div>
+
+<div class="biat-safe-watermark">
+  <div class="biat-safe-logo"></div>
+  <div class="biat-safe-text">Risk Monitor</div>
+</div>
 </html>

@@ -1,549 +1,983 @@
 <!DOCTYPE html>
+<html class="dark" lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIAT Risk Monitor - Model Performance</title>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>BIAT Risk Monitor - Model Performance</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-variant": "#2a344e",
-                        "surface-container-low": "#101b33",
-                        "on-surface": "#d9e2ff",
-                        "inverse-on-surface": "#263049",
-                        "on-secondary-container": "#a5b5db",
-                        "outline": "#85948e",
-                        "error": "#ffb4ab",
-                        "primary-container": "#5ffbd6",
-                        "tertiary-container": "#fbe273",
-                        "on-tertiary-fixed": "#211b00",
-                        "on-error-container": "#ffdad6",
-                        "primary-fixed": "#5ffbd6",
-                        "surface": "#07122a",
-                        "primary": "#ffffff",
-                        "on-tertiary-container": "#756400",
-                        "surface-container-lowest": "#030d25",
-                        "background": "#07122a",
-                        "surface-tint": "#38debb",
-                        "error-container": "#93000a",
-                        "on-secondary": "#20304f",
-                        "on-tertiary": "#393000",
-                        "on-surface-variant": "#bacac3",
-                        "secondary-fixed": "#d8e2ff",
-                        "tertiary-fixed": "#fbe273",
-                        "tertiary-fixed-dim": "#dec65a",
-                        "tertiary": "#ffffff",
-                        "secondary-container": "#374767",
-                        "surface-dim": "#07122a",
-                        "on-primary": "#00382d",
-                        "secondary": "#b6c6ed",
-                        "surface-container-high": "#1f2942",
-                        "surface-container-highest": "#2a344e",
-                        "on-primary-fixed": "#002019",
-                        "on-primary-fixed-variant": "#005142",
-                        "inverse-surface": "#d9e2ff",
-                        "on-error": "#690005",
-                        "outline-variant": "#3c4a45",
-                        "on-secondary-fixed-variant": "#374767",
-                        "secondary-fixed-dim": "#b6c6ed",
-                        "on-primary-container": "#00725e",
-                        "on-secondary-fixed": "#091b39",
-                        "on-background": "#d9e2ff",
-                        "surface-container": "#151f37",
-                        "inverse-primary": "#006b58",
-                        "on-tertiary-fixed-variant": "#534600",
-                        "surface-bright": "#2f3952",
-                        "primary-fixed-dim": "#38debb"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "base": "8px",
-                        "stack-md": "12px",
-                        "stack-sm": "4px",
-                        "gutter": "16px",
-                        "container-padding": "24px",
-                        "stack-lg": "32px"
-                    },
-                    "fontFamily": {
-                        "label-sm": ["JetBrains Mono"],
-                        "label-md": ["JetBrains Mono"],
-                        "headline-lg": ["Hanken Grotesk"],
-                        "body-md": ["Inter"],
-                        "headline-lg-mobile": ["Hanken Grotesk"],
-                        "body-sm": ["Inter"],
-                        "headline-md": ["Hanken Grotesk"],
-                        "body-lg": ["Inter"],
-                        "display-lg": ["Hanken Grotesk"]
-                    },
-                    "fontSize": {
-                        "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
-                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
-                    }
-                },
-            },
-        }
-    </script>
-<style>
-        .glass-card {
-            background: rgba(17, 34, 64, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid #233554;
-            transition: border-color 0.3s ease;
-        }
-        .glass-card:hover {
-            border-color: rgba(100, 255, 218, 0.3);
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .neon-glow {
-            text-shadow: 0 0 8px rgba(95, 251, 214, 0.4);
-        }
-    </style>
-</head>
-<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
-<!-- SideNavBar -->
-<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col py-stack-lg z-[60]">
-<div class="px-gutter mb-stack-lg">
-<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Vigilant Professionalism</p>
-</div>
-<nav class="flex-1 flex flex-col gap-stack-sm px-gutter">
-<!-- Inactive -->
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-<span class="font-label-md text-label-md">Global Dashboard</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
-<span class="font-label-md text-label-md">Risk Evolution</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-<span class="font-label-md text-label-md">Notifications</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="group">group</span>
-<span class="font-label-md text-label-md">Client Profiles</span>
-</a>
-<!-- Active -->
-<a class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform" href="#">
-<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
-<span class="font-label-md text-label-md">Model Performance</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
-<span class="font-label-md text-label-md">AI Assistant</span>
-</a>
-</nav>
-<div class="mt-auto px-gutter flex flex-col gap-stack-sm border-t border-outline-variant/30 pt-stack-lg">
-<button class="bg-primary-container text-on-primary-container py-stack-md rounded-lg font-bold flex items-center justify-center gap-base mb-stack-md">
-<span class="material-symbols-outlined" data-icon="warning">warning</span>
-                Critical Alerts
-            </button>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-<span class="font-label-md text-label-md">Settings</span>
-</a>
-<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
-<span class="material-symbols-outlined" data-icon="help">help</span>
-<span class="font-label-md text-label-md">Support</span>
-</a>
-</div>
-</aside>
-<!-- TopAppBar -->
-<header class="flex justify-between items-center h-16 px-container-padding ml-[280px] bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant sticky top-0 z-50 shadow-sm">
-<div class="flex items-center gap-gutter">
-<span class="font-headline-md text-headline-md font-extrabold text-primary">Model Performance</span>
-<div class="relative flex items-center bg-surface-container-lowest border border-outline-variant rounded-full px-base py-1">
-<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
-<input class="bg-transparent border-none focus:ring-0 text-body-sm text-on-surface w-64 p-0" placeholder="Search models or metrics..." type="text"/>
-</div>
-</div>
-<div class="flex items-center gap-gutter">
-<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-stack-sm">
-<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
-<span class="font-label-md text-label-md">Quick Action</span>
-</button>
-<div class="flex items-center gap-stack-md">
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="account_circle">account_circle</span>
-</div>
-</div>
-</header>
-<!-- Main Content -->
-<main class="ml-[280px] p-container-padding space-y-gutter">
-<!-- KPIs Hero Section -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Accuracy</span>
-<span class="font-headline-lg text-primary neon-glow">0.9736</span>
-<div class="flex items-center gap-1 text-primary-fixed text-xs">
-<span class="material-symbols-outlined text-sm" data-icon="arrow_upward">arrow_upward</span>
-<span>+0.002% vs prev iteration</span>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm border-l-4 border-l-primary-container">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Recall</span>
-<span class="font-headline-lg text-primary-fixed neon-glow">0.9372</span>
-<span class="text-xs text-on-surface-variant italic">Prioritized for Risk Mitigation</span>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">F1-Score</span>
-<span class="font-headline-lg text-primary neon-glow">0.9450</span>
-<div class="flex items-center gap-1 text-on-surface-variant text-xs">
-<span>Harmonic mean stability</span>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">ROC-AUC</span>
-<span class="font-headline-lg text-primary neon-glow">0.9889</span>
-<div class="flex items-center gap-1 text-primary-fixed text-xs">
-<span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
-<span>Excellent separation</span>
-</div>
-</div>
-</div>
-<!-- Narrative & Selection Justification -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-<div class="lg:col-span-2 glass-card p-gutter rounded-xl">
-<div class="flex items-center gap-base mb-stack-md">
-<span class="material-symbols-outlined text-primary-container" data-icon="psychology">psychology</span>
-<h3 class="font-headline-md text-primary">Strategic Selection: LightGBM</h3>
-</div>
-<div class="space-y-stack-md text-body-md text-on-surface-variant leading-relaxed">
-<p>
-                        The selection of <strong class="text-primary">LightGBM</strong> as the champion model for BIAT's surveillance infrastructure is driven by its exceptional handling of large-scale banking data and its robustness against imbalanced classes.
-                    </p>
-<p>
-                        In our context, <strong class="text-primary-container">Recall is the primary optimization objective.</strong> Missing a single risky client (False Negative) carries significantly higher institutional cost than a manual review of a low-risk client (False Positive). LightGBM's gradient-based one-side sampling (GOSS) allows us to maintain a high Recall of 0.9372 without degrading general Accuracy.
-                    </p>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col justify-center border-t-2 border-t-tertiary-container">
-<div class="text-center space-y-base">
-<span class="material-symbols-outlined text-display-lg text-tertiary-container" data-icon="shield">shield</span>
-<h4 class="font-headline-md text-primary">Why Recall Matters?</h4>
-<p class="font-body-sm text-on-surface-variant">
-                        "Failure to detect a high-risk entity threatens capital stability. We prioritize discovery over precision to ensure absolute vigilance."
-                    </p>
-<div class="pt-stack-md">
-<span class="font-label-sm text-tertiary-container border border-tertiary-container/30 px-gutter py-1 rounded-full">CORE MANDATE</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Charts Grid (Bento Style) -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Model Comparison Bar Chart -->
-<div class="lg:col-span-7 glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-center mb-stack-lg">
-<h3 class="font-label-md text-primary uppercase tracking-widest">Benchmark Metrics Comparison</h3>
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="bar_chart">bar_chart</span>
-</div>
-<div class="space-y-gutter">
-<!-- Accuracy Row -->
-<div class="space-y-stack-sm">
-<div class="flex justify-between text-xs font-label-sm">
-<span>Accuracy</span>
-<span class="text-on-surface-variant">LightGBM (Winner)</span>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden flex">
-<div class="bg-primary-container w-[97%] h-full" title="LightGBM: 0.97"></div>
-<div class="bg-secondary-container w-[92%] h-full" title="Random Forest: 0.92"></div>
-<div class="bg-surface-variant w-[85%] h-full" title="Logistic Regression: 0.85"></div>
-</div>
-</div>
-<!-- Recall Row -->
-<div class="space-y-stack-sm">
-<div class="flex justify-between text-xs font-label-sm">
-<span>Recall (Critical)</span>
-<span class="text-on-surface-variant">0.937 vs 0.881</span>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-<div class="bg-primary-container w-[93.7%] h-full"></div>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-<div class="bg-secondary-container w-[88.1%] h-full"></div>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-<div class="bg-surface-variant w-[76.4%] h-full"></div>
-</div>
-</div>
-<!-- Legends -->
-<div class="flex gap-gutter pt-stack-md border-t border-outline-variant/30">
-<div class="flex items-center gap-stack-sm">
-<div class="w-3 h-3 bg-primary-container rounded-sm"></div>
-<span class="text-xs font-label-sm text-on-surface-variant">LightGBM</span>
-</div>
-<div class="flex items-center gap-stack-sm">
-<div class="w-3 h-3 bg-secondary-container rounded-sm"></div>
-<span class="text-xs font-label-sm text-on-surface-variant">Random Forest</span>
-</div>
-<div class="flex items-center gap-stack-sm">
-<div class="w-3 h-3 bg-surface-variant rounded-sm"></div>
-<span class="text-xs font-label-sm text-on-surface-variant">Logistic Regression</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Confusion Matrix -->
-<div class="lg:col-span-5 glass-card p-gutter rounded-xl">
-<h3 class="font-label-md text-primary uppercase tracking-widest mb-stack-lg">Confusion Matrix (LightGBM)</h3>
-<div class="grid grid-cols-2 gap-stack-sm relative">
-<!-- Column Labels -->
-<div class="col-start-1 text-center font-label-sm text-on-surface-variant text-[10px]">PREDICTED NORMAL</div>
-<div class="col-start-2 text-center font-label-sm text-on-surface-variant text-[10px]">PREDICTED RISKY</div>
-<!-- True Negative -->
-<div class="aspect-square bg-surface-container-highest/50 border border-outline-variant/20 flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-on-surface-variant text-[10px]">TN</span>
-<span class="font-headline-md text-primary">12,402</span>
-</div>
-<!-- False Positive -->
-<div class="aspect-square bg-error-container/20 border border-error/30 flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-error text-[10px]">FP (Noise)</span>
-<span class="font-headline-md text-error">312</span>
-</div>
-<!-- Row Labels (Absolute Positioned for style) -->
-<div class="col-start-1 text-center font-label-sm text-on-surface-variant text-[10px]">ACTUAL NORMAL</div>
-<div class="col-start-2 text-center font-label-sm text-on-surface-variant text-[10px]">ACTUAL RISKY</div>
-<!-- False Negative -->
-<div class="aspect-square bg-error-container/40 border-2 border-error flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-error font-bold text-[10px]">FN (Risk!)</span>
-<span class="font-headline-md text-error">84</span>
-</div>
-<!-- True Positive -->
-<div class="aspect-square bg-primary-container/20 border border-primary-container/40 flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-primary-container text-[10px]">TP</span>
-<span class="font-headline-md text-primary-container">1,256</span>
-</div>
-</div>
-<p class="mt-gutter text-[10px] text-on-surface-variant text-center font-label-sm italic">
-                    Focus: Minimizing FN (Lower Left Quad) is the key surveillance objective.
-                </p>
-</div>
-</div>
-<!-- Feature Importance & Data Insights -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Feature Importance Horizontal Chart -->
-<div class="lg:col-span-8 glass-card p-gutter rounded-xl">
-<h3 class="font-label-md text-primary uppercase tracking-widest mb-stack-lg">Feature Importance (SHAP values)</h3>
-<div class="space-y-stack-md">
-<!-- Feature 1 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">NBRJDEP</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[92%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.245</span>
-</div>
-<!-- Feature 2 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">MVT</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[84%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.198</span>
-</div>
-<!-- Feature 3 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">AVG_DEP_3M</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[76%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.162</span>
-</div>
-<!-- Feature 4 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">DR_CR_RATIO</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[65%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.134</span>
-</div>
-<!-- Feature 5 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">ACC_AGE_DAYS</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[48%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.089</span>
-</div>
-</div>
-</div>
-<!-- Visualization / Graphic -->
-<div class="lg:col-span-4 glass-card overflow-hidden rounded-xl relative group">
-<img alt="Neural network visualization" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500" data-alt="A highly complex digital visualization of a neural network with glowing interconnected nodes and fiber-optic-like pathways. The aesthetic is tech-noir with deep navy blues and sharp cyan highlights. Tiny data particles flow through the connections, representing high-frequency financial transactions. The lighting is dark and cinematic, emphasizing the precision and complexity of the model architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoDBBZioK5UzkKBXPPiFkcXKRcVi71yeANVO6GmpGptMJ_AXbzWBri145_XMAcjWvaFM-dkAmO5zihab1_-pZKAdoYM6qWllsn_Z9L4e0OuQ-ixfgWK4jn3FhjbFphAbfpBPYfjF3RcpmYmLq31q5v_J5lQMxR1CxnWq3FGaWRtGG23mIVJXW4fAhK_NqQwDSh-6yjghi3FRRsx9sdlfntW2IKzBZW6Ij5H4PcAoLWhCv-PK8sjzHPNBvLXp2_PY9D9q8DaAx485Y"/>
-<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent flex flex-col justify-end p-gutter">
-<h4 class="font-headline-md text-primary">Latent Feature Space</h4>
-<p class="font-body-sm text-on-surface-variant">The model effectively maps 152 dimensional input vectors into a distinct risk-profile manifold.</p>
-</div>
-</div>
-</div>
-</main>
-<!-- FAB for quick report generation (as per instructions, only on home/dashboard, but added here for 'Model Performance' context as it's a primary view) -->
-<div class="fixed bottom-gutter right-gutter z-50">
-<button class="bg-primary-container text-on-primary-container w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
-<span class="material-symbols-outlined" data-icon="file_download">file_download</span>
-</button>
-</div>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-
-
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-(() => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant",
-    "Critical Alerts": "/notifications"
-  };
-
-  const activeByPath = {
-    "/dashboard": "Global Dashboard",
-    "/evolution": "Risk Evolution",
-    "/notifications": "Notifications",
-    "/client": "Client Profiles",
-    "/performance": "Model Performance",
-    "/assistant": "AI Assistant"
-  };
-
-  const activeLabel = activeByPath[window.location.pathname];
-
-  document.querySelectorAll("a, button").forEach((element) => {
-    const text = element.innerText.trim();
-
-    Object.keys(navigationMap).forEach((label) => {
-      if (text.includes(label)) {
-        const url = navigationMap[label];
-
-        if (element.tagName.toLowerCase() === "a") {
-          element.setAttribute("href", url);
-        } else {
-          element.style.cursor = "pointer";
-          element.onclick = () => {
-            window.location.href = url;
-          };
-        }
-
-        // Remove wrong active state
-        element.classList.remove(
-          "bg-secondary-container",
-          "text-on-secondary-container",
-          "font-bold",
-          "scale-[0.98]"
-        );
-
-        element.classList.add(
-          "text-on-surface-variant",
-          "hover:text-on-surface",
-          "hover:bg-surface-variant/30"
-        );
-
-        // Apply correct active state
-        if (label === activeLabel) {
-          element.classList.remove(
-            "text-on-surface-variant",
-            "hover:text-on-surface",
-            "hover:bg-surface-variant/30"
-          );
-
-          element.classList.add(
-            "bg-secondary-container",
-            "text-on-secondary-container",
-            "rounded-lg",
-            "font-bold",
-            "scale-[0.98]"
-          );
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#07122a",
+            surface: "#07122a",
+            "surface-container-lowest": "#030d25",
+            "surface-container-low": "#101b33",
+            "surface-container": "#151f37",
+            "surface-container-high": "#1f2942",
+            "surface-container-highest": "#2a344e",
+            "surface-variant": "#2a344e",
+            "on-surface": "#d9e2ff",
+            "on-surface-variant": "#bacac3",
+            outline: "#85948e",
+            "outline-variant": "#3c4a45",
+            primary: "#ffffff",
+            "primary-container": "#5ffbd6",
+            "on-primary-container": "#00382d",
+            secondary: "#b6c6ed",
+            "secondary-container": "#374767",
+            "on-secondary-container": "#d9e2ff",
+            error: "#ffb4ab",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            tertiary: "#fbe273"
+          },
+          fontFamily: {
+            mono: ["JetBrains Mono"],
+            display: ["Hanken Grotesk"],
+            body: ["Inter"]
+          }
         }
       }
-    });
-  });
-})();
-</script>
+    };
+  </script>
 
-
-<!-- BIAT_AUTO_NAV_PATCH -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const navigationMap = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  const activeClasses = [
-    "bg-secondary-container",
-    "text-on-secondary-container",
-    "rounded-lg",
-    "font-bold",
-    "scale-[0.98]"
-  ];
-
-  const inactiveClasses = [
-    "text-on-surface-variant",
-    "hover:text-on-surface",
-    "hover:bg-surface-variant/30"
-  ];
-
-  const currentPath = window.location.pathname;
-
-  document.querySelectorAll("aside a").forEach((link) => {
-    const text = link.innerText.trim();
-
-    Object.entries(navigationMap).forEach(([label, url]) => {
-      if (text.includes(label)) {
-        link.setAttribute("href", url);
-
-        activeClasses.forEach((cls) => link.classList.remove(cls));
-        inactiveClasses.forEach((cls) => link.classList.add(cls));
-
-        if (currentPath === url) {
-          inactiveClasses.forEach((cls) => link.classList.remove(cls));
-          activeClasses.forEach((cls) => link.classList.add(cls));
-        }
-      }
-    });
-  });
-
-  document.querySelectorAll("button, a").forEach((element) => {
-    const text = element.innerText.trim();
-
-    if (text.includes("Critical Alerts")) {
-      element.style.cursor = "pointer";
-      element.onclick = () => {
-        window.location.href = "/notifications";
-      };
+  <style>
+    body {
+      font-family: Inter, sans-serif;
     }
-  });
+
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .display {
+      font-family: "Hanken Grotesk", sans-serif;
+    }
+
+    .glass-card {
+      background: rgba(17, 34, 64, 0.45);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(60, 74, 69, 0.7);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .metric-ring {
+      background:
+        radial-gradient(circle at center, #101b33 58%, transparent 59%),
+        conic-gradient(#5ffbd6 var(--value), #2a344e 0);
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-low border-r border-outline-variant flex flex-col z-50">
+    <div class="p-6">
+      <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-2">
+      <div data-route="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="mono text-sm">Global Dashboard</span>
+      </div>
+
+      <div data-route="/evolution" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">trending_up</span>
+        <span class="mono text-sm">Risk Evolution</span>
+      </div>
+
+      <div data-route="/notifications" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="mono text-sm">Notifications</span>
+      </div>
+
+      <div data-route="/client" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">group</span>
+        <span class="mono text-sm">Client Profiles</span>
+      </div>
+
+      <div data-route="/performance" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold cursor-pointer">
+        <span class="material-symbols-outlined">analytics</span>
+        <span class="mono text-sm">Model Performance</span>
+      </div>
+
+      <div data-route="/assistant" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span class="mono text-sm">AI Assistant</span>
+      </div>
+    </nav>
+
+    <div class="p-4 border-t border-outline-variant/40 space-y-3">
+      <button data-route="/notifications" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">warning</span>
+        Critical Alerts
+      </button>
+
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="mono text-sm">Settings</span>
+      </div>
+
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
+        <span class="material-symbols-outlined">help</span>
+        <span class="mono text-sm">Support</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="ml-[280px] h-screen overflow-y-auto bg-background">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant flex items-center justify-between px-6">
+      <div class="relative w-[420px]">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input
+          id="topSearch"
+          class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
+          placeholder="Search model, metric, feature..."
+        />
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button id="quickAction" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">
+          Quick Action
+        </button>
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+          <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+          <div>
+            <p class="mono text-sm font-bold">D. Ben Salem</p>
+            <p class="mono text-xs text-on-surface-variant">Risk Officer</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="p-6 space-y-6">
+
+      <!-- Title -->
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="mono text-xs text-primary-container uppercase tracking-widest">Model Governance</p>
+          <h2 class="display text-4xl font-bold mt-2">Model Performance</h2>
+          <p class="text-on-surface-variant mt-2 max-w-3xl">
+            Analyse de performance du modèle de prédiction : métriques, matrice de confusion, importance des variables et stabilité.
+          </p>
+        </div>
+
+        <button id="exportReport" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold flex items-center gap-2">
+          <span class="material-symbols-outlined">download</span>
+          Export Report
+        </button>
+      </div>
+
+      <!-- Controls -->
+      <div class="glass-card rounded-2xl p-5">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
+          <div>
+            <label class="mono text-xs uppercase text-on-surface-variant">Sélection du modèle</label>
+            <select id="modelSelect" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
+              <option value="lightgbm">LightGBM</option>
+              <option value="randomForest">Random Forest</option>
+              <option value="logistic">Logistic Regression</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="mono text-xs uppercase text-on-surface-variant">Période d’évaluation</label>
+            <select id="periodSelect" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
+              <option value="last_month">Last Month</option>
+              <option value="quarter">Last Quarter</option>
+              <option value="year">Year to Date</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="mono text-xs uppercase text-on-surface-variant">Seuil risque</label>
+            <select id="thresholdSelect" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
+              <option value="0.50">0.50</option>
+              <option value="0.60">0.60</option>
+              <option value="0.70">0.70</option>
+            </select>
+          </div>
+
+          <button id="runEvaluation" class="bg-secondary-container text-on-secondary-container px-5 py-3 rounded-xl mono text-sm font-bold">
+            Run Evaluation
+          </button>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">ROC-AUC</p>
+          <p id="rocAuc" class="display text-3xl font-bold text-primary-container mt-3">0.9889</p>
+          <p class="text-xs text-on-surface-variant mt-2">Séparation des classes</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">Recall</p>
+          <p id="recall" class="display text-3xl font-bold text-tertiary mt-3">0.9372</p>
+          <p class="text-xs text-on-surface-variant mt-2">Clients risqués détectés</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">Precision</p>
+          <p id="precision" class="display text-3xl font-bold mt-3">0.9530</p>
+          <p class="text-xs text-on-surface-variant mt-2">Alertes fiables</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">F1-Score</p>
+          <p id="f1Score" class="display text-3xl font-bold text-primary-container mt-3">0.9450</p>
+          <p class="text-xs text-on-surface-variant mt-2">Équilibre recall/precision</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <p class="mono text-xs uppercase text-on-surface-variant">Accuracy</p>
+          <p id="accuracy" class="display text-3xl font-bold mt-3">0.9710</p>
+          <p class="text-xs text-on-surface-variant mt-2">Performance globale</p>
+        </div>
+      </div>
+
+      <!-- Model overview -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="mono text-xs uppercase text-on-surface-variant">Current Model</p>
+              <h3 id="modelName" class="display text-3xl font-bold mt-2">LightGBM</h3>
+            </div>
+            <span id="modelStatus" class="px-3 py-1 rounded-full mono text-xs font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-400/30">Production Ready</span>
+          </div>
+
+          <div class="flex justify-center mt-8">
+            <div id="metricRing" class="metric-ring w-44 h-44 rounded-full flex items-center justify-center" style="--value: 98.89%;">
+              <div class="text-center">
+                <p id="ringValue" class="display text-4xl font-bold">98.89%</p>
+                <p class="mono text-xs text-on-surface-variant">ROC-AUC</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 bg-surface-container-low rounded-xl p-4">
+            <p class="mono text-xs uppercase text-on-surface-variant">Decision focus</p>
+            <p id="modelFocus" class="mt-2 text-sm leading-relaxed text-on-surface">
+              Priorité au Recall pour éviter de rater un client réellement risqué.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="display text-2xl font-bold">Confusion Matrix</h3>
+            <span id="thresholdLabel" class="mono text-xs text-on-surface-variant">Threshold 0.50</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-surface-container-low rounded-xl p-5 border border-emerald-400/20">
+              <p class="mono text-xs text-on-surface-variant">True Negative</p>
+              <p id="tnValue" class="display text-3xl font-bold text-emerald-300 mt-2">8421</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-5 border border-yellow-400/20">
+              <p class="mono text-xs text-on-surface-variant">False Positive</p>
+              <p id="fpValue" class="display text-3xl font-bold text-yellow-300 mt-2">312</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-5 border border-red-400/20">
+              <p class="mono text-xs text-on-surface-variant">False Negative</p>
+              <p id="fnValue" class="display text-3xl font-bold text-red-300 mt-2">47</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-5 border border-primary-container/20">
+              <p class="mono text-xs text-on-surface-variant">True Positive</p>
+              <p id="tpValue" class="display text-3xl font-bold text-primary-container mt-2">701</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="display text-2xl font-bold mb-5">Business Explanation</h3>
+
+          <div class="space-y-4">
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs uppercase text-primary-container">Why Recall matters</p>
+              <p class="text-sm text-on-surface mt-2 leading-relaxed">
+                En risque bancaire, rater un client réellement risqué coûte plus cher que traiter une alerte prudente.
+              </p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-4">
+              <p class="mono text-xs uppercase text-tertiary">Operational decision</p>
+              <p id="decisionText" class="text-sm text-on-surface mt-2 leading-relaxed">
+                Le modèle LightGBM est recommandé pour la production.
+              </p>
+            </div>
+
+            <button id="explainModel" class="w-full bg-primary-container text-on-primary-container rounded-xl py-3 mono text-sm font-bold">
+              Explain Selected Model
+            </button>
+
+            <p id="explainOutput" class="text-sm text-on-surface-variant leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="display text-2xl font-bold">Feature Importance</h3>
+            <span class="mono text-xs text-on-surface-variant">Top variables</span>
+          </div>
+
+          <div id="featureChart" class="space-y-4"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="display text-2xl font-bold">Benchmark Models</h3>
+            <span class="mono text-xs text-on-surface-variant">Comparaison ROC-AUC</span>
+          </div>
+
+          <div id="benchmarkChart" class="space-y-5"></div>
+        </div>
+      </div>
+
+      <!-- Stability -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
+        <div class="glass-card rounded-2xl p-6">
+          <p class="mono text-xs uppercase text-on-surface-variant">PSI</p>
+          <p id="psiValue" class="display text-3xl font-bold text-primary-container mt-3">0.07</p>
+          <p class="text-sm text-on-surface-variant mt-2">Population Stability Index</p>
+          <p class="mt-4 px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-300 mono text-xs inline-block">Stable</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <p class="mono text-xs uppercase text-on-surface-variant">Data Drift</p>
+          <p id="driftValue" class="display text-3xl font-bold text-tertiary mt-3">Low</p>
+          <p class="text-sm text-on-surface-variant mt-2">Variation des données</p>
+          <p class="mt-4 px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-300 mono text-xs inline-block">No Alert</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <p class="mono text-xs uppercase text-on-surface-variant">Monitoring</p>
+          <p class="display text-3xl font-bold mt-3">Monthly</p>
+          <p class="text-sm text-on-surface-variant mt-2">Fréquence de réévaluation recommandée</p>
+          <button id="openAssistant" class="mt-4 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-lg mono text-sm font-bold">
+            Ask AI Assistant
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const models = {
+        lightgbm: {
+          name: "LightGBM",
+          status: "Production Ready",
+          rocAuc: 0.9889,
+          recall: 0.9372,
+          precision: 0.9530,
+          f1: 0.9450,
+          accuracy: 0.9710,
+          matrix: { tn: 8421, fp: 312, fn: 47, tp: 701 },
+          psi: 0.07,
+          drift: "Low",
+          focus: "Priorité au Recall pour éviter de rater un client réellement risqué.",
+          decision: "LightGBM est recommandé pour la production grâce à son ROC-AUC élevé et son excellent Recall.",
+          explanation: "LightGBM offre le meilleur compromis entre détection des clients risqués et limitation des fausses alertes.",
+          features: [
+            ["NBRJDEP", 95],
+            ["RISK_BRUT", 88],
+            ["Historique incidents", 76],
+            ["Solde moyen", 63],
+            ["Fréquence dépassement", 59],
+            ["Ancienneté client", 42]
+          ]
+        },
+        randomForest: {
+          name: "Random Forest",
+          status: "Valid Alternative",
+          rocAuc: 0.9620,
+          recall: 0.9010,
+          precision: 0.9280,
+          f1: 0.9143,
+          accuracy: 0.9540,
+          matrix: { tn: 8210, fp: 421, fn: 74, tp: 674 },
+          psi: 0.10,
+          drift: "Low",
+          focus: "Bon benchmark, robuste mais moins performant que LightGBM sur le Recall.",
+          decision: "Random Forest peut servir de benchmark, mais LightGBM reste préférable pour la production.",
+          explanation: "Random Forest est stable mais détecte légèrement moins de clients risqués que LightGBM.",
+          features: [
+            ["NBRJDEP", 91],
+            ["RISK_BRUT", 80],
+            ["Solde moyen", 72],
+            ["Historique incidents", 68],
+            ["Fréquence dépassement", 54],
+            ["Ancienneté client", 40]
+          ]
+        },
+        logistic: {
+          name: "Logistic Regression",
+          status: "Baseline",
+          rocAuc: 0.8840,
+          recall: 0.8120,
+          precision: 0.8610,
+          f1: 0.8358,
+          accuracy: 0.9020,
+          matrix: { tn: 7790, fp: 693, fn: 141, tp: 607 },
+          psi: 0.14,
+          drift: "Medium",
+          focus: "Modèle simple pour comparaison, utile comme baseline mais insuffisant pour production critique.",
+          decision: "La régression logistique est lisible, mais moins performante pour détecter les clients à risque.",
+          explanation: "La régression logistique sert de modèle de référence. Elle est lisible mais capture moins bien les relations complexes.",
+          features: [
+            ["NBRJDEP", 82],
+            ["RISK_BRUT", 74],
+            ["Solde moyen", 58],
+            ["Historique incidents", 53],
+            ["Fréquence dépassement", 49],
+            ["Ancienneté client", 31]
+          ]
+        }
+      };
+
+      const benchmark = [
+        ["LightGBM", 98.89],
+        ["Random Forest", 96.20],
+        ["Logistic Regression", 88.40]
+      ];
+
+      const $ = (id) => document.getElementById(id);
+
+      function percent(value) {
+        return (value * 100).toFixed(2) + "%";
+      }
+
+      function setText(id, value) {
+        $(id).innerText = value;
+      }
+
+      function renderFeatures(features) {
+        const container = $("featureChart");
+        container.innerHTML = "";
+
+        features.forEach(([label, value]) => {
+          const row = document.createElement("div");
+          row.innerHTML = `
+            <div class="flex items-center justify-between mb-2">
+              <span class="mono text-sm">${label}</span>
+              <span class="mono text-sm text-primary-container">${value}%</span>
+            </div>
+            <div class="h-3 bg-surface-container-high rounded-full overflow-hidden">
+              <div class="h-3 bg-primary-container rounded-full" style="width:${value}%"></div>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+      }
+
+      function renderBenchmark() {
+        const container = $("benchmarkChart");
+        container.innerHTML = "";
+
+        benchmark.forEach(([label, value]) => {
+          const row = document.createElement("div");
+          row.innerHTML = `
+            <div class="flex items-center justify-between mb-2">
+              <span class="mono text-sm">${label}</span>
+              <span class="mono text-sm text-primary-container">${value.toFixed(2)}%</span>
+            </div>
+            <div class="h-4 bg-surface-container-high rounded-full overflow-hidden">
+              <div class="h-4 bg-tertiary rounded-full" style="width:${value}%"></div>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+      }
+
+      function updateModel() {
+        const model = models[$("modelSelect").value];
+
+        setText("modelName", model.name);
+        setText("modelStatus", model.status);
+        setText("rocAuc", model.rocAuc.toFixed(4));
+        setText("recall", model.recall.toFixed(4));
+        setText("precision", model.precision.toFixed(4));
+        setText("f1Score", model.f1.toFixed(4));
+        setText("accuracy", model.accuracy.toFixed(4));
+
+        setText("tnValue", model.matrix.tn);
+        setText("fpValue", model.matrix.fp);
+        setText("fnValue", model.matrix.fn);
+        setText("tpValue", model.matrix.tp);
+
+        setText("psiValue", model.psi.toFixed(2));
+        setText("driftValue", model.drift);
+        setText("modelFocus", model.focus);
+        setText("decisionText", model.decision);
+        setText("thresholdLabel", "Threshold " + $("thresholdSelect").value);
+
+        $("metricRing").style.setProperty("--value", (model.rocAuc * 100) + "%");
+        setText("ringValue", percent(model.rocAuc));
+
+        renderFeatures(model.features);
+        renderBenchmark();
+
+        $("explainOutput").innerText = "";
+      }
+
+      function exportReport() {
+        const model = models[$("modelSelect").value];
+
+        const rows = [
+          ["Model", model.name],
+          ["Status", model.status],
+          ["ROC-AUC", model.rocAuc],
+          ["Recall", model.recall],
+          ["Precision", model.precision],
+          ["F1-Score", model.f1],
+          ["Accuracy", model.accuracy],
+          ["True Negative", model.matrix.tn],
+          ["False Positive", model.matrix.fp],
+          ["False Negative", model.matrix.fn],
+          ["True Positive", model.matrix.tp],
+          ["PSI", model.psi],
+          ["Data Drift", model.drift],
+          ["Business Decision", model.decision]
+        ];
+
+        const csv = rows
+          .map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(","))
+          .join("\n");
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "biat_model_performance_report.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+      }
+
+      $("modelSelect").addEventListener("change", updateModel);
+      $("thresholdSelect").addEventListener("change", updateModel);
+      $("periodSelect").addEventListener("change", updateModel);
+
+      $("runEvaluation").addEventListener("click", () => {
+        updateModel();
+
+        const button = $("runEvaluation");
+        const oldText = button.innerText;
+
+        button.innerText = "Evaluation Updated ✓";
+        button.classList.remove("bg-secondary-container", "text-on-secondary-container");
+        button.classList.add("bg-primary-container", "text-on-primary-container");
+
+        setTimeout(() => {
+          button.innerText = oldText;
+          button.classList.remove("bg-primary-container", "text-on-primary-container");
+          button.classList.add("bg-secondary-container", "text-on-secondary-container");
+        }, 1500);
+      });
+
+      $("exportReport").addEventListener("click", exportReport);
+
+      $("quickAction").addEventListener("click", () => {
+        window.location.href = "/notifications";
+      });
+
+      $("openAssistant").addEventListener("click", () => {
+        window.location.href = "/assistant";
+      });
+
+      $("explainModel").addEventListener("click", () => {
+        $("explainOutput").innerText = models[$("modelSelect").value].explanation;
+      });
+
+      document.querySelectorAll("[data-route]").forEach((el) => {
+        const route = el.getAttribute("data-route");
+        if (!route) return;
+
+        el.addEventListener("click", () => {
+          window.location.href = route;
+        });
+      });
+
+      updateModel();
+    });
+  </script>
+   <!-- BIAT_PERFORMANCE_REAL_ML_RESULTS -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("BIAT Performance ML results loaded");
+
+  let metrics = [];
+
+  try {
+    const response = await fetch("/attached_assets/model_metrics.json");
+    metrics = await response.json();
+  } catch (error) {
+    console.error("Impossible de charger model_metrics.json", error);
+    alert("Erreur: impossible de charger attached_assets/model_metrics.json");
+    return;
+  }
+
+  if (!metrics || metrics.length === 0) {
+    alert("Aucune métrique trouvée dans model_metrics.json");
+    return;
+  }
+
+  let selectedModel = metrics[0];
+
+  function formatMetric(value) {
+    return Number(value).toFixed(4);
+  }
+
+  function percent(value) {
+    return (Number(value) * 100).toFixed(2) + "%";
+  }
+
+  function findTextElement(label) {
+    return Array.from(document.querySelectorAll("p, span, div, h1, h2, h3"))
+      .find(el => (el.innerText || "").trim() === label);
+  }
+
+  function updateMetricCard(label, value) {
+    const labelElement = findTextElement(label);
+    if (!labelElement) return;
+
+    const card = labelElement.closest("div");
+    if (!card) return;
+
+    const numbers = Array.from(card.querySelectorAll("p, span, div, h2, h3"))
+      .filter(el => /^\d+\.\d+|^\d+%/.test((el.innerText || "").trim()));
+
+    if (numbers.length > 0) {
+      numbers[0].innerText = value;
+    }
+  }
+
+  function updateConfusionMatrix(model) {
+    const cm = model.confusion_matrix;
+    if (!cm) return;
+
+    const labels = {
+      "True Negative": cm.tn,
+      "False Positive": cm.fp,
+      "False Negative": cm.fn,
+      "True Positive": cm.tp
+    };
+
+    Object.entries(labels).forEach(([label, value]) => {
+      const labelElement = findTextElement(label);
+      if (!labelElement) return;
+
+      const box = labelElement.closest("div");
+      if (!box) return;
+
+      const numberElement = Array.from(box.querySelectorAll("p, span, div, h2, h3"))
+        .find(el => /^\d+$/.test((el.innerText || "").trim()));
+
+      if (numberElement) {
+        numberElement.innerText = value;
+      }
+    });
+  }
+
+  function updateBusinessExplanation(model) {
+    const explanationTitle = Array.from(document.querySelectorAll("h1, h2, h3, p, div"))
+      .find(el => (el.innerText || "").includes("Business Explanation"));
+
+    if (!explanationTitle) return;
+
+    const panel = explanationTitle.closest("div");
+    if (!panel) return;
+
+    const paragraphs = panel.querySelectorAll("p");
+
+    if (paragraphs.length >= 2) {
+      paragraphs[paragraphs.length - 2].innerText =
+        `Le modèle ${model.model} détecte ${percent(model.recall)} des clients réellement risqués. En risque bancaire, un recall élevé est important pour éviter de rater un client critique.`;
+
+      paragraphs[paragraphs.length - 1].innerText =
+        `${model.model} est recommandé car il offre un équilibre solide entre Precision (${percent(model.precision)}), Recall (${percent(model.recall)}), F1-score (${formatMetric(model.f1_score)}) et ROC-AUC (${formatMetric(model.roc_auc)}).`;
+    }
+  }
+
+  function updateCurrentModel(model) {
+    const modelNames = ["LightGBM", "RandomForest", "LogisticRegression", "MLP_DeepLearning", "HistGradientBoosting_Fallback"];
+
+    document.querySelectorAll("h1, h2, h3, p, span, div").forEach(el => {
+      const text = (el.innerText || "").trim();
+
+      if (modelNames.includes(text)) {
+        el.innerText = model.model;
+      }
+    });
+  }
+
+  function renderModel(model) {
+    selectedModel = model;
+
+    updateMetricCard("ROC-AUC", formatMetric(model.roc_auc));
+    updateMetricCard("RECALL", formatMetric(model.recall));
+    updateMetricCard("PRECISION", formatMetric(model.precision));
+    updateMetricCard("F1-SCORE", formatMetric(model.f1_score));
+    updateMetricCard("ACCURACY", formatMetric(model.accuracy));
+
+    updateCurrentModel(model);
+    updateConfusionMatrix(model);
+    updateBusinessExplanation(model);
+  }
+
+  function createModelSelector() {
+    const possibleSelect = Array.from(document.querySelectorAll("select")).find(select =>
+      Array.from(select.options).some(opt => opt.text.includes("LightGBM"))
+    );
+
+    if (possibleSelect) {
+      possibleSelect.innerHTML = metrics.map(m => `
+        <option value="${m.model}">${m.model}</option>
+      `).join("");
+
+      possibleSelect.value = selectedModel.model;
+
+      possibleSelect.addEventListener("change", e => {
+        const model = metrics.find(m => m.model === e.target.value);
+        if (model) renderModel(model);
+      });
+
+      return;
+    }
+
+    const modelButton = Array.from(document.querySelectorAll("button, div"))
+      .find(el => (el.innerText || "").includes("LightGBM"));
+
+    if (modelButton) {
+      modelButton.style.cursor = "pointer";
+      modelButton.addEventListener("click", () => {
+        const list = metrics.map((m, i) => `${i + 1} = ${m.model}`).join("\n");
+        const choice = prompt("Choisir un modèle:\n\n" + list, "1");
+        const index = Number(choice) - 1;
+
+        if (metrics[index]) {
+          renderModel(metrics[index]);
+        }
+      });
+    }
+  }
+
+  function setupExportButton() {
+    const exportButton = Array.from(document.querySelectorAll("button, a"))
+      .find(el => (el.innerText || "").includes("Export Report"));
+
+    if (!exportButton) return;
+
+    exportButton.addEventListener("click", e => {
+      e.preventDefault();
+
+      const rows = [
+        ["Model", "ROC_AUC", "Recall", "Precision", "F1_Score", "Accuracy", "TN", "FP", "FN", "TP"],
+        ...metrics.map(m => [
+          m.model,
+          m.roc_auc,
+          m.recall,
+          m.precision,
+          m.f1_score,
+          m.accuracy,
+          m.confusion_matrix.tn,
+          m.confusion_matrix.fp,
+          m.confusion_matrix.fn,
+          m.confusion_matrix.tp
+        ])
+      ];
+
+      const csv = rows
+        .map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "biat_model_performance_report.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  createModelSelector();
+  setupExportButton();
+  renderModel(selectedModel);
 });
 </script>
+<script src="/attached_assets/auth.js"></script>
+</body>
+<!-- BIAT BACKGROUND SAFE PATCH -->
+<style>
+  html {
+    background: #07122a !important;
+  }
 
-</body></html>
+  body {
+    position: relative;
+    background: #07122a !important;
+    min-height: 100vh;
+  }
+
+  #biat-background-safe {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 88% 8%, rgba(245,146,30,0.18) 0%, rgba(245,146,30,0.08) 25%, transparent 48%),
+      radial-gradient(circle at 10% 90%, rgba(30,58,158,0.22) 0%, rgba(30,58,158,0.08) 30%, transparent 55%),
+      linear-gradient(135deg, #061024 0%, #07122a 45%, #0b1b38 100%);
+  }
+
+  #biat-background-safe::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,146,30,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,146,30,0.03) 1px, transparent 1px),
+      linear-gradient(rgba(95,251,214,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,251,214,0.018) 1px, transparent 1px);
+    background-size: 90px 90px, 90px 90px, 24px 24px, 24px 24px;
+  }
+
+  .biat-safe-curve {
+    position: absolute;
+    top: -100px;
+    right: -180px;
+    width: 720px;
+    height: 560px;
+    opacity: 0.22;
+  }
+
+  .biat-safe-accent {
+    position: absolute;
+    left: 260px;
+    bottom: -190px;
+    width: 680px;
+    height: 390px;
+    opacity: 0.10;
+  }
+
+  .biat-safe-watermark {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.12;
+    user-select: none;
+  }
+
+  .biat-safe-logo {
+    width: 78px;
+    height: 66px;
+    background: #00537a;
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .biat-safe-logo::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 65px;
+    height: 46px;
+    background: #f5921e;
+    border-radius: 80% 90% 0 0;
+    transform: skewX(-26deg);
+  }
+
+  .biat-safe-logo::after {
+    content: "";
+    position: absolute;
+    left: 32px;
+    bottom: 18px;
+    width: 58px;
+    height: 11px;
+    background: white;
+    border-radius: 20px;
+    transform: skewX(-28deg);
+  }
+
+  .biat-safe-text {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 4px;
+    margin-top: 6px;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  aside,
+  header,
+  main,
+  section {
+    position: relative;
+    z-index: 2;
+  }
+
+  main {
+    background: transparent !important;
+  }
+</style>
+
+<div id="biat-background-safe">
+  <svg class="biat-safe-curve" viewBox="0 0 720 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M720 0 C540 5 295 95 85 330 C5 420 -45 500 -90 560 H720 Z" fill="#f5921e"/>
+    <path d="M720 0 C610 35 405 140 235 330 C145 430 105 505 80 560 H720 Z" fill="#1e3a9e"/>
+    <path d="M700 8 C525 45 315 155 130 380 C70 455 28 515 0 560" stroke="rgba(255,255,255,0.45)" stroke-width="4"/>
+  </svg>
+
+  <svg class="biat-safe-accent" viewBox="0 0 680 390" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 390 C160 230 370 105 680 0 L680 390 Z" fill="#f5921e"/>
+    <path d="M170 390 C315 245 500 130 680 55 L680 390 Z" fill="#1e3a9e"/>
+  </svg>
+</div>
+
+<div class="biat-safe-watermark">
+  <div class="biat-safe-logo"></div>
+  <div class="biat-safe-text">Risk Monitor</div>
+</div>
+</html>

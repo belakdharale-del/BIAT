@@ -313,41 +313,9 @@
 <!-- FAB for Quick Actions (Suppressed on Chat/Settings pages according to rules, but kept for context if desired elsewhere. Here it is omitted as per UX guidelines for focused journey) -->
 
 
-<!-- BIAT_AI_ASSISTANT_CLEAN_FIX -->
+<!-- BIAT_AI_ASSISTANT_DYNAMIC_API -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const portfolioData = {
-    totalClients: 12842,
-    criticalClients: 45,
-    highRiskClients: 120,
-    pendingNotifications: 216,
-    averageScore: 84.7,
-    totalExposure: "4.2M TND",
-    recall: 0.9372,
-    rocAuc: 0.9889,
-    priorityClients: [
-      {
-        cpte: "CPTE_0015",
-        score: 96.5,
-        reason: "trois rejets successifs et aggravation récente",
-        action: "examen immédiat du dossier"
-      },
-      {
-        cpte: "CPTE_000362",
-        score: 94.2,
-        reason: "hausse rapide du nombre de jours en dépassement",
-        action: "notification juridique et appel du chargé de compte"
-      },
-      {
-        cpte: "CPTE_0025",
-        score: 91.4,
-        reason: "exposition élevée et score supérieur au seuil critique",
-        action: "revue risque sous 24h"
-      }
-    ]
-  };
-
-  /* Navigation */
   const routes = {
     "Global Dashboard": "/dashboard",
     "Risk Evolution": "/evolution",
@@ -371,14 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  function normalize(text) {
-    return String(text)
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim();
-  }
-
   function escapeHtml(text) {
     return String(text)
       .replaceAll("&", "&amp;")
@@ -388,23 +348,21 @@ document.addEventListener("DOMContentLoaded", () => {
       .replaceAll("'", "&#039;");
   }
 
-  function getMessagesContainer() {
-    const containers = Array.from(document.querySelectorAll("div"));
+  function formatAnswer(text) {
+    return escapeHtml(text)
+      .replace(/\n/g, "<br>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  }
 
-    return (
-      containers.find((el) =>
-        String(el.className).includes("overflow-y-auto") &&
-        String(el.className).includes("p-container-padding") &&
-        el.innerText.includes("ANALYSE DU PORTEFEUILLE")
-      ) ||
-      containers.find((el) =>
-        String(el.className).includes("overflow-y-auto") &&
-        String(el.className).includes("space-y-gutter")
-      )
+  function getMessagesContainer() {
+    return Array.from(document.querySelectorAll("div")).find((el) =>
+      String(el.className).includes("overflow-y-auto") &&
+      String(el.className).includes("space-y-gutter")
     );
   }
 
   const messagesContainer = getMessagesContainer();
+
   const input = Array.from(document.querySelectorAll("textarea, input")).find((el) =>
     (el.placeholder || "").toLowerCase().includes("interroger")
   );
@@ -422,92 +380,6 @@ document.addEventListener("DOMContentLoaded", () => {
   messagesContainer.style.flexDirection = "column";
   messagesContainer.style.gap = "16px";
 
-  function getAnswer(question) {
-    const q = normalize(question);
-
-    if (q.includes("prioritaire") || q.includes("prioritaires")) {
-      return {
-        title: "CLIENTS PRIORITAIRES À TRAITER",
-        body: "Les clients prioritaires sont les clients critiques avec score élevé, aggravation récente et exposition importante.",
-        points: portfolioData.priorityClients.map(
-          (c) => `${c.cpte} — score ${c.score}% — ${c.reason}. Action recommandée : ${c.action}.`
-        )
-      };
-    }
-
-    if (q.includes("000362") || q.includes("cpte_000362")) {
-      return {
-        title: "ANALYSE CLIENT CPTE_000362",
-        body: "Le client CPTE_000362 présente un risque critique avec un score estimé à 94.2%. Le profil montre une hausse du nombre de jours en dépassement.",
-        points: [
-          "Niveau d’alerte : Critique.",
-          "Priorité : P2, proche du seuil P1.",
-          "Action recommandée : appel du chargé de compte et notification préventive.",
-          "Surveillance conseillée : quotidienne pendant 7 jours."
-        ]
-      };
-    }
-
-    if (q.includes("0015") || q.includes("cpte_0015")) {
-      return {
-        title: "ANALYSE CLIENT CPTE_0015",
-        body: "Le client CPTE_0015 est critique. Le signal principal est une succession de rejets et une aggravation comportementale.",
-        points: [
-          "Score estimé : 96.5%.",
-          "Priorité : P1.",
-          "Action recommandée : examen immédiat du dossier.",
-          "Contacter le client aujourd’hui."
-        ]
-      };
-    }
-
-    if (q.includes("global") || q.includes("evolue") || q.includes("risque")) {
-      return {
-        title: "ÉVOLUTION DU RISQUE GLOBAL",
-        body: `Le portefeuille présente une pression modérée. Le score moyen est actuellement de ${portfolioData.averageScore}%, avec ${portfolioData.criticalClients} clients critiques et ${portfolioData.highRiskClients} clients à risque élevé.`,
-        points: [
-          `Exposition totale estimée : ${portfolioData.totalExposure}.`,
-          `${portfolioData.pendingNotifications} notifications sont encore en attente de traitement.`,
-          "La priorité doit rester sur les clients critiques en aggravation."
-        ]
-      };
-    }
-
-    if (q.includes("seuil") || q.includes("80")) {
-      return {
-        title: "SIMULATION DU SEUIL CRITIQUE À 80%",
-        body: "Abaisser le seuil critique à 80% augmente le nombre de clients à traiter. Cela améliore la détection préventive mais augmente aussi la charge opérationnelle.",
-        points: [
-          "Avantage : moins de clients risqués non détectés.",
-          "Inconvénient : plus de faux positifs.",
-          "Recommandation : garder 85% comme seuil critique principal."
-        ]
-      };
-    }
-
-    if (q.includes("modele") || q.includes("lightgbm") || q.includes("recall")) {
-      return {
-        title: "PERFORMANCE DU MODÈLE LIGHTGBM",
-        body: `Le modèle LightGBM est adapté aux données bancaires tabulaires. Le recall actuel est de ${portfolioData.recall}, ce qui est prioritaire pour éviter de manquer les clients risqués.`,
-        points: [
-          `ROC-AUC : ${portfolioData.rocAuc}.`,
-          "Le recall est plus important que la précision dans ce cas métier.",
-          "Un faux négatif peut coûter plus cher qu’un faux positif."
-        ]
-      };
-    }
-
-    return {
-      title: "ANALYSE GÉNÉRALE DU PORTEFEUILLE",
-      body: "Je peux analyser le risque global, les clients prioritaires, un client spécifique, les seuils critiques ou les performances du modèle.",
-      points: [
-        "Essayez : Comment évolue le risque global ?",
-        "Essayez : Quels sont les clients prioritaires ?",
-        "Essayez : Analyse le client CPTE_000362"
-      ]
-    };
-  }
-
   function addUserMessage(text) {
     const wrapper = document.createElement("div");
     wrapper.className = "flex justify-end mb-stack-lg";
@@ -519,22 +391,12 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     messagesContainer.appendChild(wrapper);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 
-  function addAssistantMessage(answer) {
+  function addAssistantMessage(text, sourceLabel = "DONNÉES RÉELLES") {
     const wrapper = document.createElement("div");
     wrapper.className = "flex justify-start items-start gap-base mb-stack-lg";
-
-    const pointsHtml = answer.points
-      .map(
-        (point) => `
-          <li class="flex gap-base">
-            <span class="text-primary-container">•</span>
-            <span>${escapeHtml(point)}</span>
-          </li>
-        `
-      )
-      .join("");
 
     wrapper.innerHTML = `
       <div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-primary-container/20 flex items-center justify-center text-primary-container shrink-0">
@@ -543,49 +405,81 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div class="max-w-[85%] glass-panel p-gutter rounded-xl rounded-tl-none message-glow">
         <div class="flex items-center justify-between mb-stack-md">
-          <span class="font-label-sm text-label-sm text-primary-container">${escapeHtml(answer.title)}</span>
-          <span class="font-label-sm text-label-sm text-outline opacity-50">RÉPONSE MOCK</span>
+          <span class="font-label-sm text-label-sm text-primary-container">ASSISTANT BIAT RISK MONITOR</span>
+          <span class="font-label-sm text-label-sm text-outline opacity-50">${sourceLabel}</span>
         </div>
 
-        <div class="space-y-stack-md font-body-md text-body-md text-on-surface">
-          <p>${escapeHtml(answer.body)}</p>
-          <ul class="list-none space-y-stack-sm pl-0 mt-stack-md">
-            ${pointsHtml}
-          </ul>
+        <div class="space-y-stack-md font-body-md text-body-md text-on-surface leading-relaxed">
+          <p>${formatAnswer(text)}</p>
         </div>
       </div>
     `;
 
     messagesContainer.appendChild(wrapper);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 
-  function ask(question) {
+  function addThinkingMessage() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "flex justify-start items-center gap-base opacity-70 mb-stack-lg";
+    wrapper.innerHTML = `
+      <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface-variant shrink-0">
+        <span class="material-symbols-outlined">smart_toy</span>
+      </div>
+      <div class="text-on-surface-variant font-body-sm">Analyse en cours...</div>
+    `;
+
+    messagesContainer.appendChild(wrapper);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    return wrapper;
+  }
+
+  async function askAssistant(question) {
     const text = question.trim();
     if (!text) return;
 
     addUserMessage(text);
-
-    const thinking = document.createElement("div");
-    thinking.className = "text-on-surface-variant font-body-sm mb-stack-lg";
-    thinking.innerText = "Analyse en cours...";
-    messagesContainer.appendChild(thinking);
-
-    setTimeout(() => {
-      thinking.remove();
-      addAssistantMessage(getAnswer(text));
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }, 300);
-
     input.value = "";
+
+    const thinking = addThinkingMessage();
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: text
+        })
+      });
+
+      const data = await response.json();
+      thinking.remove();
+
+      if (data.answer) {
+        addAssistantMessage(data.answer, data.context_used ? "DONNÉES RÉELLES" : "RÉPONSE IA");
+      } else {
+        addAssistantMessage("Aucune réponse reçue du serveur.", "ERREUR");
+      }
+
+    } catch (error) {
+      thinking.remove();
+      addAssistantMessage(
+        "Erreur de connexion avec /api/chat. Vérifie que python server.py est bien lancé.",
+        "ERREUR"
+      );
+    }
+
     input.focus();
   }
 
-  sendButton.onclick = () => ask(input.value);
+  sendButton.onclick = () => askAssistant(input.value);
 
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      ask(input.value);
+      askAssistant(input.value);
     }
   });
 
@@ -599,12 +493,150 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       button.onclick = () => {
         input.value = text;
-        ask(text);
+        askAssistant(text);
       };
     }
   });
 });
 </script>
 
+<script src="/attached_assets/auth.js"></script>
 </body>
+<!-- BIAT BACKGROUND SAFE PATCH -->
+<style>
+  html {
+    background: #07122a !important;
+  }
+
+  body {
+    position: relative;
+    background: #07122a !important;
+    min-height: 100vh;
+  }
+
+  #biat-background-safe {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 88% 8%, rgba(245,146,30,0.18) 0%, rgba(245,146,30,0.08) 25%, transparent 48%),
+      radial-gradient(circle at 10% 90%, rgba(30,58,158,0.22) 0%, rgba(30,58,158,0.08) 30%, transparent 55%),
+      linear-gradient(135deg, #061024 0%, #07122a 45%, #0b1b38 100%);
+  }
+
+  #biat-background-safe::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,146,30,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,146,30,0.03) 1px, transparent 1px),
+      linear-gradient(rgba(95,251,214,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(95,251,214,0.018) 1px, transparent 1px);
+    background-size: 90px 90px, 90px 90px, 24px 24px, 24px 24px;
+  }
+
+  .biat-safe-curve {
+    position: absolute;
+    top: -100px;
+    right: -180px;
+    width: 720px;
+    height: 560px;
+    opacity: 0.22;
+  }
+
+  .biat-safe-accent {
+    position: absolute;
+    left: 260px;
+    bottom: -190px;
+    width: 680px;
+    height: 390px;
+    opacity: 0.10;
+  }
+
+  .biat-safe-watermark {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.12;
+    user-select: none;
+  }
+
+  .biat-safe-logo {
+    width: 78px;
+    height: 66px;
+    background: #00537a;
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .biat-safe-logo::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 65px;
+    height: 46px;
+    background: #f5921e;
+    border-radius: 80% 90% 0 0;
+    transform: skewX(-26deg);
+  }
+
+  .biat-safe-logo::after {
+    content: "";
+    position: absolute;
+    left: 32px;
+    bottom: 18px;
+    width: 58px;
+    height: 11px;
+    background: white;
+    border-radius: 20px;
+    transform: skewX(-28deg);
+  }
+
+  .biat-safe-text {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 4px;
+    margin-top: 6px;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  aside,
+  header,
+  main,
+  section {
+    position: relative;
+    z-index: 2;
+  }
+
+  main {
+    background: transparent !important;
+  }
+</style>
+
+<div id="biat-background-safe">
+  <svg class="biat-safe-curve" viewBox="0 0 720 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M720 0 C540 5 295 95 85 330 C5 420 -45 500 -90 560 H720 Z" fill="#f5921e"/>
+    <path d="M720 0 C610 35 405 140 235 330 C145 430 105 505 80 560 H720 Z" fill="#1e3a9e"/>
+    <path d="M700 8 C525 45 315 155 130 380 C70 455 28 515 0 560" stroke="rgba(255,255,255,0.45)" stroke-width="4"/>
+  </svg>
+
+  <svg class="biat-safe-accent" viewBox="0 0 680 390" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 390 C160 230 370 105 680 0 L680 390 Z" fill="#f5921e"/>
+    <path d="M170 390 C315 245 500 130 680 55 L680 390 Z" fill="#1e3a9e"/>
+  </svg>
+</div>
+
+<div class="biat-safe-watermark">
+  <div class="biat-safe-logo"></div>
+  <div class="biat-safe-text">Risk Monitor</div>
+</div>
 </html>

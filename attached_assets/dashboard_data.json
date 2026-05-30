@@ -1,0 +1,113 @@
+{
+  "project": "BIAT Risk Monitor",
+  "data_source": "ML predictions generated from dataset_ml_clean.csv",
+  "period_min": "2025-05-31",
+  "period_max": "2025-11-30",
+  "best_model": "LightGBM",
+  "best_model_metrics": {
+    "model": "LightGBM",
+    "threshold": 0.7,
+    "roc_auc": 0.9958,
+    "recall": 0.9793,
+    "precision": 0.9973,
+    "f1_score": 0.9882,
+    "accuracy": 0.9941,
+    "confusion_matrix": {
+      "tn": 29535,
+      "fp": 26,
+      "fn": 205,
+      "tp": 9713
+    }
+  },
+  "kpis": {
+    "total_clients": 19316,
+    "predicted_risky": 9739,
+    "critical_clients": 9726,
+    "high_risk_clients": 22,
+    "medium_risk_clients": 28,
+    "low_risk_clients": 29703,
+    "avg_risk_score_percent": 23.87,
+    "max_risk_score_percent": 95.0,
+    "total_exposure": 42996409.0
+  },
+  "risk_distribution": [
+    {
+      "label": "Critique",
+      "count": 9726
+    },
+    {
+      "label": "Élevé",
+      "count": 22
+    },
+    {
+      "label": "Moyen",
+      "count": 28
+    },
+    {
+      "label": "Faible",
+      "count": 29703
+    }
+  ],
+  "model_comparison": [
+    {
+      "model": "LightGBM",
+      "threshold": 0.7,
+      "roc_auc": 0.9958,
+      "recall": 0.9793,
+      "precision": 0.9973,
+      "f1_score": 0.9882,
+      "accuracy": 0.9941,
+      "confusion_matrix": {
+        "tn": 29535,
+        "fp": 26,
+        "fn": 205,
+        "tp": 9713
+      }
+    },
+    {
+      "model": "RandomForest",
+      "threshold": 0.7,
+      "roc_auc": 0.9958,
+      "recall": 0.9769,
+      "precision": 0.9988,
+      "f1_score": 0.9877,
+      "accuracy": 0.9939,
+      "confusion_matrix": {
+        "tn": 29549,
+        "fp": 12,
+        "fn": 229,
+        "tp": 9689
+      }
+    },
+    {
+      "model": "LogisticRegression",
+      "threshold": 0.7,
+      "roc_auc": 0.9957,
+      "recall": 0.9708,
+      "precision": 0.9984,
+      "f1_score": 0.9844,
+      "accuracy": 0.9923,
+      "confusion_matrix": {
+        "tn": 29546,
+        "fp": 15,
+        "fn": 290,
+        "tp": 9628
+      }
+    },
+    {
+      "model": "MLP_DeepLearning",
+      "threshold": 0.7,
+      "roc_auc": 0.9956,
+      "recall": 0.968,
+      "precision": 0.999,
+      "f1_score": 0.9833,
+      "accuracy": 0.9917,
+      "confusion_matrix": {
+        "tn": 29551,
+        "fp": 10,
+        "fn": 317,
+        "tp": 9601
+      }
+    }
+  ]
+}

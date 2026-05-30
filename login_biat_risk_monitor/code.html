@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIAT Risk Monitor - Login</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Hanken+Grotesk:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#07122a",
+            "surface-container-low": "#101b33",
+            "surface-container": "#151f37",
+            "on-surface": "#d9e2ff",
+            "on-surface-variant": "#bacac3",
+            "primary-container": "#5ffbd6",
+            "on-primary-container": "#00382d",
+            outline: "#3c4a45",
+            error: "#ffb4ab"
+          },
+          fontFamily: {
+            mono: ["JetBrains Mono"],
+            display: ["Hanken Grotesk"],
+            body: ["Inter"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family: Inter, sans-serif; }
+    .mono { font-family: "JetBrains Mono", monospace; }
+    .display { font-family: "Hanken Grotesk", sans-serif; }
+    .bg-biat {
+      background:
+        radial-gradient(circle at 85% 10%, rgba(245,146,30,.28), transparent 35%),
+        radial-gradient(circle at 15% 85%, rgba(30,58,158,.35), transparent 40%),
+        linear-gradient(135deg,#061024,#07122a,#0b1b38);
+    }
+  </style>
+</head>
+
+<body class="bg-biat min-h-screen text-on-surface flex items-center justify-center p-6">
+
+  <div class="w-full max-w-md bg-surface-container/80 border border-outline rounded-2xl p-8 shadow-2xl backdrop-blur">
+    <div class="text-center mb-8">
+      <h1 class="display text-4xl font-extrabold text-white">BIAT Risk Monitor</h1>
+      <p class="text-on-surface-variant mt-2">Accès sécurisé à l’espace risque</p>
+    </div>
+
+    <form id="loginForm" class="space-y-5">
+      <div>
+        <label class="mono text-xs uppercase text-on-surface-variant">Nom utilisateur</label>
+        <input id="username" type="text" required
+          class="mt-2 w-full bg-surface-container-low border border-outline rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary-container"
+          placeholder="Exemple : Ahlem, Risk Officer, Admin">
+      </div>
+
+      <div>
+        <label class="mono text-xs uppercase text-on-surface-variant">Mot de passe</label>
+        <input id="password" type="password" required
+          class="mt-2 w-full bg-surface-container-low border border-outline rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary-container"
+          placeholder="Mot de passe">
+      </div>
+
+      <p id="loginError" class="hidden text-error text-sm mono">
+        Mot de passe incorrect. Essayez : biat2026
+      </p>
+
+      <button type="submit"
+        class="w-full bg-primary-container text-on-primary-container rounded-xl py-3 mono font-bold">
+        Se connecter
+      </button>
+    </form>
+
+    <div class="mt-6 bg-surface-container-low rounded-xl p-4 text-sm text-on-surface-variant">
+      <p class="mono text-xs uppercase text-primary-container mb-2">Démo</p>
+      <p>Mot de passe : <b>biat2026</b></p>
+      <p>Le nom affiché dans l’application sera celui tapé dans le champ utilisateur.</p>
+    </div>
+  </div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (password !== "biat2026") {
+    document.getElementById("loginError").classList.remove("hidden");
+    return;
+  }
+
+  localStorage.setItem("biat_auth", "true");
+  localStorage.setItem("biat_user", username || "Risk Officer");
+  localStorage.setItem("biat_role", "Risk Officer");
+
+  window.location.href = "/dashboard";
+});
+</script>
+
+</body>
+</html>
