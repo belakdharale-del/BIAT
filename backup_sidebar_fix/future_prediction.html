@@ -1,0 +1,673 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIAT Risk Monitor | Future Prediction</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#07122a",
+            surface: "#07122a",
+            "surface-container-lowest": "#030d25",
+            "surface-container-low": "#101b33",
+            "surface-container": "#151f37",
+            "surface-container-high": "#1f2942",
+            "surface-container-highest": "#2a344e",
+            "surface-variant": "#2a344e",
+            "on-surface": "#d9e2ff",
+            "on-surface-variant": "#bacac3",
+            outline: "#85948e",
+            "outline-variant": "#3c4a45",
+            primary: "#ffffff",
+            "primary-container": "#5ffbd6",
+            "on-primary-container": "#00382d",
+            secondary: "#b6c6ed",
+            "secondary-container": "#374767",
+            "on-secondary-container": "#d9e2ff",
+            error: "#ffb4ab",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            tertiary: "#fbe273",
+            orange: "#f5921e",
+            biatblue: "#1e3a9e"
+          },
+          fontFamily: {
+            mono: ["JetBrains Mono", "monospace"],
+            display: ["Hanken Grotesk", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body { font-family: Inter, sans-serif; }
+    .mono { font-family: "JetBrains Mono", monospace; }
+    .display { font-family: "Hanken Grotesk", sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+    .glass-card {
+      background: rgba(17, 34, 64, 0.50);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(60, 74, 69, 0.72);
+      box-shadow: 0 14px 34px rgba(0,0,0,.18);
+    }
+
+    .biat-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 86% 10%, rgba(245,146,30,0.11) 0%, rgba(245,146,30,0.03) 28%, transparent 48%),
+        radial-gradient(circle at 9% 90%, rgba(30,58,158,0.26) 0%, rgba(30,58,158,0.10) 32%, transparent 58%),
+        linear-gradient(135deg, #061024 0%, #07122a 45%, #0b1b38 100%);
+    }
+
+    .biat-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,146,30,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,146,30,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(95,251,214,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,251,214,0.018) 1px, transparent 1px);
+      background-size: 90px 90px, 90px 90px, 24px 24px, 24px 24px;
+    }
+
+    .biat-wm {
+      position: fixed;
+      right: 28px;
+      bottom: 24px;
+      z-index: 1;
+      opacity: .10;
+      pointer-events: none;
+      user-select: none;
+    }
+    .biat-wm-box {
+      width: 82px;
+      height: 66px;
+      border-radius: 8px;
+      background: #00537a;
+      overflow: hidden;
+      position: relative;
+    }
+    .biat-wm-box::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      width: 70px;
+      height: 48px;
+      background: #f5921e;
+      border-radius: 80% 90% 0 0;
+      transform: skewX(-26deg);
+    }
+    .biat-wm-box::after {
+      content: "";
+      position: absolute;
+      left: 32px;
+      bottom: 18px;
+      width: 60px;
+      height: 11px;
+      background: white;
+      border-radius: 20px;
+      transform: skewX(-28deg);
+    }
+    .biat-wm-sub {
+      font-family: JetBrains Mono, monospace;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      font-size: 8px;
+      text-align: right;
+      margin-top: 6px;
+      color: rgba(255,255,255,.55);
+    }
+
+    aside, header, main, section { position: relative; z-index: 2; }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(42,52,78,.75);
+      overflow: hidden;
+    }
+    .bar > span {
+      display:block;
+      height:100%;
+      border-radius:999px;
+      background: linear-gradient(90deg, #5ffbd6, #f5921e);
+      width: 0%;
+      transition: width .55s ease;
+    }
+
+    .donut {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(#ffb4ab 0deg, #2a344e 0deg);
+      position: relative;
+    }
+    .donut::after {
+      content: "";
+      position:absolute;
+      inset: 24px;
+      border-radius: 50%;
+      background: #101b33;
+      border: 1px solid rgba(60,74,69,.65);
+    }
+
+    .badge { border: 1px solid rgba(255,255,255,.08); }
+    .table-row:hover { background: rgba(95,251,214,.055); }
+
+    @media (max-width: 1000px) {
+      aside { display:none; }
+      main { margin-left:0 !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen">
+  <div class="biat-bg">
+    <svg style="position:absolute;top:-80px;right:-120px;width:780px;height:620px;opacity:.36" viewBox="0 0 780 620" fill="none">
+      <path d="M780 0 C590 10 310 110 100 355 C20 448 -20 535 -70 620 H780 Z" fill="#f5921e"/>
+      <path d="M780 0 C640 40 420 155 250 360 C160 470 120 555 90 620 H780 Z" fill="#1e3a9e"/>
+      <path d="M760 10 C570 55 335 180 145 410 C80 490 35 555 0 620" stroke="rgba(255,255,255,.45)" stroke-width="4"/>
+    </svg>
+  </div>
+  <div class="biat-wm"><div class="biat-wm-box"></div><div class="biat-wm-sub">Risk Monitor</div></div>
+
+  <aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low/80 backdrop-blur-xl flex flex-col z-50">
+    <div class="p-6">
+      <h1 class="display text-3xl font-bold text-primary leading-tight">BIAT Risk<br>Monitor</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
+    </div>
+    <nav class="flex-1 px-4 space-y-2">
+      <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">dashboard</span><span class="mono text-sm">Global Dashboard</span>
+      </a>
+      <a href="/evolution" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">trending_up</span><span class="mono text-sm">Risk Evolution</span>
+      </a>
+      <a href="/future" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold">
+        <span class="material-symbols-outlined">online_prediction</span><span class="mono text-sm">Future Prediction</span>
+      </a>
+      <a href="/notifications" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">notifications</span><span class="mono text-sm">Notifications</span>
+      </a>
+      <a href="/client" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">group</span><span class="mono text-sm">Client Profiles</span>
+      </a>
+      <a href="/performance" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">analytics</span><span class="mono text-sm">Model Performance</span>
+      </a>
+      <a href="/assistant" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">smart_toy</span><span class="mono text-sm">AI Assistant</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-outline-variant/40 space-y-3">
+      <button onclick="window.location.href='/notifications'" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">warning</span>Critical Alerts
+      </button>
+      <button onclick="window.location.href='/assistant'" class="w-full border border-primary-container/30 text-primary-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2 hover:bg-primary-container/10">
+        <span class="material-symbols-outlined">psychology</span>Ask Assistant
+      </button>
+    </div>
+  </aside>
+
+  <main class="ml-[280px] min-h-screen overflow-y-auto">
+    <header class="sticky top-0 z-40 h-16 border-b border-outline-variant bg-background/80 backdrop-blur-xl flex items-center justify-between px-6">
+      <div class="flex items-center gap-4">
+        <div>
+          <h2 class="display text-2xl font-bold">Future Risk Prediction</h2>
+          <p class="mono text-xs text-on-surface-variant">LightGBM Â· Horizon 30 jours Â· Direct Portfolio Sync</p>
+        </div>
+        <span id="apiStatus" class="mono text-xs px-3 py-1 rounded-full border border-primary-container/30 bg-primary-container/10 text-primary-container">LOADING</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="refreshData()" class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest mono text-sm flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">refresh</span>Refresh
+        </button>
+        <button onclick="window.location.href='/assistant'" class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container mono text-sm font-bold flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">smart_toy</span>Analyse IA
+        </button>
+      </div>
+    </header>
+
+    <section class="p-6 space-y-6">
+      <div class="glass-card rounded-2xl p-6 overflow-hidden relative">
+        <div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-primary-container/10 to-transparent pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+          <div>
+            <p class="mono text-xs text-primary-container tracking-[.25em] uppercase">Module prÃ©dictif</p>
+            <h1 class="display text-4xl font-extrabold mt-2">PrÃ©dire les clients qui vont devenir critiques</h1>
+            <p class="text-on-surface-variant mt-3 max-w-4xl">
+              Cette page visualise les scores futurs gÃ©nÃ©rÃ©s par LightGBM, distingue les clients dÃ©jÃ  critiques de ceux qui ne le sont pas encore,
+              et priorise les dossiers Ã  traiter avant le passage rÃ©el en situation critique.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl bg-surface-container-high/70 border border-outline-variant p-4">
+              <p class="mono text-on-surface-variant text-xs">Target horizon</p>
+              <p class="display text-xl font-bold">30 jours</p>
+            </div>
+            <div class="rounded-xl bg-surface-container-high/70 border border-outline-variant p-4">
+              <p class="mono text-on-surface-variant text-xs">Primary model</p>
+              <p class="display text-xl font-bold">LightGBM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="kpiGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4"></div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="mono text-xs text-primary-container tracking-[.2em] uppercase">Distribution</p>
+              <h3 class="display text-2xl font-bold">Niveaux futurs prÃ©dits</h3>
+            </div>
+            <span class="material-symbols-outlined text-primary-container">stacked_bar_chart</span>
+          </div>
+          <div id="futureLevelBars" class="space-y-4"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="mono text-xs text-primary-container tracking-[.2em] uppercase">Critical ratio</p>
+              <h3 class="display text-2xl font-bold">Portefeuille futur</h3>
+            </div>
+            <span class="material-symbols-outlined text-error">crisis_alert</span>
+          </div>
+          <div class="flex items-center justify-center py-3">
+            <div id="criticalDonut" class="donut"></div>
+          </div>
+          <div class="mt-4 text-center">
+            <p id="criticalPct" class="display text-4xl font-extrabold text-error">--%</p>
+            <p class="text-on-surface-variant text-sm">clients prÃ©dits critiques</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="mono text-xs text-primary-container tracking-[.2em] uppercase">Evolution</p>
+              <h3 class="display text-2xl font-bold">Ã‰volution prÃ©vue</h3>
+            </div>
+            <span class="material-symbols-outlined text-tertiary">moving</span>
+          </div>
+          <div id="evolutionBars" class="space-y-4"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
+          <div class="flex items-start justify-between gap-4 mb-5">
+            <div>
+              <p class="mono text-xs text-primary-container tracking-[.2em] uppercase">AI Insight</p>
+              <h3 class="display text-2xl font-bold">Lecture mÃ©tier automatique</h3>
+            </div>
+            <span class="material-symbols-outlined text-primary-container">psychology</span>
+          </div>
+          <div id="insightBox" class="rounded-xl border border-outline-variant bg-surface-container-low/70 p-5 text-on-surface-variant leading-relaxed"></div>
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <button onclick="askAssistant('Quels sont les clients non critiques aujourdâ€™hui mais prÃ©dits critiques ?')" class="rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant p-4 text-left">
+              <p class="mono text-xs text-primary-container">Question IA</p>
+              <p class="mt-1 font-semibold">Non critiques â†’ critiques</p>
+            </button>
+            <button onclick="askAssistant('Explique la prÃ©diction future du risque.')" class="rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant p-4 text-left">
+              <p class="mono text-xs text-primary-container">Question IA</p>
+              <p class="mt-1 font-semibold">Expliquer le module</p>
+            </button>
+            <button onclick="askAssistant('Quelle est la diffÃ©rence entre risque futur et anomalie ?')" class="rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant p-4 text-left">
+              <p class="mono text-xs text-primary-container">Question IA</p>
+              <p class="mt-1 font-semibold">Risque vs anomalie</p>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-4 mb-5">
+          <div>
+            <p class="mono text-xs text-primary-container tracking-[.2em] uppercase">Operational table</p>
+            <h3 class="display text-2xl font-bold">Clients futurs Ã  surveiller</h3>
+            <p class="text-on-surface-variant mt-1 text-sm">Vue initiale : clients non critiques aujourdâ€™hui mais prÃ©dits critiques. Filtre aussi les aggravations fortes et les anomalies.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3 w-full xl:w-auto">
+            <input id="searchInput" oninput="renderTable()" placeholder="Rechercher CPTE..." class="bg-surface-container-low border-outline-variant rounded-lg text-sm" />
+            <select id="filterLevel" onchange="renderTable()" class="bg-surface-container-low border-outline-variant rounded-lg text-sm">
+              <option value="">Tous niveaux futurs</option>
+              <option value="Critique">Critique</option>
+              <option value="Ã‰levÃ©">Ã‰levÃ©</option>
+              <option value="Moyen">Moyen</option>
+              <option value="Faible">Faible</option>
+            </select>
+            <select id="filterEvolution" onchange="renderTable()" class="bg-surface-container-low border-outline-variant rounded-lg text-sm">
+              <option value="">Toutes Ã©volutions</option>
+              <option value="Aggravation forte">Aggravation forte</option>
+              <option value="Aggravation">Aggravation</option>
+              <option value="Stable">Stable</option>
+              <option value="AmÃ©lioration">AmÃ©lioration</option>
+              <option value="Nouveau client">Nouveau client</option>
+            </select>
+            <select id="filterPreset" onchange="applyPreset()" class="bg-surface-container-low border-outline-variant rounded-lg text-sm">
+              <option value="">Vue complÃ¨te</option>
+              <option value="toCritical" selected>Non critique â†’ Critique</option>
+              <option value="strongAggravation">Aggravation forte</option>
+              <option value="anomalies">Avec anomalie</option>
+              <option value="veryHigh">PrioritÃ© trÃ¨s Ã©levÃ©e</option>
+            </select>
+            <button onclick="exportFilteredCSV()" class="rounded-lg bg-primary-container text-on-primary-container px-4 py-2 mono text-sm font-bold flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-lg">download</span>Export CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-outline-variant">
+          <table class="w-full text-sm">
+            <thead class="bg-surface-container-high text-on-surface-variant mono text-xs uppercase tracking-wider">
+              <tr>
+                <th class="text-left px-4 py-3">Client</th>
+                <th class="text-left px-4 py-3">Niveau actuel</th>
+                <th class="text-left px-4 py-3">Futur prÃ©dit</th>
+                <th class="text-left px-4 py-3">Score futur</th>
+                <th class="text-left px-4 py-3">Ã‰volution</th>
+                <th class="text-left px-4 py-3">Anomalie</th>
+                <th class="text-left px-4 py-3">PrioritÃ©</th>
+                <th class="text-left px-4 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTable" class="divide-y divide-outline-variant/45"></tbody>
+          </table>
+        </div>
+        <div class="flex items-center justify-between mt-4 text-sm text-on-surface-variant">
+          <p id="tableCount">0 client affichÃ©</p>
+          <button onclick="increaseRows()" class="px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container-high mono text-xs">Afficher plus</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let FUTURE_DATA = null;
+    let ALL_RECORDS = [];
+    let visibleRows = 30;
+
+    const fmt = (n) => Number(n || 0).toLocaleString("fr-FR");
+    const pct = (n) => `${Number(n || 0).toFixed(1)}%`;
+
+    function badgeClass(value) {
+      const v = String(value || "").toLowerCase();
+      if (v.includes("critique") || v.includes("trÃ¨s")) return "bg-error-container/50 text-error border-error/30";
+      if (v.includes("Ã©lev") || v.includes("aggravation")) return "bg-orange/15 text-orange border-orange/30";
+      if (v.includes("moyen")) return "bg-tertiary/15 text-tertiary border-tertiary/30";
+      if (v.includes("faible") || v.includes("normal")) return "bg-primary-container/10 text-primary-container border-primary-container/25";
+      return "bg-surface-container-high text-on-surface-variant border-outline-variant";
+    }
+
+    function levelColor(level) {
+      const v = String(level || "").toLowerCase();
+      if (v.includes("critique")) return "#ffb4ab";
+      if (v.includes("Ã©lev")) return "#f5921e";
+      if (v.includes("moyen")) return "#fbe273";
+      return "#5ffbd6";
+    }
+
+    async function loadFutureData() {
+      const apiStatus = document.getElementById("apiStatus");
+      try {
+        apiStatus.textContent = "SYNCING";
+        apiStatus.className = "mono text-xs px-3 py-1 rounded-full border border-tertiary/30 bg-tertiary/10 text-tertiary";
+
+        let res = await fetch("/api/future-predictions", { cache: "no-store" });
+        if (!res.ok) {
+          res = await fetch("/attached_assets/future_predictions.json", { cache: "no-store" });
+        }
+        FUTURE_DATA = await res.json();
+        ALL_RECORDS = FUTURE_DATA.all_future_predictions || FUTURE_DATA.top_future_risk_clients || [];
+
+        apiStatus.textContent = "DIRECT PORTFOLIO SYNC";
+        apiStatus.className = "mono text-xs px-3 py-1 rounded-full border border-primary-container/30 bg-primary-container/10 text-primary-container";
+
+        renderAll();
+      } catch (err) {
+        console.error(err);
+        apiStatus.textContent = "DATA ERROR";
+        apiStatus.className = "mono text-xs px-3 py-1 rounded-full border border-error/30 bg-error-container/30 text-error";
+        document.getElementById("insightBox").innerHTML = "Impossible de charger <code>future_predictions.json</code>. VÃ©rifie que le serveur est lancÃ© et que le fichier existe dans <code>attached_assets</code>.";
+      }
+    }
+
+    function refreshData() {
+      loadFutureData();
+    }
+
+    function renderAll() {
+      renderKpis();
+      renderFutureBars();
+      renderEvolutionBars();
+      renderDonut();
+      renderInsight();
+      renderTable();
+    }
+
+    function renderKpis() {
+      const s = FUTURE_DATA.summary || {};
+      const cards = [
+        { label: "Clients analysÃ©s", value: s.total_clients, icon: "groups", tone: "text-primary-container" },
+        { label: "PrÃ©dits critiques", value: s.critical_future_clients, icon: "crisis_alert", tone: "text-error" },
+        { label: "Non critiques â†’ critiques", value: countNonCriticalToCritical(), icon: "trending_up", tone: "text-orange" },
+        { label: "Aggravation prÃ©vue", value: s.aggravation_clients, icon: "moving", tone: "text-tertiary" },
+        { label: "Comportements atypiques", value: s.anomalous_clients, icon: "radar", tone: "text-primary-container" },
+        { label: "Nouveaux clients", value: s.new_clients, icon: "person_add", tone: "text-secondary" }
+      ];
+
+      document.getElementById("kpiGrid").innerHTML = cards.map(c => `
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between">
+            <p class="mono text-xs text-on-surface-variant uppercase">${c.label}</p>
+            <span class="material-symbols-outlined ${c.tone}">${c.icon}</span>
+          </div>
+          <p class="display text-3xl font-extrabold mt-3">${fmt(c.value)}</p>
+        </div>
+      `).join("");
+    }
+
+    function countNonCriticalToCritical() {
+      return ALL_RECORDS.filter(r => r.niveau_futur_predit === "Critique" && r.niveau_actuel !== "Critique").length;
+    }
+
+    function renderFutureBars() {
+      const dist = (FUTURE_DATA.summary || {}).future_level_distribution || {};
+      const order = ["Faible", "Moyen", "Ã‰levÃ©", "Critique"];
+      const total = Object.values(dist).reduce((a,b) => a + Number(b || 0), 0) || 1;
+
+      document.getElementById("futureLevelBars").innerHTML = order.map(level => {
+        const value = Number(dist[level] || 0);
+        const percent = value / total * 100;
+        return `
+          <div>
+            <div class="flex justify-between mb-2">
+              <span class="font-semibold">${level}</span>
+              <span class="mono text-sm text-on-surface-variant">${fmt(value)} Â· ${pct(percent)}</span>
+            </div>
+            <div class="bar"><span style="width:${percent}%; background:${levelColor(level)}"></span></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderEvolutionBars() {
+      const dist = (FUTURE_DATA.summary || {}).expected_evolution_distribution || {};
+      const order = ["Stable", "Aggravation", "Aggravation forte", "AmÃ©lioration", "Nouveau client"];
+      const total = Object.values(dist).reduce((a,b) => a + Number(b || 0), 0) || 1;
+
+      document.getElementById("evolutionBars").innerHTML = order.map(label => {
+        const value = Number(dist[label] || 0);
+        const percent = value / total * 100;
+        return `
+          <div>
+            <div class="flex justify-between mb-2">
+              <span class="font-semibold">${label}</span>
+              <span class="mono text-sm text-on-surface-variant">${fmt(value)}</span>
+            </div>
+            <div class="bar"><span style="width:${percent}%;"></span></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderDonut() {
+      const s = FUTURE_DATA.summary || {};
+      const total = Number(s.total_clients || 0) || 1;
+      const critical = Number(s.critical_future_clients || 0);
+      const deg = critical / total * 360;
+      const p = critical / total * 100;
+      document.getElementById("criticalDonut").style.background =
+        `conic-gradient(#ffb4ab 0deg ${deg}deg, #f5921e ${deg}deg ${deg + 2}deg, #2a344e ${deg + 2}deg 360deg)`;
+      document.getElementById("criticalPct").textContent = pct(p);
+    }
+
+    function renderInsight() {
+      const s = FUTURE_DATA.summary || {};
+      const nonCrit = countNonCriticalToCritical();
+      const stableCritical = ALL_RECORDS.filter(r => r.niveau_futur_predit === "Critique" && r.niveau_actuel === "Critique").length;
+      document.getElementById("insightBox").innerHTML = `
+        <p>
+          Le module futur analyse <strong>${fmt(s.total_clients)}</strong> clients et prÃ©dit
+          <strong class="text-error">${fmt(s.critical_future_clients)}</strong> dossiers critiques Ã  horizon 30 jours.
+          Parmi eux, <strong class="text-orange">${fmt(nonCrit)}</strong> ne sont pas critiques aujourdâ€™hui mais risquent de le devenir.
+        </p>
+        <p class="mt-3">
+          La prioritÃ© mÃ©tier consiste Ã  traiter dâ€™abord les clients <strong>non critiques â†’ critiques</strong>,
+          puis les <strong>${fmt(stableCritical)}</strong> clients dÃ©jÃ  critiques qui restent critiques, surtout si une anomalie ou une exposition financiÃ¨re importante est dÃ©tectÃ©e.
+        </p>
+      `;
+    }
+
+    function getFilteredRecords() {
+      const search = document.getElementById("searchInput").value.trim().toLowerCase();
+      const level = document.getElementById("filterLevel").value;
+      const evolution = document.getElementById("filterEvolution").value;
+      const preset = document.getElementById("filterPreset").value;
+
+      return ALL_RECORDS.filter(r => {
+        const cpte = String(r.cpte || "").toLowerCase();
+        const anomaly = Number(r.is_anomaly || 0) === 1 || String(r.niveau_anomalie || "").toLowerCase().includes("anom");
+
+        if (search && !cpte.includes(search)) return false;
+        if (level && r.niveau_futur_predit !== level) return false;
+        if (evolution && r.evolution_prevue !== evolution) return false;
+
+        if (preset === "toCritical" && !(r.niveau_futur_predit === "Critique" && r.niveau_actuel !== "Critique")) return false;
+        if (preset === "strongAggravation" && r.evolution_prevue !== "Aggravation forte") return false;
+        if (preset === "anomalies" && !anomaly) return false;
+        if (preset === "veryHigh" && r.priorite !== "TrÃ¨s Ã©levÃ©e") return false;
+
+        return true;
+      });
+    }
+
+    function renderTable() {
+      const filtered = getFilteredRecords();
+      const rows = filtered.slice(0, visibleRows);
+
+      document.getElementById("clientsTable").innerHTML = rows.map(r => {
+        const anomalyText = Number(r.is_anomaly || 0) === 1 ? (r.niveau_anomalie || "Anomalie") : "Normal";
+        return `
+          <tr class="table-row">
+            <td class="px-4 py-3 mono font-bold text-primary-container">${r.cpte || "N/A"}</td>
+            <td class="px-4 py-3"><span class="badge px-2 py-1 rounded-full text-xs ${badgeClass(r.niveau_actuel)}">${r.niveau_actuel || "N/A"}</span></td>
+            <td class="px-4 py-3"><span class="badge px-2 py-1 rounded-full text-xs ${badgeClass(r.niveau_futur_predit)}">${r.niveau_futur_predit || "N/A"}</span></td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class="mono font-bold">${Number(r.score_futur_predit_pct || 0).toFixed(1)}%</span>
+                <div class="bar w-28"><span style="width:${Math.min(100, Number(r.score_futur_predit_pct || 0))}%; background:${levelColor(r.niveau_futur_predit)}"></span></div>
+              </div>
+            </td>
+            <td class="px-4 py-3"><span class="badge px-2 py-1 rounded-full text-xs ${badgeClass(r.evolution_prevue)}">${r.evolution_prevue || "N/A"}</span></td>
+            <td class="px-4 py-3"><span class="badge px-2 py-1 rounded-full text-xs ${badgeClass(anomalyText)}">${anomalyText}</span></td>
+            <td class="px-4 py-3"><span class="badge px-2 py-1 rounded-full text-xs ${badgeClass(r.priorite)}">${r.priorite || "N/A"}</span></td>
+            <td class="px-4 py-3 text-on-surface-variant max-w-[360px]">${r.recommandation || "Surveillance recommandÃ©e."}</td>
+          </tr>
+        `;
+      }).join("");
+
+      document.getElementById("tableCount").textContent = `${fmt(rows.length)} affichÃ©s sur ${fmt(filtered.length)} clients filtrÃ©s`;
+    }
+
+    function applyPreset() {
+      visibleRows = 30;
+      renderTable();
+    }
+
+    function increaseRows() {
+      visibleRows += 30;
+      renderTable();
+    }
+
+
+    function csvEscape(value) {
+      const s = String(value ?? "").replaceAll('"', '""');
+      return `"${s}"`;
+    }
+
+    function exportFilteredCSV() {
+      const records = getFilteredRecords();
+      const headers = [
+        "cpte",
+        "niveau_actuel",
+        "niveau_futur_predit",
+        "score_futur_predit_pct",
+        "evolution_prevue",
+        "niveau_anomalie",
+        "priorite",
+        "risk_brut_display",
+        "fiabilite_prediction",
+        "recommandation"
+      ];
+
+      const rows = [
+        headers.join(";"),
+        ...records.map(r => headers.map(h => csvEscape(r[h])).join(";"))
+      ];
+
+      const blob = new Blob(["\ufeff" + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const preset = document.getElementById("filterPreset").value || "all";
+      const date = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `future_predictions_${preset}_${date}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function askAssistant(question) {
+      const url = `/assistant?q=${encodeURIComponent(question)}`;
+      window.location.href = url;
+    }
+
+    document.addEventListener("DOMContentLoaded", loadFutureData);
+  </script>
+  <script src="/attached_assets/auth.js"></script>
+</body>
+</html>
+
+

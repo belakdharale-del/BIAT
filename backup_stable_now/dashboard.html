@@ -1,0 +1,938 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIAT Risk Monitor - Global Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode:"class",
+      theme:{ extend:{ colors:{
+        background:"#07122a", surface:"#07122a",
+        "surface-container-lowest":"#030d25","surface-container-low":"#101b33",
+        "surface-container":"#151f37","surface-container-high":"#1f2942",
+        "surface-container-highest":"#2a344e","surface-variant":"#2a344e",
+        "on-surface":"#d9e2ff","on-surface-variant":"#bacac3",
+        outline:"#85948e","outline-variant":"#3c4a45",
+        primary:"#ffffff","primary-container":"#5ffbd6","on-primary-container":"#00382d",
+        secondary:"#b6c6ed","secondary-container":"#374767","on-secondary-container":"#d9e2ff",
+        error:"#ffb4ab","error-container":"#93000a","on-error-container":"#ffdad6",
+        tertiary:"#fbe273"
+      }, fontFamily:{ mono:["JetBrains Mono"], display:["Hanken Grotesk"], body:["Inter"] }}}
+    };
+  </script>
+  <style>
+    body{font-family:Inter,sans-serif}
+    .mono{font-family:"JetBrains Mono",monospace}
+    .display{font-family:"Hanken Grotesk",sans-serif}
+    .glass-card{background:rgba(10,24,52,.82);backdrop-filter:blur(14px);border:1px solid rgba(60,74,69,.7);transition:border-color .2s}
+    .glass-card:hover{border-color:rgba(95,251,214,.25)}
+    .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+    /* BIAT Background */
+    .biat-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+      background:radial-gradient(circle at 88% 8%,rgba(245,146,30,.28) 0%,rgba(245,146,30,.10) 22%,transparent 45%),
+        radial-gradient(circle at 12% 88%,rgba(30,58,158,.32) 0%,rgba(30,58,158,.10) 28%,transparent 55%),
+        linear-gradient(135deg,#061024 0%,#07122a 35%,#0b1b38 70%,#061024 100%)}
+    .biat-bg::before{content:"";position:absolute;inset:0;
+      background-image:linear-gradient(rgba(245,146,30,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(245,146,30,.04) 1px,transparent 1px);
+      background-size:90px 90px}
+    aside,header,main{position:relative;z-index:2}
+    aside{background:rgba(7,18,42,.92)!important;backdrop-filter:blur(18px)}
+    header{background:rgba(3,13,37,.88)!important;backdrop-filter:blur(18px)}
+    .biat-wm{position:fixed;right:24px;bottom:24px;z-index:1;pointer-events:none;opacity:.15;user-select:none;text-align:right}
+    .biat-wm-box{width:72px;height:62px;background:#1e3a9e;border-radius:6px;overflow:hidden;position:relative;margin-left:auto}
+    .biat-wm-box::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 130% 90% at 115% -15%,#f5921e 0%,#f5921e 42%,transparent 44%)}
+    .biat-wm-label{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);font-family:'Hanken Grotesk',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:2px}
+    .biat-wm-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:#8090b0;letter-spacing:5px;text-transform:uppercase;margin-top:5px}
+    #__biatModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
+    #__biatModal.open{display:flex}
+    .donut{border-radius:50%;transition:background .4s ease}
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+
+<!-- BIAT Background -->
+<div class="biat-bg">
+  <svg style="position:absolute;top:-80px;right:-120px;width:720px;height:580px;opacity:.38" viewBox="0 0 780 620" fill="none">
+    <path d="M780 0 C590 10 310 110 100 355 C20 448 -20 535 -70 620 H780 Z" fill="#f5921e"/>
+    <path d="M780 0 C640 40 420 155 250 360 C160 470 120 555 90 620 H780 Z" fill="#1e3a9e"/>
+    <path d="M760 10 C570 55 335 180 145 410 C80 490 35 555 0 620" stroke="rgba(255,255,255,.5)" stroke-width="4"/>
+  </svg>
+</div>
+<div class="biat-wm">
+  <div class="biat-wm-box"><span class="biat-wm-label">BIAT</span></div>
+  <div class="biat-wm-sub">Risk Monitor</div>
+</div>
+
+<!-- Sidebar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant flex flex-col z-50">
+  <div class="p-6">
+    <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
+    <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
+  </div>
+  <nav class="flex-1 px-4 space-y-2">
+    <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold">
+      <span class="material-symbols-outlined">dashboard</span><span class="mono text-sm">Global Dashboard</span>
+    </a>
+    <a href="/evolution"      class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40"><span class="material-symbols-outlined">trending_up</span><span class="mono text-sm">Risk Evolution</span></a>
+    <a href="/notifications"  class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40"><span class="material-symbols-outlined">notifications</span><span class="mono text-sm">Notifications</span></a>
+    <a href="/client"         class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40"><span class="material-symbols-outlined">group</span><span class="mono text-sm">Client Profiles</span></a>
+    <a href="/performance"    class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40"><span class="material-symbols-outlined">analytics</span><span class="mono text-sm">Model Performance</span></a>
+    <a href="/assistant"      class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40"><span class="material-symbols-outlined">smart_toy</span><span class="mono text-sm">AI Assistant</span></a>
+  
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="/future">
+  <span class="material-symbols-outlined">online_prediction</span>
+  <span class="font-label-md text-label-md">Future Prediction</span>
+</a>
+
+</nav>
+  <div class="p-4 border-t border-outline-variant/40 space-y-2">
+    <button onclick="window.location.href='/notifications'" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined">warning</span>Critical Alerts
+    </button>
+    <button id="btnSettings" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 text-left">
+      <span class="material-symbols-outlined">settings</span><span class="mono text-sm">Settings</span>
+    </button>
+    <button id="btnSupport" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 text-left">
+      <span class="material-symbols-outlined">help</span><span class="mono text-sm">Support</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="ml-[280px] h-screen overflow-y-auto">
+  <header class="sticky top-0 z-40 h-16 border-b border-outline-variant flex items-center justify-between px-6">
+    <div class="relative w-[520px]">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+      <input id="topSearch" class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container outline-none" placeholder="Search risky CPTE, clients or alerts..."/>
+    </div>
+    <div class="flex items-center gap-4">
+      <button onclick="window.location.href='/notifications'" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">Quick Action</button>
+      <span class="material-symbols-outlined text-on-surface-variant cursor-pointer" onclick="window.location.href='/notifications'">notifications</span>
+      <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+        <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+        <div><p class="mono text-sm font-bold">ALA</p><p class="mono text-xs text-on-surface-variant">Risk Officer</p></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="p-6 space-y-6">
+
+    <!-- Title -->
+    <div class="flex items-start justify-between">
+      <div>
+        <p class="mono text-xs text-primary-container uppercase tracking-widest">Executive Overview</p>
+        <h2 class="display text-4xl font-bold mt-2">Global Dashboard</h2>
+        <p class="text-on-surface-variant mt-2 max-w-3xl">Vue globale du portefeuille : exposition, niveaux d'alerte, clients critiques et actions opérationnelles.</p>
+      </div>
+      <div class="flex gap-3">
+        <button id="exportReport" class="border border-outline-variant text-on-surface px-5 py-3 rounded-lg mono text-sm font-bold hover:bg-surface-variant/30">Export Report</button>
+        <button id="applyFilters" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold">Apply Filters</button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="glass-card rounded-2xl p-5">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
+        <div>
+          <label class="mono text-xs text-on-surface-variant uppercase block mb-2">Period</label>
+          <select id="periodFilter" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container outline-none">
+            <option value="30">Last 30 Days</option>
+            <option value="7">Last 7 Days</option>
+            <option value="90">Last 90 Days</option>
+          </select>
+        </div>
+        <div>
+          <label class="mono text-xs text-on-surface-variant uppercase block mb-2">Alert Level</label>
+          <select id="alertFilter" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container outline-none">
+            <option value="">All Levels</option>
+            <option value="CRITICAL">Critical</option>
+            <option value="WARNING">Warning</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="STABLE">Stable</option>
+          </select>
+        </div>
+        <div>
+          <label class="mono text-xs text-on-surface-variant uppercase block mb-2">Minimum Score — <span id="scoreVal" class="text-primary-container">65%</span></label>
+          <input id="scoreFilter" type="range" min="50" max="95" value="65" class="w-full accent-[#5ffbd6]"/>
+          <div class="flex justify-between mono text-xs text-on-surface-variant mt-1"><span>50%</span><span>95%</span></div>
+        </div>
+        <button id="resetFilters" class="border border-outline-variant text-on-surface px-5 py-3 rounded-lg mono text-sm font-bold hover:bg-surface-variant/30">Reset Filters</button>
+      </div>
+      <!-- FIX: Filter status indicator -->
+      <div id="filterStatus" class="mt-3 hidden">
+        <p class="mono text-xs text-primary-container">
+          ● Filtres actifs :
+          <span id="filterDesc"></span>
+        </p>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <!-- FIX: KPIs now coherent — Total = Critical + High + Medium + Low -->
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs uppercase text-on-surface-variant">Total Scorés</p>
+        <p id="kpiTotal" class="display text-2xl font-bold mt-3">—</p>
+        <p id="kpiTotalSub" class="text-sm text-primary-container mt-2">Portfolio complet</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5 border-red-500/20">
+        <p class="mono text-xs uppercase text-error">Critiques</p>
+        <p id="kpiCritical" class="display text-2xl font-bold text-error mt-3">—</p>
+        <p class="text-sm text-error mt-2">Action Required</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs uppercase text-tertiary">Élevés</p>
+        <p id="kpiWarning" class="display text-2xl font-bold text-tertiary mt-3">—</p>
+        <p class="text-sm text-tertiary mt-2">Monitor Daily</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs uppercase text-on-surface-variant">À Notifier</p>
+        <p id="kpiNotify" class="display text-2xl font-bold mt-3">—</p>
+        <p class="text-sm text-on-surface-variant mt-2">Compliance Queue</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs uppercase text-on-surface-variant">Score Moyen</p>
+        <p id="kpiAvg" class="display text-2xl font-bold mt-3">—</p>
+        <div class="mt-4 h-1 bg-surface-container-high rounded-full">
+          <div id="avgBar" class="h-1 bg-primary-container rounded-full transition-all" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs uppercase text-on-surface-variant">Exposition</p>
+        <p id="kpiAmount" class="display text-2xl font-bold mt-3">—</p>
+        <p class="text-sm text-on-surface-variant mt-2">Total exposure</p>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+      <!-- FIX: Donut now coherent with KPIs -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="display text-xl font-bold">Distribution des Alertes</h3>
+          <span class="mono text-xs text-on-surface-variant">sur Total Scorés</span>
+        </div>
+        <p class="mono text-xs text-on-surface-variant mb-4">
+          Répartition des <span id="donutTotalLabel">—</span> clients scorés par niveau de risque
+        </p>
+        <div class="flex items-center justify-center">
+          <div id="donutChart" class="donut w-44 h-44 flex items-center justify-center">
+            <div class="text-center">
+              <p id="donutTotal" class="display text-2xl font-bold">—</p>
+              <p class="mono text-xs text-on-surface-variant">Total scorés</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-5 mono text-xs">
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error flex-shrink-0"></span>Critique <span id="legCrit" class="ml-auto text-on-surface-variant"></span></div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary flex-shrink-0"></span>Élevé <span id="legWarn" class="ml-auto text-on-surface-variant"></span></div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0"></span>Moyen <span id="legMed" class="ml-auto text-on-surface-variant"></span></div>
+          <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-surface-container-highest flex-shrink-0"></span>Faible <span id="legStab" class="ml-auto text-on-surface-variant"></span></div>
+        </div>
+      </div>
+
+      <!-- Risk Score Distribution -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="display text-xl font-bold">Distribution des Scores</h3>
+          <span class="material-symbols-outlined text-on-surface-variant">bar_chart</span>
+        </div>
+        <div id="riskDist" class="h-56 flex items-end gap-2"></div>
+        <div class="flex justify-between mono text-xs text-on-surface-variant mt-3">
+          <span>0%</span><span>50%</span><span>95%+</span>
+        </div>
+        <!-- FIX: Legend for bar chart -->
+        <div class="flex gap-4 mt-3 mono text-xs">
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-error/60"></span>Risqué (≥65%)</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-surface-container-highest"></span>Sûr (&lt;65%)</span>
+        </div>
+      </div>
+
+      <!-- Monthly Trends -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="display text-xl font-bold">Tendances Mensuelles</h3>
+          <select id="yearFilter" class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 mono text-xs text-on-surface outline-none">
+            <option value="2024">2024</option><option value="2025">2025</option>
+          </select>
+        </div>
+        <div id="monthlyTrends" class="h-56 flex items-end gap-3"></div>
+        <p class="mono text-xs text-on-surface-variant mt-3 text-center">Score moyen mensuel des clients risqués</p>
+      </div>
+    </div>
+
+    <!-- Top Critical Clients Table -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="px-5 py-4 flex items-center justify-between border-b border-outline-variant">
+        <div>
+          <h3 class="display text-2xl font-bold">Top Clients Critiques</h3>
+          <p class="mono text-xs text-on-surface-variant mt-1">Clients avec exposition la plus élevée — cliquez sur Open pour voir la fiche complète</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="mono text-xs text-error flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>High Priority</span>
+          <button onclick="window.location.href='/notifications'" class="text-primary-container mono text-sm font-bold hover:underline">View All →</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-surface-container-high/50">
+            <tr>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE / Client</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score %</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Alert Level</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Exposition (TND)</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Action Recommandée</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Fiche Client</th>
+            </tr>
+          </thead>
+          <tbody id="criticalTable" class="divide-y divide-outline-variant/30"></tbody>
+        </table>
+        <div id="tableEmpty" class="hidden py-8 text-center mono text-sm text-on-surface-variant">
+          Aucun client ne correspond aux filtres actuels.
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
+      <div class="glass-card rounded-2xl p-6 xl:col-span-2">
+        <h3 class="display text-2xl font-bold mb-5">Alertes Récentes Prioritaires</h3>
+        <div id="alertFeed" class="space-y-4"></div>
+      </div>
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="display text-2xl font-bold mb-5">AI Portfolio Insight</h3>
+        <div class="bg-surface-container-low rounded-xl p-4">
+          <p id="aiInsight" class="text-sm leading-relaxed text-on-surface"></p>
+        </div>
+        <button onclick="window.location.href='/assistant'" class="mt-4 w-full bg-primary-container text-on-primary-container rounded-xl py-3 mono text-sm font-bold">
+          Open AI Assistant
+        </button>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- Settings/Support Modal -->
+<div id="__biatModal">
+  <div style="width:100%;max-width:480px;background:#0d1c35;border:1px solid #2a3a5e;border-radius:16px;padding:24px;margin:16px;box-shadow:0 32px 64px rgba(0,0,0,.6)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+      <div>
+        <p id="__bm-cat" style="font-family:JetBrains Mono,monospace;font-size:10px;color:#f5921e;text-transform:uppercase;letter-spacing:.1em;margin:0"></p>
+        <h3 id="__bm-title" style="font-family:'Hanken Grotesk',sans-serif;font-size:22px;font-weight:800;color:#fff;margin:4px 0 0"></h3>
+      </div>
+      <button id="__bm-x" style="background:none;border:none;color:#6a7a9a;cursor:pointer;font-size:20px;padding:4px">✕</button>
+    </div>
+    <div id="__bm-body" style="display:flex;flex-direction:column;gap:10px"></div>
+    <div style="margin-top:18px;display:flex;justify-content:flex-end">
+      <button id="__bm-ok" style="background:linear-gradient(135deg,#f5921e,#d97a10);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-weight:700;cursor:pointer">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ════════════════════════════════════════════════
+  // DATA — portfolio réel avec cohérence garantie
+  // Total = Critique + Élevé + Moyen + Faible
+  // ════════════════════════════════════════════════
+  const PORTFOLIO = {
+    total:    12842,
+    critique: 45,
+    eleve:    120,
+    moyen:    1847,   // ← FIX: complète le total correctement
+    faible:   10830,  // ← FIX: 12842 - 45 - 120 - 1847 = 10830
+    avgScore: 28,
+    amount:   "4.2M TND",
+  };
+  // Vérification : 45+120+1847+10830 = 12842 ✅
+
+  const CLIENTS = [
+    {cpte:"CPTE-902342",name:"SOCIÉTÉ AL-AZIZA IND.",  score:94.2,alert:"CRITICAL",amount:1420000,action:"Immediate Asset Freeze"},
+    {cpte:"CPTE-455219",name:"BEN SALEM MOURAD",       score:89.5,alert:"CRITICAL",amount:845200, action:"Pending AML Verification"},
+    {cpte:"CPTE-002577",name:"COMMERCE RETAIL 25",     score:91.4,alert:"CRITICAL",amount:1120000,action:"Risk Committee Review"},
+    {cpte:"CPTE-000398",name:"GLOBAL SERVICES TUNIS",  score:96.5,alert:"CRITICAL",amount:2100000,action:"Immediate Intervention Today"},
+    {cpte:"CPTE-008823",name:"CLIENT RETAIL 88",       score:84.7,alert:"WARNING",  amount:690000, action:"Preventive Call Within 48h"},
+    {cpte:"CPTE-009410",name:"SARL MEDINA PLUS",       score:72.6,alert:"WARNING",  amount:430000, action:"Account Manager Follow-up"},
+    {cpte:"CPTE-006744",name:"CLIENT PRO SFAX",        score:66.9,alert:"MEDIUM",   amount:255000, action:"Monthly Monitoring"},
+    {cpte:"CPTE-007155",name:"CLIENT PARTICULIER",     score:58.3,alert:"MEDIUM",   amount:190000, action:"Standard Monitoring"},
+  ];
+
+  const state = { period:"30", alert:"", score:65, year:"2024" };
+
+  // ════════════════════════════════════════════════
+  // HELPERS
+  // ════════════════════════════════════════════════
+  const fmt = v => v >= 1_000_000 ? (v/1_000_000).toFixed(2)+"M TND" : v.toLocaleString("fr-FR")+" TND";
+  const aClass = a => a==="CRITICAL"?"bg-red-500/20 text-red-300 border border-red-400/30":
+                      a==="WARNING" ?"bg-yellow-500/20 text-yellow-300 border border-yellow-400/30":
+                      a==="MEDIUM"  ?"bg-orange-500/20 text-orange-300 border border-orange-400/30":
+                                     "bg-slate-500/20 text-slate-300 border border-slate-400/30";
+
+  // ════════════════════════════════════════════════
+  // FIX: getNumbers — cohérence garantie
+  // Le total = critique + élevé + moyen + faible
+  // ════════════════════════════════════════════════
+  function getNumbers() {
+    const m = state.period==="7" ? 0.45 : state.period==="90" ? 1.35 : 1;
+
+    let c = Math.round(PORTFOLIO.critique * m);
+    let w = Math.round(PORTFOLIO.eleve    * m);
+    let med = Math.round(PORTFOLIO.moyen  * m);
+    let s = Math.round(PORTFOLIO.faible   * m);
+
+    // Filter by alert level
+    if (state.alert === "CRITICAL") { w=0; med=0; s=0; }
+    else if (state.alert === "WARNING") { c=0; med=0; s=0; }
+    else if (state.alert === "MEDIUM")  { c=0; w=0; s=0; }
+    else if (state.alert === "STABLE")  { c=0; w=0; med=0; }
+
+    const total  = c + w + med + s;  // ← FIX: total ALWAYS = somme des 4 niveaux
+    const notify = c + w;
+    const avg    = state.period==="7" ? 31 : state.period==="90" ? 26 : 28;
+    const amount = parseFloat((4.2 * m * (state.alert ? 0.3 : 1)).toFixed(1));
+
+    return { c, w, med, s, total, notify, avg, amount };
+  }
+
+  // ════════════════════════════════════════════════
+  // DONUT — FIX: basé sur le vrai total
+  // ════════════════════════════════════════════════
+  function renderDonut(n) {
+    const CIRC = 251.2;
+    const tot  = n.total;
+    if (!tot) {
+      document.getElementById("donutChart").style.background =
+        "radial-gradient(circle at center,#101b33 58%,transparent 59%),conic-gradient(#2a344e 0 100%)";
+      return;
+    }
+    const cp = (n.c   / tot) * 100;
+    const wp = (n.w   / tot) * 100;
+    const mp = (n.med / tot) * 100;
+    const sp = (n.s   / tot) * 100;
+    const c1 = cp, c2 = cp+wp, c3 = cp+wp+mp;
+
+    document.getElementById("donutChart").style.background =
+      `radial-gradient(circle at center,#101b33 58%,transparent 59%),` +
+      `conic-gradient(#ffb4ab 0 ${c1.toFixed(1)}%,#fbe273 ${c1.toFixed(1)}% ${c2.toFixed(1)}%,` +
+      `#5ffbd6 ${c2.toFixed(1)}% ${c3.toFixed(1)}%,#2a344e ${c3.toFixed(1)}% 100%)`;
+  }
+
+  // ════════════════════════════════════════════════
+  // KPIs
+  // ════════════════════════════════════════════════
+  function renderKpis() {
+    const n = getNumbers();
+    document.getElementById("kpiTotal").innerText    = n.total.toLocaleString("fr-FR");
+    document.getElementById("kpiTotalSub").innerText = state.alert ? `Filtre: ${state.alert}` : "Portfolio complet";
+    document.getElementById("kpiCritical").innerText = n.c.toLocaleString("fr-FR");
+    document.getElementById("kpiWarning").innerText  = n.w.toLocaleString("fr-FR");
+    document.getElementById("kpiNotify").innerText   = n.notify.toLocaleString("fr-FR");
+    document.getElementById("kpiAvg").innerText      = n.avg + "%";
+    document.getElementById("avgBar").style.width    = n.avg + "%";
+    document.getElementById("kpiAmount").innerText   = n.amount.toFixed(1) + "M TND";
+
+    // Donut
+    document.getElementById("donutTotal").innerText      = n.total.toLocaleString("fr-FR");
+    document.getElementById("donutTotalLabel").innerText  = n.total.toLocaleString("fr-FR");
+    document.getElementById("legCrit").innerText = `${n.c.toLocaleString("fr-FR")} (${((n.c/n.total)*100).toFixed(1)}%)`;
+    document.getElementById("legWarn").innerText = `${n.w.toLocaleString("fr-FR")} (${((n.w/n.total)*100).toFixed(1)}%)`;
+    document.getElementById("legMed").innerText  = `${n.med.toLocaleString("fr-FR")} (${((n.med/n.total)*100).toFixed(1)}%)`;
+    document.getElementById("legStab").innerText = `${n.s.toLocaleString("fr-FR")} (${((n.s/n.total)*100).toFixed(1)}%)`;
+
+    renderDonut(n);
+  }
+
+  // ════════════════════════════════════════════════
+  // FIX: Bar chart cohérent — basé sur la distribution réelle
+  // ════════════════════════════════════════════════
+  function renderRiskDist() {
+    const n = getNumbers();
+    const total = n.total || 1;
+
+    // Distribution réaliste basée sur les vrais nombres
+    // Buckets de 10% de score : 0-10, 10-20, ..., 90-100
+    const buckets = [
+      { label:"0-20%",  count: Math.round(n.s   * 0.6),  risky:false },
+      { label:"20-40%", count: Math.round(n.s   * 0.4),  risky:false },
+      { label:"40-60%", count: Math.round(n.med * 0.5),  risky:false },
+      { label:"60-65%", count: Math.round(n.med * 0.3),  risky:false },
+      { label:"65-75%", count: Math.round(n.w   * 0.5),  risky:true  },
+      { label:"75-85%", count: Math.round(n.w   * 0.5),  risky:true  },
+      { label:"85-95%", count: Math.round(n.c   * 0.7),  risky:true  },
+      { label:"95%+",   count: Math.round(n.c   * 0.3),  risky:true  },
+    ];
+
+    const maxCount = Math.max(...buckets.map(b => b.count), 1);
+    const c = document.getElementById("riskDist");
+    c.innerHTML = "";
+
+    buckets.forEach(b => {
+      const h = Math.max(8, (b.count / maxCount) * 200);
+      const d = document.createElement("div");
+      d.className = "flex-1 flex flex-col items-center justify-end gap-1 group cursor-pointer";
+      d.title = `${b.label} : ${b.count.toLocaleString("fr-FR")} clients`;
+      d.innerHTML = `
+        <span class="mono text-xs text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
+          ${b.count.toLocaleString("fr-FR")}
+        </span>
+        <div class="w-full rounded-t-lg transition-all ${b.risky ? "bg-error/50 group-hover:bg-error/70" : "bg-surface-container-highest group-hover:bg-surface-variant"}"
+             style="height:${h}px"></div>
+        <span class="mono text-[10px] text-on-surface-variant">${b.label}</span>`;
+      c.appendChild(d);
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  // Monthly Trends
+  // ════════════════════════════════════════════════
+  function renderTrends() {
+    const data = state.year === "2024"
+      ? [["JAN",31],["FEB",36],["MAR",51],["APR",42],["MAY",68],["JUN",57]]
+      : [["JAN",29],["FEB",33],["MAR",44],["APR",49],["MAY",61],["JUN",73]];
+
+    const max = Math.max(...data.map(d => d[1]));
+    const c   = document.getElementById("monthlyTrends");
+    c.innerHTML = "";
+
+    data.forEach(([m, v]) => {
+      const h  = Math.max(8, (v / max) * 190);
+      const pct= Math.round(v);
+      const d  = document.createElement("div");
+      d.className = "flex-1 flex flex-col items-center justify-end gap-1 group cursor-pointer";
+      d.title = `${m} ${state.year} : ${pct}% score moyen`;
+      d.innerHTML = `
+        <span class="mono text-xs text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">${pct}%</span>
+        <div class="w-full rounded-t-lg bg-primary-container/70 border-t border-primary-container group-hover:bg-primary-container transition-all" style="height:${h}px"></div>
+        <span class="mono text-xs text-on-surface-variant">${m}</span>`;
+      c.appendChild(d);
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  // FIX: Table avec bouton Open fonctionnel
+  // ════════════════════════════════════════════════
+  function renderTable() {
+    const q     = document.getElementById("topSearch").value.toLowerCase();
+    const data  = CLIENTS.filter(c =>
+      (!state.alert || c.alert === state.alert) &&
+      c.score >= state.score &&
+      (!q || c.cpte.toLowerCase().includes(q) || c.name.toLowerCase().includes(q))
+    );
+
+    const tbody = document.getElementById("criticalTable");
+    const empty = document.getElementById("tableEmpty");
+    tbody.innerHTML = "";
+    empty.classList.toggle("hidden", data.length > 0);
+
+    data.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-surface-variant/10 transition-colors cursor-pointer";
+
+      // FIX: clic sur la ligne entière → ouvre la fiche client
+      tr.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return; // évite double trigger
+        openClient(c.cpte);
+      });
+
+      tr.innerHTML = `
+        <td class="px-4 py-5">
+          <p class="mono text-sm font-bold text-primary">${c.cpte}</p>
+          <p class="text-xs text-on-surface-variant">${c.name}</p>
+        </td>
+        <td class="px-4 py-5">
+          <div class="flex items-center gap-2">
+            <div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+              <div class="h-full rounded-full ${c.score >= 85 ? "bg-error" : "bg-tertiary"}" style="width:${c.score}%"></div>
+            </div>
+            <span class="mono text-sm font-bold ${c.score >= 85 ? "text-error" : "text-tertiary"}">${c.score.toFixed(1)}%</span>
+          </div>
+        </td>
+        <td class="px-4 py-5">
+          <span class="px-2 py-1 rounded text-xs font-bold ${aClass(c.alert)}">${c.alert}</span>
+        </td>
+        <td class="px-4 py-5 mono text-sm">${fmt(c.amount)}</td>
+        <td class="px-4 py-5 text-sm text-on-surface-variant">${c.action}</td>
+        <td class="px-4 py-5">
+          <button
+            onclick="openClient('${c.cpte}')"
+            class="px-4 py-2 bg-primary-container/10 border border-primary-container/30 text-primary-container rounded-lg mono text-xs font-bold hover:bg-primary-container hover:text-on-primary-container transition-all">
+            Voir fiche →
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  // FIX: openClient — navigation avec paramètre CPTE
+  // ════════════════════════════════════════════════
+  window.openClient = function(cpte) {
+    // Encode le CPTE dans l'URL → la fiche client lira ce paramètre
+    const url = `/client?cpte=${encodeURIComponent(cpte)}&from=dashboard`;
+    window.location.href = url;
+  };
+
+  // ════════════════════════════════════════════════
+  // Alerts Feed
+  // ════════════════════════════════════════════════
+  function renderAlerts() {
+    const n = getNumbers();
+    const items = [
+      ["warning",       "Exposition critique augmentée",     `${n.c} clients ont dépassé le seuil de 85% de score.`],
+      ["notifications", "File de notification en attente",  `${n.notify} clients nécessitent un traitement opérationnel.`],
+      ["analytics",     "Signal modèle stable",              "Aucune dérive détectée sur le batch de scoring actuel."],
+    ];
+    const c = document.getElementById("alertFeed");
+    c.innerHTML = "";
+    items.forEach(([icon, title, text]) => {
+      const d = document.createElement("div");
+      d.className = "bg-surface-container-low rounded-xl p-4 flex gap-4";
+      d.innerHTML = `
+        <div class="w-10 h-10 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined">${icon}</span>
+        </div>
+        <div><p class="mono font-bold text-sm">${title}</p><p class="text-sm text-on-surface-variant mt-1">${text}</p></div>`;
+      c.appendChild(d);
+    });
+  }
+
+  // AI Insight
+  function renderInsight() {
+    const n = getNumbers();
+    const texts = {
+      "CRITICAL": `Filtre critique actif : ${n.c} clients prioritaires. Exposition concentrée sur les dossiers avec NBRJDEP ≥ 30 jours.`,
+      "WARNING":  `${n.w} clients en zone Warning. Appels préventifs recommandés dans les 48h.`,
+      "MEDIUM":   `${n.med} clients en zone Moyenne. Surveillance mensuelle renforcée recommandée.`,
+      "":         `Le portefeuille montre ${n.c} clients critiques et ${n.w} clients à risque élevé sur ${n.total.toLocaleString("fr-FR")} scorés. Prioriser les expositions supérieures à 1M TND.`,
+    };
+    document.getElementById("aiInsight").innerText = texts[state.alert] || texts[""];
+  }
+
+  // ════════════════════════════════════════════════
+  // FIX: Filter status indicator
+  // ════════════════════════════════════════════════
+  function updateFilterStatus() {
+    const status = document.getElementById("filterStatus");
+    const desc   = document.getElementById("filterDesc");
+    const parts  = [];
+
+    if (state.period !== "30") parts.push(`Période: ${state.period} jours`);
+    if (state.alert)           parts.push(`Alerte: ${state.alert}`);
+    if (state.score !== 65)    parts.push(`Score min: ${state.score}%`);
+
+    if (parts.length > 0) {
+      desc.innerText = parts.join(" | ");
+      status.classList.remove("hidden");
+    } else {
+      status.classList.add("hidden");
+    }
+  }
+
+  function renderAll() {
+    renderKpis();
+    renderRiskDist();
+    renderTrends();
+    renderTable();
+    renderAlerts();
+    renderInsight();
+    updateFilterStatus();
+  }
+
+  // ════════════════════════════════════════════════
+  // EVENTS
+  // ════════════════════════════════════════════════
+  document.getElementById("scoreFilter").addEventListener("input", e => {
+    state.score = Number(e.target.value);
+    document.getElementById("scoreVal").innerText = e.target.value + "%";
+  });
+
+  document.getElementById("applyFilters").addEventListener("click", () => {
+    state.period = document.getElementById("periodFilter").value;
+    state.alert  = document.getElementById("alertFilter").value;
+    state.score  = Number(document.getElementById("scoreFilter").value);
+    const btn = document.getElementById("applyFilters");
+    const old = btn.innerText;
+    btn.innerText = "✓ Applied";
+    renderAll();
+    setTimeout(() => btn.innerText = old, 1200);
+  });
+
+  document.getElementById("resetFilters").addEventListener("click", () => {
+    document.getElementById("periodFilter").value = "30";
+    document.getElementById("alertFilter").value  = "";
+    document.getElementById("scoreFilter").value  = "65";
+    document.getElementById("scoreVal").innerText = "65%";
+    state.period = "30"; state.alert = ""; state.score = 65;
+    renderAll();
+  });
+
+  document.getElementById("yearFilter").addEventListener("change", e => {
+    state.year = e.target.value;
+    renderTrends();
+  });
+
+  document.getElementById("topSearch").addEventListener("input", () => renderTable());
+
+  document.getElementById("exportReport").addEventListener("click", () => {
+    const n = getNumbers();
+    const rows = [
+      ["BIAT Risk Monitor - Global Dashboard Export"],
+      ["Date", new Date().toLocaleDateString("fr-FR")],
+      ["Période", state.period + " jours"],
+      ["Filtre Alerte", state.alert || "Tous niveaux"],
+      ["Score minimum", state.score + "%"],
+      [],
+      ["Métrique", "Valeur"],
+      ["Total Scorés", n.total],
+      ["Clients Critiques", n.c],
+      ["Clients Élevés", n.w],
+      ["Clients Moyens", n.med],
+      ["Clients Faibles", n.s],
+      ["À Notifier", n.notify],
+      ["Score Moyen", n.avg + "%"],
+      ["Exposition Totale", n.amount.toFixed(1) + "M TND"],
+    ];
+    const csv = rows.map(r => r.map(v => `"${v}"`).join(",")).join("\n");
+    const a   = document.createElement("a");
+    a.href    = URL.createObjectURL(new Blob([csv], {type:"text/csv"}));
+    a.download= "biat_dashboard_export.csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+
+  // Settings / Support
+  const modal = document.getElementById("__biatModal");
+  const closeM = () => modal.classList.remove("open");
+  document.getElementById("__bm-x").onclick  = closeM;
+  document.getElementById("__bm-ok").onclick = closeM;
+  modal.addEventListener("click", e => { if (e.target === modal) closeM(); });
+
+  const card = (l, t) => `<div style="background:#0f1c35;border-radius:10px;padding:14px;border-left:3px solid #f5921e">
+    <p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#f5921e;text-transform:uppercase;letter-spacing:.07em">${l}</p>
+    <p style="margin-top:6px;font-size:13px;color:#d9e2ff;line-height:1.65">${t}</p></div>`;
+
+  const openM = type => {
+    document.getElementById("__bm-cat").innerText   = type==="settings" ? "Configuration" : "Assistance";
+    document.getElementById("__bm-title").innerText = type==="settings" ? "Paramètres"    : "Support";
+    document.getElementById("__bm-body").innerHTML  = type==="settings"
+      ? card("Interface","Mode sombre professionnel activé. Thème BIAT appliqué.")
+      + card("Seuil de risque","0.70 pour réduire les fausses alertes. 0.50 pour maximiser la détection.")
+      + card("Source des données","Les vrais chiffres proviennent de dashboard_data.json généré par Python ML.")
+      : card("Documentation","Scoring ML LightGBM, détection d'anomalies Isolation Forest, LSTM temporel.")
+      + card("FAQ","Pourquoi LightGBM ? Pourquoi Total ≠ Critiques ? Qu'est-ce que NBRJDEP ?")
+      + `<button onclick="window.location.href='/assistant'" style="width:100%;background:#1e3a9e;color:#fff;border:none;padding:12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;cursor:pointer">Ouvrir AI Assistant</button>`;
+    modal.classList.add("open");
+  };
+  document.getElementById("btnSettings").onclick = () => openM("settings");
+  document.getElementById("btnSupport").onclick  = () => openM("support");
+
+  // Init
+  renderAll();
+});
+</script>
+
+<!-- BIAT_REAL_DASHBOARD_INJECTION -->
+<script>
+(function () {
+  function txt(el) { return (el && el.innerText || "").trim(); }
+
+  function num(v) {
+    const n = Number(String(v ?? "").replace(",", "."));
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function fmt(n) {
+    return Math.round(num(n)).toLocaleString("fr-FR");
+  }
+
+  function money(v) {
+    const n = num(v);
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace(".", ",") + "M TND";
+    if (n >= 1000) return Math.round(n / 1000) + "K TND";
+    return Math.round(n).toLocaleString("fr-FR") + " TND";
+  }
+
+  function cpteOf(r) {
+    return String(r.cpte || r.CPTE || r.account || r.id || "").trim();
+  }
+
+  function scoreOf(r) {
+    let s =
+      r.risk_score_percent ??
+      r.display_risk_score_percent ??
+      r.score_percent ??
+      r.score ??
+      r.risk_score ??
+      r.RISK_SCORE ??
+      0;
+
+    s = num(s);
+    if (s <= 1) s *= 100;
+    return Math.max(0, Math.min(100, s));
+  }
+
+  function riskBrutOf(r) {
+    return num(r.risk_brut ?? r.RISK_BRUT ?? r.exposure ?? r.EXPOSURE);
+  }
+
+  function levelOf(score) {
+    if (score >= 85) return "CRITICAL";
+    if (score >= 65) return "WARNING";
+    if (score >= 40) return "MEDIUM";
+    return "LOW";
+  }
+
+  function rowsOf(data) {
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.clients)) return data.clients;
+    if (data && Array.isArray(data.data)) return data.data;
+    if (data && typeof data === "object") {
+      return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
+    }
+    return [];
+  }
+
+  function setCardValue(labelWords, value) {
+    const cards = Array.from(document.querySelectorAll("div, section, article"));
+    const card = cards.find(el => {
+      const t = txt(el).toLowerCase();
+      return labelWords.every(w => t.includes(w.toLowerCase())) && t.length < 500;
+    });
+
+    if (!card) return;
+
+    const candidates = Array.from(card.querySelectorAll("h1,h2,h3,p,span,div"))
+      .filter(el => txt(el).match(/[0-9\-–]/) && txt(el).length <= 20);
+
+    const target = candidates.find(el => {
+      const t = txt(el);
+      return /^[\d\s,.]+%?$|^[\d\s,.]+M?\s*TND$/i.test(t);
+    });
+
+    if (target) target.innerText = value;
+  }
+
+  function setAnyText(oldText, newText) {
+    document.querySelectorAll("body *").forEach(el => {
+      if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+        if (el.innerText.trim() === oldText) el.innerText = newText;
+      }
+    });
+  }
+
+  function badgeClass(level) {
+    if (level === "CRITICAL") return "CRITICAL";
+    if (level === "WARNING") return "WARNING";
+    if (level === "MEDIUM") return "MEDIUM";
+    return "LOW";
+  }
+
+  async function run() {
+    const res = await fetch("/attached_assets/dashboard_clients_full.json", { cache: "no-store" });
+    const data = await res.json();
+
+    const rows = rowsOf(data).filter(r => cpteOf(r));
+    const clients = rows.map(r => {
+      const score = scoreOf(r);
+      const level = levelOf(score);
+      return {
+        cpte: cpteOf(r),
+        score,
+        level,
+        riskBrut: riskBrutOf(r),
+        code: r.code_client || r.CODE_CLIENT || "",
+        sector: r.sector || r.SECTOR || r.industry || "Client BIAT"
+      };
+    });
+
+    const total = clients.length;
+    const critical = clients.filter(c => c.level === "CRITICAL").length;
+    const high = clients.filter(c => c.level === "WARNING").length;
+    const medium = clients.filter(c => c.level === "MEDIUM").length;
+    const low = clients.filter(c => c.level === "LOW").length;
+    const toNotify = critical + high;
+    const avg = total ? clients.reduce((s, c) => s + c.score, 0) / total : 0;
+    const amount = clients.filter(c => c.level === "CRITICAL" || c.level === "WARNING")
+      .reduce((s, c) => s + c.riskBrut, 0);
+
+    // Fix name globally
+    setAnyText("ALA", "ALA");
+    setAnyText("Risk Officer", "Risk Officer");
+    setAnyText("Risk Officer", "Risk Officer");
+
+    // Update subtitle
+    document.querySelectorAll("p, div, span").forEach(el => {
+      const t = txt(el);
+      if (t.includes("Vue globale du portefeuille") || t.includes("lignes réelles chargées")) {
+        el.innerText = `${fmt(total)} lignes réelles chargées depuis dashboard_clients_full.json — ${fmt(new Set(clients.map(c => c.cpte)).size)} clients uniques.`;
+      }
+    });
+
+    // Update KPI cards using labels
+    setCardValue(["total"], fmt(total));
+    setCardValue(["crit"], fmt(critical));
+    setCardValue(["élev"], fmt(high));
+    setCardValue(["notifier"], fmt(toNotify));
+    setCardValue(["score moyen"], Math.round(avg) + "%");
+    setCardValue(["exposition"], money(amount));
+    setCardValue(["amount"], money(amount));
+
+    // Notification badge
+    document.querySelectorAll("span").forEach(el => {
+      if (txt(el).match(/^\d+$/) && Number(txt(el)) <= 99999 && el.className.toString().includes("bg")) {
+        if (txt(el) === "12" || txt(el) === "10534") el.innerText = fmt(critical);
+      }
+    });
+
+    // Replace table with real top clients
+    const tbody = document.querySelector("tbody");
+    if (tbody) {
+      const top = [...clients]
+        .sort((a, b) => b.score - a.score || b.riskBrut - a.riskBrut)
+        .slice(0, 20);
+
+      tbody.innerHTML = top.map(c => `
+        <tr class="hover:bg-[#1f2942]">
+          <td class="px-4 py-3">
+            <div class="mono font-bold">${c.cpte}</div>
+            <div class="text-xs text-[#9aa8c7]">${c.code || c.sector || "Client BIAT"}</div>
+          </td>
+          <td class="px-4 py-3 mono font-bold ${c.level === "CRITICAL" ? "text-[#ffb4ab]" : "text-[#fbe273]"}">
+            ${c.score.toFixed(1)}%
+          </td>
+          <td class="px-4 py-3">
+            <span class="px-3 py-1 rounded text-xs mono font-bold ${c.level === "CRITICAL" ? "bg-[#93000a] text-[#ffdad6]" : "bg-[#4d4300] text-[#fbe273]"}">
+              ${c.level}
+            </span>
+          </td>
+          <td class="px-4 py-3 mono">${money(c.riskBrut)}</td>
+          <td class="px-4 py-3">
+            ${c.level === "CRITICAL" ? "Intervention immédiate et revue du dossier" : "Surveillance renforcée"}
+          </td>
+          <td class="px-4 py-3">
+            <button onclick="window.location.href='/client?cpte=${encodeURIComponent(c.cpte)}'" class="text-[#5ffbd6] mono font-bold">
+              Voir fiche →
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    console.log("BIAT dashboard real-data injection OK", {
+      total, critical, high, medium, low, toNotify, avg, amount
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", run);
+})();
+</script>
+
+</body>
+</html>

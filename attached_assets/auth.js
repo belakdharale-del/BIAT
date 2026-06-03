@@ -1,162 +1,190 @@
+// ============================================================
+// BIAT Risk Monitor - auth.js CLEAN
+// Auth + header user + logout/settings/support only
+// No global navigation interception
+// No preventDefault for sidebar links
+// No MutationObserver
+// No setInterval
+// ============================================================
+
 (function () {
   const path = window.location.pathname;
-  const isLogin = path === "/login" || path.includes("login_biat_risk_monitor");
 
-  if (!isLogin) {
-    const isAuth = localStorage.getItem("biat_auth") === "true";
+  const isLoginPage =
+    path === "/" ||
+    path === "/login" ||
+    path.includes("login_biat_risk_monitor");
 
-    if (!isAuth) {
+  // Protect internal pages
+  if (!isLoginPage) {
+    const isAuthenticated = localStorage.getItem("biat_auth") === "true";
+
+    if (!isAuthenticated) {
       window.location.href = "/login";
       return;
     }
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    const username = localStorage.getItem("biat_user") || "Risk Officer";
+    const username = localStorage.getItem("biat_user") || "ALA";
     const role = localStorage.getItem("biat_role") || "Risk Officer";
 
-    // 1) Remplacer automatiquement le nom utilisateur dans tous les headers
-    function updateHeaderUser() {
-      const header = document.querySelector("header");
-      if (!header) return;
+    updateHeaderUser(username, role);
+    activateQuickAction();
+    activateNotificationIcon();
+    activateUserMenu(username, role);
+    activateSettingsSupport(username, role);
+  });
 
-      // Cherche les blocs texte dans le header
-      const textElements = header.querySelectorAll("p, span, div");
+  function updateHeaderUser(username, role) {
+    const header = document.querySelector("header");
+    if (!header) return;
 
-      textElements.forEach((el) => {
-        const txt = (el.innerText || "").trim();
+    const elements = header.querySelectorAll("p, span, div");
 
-        if (
-          txt === "A. Mansour" ||
-          txt === "D. Ben Salem" ||
-          txt === "R. Khelifi" ||
-          txt === "ADMIN" ||
-          txt === "Chief Risk Manager" ||
-          txt === "Risk Officer"
-        ) {
-          if (
-            txt === "ADMIN" ||
-            txt === "Chief Risk Manager" ||
-            txt === "Risk Officer"
-          ) {
-            el.innerText = role;
-          } else {
-            el.innerText = username;
-          }
-        }
-      });
-    }
+    elements.forEach((el) => {
+      const text = (el.innerText || "").trim();
 
-    updateHeaderUser();
+      if (
+        text === "A. Mansour" ||
+        text === "D. Ben Salem" ||
+        text === "R. Khelifi" ||
+        text === "R. Dupont" ||
+        text === "Risk Officer Name" ||
+        text === "ALA"
+      ) {
+        el.innerText = username;
+      }
 
-    // 2) Quick Action -> Notifications
-    document.querySelectorAll("button").forEach((btn) => {
-      const txt = (btn.innerText || "").trim().toLowerCase();
+      if (
+        text === "Chief Risk Manager" ||
+        text === "Risk Officer" ||
+        text === "ADMIN" ||
+        text === "Admin"
+      ) {
+        el.innerText = role;
+      }
+    });
+  }
 
-      if (txt.includes("quick action")) {
-        btn.onclick = function () {
-          window.location.href = "/notifications";
+  function activateQuickAction() {
+    document.querySelectorAll("button").forEach((button) => {
+      const text = (button.innerText || "").trim().toLowerCase();
+
+      if (text.includes("quick action")) {
+        button.onclick = function () {
+          window.location.href = "/assistant";
         };
       }
     });
+  }
 
-    // 3) Icône notification -> Notifications
+  function activateNotificationIcon() {
     document.querySelectorAll(".material-symbols-outlined").forEach((icon) => {
-      const txt = (icon.innerText || "").trim();
+      const text = (icon.innerText || "").trim();
 
-      if (txt === "notifications") {
+      if (text === "notifications") {
         icon.style.cursor = "pointer";
         icon.onclick = function () {
           window.location.href = "/notifications";
         };
       }
     });
+  }
 
-    // 4) Zone utilisateur -> menu Profil / Déconnexion
-    function makeUserMenuActive() {
-      const header = document.querySelector("header");
-      if (!header) return;
+  function activateUserMenu(username, role) {
+    const header = document.querySelector("header");
+    if (!header) return;
 
-      let userZone = null;
+    let userZone = header.querySelector(".border-l");
 
-      // Cas dashboard
-      userZone = header.querySelector(".border-l");
+    if (!userZone) {
+      const divs = header.querySelectorAll("div");
+      userZone = divs[divs.length - 1];
+    }
 
-      // Cas risk evolution : souvent dernier bloc du header
-      if (!userZone) {
-        const divs = header.querySelectorAll("div");
-        userZone = divs[divs.length - 1];
+    if (!userZone) return;
+
+    userZone.style.cursor = "pointer";
+
+    userZone.onclick = function () {
+      const oldMenu = document.getElementById("userMenu");
+
+      if (oldMenu) {
+        oldMenu.remove();
+        return;
       }
 
-      if (!userZone) return;
+      const menu = document.createElement("div");
+      menu.id = "userMenu";
 
-      userZone.style.cursor = "pointer";
+      menu.style.position = "fixed";
+      menu.style.top = "64px";
+      menu.style.right = "24px";
+      menu.style.zIndex = "99999";
+      menu.style.width = "240px";
+      menu.style.background = "#101b33";
+      menu.style.border = "1px solid #3c4a45";
+      menu.style.borderRadius = "14px";
+      menu.style.padding = "14px";
+      menu.style.boxShadow = "0 20px 40px rgba(0,0,0,.45)";
+      menu.style.color = "#d9e2ff";
+      menu.style.fontFamily = "Inter, Arial, sans-serif";
 
-      userZone.onclick = function () {
-        let oldMenu = document.getElementById("userMenu");
-        if (oldMenu) {
-          oldMenu.remove();
-          return;
-        }
+      menu.innerHTML = `
+        <div style="margin-bottom:12px">
+          <p style="font-weight:700;margin:0">${username}</p>
+          <p style="font-size:12px;color:#bacac3;margin:4px 0 0">${role}</p>
+        </div>
 
-        const menu = document.createElement("div");
-        menu.id = "userMenu";
-        menu.style.position = "fixed";
-        menu.style.top = "64px";
-        menu.style.right = "24px";
-        menu.style.zIndex = "99999";
-        menu.style.width = "240px";
-        menu.style.background = "#101b33";
-        menu.style.border = "1px solid #3c4a45";
-        menu.style.borderRadius = "14px";
-        menu.style.padding = "14px";
-        menu.style.boxShadow = "0 20px 40px rgba(0,0,0,.45)";
-        menu.style.color = "#d9e2ff";
-        menu.style.fontFamily = "Inter, sans-serif";
+        <button id="profileBtn"
+          style="
+            width:100%;
+            padding:10px;
+            border-radius:8px;
+            background:#1f2942;
+            color:#d9e2ff;
+            border:none;
+            margin-bottom:8px;
+            cursor:pointer;
+          ">
+          Profil utilisateur
+        </button>
 
-        menu.innerHTML = `
-          <div style="margin-bottom:12px">
-            <p style="font-weight:700;margin:0">${username}</p>
-            <p style="font-size:12px;color:#bacac3;margin:4px 0 0">${role}</p>
-          </div>
+        <button id="logoutBtn"
+          style="
+            width:100%;
+            padding:10px;
+            border-radius:8px;
+            background:#93000a;
+            color:#ffdad6;
+            border:none;
+            cursor:pointer;
+          ">
+          Déconnexion
+        </button>
+      `;
 
-          <button id="profileBtn"
-            style="width:100%;padding:10px;border-radius:8px;background:#1f2942;color:#d9e2ff;border:none;margin-bottom:8px;cursor:pointer">
-            Profil utilisateur
-          </button>
+      document.body.appendChild(menu);
 
-          <button id="logoutBtn"
-            style="width:100%;padding:10px;border-radius:8px;background:#93000a;color:#ffdad6;border:none;cursor:pointer">
-            Déconnexion
-          </button>
-        `;
+      const profileBtn = document.getElementById("profileBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
 
-        document.body.appendChild(menu);
-
-        document.getElementById("profileBtn").onclick = function () {
-          alert("Utilisateur : " + username + "\\nRôle : " + role);
+      if (profileBtn) {
+        profileBtn.onclick = function () {
+          alert("Utilisateur : " + username + "\nRôle : " + role);
         };
+      }
 
-        document.getElementById("logoutBtn").onclick = function () {
+      if (logoutBtn) {
+        logoutBtn.onclick = function () {
           localStorage.removeItem("biat_auth");
           localStorage.removeItem("biat_user");
           localStorage.removeItem("biat_role");
           window.location.href = "/login";
         };
-      };
-    }
-
-    makeUserMenuActive();
-  });
-})();
-/* BIAT SETTINGS AND SUPPORT FIX */
-document.addEventListener("DOMContentLoaded", () => {
-  function getCurrentUser() {
-    return localStorage.getItem("biat_user") || "Risk Officer";
-  }
-
-  function getCurrentRole() {
-    return localStorage.getItem("biat_role") || "Risk Officer";
+      }
+    };
   }
 
   function closeBiatModal() {
@@ -169,12 +197,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const modal = document.createElement("div");
     modal.id = "biat-global-modal";
+
     modal.innerHTML = `
       <div style="
         position: fixed;
         inset: 0;
         background: rgba(0,0,0,0.55);
-        z-index: 9998;
+        z-index: 99998;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -201,10 +230,10 @@ document.addEventListener("DOMContentLoaded", () => {
               font-size: 18px;
               font-weight: 800;
               color: #5ffbd6;
-              letter-spacing: 0.02em;
             ">
               ${title}
             </div>
+
             <button id="biat-modal-close" style="
               background: transparent;
               border: 0;
@@ -224,117 +253,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.appendChild(modal);
 
-    document.getElementById("biat-modal-close").onclick = closeBiatModal;
+    const closeBtn = document.getElementById("biat-modal-close");
+    if (closeBtn) closeBtn.onclick = closeBiatModal;
 
-    modal.addEventListener("click", (event) => {
+    modal.addEventListener("click", function (event) {
       if (event.target === modal.firstElementChild) {
         closeBiatModal();
       }
     });
   }
 
-  function openSettings() {
-    const user = getCurrentUser();
-    const role = getCurrentRole();
+  function activateSettingsSupport(username, role) {
+    document.querySelectorAll("aside a, aside button, aside div, nav a, nav div").forEach((el) => {
+      const text = (el.innerText || "").trim().toLowerCase();
 
-    openBiatModal(
-      "Settings",
-      `
-        <div style="display:grid; gap:14px;">
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>Utilisateur connecté</strong><br>
-            ${user}
-          </div>
+      if (text.includes("settings")) {
+        el.style.cursor = "pointer";
+        el.onclick = function () {
+          openBiatModal(
+            "Settings",
+            `
+              <div style="display:grid; gap:14px;">
+                <div style="background:#07122a; padding:14px; border-radius:12px;">
+                  <strong>Utilisateur connecté</strong><br>
+                  ${username}
+                </div>
 
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>Rôle</strong><br>
-            ${role}
-          </div>
+                <div style="background:#07122a; padding:14px; border-radius:12px;">
+                  <strong>Rôle</strong><br>
+                  ${role}
+                </div>
 
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>État système</strong><br>
-            Application locale active sur <code>localhost:5000</code><br>
-            Données synchronisées depuis <code>attached_assets</code>
-          </div>
-
-          <button id="biat-logout-btn" style="
-            margin-top:8px;
-            background:#93000a;
-            color:#ffdad6;
-            border:0;
-            padding:12px 16px;
-            border-radius:10px;
-            font-weight:700;
-            cursor:pointer;
-          ">
-            Se déconnecter
-          </button>
-        </div>
-      `
-    );
-
-    setTimeout(() => {
-      const logoutBtn = document.getElementById("biat-logout-btn");
-      if (logoutBtn) {
-        logoutBtn.onclick = () => {
-          localStorage.removeItem("biat_auth");
-          localStorage.removeItem("biat_user");
-          localStorage.removeItem("biat_role");
-          window.location.href = "/login";
+                <div style="background:#07122a; padding:14px; border-radius:12px;">
+                  <strong>État système</strong><br>
+                  Application locale active sur <code>localhost:5000</code>
+                </div>
+              </div>
+            `
+          );
         };
       }
-    }, 50);
+
+      if (text.includes("support")) {
+        el.style.cursor = "pointer";
+        el.onclick = function () {
+          openBiatModal(
+            "Support",
+            `
+              <div style="display:grid; gap:14px;">
+                <div style="background:#07122a; padding:14px; border-radius:12px;">
+                  <strong>BIAT Risk Monitor — Aide rapide</strong><br>
+                  Pages disponibles : Dashboard, Risk Evolution, Future Prediction,
+                  Notifications, Client Profiles, Model Performance, AI Assistant.
+                </div>
+
+                <div style="background:#07122a; padding:14px; border-radius:12px;">
+                  <strong>Important</strong><br>
+                  La navigation doit rester faite par les liens HTML normaux :
+                  <code>&lt;a href="/dashboard"&gt;</code>,
+                  <code>&lt;a href="/notifications"&gt;</code>, etc.
+                </div>
+              </div>
+            `
+          );
+        };
+      }
+    });
   }
-
-  function openSupport() {
-    openBiatModal(
-      "Support",
-      `
-        <div style="display:grid; gap:14px;">
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>BIAT Risk Monitor — Aide rapide</strong><br>
-            Cette application permet de suivre les clients à risque, les anomalies, les notifications et les performances du modèle.
-          </div>
-
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>Pages principales</strong><br>
-            • Global Dashboard : vue globale du portefeuille<br>
-            • Risk Evolution : évolution du risque<br>
-            • Notifications : clients à notifier<br>
-            • Client Profiles : analyse client par CPTE<br>
-            • Model Performance : performances ML<br>
-            • AI Assistant : assistant conversationnel
-          </div>
-
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>Exemples de questions Assistant IA</strong><br>
-            • Combien de clients critiques avons-nous ?<br>
-            • Quels clients notifier en priorité ?<br>
-            • Analyse le client CPTE_001508<br>
-            • Comment évoluent les clients critiques ?<br>
-            • Compare scoring ML et anomalies
-          </div>
-
-          <div style="background:#07122a; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
-            <strong>Note</strong><br>
-            Si Groq ne répond pas, l’assistant utilise automatiquement les données locales réelles via le fallback.
-          </div>
-        </div>
-      `
-    );
-  }
-
-  document.querySelectorAll("aside div, aside button, nav div").forEach((el) => {
-    const text = (el.innerText || "").trim().toLowerCase();
-
-    if (text.includes("settings")) {
-      el.style.cursor = "pointer";
-      el.onclick = openSettings;
-    }
-
-    if (text.includes("support")) {
-      el.style.cursor = "pointer";
-      el.onclick = openSupport;
-    }
-  });
-});
+})();

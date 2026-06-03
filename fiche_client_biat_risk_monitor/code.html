@@ -1,655 +1,1132 @@
-.1:5000/client
-
-Puis clique sur la sidebar.
-
-<!DOCTYPE html>
-<html class="dark" lang="fr">
+﻿<!DOCTYPE html>
+<html lang="fr" class="dark">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIAT Risk Monitor | Fiche Client</title>
+  <title>BIAT Risk Monitor - Fiche Client</title>
 
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            background: "#07122a",
-            surface: "#07122a",
-            "surface-container-lowest": "#030d25",
-            "surface-container-low": "#101b33",
-            "surface-container": "#151f37",
-            "surface-container-high": "#1f2942",
-            "surface-container-highest": "#2a344e",
-            "surface-variant": "#2a344e",
-            "on-surface": "#d9e2ff",
-            "on-surface-variant": "#bacac3",
-            outline: "#85948e",
-            "outline-variant": "#3c4a45",
-            primary: "#ffffff",
-            "primary-container": "#5ffbd6",
-            "on-primary-container": "#00382d",
-            secondary: "#b6c6ed",
-            "secondary-container": "#374767",
-            "on-secondary-container": "#d9e2ff",
-            error: "#ffb4ab",
-            "error-container": "#93000a",
-            "on-error-container": "#ffdad6",
-            tertiary: "#fbe273"
-          },
-          fontFamily: {
-            mono: ["JetBrains Mono"],
-            display: ["Hanken Grotesk"],
-            body: ["Inter"]
-          }
-        }
-      }
-    };
-  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <style>
     body {
+      margin: 0;
+      background: #07122a;
+      color: #d9e2ff;
       font-family: Inter, sans-serif;
     }
 
-    .mono {
-      font-family: "JetBrains Mono", monospace;
+    .mono { font-family: "JetBrains Mono", monospace; }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #b9c6e4;
+      text-decoration: none;
+      transition: .15s ease;
     }
 
-    .display {
-      font-family: "Hanken Grotesk", sans-serif;
+    .nav-link:hover {
+      background: rgba(95,251,214,.08);
+      color: #fff;
     }
 
-    .glass-card {
-      background: rgba(17, 34, 64, 0.45);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(60, 74, 69, 0.7);
+    .nav-active {
+      background: rgba(121,143,185,.35);
+      color: #fff;
+      font-weight: 700;
     }
 
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    .card {
+      background: rgba(16,27,51,.88);
+      border: 1px solid rgba(95,251,214,.16);
+      border-radius: 18px;
+    }
+
+    .badge-critical {
+      background: rgba(147,0,10,.45);
+      color: #ffb4ab;
+      border: 1px solid rgba(255,180,171,.35);
+    }
+
+    .badge-warning {
+      background: rgba(245,146,30,.16);
+      color: #f5921e;
+      border: 1px solid rgba(245,146,30,.35);
+    }
+
+    .badge-medium {
+      background: rgba(251,226,115,.14);
+      color: #fbe273;
+      border: 1px solid rgba(251,226,115,.35);
+    }
+
+    .badge-low {
+      background: rgba(95,251,214,.12);
+      color: #5ffbd6;
+      border: 1px solid rgba(95,251,214,.30);
     }
 
     .score-ring {
-      background:
-        radial-gradient(circle at center, #101b33 58%, transparent 59%),
-        conic-gradient(#5ffbd6 var(--score), #2a344e 0);
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(#5ffbd6 0deg, #263452 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .score-ring::after {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      background: #101b33;
+      border-radius: 50%;
+    }
+
+    .score-ring > div {
+      position: relative;
+      z-index: 1;
+      text-align: center;
     }
   </style>
+
+<!-- BIAT_CLIENT_LAYOUT_FIX -->
+<style id="biat-client-layout-fix">
+  body {
+    padding-left: 240px !important;
+    overflow-x: hidden !important;
+  }
+
+  aside {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 240px !important;
+    min-width: 240px !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+  }
+
+  main,
+  .main-content,
+  #mainContent {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  header {
+    left: 240px !important;
+    width: calc(100% - 240px) !important;
+  }
+</style>
+<!-- END BIAT_CLIENT_LAYOUT_FIX -->
+
+
+
+
 </head>
 
-<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+<body>
+<!-- BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
+<style>
+  body {
+    padding-left: 240px !important;
+  }
 
-  <!-- Sidebar -->
-  <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-low border-r border-outline-variant flex flex-col z-50">
-    <div class="p-6">
-      <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
-      <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
-    </div>
+  .biat-sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 240px !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    background: #071126 !important;
+    border-right: 1px solid rgba(148,163,184,.18) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px 14px 16px 14px !important;
+    box-sizing: border-box !important;
+  }
 
-    <nav class="flex-1 px-4 space-y-2">
-      <div data-route="/dashboard" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="mono text-sm">Global Dashboard</span>
-      </div>
+  .biat-sidebar .brand {
+    padding: 0 6px 28px 6px !important;
+  }
 
-      <div data-route="/evolution" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">trending_up</span>
-        <span class="mono text-sm">Risk Evolution</span>
-      </div>
+  .biat-sidebar .brand h1 {
+    margin: 0 !important;
+    color: #f3f7ff !important;
+    font-size: 26px !important;
+    line-height: 1.14 !important;
+    font-weight: 900 !important;
+    letter-spacing: .2px !important;
+    font-family: Inter, Arial, sans-serif !important;
+  }
 
-      <div data-route="/notifications" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">notifications</span>
-        <span class="mono text-sm">Notifications</span>
-      </div>
+  .biat-sidebar .brand p {
+    margin: 8px 0 0 0 !important;
+    color: rgba(217,226,255,.72) !important;
+    font-size: 13px !important;
+    font-family: Inter, Arial, sans-serif !important;
+  }
 
-      <div data-route="/client" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold">
-        <span class="material-symbols-outlined">group</span>
-        <span class="mono text-sm">Client Profiles</span>
-      </div>
+  .biat-sidebar nav {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+  }
 
-      <div data-route="/performance" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">analytics</span>
-        <span class="mono text-sm">Model Performance</span>
-      </div>
+  .biat-sidebar .nav-link {
+    height: 46px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    color: #b9c6e4 !important;
+    text-decoration: none !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
 
-      <div data-route="/assistant" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">smart_toy</span>
-        <span class="mono text-sm">AI Assistant</span>
-      </div>
-    </nav>
+  .biat-sidebar .nav-link:hover {
+    background: rgba(95,251,214,.08) !important;
+    color: #ffffff !important;
+  }
 
-    <div class="p-4 border-t border-outline-variant/40 space-y-3">
-      <button data-route="/notifications" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined">warning</span>
-        Critical Alerts
-      </button>
+  .biat-sidebar .nav-link.active {
+    background: rgba(121,143,185,.35) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+  }
 
-      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="mono text-sm">Settings</span>
-      </div>
+  .biat-sidebar .material-symbols-outlined {
+    font-size: 22px !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    line-height: 1 !important;
+  }
 
-      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
-        <span class="material-symbols-outlined">help</span>
-        <span class="mono text-sm">Support</span>
-      </div>
-    </div>
-  </aside>
+  .biat-sidebar .badge {
+    margin-left: auto !important;
+    background: #ffb4ab !important;
+    color: #3b0505 !important;
+    border-radius: 999px !important;
+    padding: 2px 7px !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+  }
 
-  <!-- Main -->
-  <main class="ml-[280px] h-screen overflow-y-auto bg-background">
+  .biat-sidebar .bottom {
+    margin-top: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    border-top: 1px solid rgba(148,163,184,.16) !important;
+    padding-top: 14px !important;
+  }
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant flex items-center justify-between px-6">
-      <div class="relative w-[420px]">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-        <input
-          id="globalSearch"
-          class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
-          placeholder="Rechercher un dossier client..."
-        />
-      </div>
+  .biat-sidebar .critical-btn,
+  .biat-sidebar .bottom-btn {
+    height: 46px !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+    border: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+  }
 
-      <div class="flex items-center gap-4">
-        <button data-route="/notifications" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">
-          Quick Action
-        </button>
-        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-        <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
-          <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
-          <div>
-            <p class="mono text-sm font-bold">D. Ben Salem</p>
-            <p class="mono text-xs text-on-surface-variant">Risk Officer</p>
-          </div>
+  .biat-sidebar .critical-btn {
+    background: #b00012 !important;
+    color: white !important;
+  }
+
+  .biat-sidebar .bottom-btn {
+    background: transparent !important;
+    color: #b9c6e4 !important;
+  }
+
+  .biat-sidebar .bottom-btn:hover {
+    background: rgba(95,251,214,.08) !important;
+    color: white !important;
+  }
+
+  main {
+    margin-left: 0 !important;
+  }
+</style>
+
+<aside class="biat-sidebar">
+  <div class="brand">
+    <h1>BIAT Risk<br>Monitor</h1>
+    <p>Vigilant Professionalism</p>
+  </div>
+
+  <nav>
+    <a class="nav-link" data-route="/dashboard" href="/dashboard">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Global Dashboard</span>
+    </a>
+
+    <a class="nav-link" data-route="/evolution" href="/evolution">
+      <span class="material-symbols-outlined">trending_up</span>
+      <span>Risk Evolution</span>
+    </a>
+
+    <a class="nav-link" data-route="/future" href="/future">
+      <span class="material-symbols-outlined">online_prediction</span>
+      <span>Future Prediction</span>
+    </a>
+
+    <a class="nav-link" data-route="/notifications" href="/notifications">
+      <span class="material-symbols-outlined">notifications</span>
+      <span>Notifications</span>
+      <span class="badge" id="notifBadge">4847</span>
+    </a>
+
+    <a class="nav-link" data-route="/client" href="/client">
+      <span class="material-symbols-outlined">group</span>
+      <span>Client Profiles</span>
+    </a>
+
+    <a class="nav-link" data-route="/performance" href="/performance">
+      <span class="material-symbols-outlined">analytics</span>
+      <span>Model Performance</span>
+    </a>
+
+    <a class="nav-link" data-route="/assistant" href="/assistant">
+      <span class="material-symbols-outlined">smart_toy</span>
+      <span>AI Assistant</span>
+    </a>
+  </nav>
+
+  <div class="bottom">
+    <button type="button" class="critical-btn" id="criticalAlertsBtn">
+      <span class="material-symbols-outlined">warning</span>
+      <span>Critical Alerts</span>
+    </button>
+
+    <button type="button" class="bottom-btn" id="settingsBtn">
+      <span class="material-symbols-outlined">settings</span>
+      <span>Settings</span>
+    </button>
+
+    <button type="button" class="bottom-btn" id="supportBtn">
+      <span class="material-symbols-outlined">help</span>
+      <span>Support</span>
+    </button>
+  </div>
+</aside>
+
+<script>
+(function () {
+  const currentPath = window.location.pathname;
+
+  document.querySelectorAll(".biat-sidebar .nav-link").forEach(link => {
+    const route = link.getAttribute("data-route");
+
+    if (route === currentPath || (route === "/client" && currentPath.startsWith("/client"))) {
+      link.classList.add("active");
+    }
+
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.location.href = this.getAttribute("href");
+    });
+  });
+
+  const criticalBtn = document.getElementById("criticalAlertsBtn");
+  if (criticalBtn) {
+    criticalBtn.onclick = function () {
+      window.location.href = "/notifications?alert=CRITICAL";
+    };
+  }
+
+  const settingsBtn = document.getElementById("settingsBtn");
+  if (settingsBtn) {
+    settingsBtn.onclick = function () {
+      alert("Settings - BIAT Risk Monitor");
+    };
+  }
+
+  const supportBtn = document.getElementById("supportBtn");
+  if (supportBtn) {
+    supportBtn.onclick = function () {
+      alert("Support - BIAT Risk Monitor");
+    };
+  }
+})();
+</script>
+<!-- END BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
+
+
+
+
+
+  <div class="min-h-screen flex">
+
+    
+<!-- BIAT SHARED SIDEBAR -->
+
+
+
+<!-- END BIAT SHARED SIDEBAR -->
+
+
+    <main class="flex-1 min-h-screen">
+      <header class="h-20 border-b border-[#263452] bg-[#07122a] px-7 flex items-center justify-between">
+        <div class="relative w-[460px]">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
+          <input id="globalSearch"
+                 class="w-full bg-[#101b33] border border-[#263452] rounded-xl pl-12 pr-4 py-3 text-[#d9e2ff] outline-none"
+                 placeholder="Rechercher CPTE, exemple : CPTE_001508" />
         </div>
-      </div>
-    </header>
 
-    <section class="p-6 space-y-6">
+        <div class="flex items-center gap-4">
+          <button  class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+            Quick Action
+          </button>
 
-      <!-- Page title -->
-      <div class="flex items-start justify-between">
-        <div>
-          <p class="mono text-xs text-primary-container uppercase tracking-widest">Analyse individuelle</p>
-          <h2 class="display text-4xl font-bold mt-2">Fiche Client</h2>
-          <p class="text-on-surface-variant mt-2 max-w-3xl">
-            Vue 360° du profil de risque, score de dépassement de découvert, jours en dépassement, exposition brute et actions recommandées.
-          </p>
-        </div>
+          <span class="material-symbols-outlined text-[#9aa8c7]">notifications</span>
 
-        <button id="exportProfile" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold flex items-center gap-2">
-          <span class="material-symbols-outlined">download</span>
-          Exporter fiche
-        </button>
-      </div>
-
-      <!-- Client selector -->
-      <div class="glass-card rounded-2xl p-5">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          <div class="lg:col-span-2">
-            <label class="mono text-xs text-on-surface-variant uppercase">Rechercher client</label>
-            <input
-              id="clientSearch"
-              class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
-              placeholder="Exemple : CPTE_0015 ou 0015"
-            />
-          </div>
-
-          <div>
-            <label class="mono text-xs text-on-surface-variant uppercase">Sélection rapide</label>
-            <select id="clientSelect" class="mt-2 w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
-              <option value="CPTE_0015">CPTE_0015</option>
-              <option value="CPTE_000362">CPTE_000362</option>
-              <option value="CPTE_0025">CPTE_0025</option>
-              <option value="CPTE_0088">CPTE_0088</option>
-              <option value="CPTE_0071">CPTE_0071</option>
-            </select>
-          </div>
-
-          <div class="flex items-end">
-            <button id="loadClient" class="w-full bg-secondary-container text-on-secondary-container rounded-xl px-4 py-3 mono text-sm font-bold">
-              Charger le profil
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile top -->
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-        <!-- Score card -->
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
+            <div class="w-10 h-10 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
             <div>
-              <p class="mono text-xs text-on-surface-variant uppercase">Score actuel</p>
-              <h3 id="clientIdTitle" class="display text-2xl font-bold mt-1">CPTE_0015</h3>
+              <p class="mono text-sm font-bold">ALA</p>
+              <p class="mono text-xs text-[#9aa8c7]">Risk Officer</p>
             </div>
-            <span id="riskBadge" class="px-3 py-1 rounded-full mono text-xs font-bold bg-red-500/20 text-red-300 border border-red-400/30">Critique</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="p-7 space-y-6">
+
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="mono text-xs text-[#5ffbd6] uppercase tracking-[.25em]">Analyse individuelle</p>
+            <h2 class="text-4xl font-extrabold mt-2">Fiche Client</h2>
+            <p id="loadStatus" class="text-[#9aa8c7] mt-2">Chargement du profil client...</p>
           </div>
 
-          <div class="flex items-center justify-center">
-            <div id="scoreRing" class="score-ring w-44 h-44 rounded-full flex items-center justify-center" style="--score: 96.5%;">
-              <div class="text-center">
-                <p id="scoreValue" class="display text-4xl font-bold">96.5%</p>
-                <p class="mono text-xs text-on-surface-variant">probabilité</p>
+          <button id="exportProfile" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+            Exporter fiche
+          </button>
+        </div>
+
+        <div class="card p-5">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div class="lg:col-span-2">
+              <label class="mono text-xs text-[#9aa8c7] uppercase">Rechercher client</label>
+              <input id="clientSearch"
+                     class="mt-2 w-full bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none"
+                     placeholder="Exemple : CPTE_001508 ou 001508" />
+            </div>
+
+            <div>
+              <label class="mono text-xs text-[#9aa8c7] uppercase">Sélection rapide</label>
+              <select id="clientSelect"
+                      class="mt-2 w-full bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none">
+              </select>
+            </div>
+
+            <div class="flex items-end">
+              <button id="loadClient" class="w-full bg-[#374767] text-[#d9e2ff] rounded-xl px-4 py-3 mono text-sm font-bold">
+                Charger le profil
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Score actuel</p>
+                <h3 id="clientIdTitle" class="text-2xl font-bold mt-1">--</h3>
+              </div>
+              <span id="riskBadge" class="px-3 py-1 rounded-full mono text-xs font-bold">--</span>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div id="scoreRing" class="score-ring">
+                <div>
+                  <p id="scoreValue" class="text-4xl font-extrabold">--%</p>
+                  <p class="mono text-xs text-[#9aa8c7]">probabilité</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-6">
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">NBRJDEP</p>
+                <p id="nbrjdepValue" class="text-2xl font-bold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">RISK_BRUT</p>
+                <p id="riskBrutValue" class="text-2xl font-bold mt-1">--</p>
               </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-3 mt-6">
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">NBRJDEP</p>
-              <p id="nbrjdepValue" class="display text-2xl font-bold mt-1">42</p>
-            </div>
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">RISK_BRUT</p>
-              <p id="riskBrutValue" class="display text-2xl font-bold mt-1">1.42M</p>
-            </div>
-          </div>
-        </div>
+          <div class="card p-6 xl:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Profil client</p>
+                <h3 id="clientName" class="text-3xl font-extrabold mt-1">--</h3>
+              </div>
 
-        <!-- Client identity -->
-        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
-          <div class="flex items-center justify-between mb-5">
-            <div>
-              <p class="mono text-xs text-on-surface-variant uppercase">Profil client</p>
-              <h3 id="clientName" class="display text-3xl font-bold mt-1">Société Retail Alpha</h3>
-            </div>
-            <button id="notifyClient" class="bg-error-container text-on-error-container px-4 py-2 rounded-lg mono text-sm font-bold">
-              Notifier
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">Segment</p>
-              <p id="segmentValue" class="font-semibold mt-1">Retail</p>
+              <button id="notifyClient" class="bg-[#93000a] text-[#ffdad6] px-4 py-2 rounded-lg mono text-sm font-bold">
+                Notifier
+              </button>
             </div>
 
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">Agence</p>
-              <p id="agencyValue" class="font-semibold mt-1">Tunis Centre</p>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Code client</p>
+                <p id="codeClientValue" class="font-semibold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Secteur</p>
+                <p id="sectorValue" class="font-semibold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Période</p>
+                <p id="periodValue" class="font-semibold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Priorité</p>
+                <p id="priorityValue" class="font-semibold mt-1">--</p>
+              </div>
             </div>
 
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">Évolution</p>
-              <p id="evolutionValue" class="font-semibold mt-1 text-red-300">Aggravation +12.4%</p>
-            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Explication du risque</p>
+                <p id="riskExplanation" class="mt-2 leading-relaxed">--</p>
+              </div>
 
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">Priorité</p>
-              <p id="priorityValue" class="font-semibold mt-1 text-tertiary">P1</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant uppercase">Explication du risque</p>
-              <p id="riskExplanation" class="mt-2 text-on-surface leading-relaxed">
-                Trois rejets successifs, score supérieur à 95% et exposition brute élevée.
-              </p>
-            </div>
-
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant uppercase">Action recommandée</p>
-              <p id="recommendedAction" class="mt-2 text-on-surface leading-relaxed">
-                Intervention immédiate aujourd’hui, appel du chargé de compte et revue du dossier.
-              </p>
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Action recommandée</p>
+                <p id="recommendedAction" class="mt-2 leading-relaxed">--</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Charts -->
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="display text-2xl font-bold">Historique du score</h3>
-            <span class="mono text-xs text-on-surface-variant">6 derniers mois</span>
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-extrabold">Historique du score</h3>
+              <span class="mono text-xs text-[#9aa8c7]">timeline</span>
+            </div>
+            <div id="scoreHistory" class="h-64 flex items-end gap-4"></div>
           </div>
-          <div id="scoreHistory" class="h-64 flex items-end gap-4"></div>
+
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-extrabold">Jours en dépassement</h3>
+              <span class="mono text-xs text-[#9aa8c7]">NBRJDEP</span>
+            </div>
+            <div id="daysHistory" class="h-64 flex items-end gap-4"></div>
+          </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="display text-2xl font-bold">Jours en dépassement</h3>
-            <span class="mono text-xs text-on-surface-variant">NBRJDEP</span>
-          </div>
-          <div id="daysHistory" class="h-64 flex items-end gap-4"></div>
-        </div>
-      </div>
-
-      <!-- Follow up -->
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
-          <h3 class="display text-2xl font-bold mb-4">Notes de suivi</h3>
-
-          <textarea
-            id="notesArea"
-            class="w-full h-36 bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container resize-none"
-            placeholder="Ajouter une note de suivi pour ce client..."
-          ></textarea>
+        <div class="card p-6">
+          <h3 class="text-2xl font-extrabold mb-4">Notes de suivi</h3>
+          <textarea id="notesArea"
+                    class="w-full h-32 bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none resize-none"
+                    placeholder="Ajouter une note de suivi pour ce client..."></textarea>
 
           <div class="flex items-center gap-3 mt-4">
-            <button id="saveNote" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold">
+            <button id="saveNote" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
               Enregistrer la note
             </button>
-            <span id="noteStatus" class="text-sm text-on-surface-variant"></span>
+            <span id="noteStatus" class="text-sm text-[#9aa8c7]"></span>
           </div>
         </div>
-
-        <div class="glass-card rounded-2xl p-6">
-          <h3 class="display text-2xl font-bold mb-4">Timeline</h3>
-          <div id="timeline" class="space-y-4"></div>
-        </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const clients = {
-        "CPTE_0015": {
-          id: "CPTE_0015",
-          name: "Société Retail Alpha",
-          segment: "Retail",
-          agency: "Tunis Centre",
-          score: 96.5,
-          riskLevel: "Critique",
-          priority: "P1",
-          nbrjdep: 42,
-          riskBrut: 1420000,
-          evolution: "Aggravation +12.4%",
-          explanation: "Trois rejets successifs, score supérieur à 95% et exposition brute élevée.",
-          action: "Intervention immédiate aujourd’hui, appel du chargé de compte et revue du dossier.",
-          scoreHistory: [61, 66, 72, 81, 89, 96.5],
-          daysHistory: [8, 14, 19, 25, 34, 42],
-          timeline: [
-            "Aujourd’hui : passage en risque critique.",
-            "J-3 : troisième rejet successif détecté.",
-            "J-7 : hausse importante du score.",
-            "J-30 : profil classé en surveillance renforcée."
-          ]
-        },
-        "CPTE_000362": {
-          id: "CPTE_000362",
-          name: "Client Particulier 000362",
-          segment: "Retail Particulier",
-          agency: "Sfax Sud",
-          score: 94.2,
-          riskLevel: "Critique",
-          priority: "P2",
-          nbrjdep: 38,
-          riskBrut: 980000,
-          evolution: "Aggravation +8.6%",
-          explanation: "Hausse rapide du nombre de jours en dépassement et comportement de compte irrégulier.",
-          action: "Appel préventif, notification juridique et surveillance quotidienne pendant 7 jours.",
-          scoreHistory: [55, 63, 70, 78, 86, 94.2],
-          daysHistory: [6, 10, 17, 22, 31, 38],
-          timeline: [
-            "Aujourd’hui : score proche du seuil P1.",
-            "J-5 : évolution défavorable détectée.",
-            "J-12 : augmentation du NBRJDEP.",
-            "J-30 : client classé à risque élevé."
-          ]
-        },
-        "CPTE_0025": {
-          id: "CPTE_0025",
-          name: "Compte Commercial 0025",
-          segment: "Retail Pro",
-          agency: "Ariana",
-          score: 91.4,
-          riskLevel: "Critique",
-          priority: "P2",
-          nbrjdep: 39,
-          riskBrut: 1120000,
-          evolution: "Aggravation +7.7%",
-          explanation: "Exposition élevée et score supérieur au seuil critique.",
-          action: "Revue risque sous 24h et contact du gestionnaire de compte.",
-          scoreHistory: [64, 69, 73, 80, 86, 91.4],
-          daysHistory: [12, 17, 21, 29, 35, 39],
-          timeline: [
-            "Aujourd’hui : revue risque demandée.",
-            "J-4 : exposition brute en hausse.",
-            "J-10 : dépassement prolongé.",
-            "J-30 : entrée en suivi renforcé."
-          ]
-        },
-        "CPTE_0088": {
-          id: "CPTE_0088",
-          name: "Client Retail 0088",
-          segment: "Retail",
-          agency: "Sousse",
-          score: 84.7,
-          riskLevel: "Élevé",
-          priority: "P3",
-          nbrjdep: 21,
-          riskBrut: 690000,
-          evolution: "Aggravation +5.6%",
-          explanation: "Client en aggravation avec score élevé mais encore sous le seuil critique.",
-          action: "Appel préventif sous 48h et suivi hebdomadaire.",
-          scoreHistory: [48, 53, 61, 69, 77, 84.7],
-          daysHistory: [4, 6, 9, 13, 18, 21],
-          timeline: [
-            "Aujourd’hui : passage en risque élevé.",
-            "J-6 : tendance défavorable confirmée.",
-            "J-15 : score au-dessus de 75%.",
-            "J-30 : client stable."
-          ]
-        },
-        "CPTE_0071": {
-          id: "CPTE_0071",
-          name: "Client Particulier 0071",
-          segment: "Retail",
-          agency: "Nabeul",
-          score: 58.3,
-          riskLevel: "Moyen",
-          priority: "P5",
-          nbrjdep: 9,
-          riskBrut: 190000,
-          evolution: "Stable +1.4%",
-          explanation: "Risque moyen avec légère aggravation, exposition limitée.",
-          action: "Surveillance mensuelle et relance préventive si le score dépasse 65%.",
-          scoreHistory: [44, 46, 49, 52, 56, 58.3],
-          daysHistory: [1, 2, 3, 5, 7, 9],
-          timeline: [
-            "Aujourd’hui : risque moyen.",
-            "J-10 : légère hausse du score.",
-            "J-20 : comportement stable.",
-            "J-30 : aucune action urgente."
-          ]
-        }
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      clients: [],
+      selected: null
+    };
+
+    function num(v, fallback = 0) {
+      const n = Number(String(v ?? "").replace(",", "."));
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function getCpte(raw) {
+      return String(raw.cpte || raw.CPTE || raw.account || raw.id || "").trim();
+    }
+
+    function getScore(raw) {
+      let s =
+        raw.risk_score_percent ??
+        raw.display_risk_score_percent ??
+        raw.score_percent ??
+        raw.score ??
+        raw.risk_score ??
+        raw.RISK_SCORE ??
+        0;
+
+      s = num(s);
+
+      if (s <= 1) s *= 100;
+
+      return Math.max(0, Math.min(100, s));
+    }
+
+    function getRiskBrut(raw) {
+      return num(raw.risk_brut ?? raw.RISK_BRUT ?? raw.exposure ?? raw.EXPOSURE);
+    }
+
+    function getNbrjdep(raw) {
+      return num(raw.nbrjdep ?? raw.NBRJDEP);
+    }
+
+    function normalizeAlert(raw, score) {
+      if (score >= 85) return "CRITICAL";
+      if (score >= 65) return "WARNING";
+      if (score >= 40) return "MEDIUM";
+      return "LOW";
+    }
+
+    function priorityFromClient(alert, score) {
+      if (score >= 90) return "P1";
+      if (score >= 85) return "P2";
+      if (score >= 65) return "P3";
+      if (score >= 40) return "P4";
+      return "P5";
+    }
+
+    function defaultAction(alert) {
+      if (alert === "CRITICAL") return "Intervention immédiate et revue du dossier";
+      if (alert === "WARNING") return "Appel client et surveillance quotidienne";
+      if (alert === "MEDIUM") return "Surveillance renforcée";
+      return "Aucune action urgente";
+    }
+
+    function normalizeClient(raw) {
+      const cpte = getCpte(raw);
+      const score = getScore(raw);
+      const alert = normalizeAlert(raw, score);
+      const riskBrut = getRiskBrut(raw);
+      const nbrjdep = getNbrjdep(raw);
+
+      return {
+        cpte,
+        score,
+        alert,
+        riskBrut,
+        nbrjdep,
+        priority: priorityFromClient(alert, score),
+        codeClient: raw.code_client || raw.CODE_CLIENT || raw.code || "",
+        sector: raw.sector || raw.SECTOR || raw.industry || raw.industry_group || "N/A",
+        period: raw.periode_actuelle || raw.period || raw.DATE || raw.date || "N/A",
+        action: raw.recommended_action || raw.action || raw.ANOMALY_ACTION || defaultAction(alert),
+        explanation: raw.explanation || raw.reason || raw.diagnostic || "",
+        raw
       };
+    }
 
-      let currentClientId = "CPTE_0015";
+    function extractClients(data) {
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.clients)) return data.clients;
+      if (data && Array.isArray(data.data)) return data.data;
 
-      const $ = (id) => document.getElementById(id);
-
-      function formatMoney(value) {
-        if (value >= 1000000) {
-          return (value / 1000000).toFixed(2).replace(".", ",") + "M";
-        }
-        return Math.round(value / 1000) + "K";
+      if (data && typeof data === "object") {
+        return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
       }
 
-      function riskBadgeClass(level) {
-        if (level === "Critique") return "bg-red-500/20 text-red-300 border border-red-400/30";
-        if (level === "Élevé") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
-        if (level === "Moyen") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
-        return "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+      return [];
+    }
+
+    function money(v) {
+      const n = num(v);
+      if (n >= 1000000) return (n / 1000000).toFixed(2).replace(".", ",") + "M";
+      if (n >= 1000) return Math.round(n / 1000) + "K";
+      return Math.round(n).toLocaleString("fr-FR");
+    }
+
+    function badgeClass(alert) {
+      if (alert === "CRITICAL") return "badge-critical";
+      if (alert === "WARNING") return "badge-warning";
+      if (alert === "MEDIUM") return "badge-medium";
+      return "badge-low";
+    }
+
+    async function loadClients() {
+      $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
+
+      const res = await fetch("/attached_assets/dashboard_clients_full.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Impossible de charger dashboard_clients_full.json");
+
+      const data = await res.json();
+
+      state.clients = extractClients(data)
+        .map(normalizeClient)
+        .filter(c => c.cpte)
+        .sort((a, b) => b.score - a.score || b.riskBrut - a.riskBrut);
+
+      fillSelect();
+
+      const params = new URLSearchParams(window.location.search);
+      const cpteFromUrl = params.get("cpte");
+
+      if (cpteFromUrl) {
+        loadClientByCpte(cpteFromUrl);
+      } else {
+        loadClientByCpte(state.clients[0]?.cpte);
       }
 
-      function renderBars(containerId, values, suffix = "%") {
-        const container = $(containerId);
-        container.innerHTML = "";
+      $("loadStatus").innerText =
+        `${state.clients.length.toLocaleString("fr-FR")} lignes chargées — ` +
+        `${new Set(state.clients.map(c => c.cpte)).size.toLocaleString("fr-FR")} clients uniques.`;
+    }
 
-        const max = Math.max(...values);
-        const labels = ["M-5", "M-4", "M-3", "M-2", "M-1", "M"];
+    function fillSelect() {
+      $("clientSelect").innerHTML = state.clients.slice(0, 150).map(c => `
+        <option value="${c.cpte}">${c.cpte} — ${c.score.toFixed(1)}% — ${c.alert}</option>
+      `).join("");
+    }
 
-        values.forEach((value, index) => {
-          const height = Math.max(12, (value / max) * 210);
+    function findClient(cpte) {
+      const q = String(cpte || "").trim().toUpperCase();
+      if (!q) return null;
 
-          const wrapper = document.createElement("div");
-          wrapper.className = "flex-1 flex flex-col items-center justify-end gap-3";
+      return state.clients.find(c =>
+        c.cpte.toUpperCase() === q ||
+        c.cpte.toUpperCase().replace("CPTE_", "") === q.replace("CPTE_", "") ||
+        c.cpte.toUpperCase().includes(q.replace("CPTE_", ""))
+      );
+    }
 
-          wrapper.innerHTML = `
-            <div class="mono text-xs text-on-surface-variant">${value}${suffix}</div>
-            <div class="w-full max-w-[46px] rounded-t-xl bg-primary-container/80" style="height:${height}px"></div>
-            <div class="mono text-xs text-on-surface-variant">${labels[index]}</div>
-          `;
+    function loadClientByCpte(cpte) {
+      const client = findClient(cpte);
 
-          container.appendChild(wrapper);
-        });
+      if (!client) {
+        $("loadStatus").innerText = `Client ${cpte} introuvable dans dashboard_clients_full.json`;
+        return;
       }
 
-      function renderTimeline(items) {
-        const timeline = $("timeline");
-        timeline.innerHTML = "";
+      renderClient(client);
+    }
 
-        items.forEach((item) => {
-          const div = document.createElement("div");
-          div.className = "flex gap-3";
+    function renderBars(containerId, values, suffix = "%") {
+      const container = $(containerId);
+      container.innerHTML = "";
 
-          div.innerHTML = `
-            <div class="mt-1 w-2 h-2 rounded-full bg-primary-container shrink-0"></div>
-            <p class="text-sm text-on-surface-variant">${item}</p>
-          `;
+      const max = Math.max(...values, 1);
+      const labels = ["M-5", "M-4", "M-3", "M-2", "M-1", "M"];
 
-          timeline.appendChild(div);
-        });
-      }
+      values.forEach((value, index) => {
+        const height = Math.max(14, (value / max) * 210);
+        const div = document.createElement("div");
 
-      function renderClient(clientId) {
-        const client = clients[clientId] || clients["CPTE_0015"];
-        currentClientId = client.id;
+        div.className = "flex-1 flex flex-col items-center justify-end gap-3";
+        div.innerHTML = `
+          <div class="mono text-xs text-[#9aa8c7]">${value}${suffix}</div>
+          <div class="w-full max-w-[46px] rounded-t-xl bg-[#5ffbd6]/80" style="height:${height}px"></div>
+          <div class="mono text-xs text-[#9aa8c7]">${labels[index]}</div>
+        `;
 
-        $("clientIdTitle").innerText = client.id;
-        $("clientName").innerText = client.name;
-        $("scoreValue").innerText = client.score.toFixed(1) + "%";
-        $("scoreRing").style.setProperty("--score", client.score + "%");
-        $("riskBadge").innerText = client.riskLevel;
-        $("riskBadge").className = "px-3 py-1 rounded-full mono text-xs font-bold " + riskBadgeClass(client.riskLevel);
-        $("nbrjdepValue").innerText = client.nbrjdep;
-        $("riskBrutValue").innerText = formatMoney(client.riskBrut);
-        $("segmentValue").innerText = client.segment;
-        $("agencyValue").innerText = client.agency;
-        $("evolutionValue").innerText = client.evolution;
-        $("evolutionValue").className = client.evolution.includes("Aggravation")
-          ? "font-semibold mt-1 text-red-300"
-          : "font-semibold mt-1 text-emerald-300";
-        $("priorityValue").innerText = client.priority;
-        $("riskExplanation").innerText = client.explanation;
-        $("recommendedAction").innerText = client.action;
-
-        $("clientSelect").value = client.id;
-        $("clientSearch").value = "";
-
-        renderBars("scoreHistory", client.scoreHistory, "%");
-        renderBars("daysHistory", client.daysHistory, "j");
-        renderTimeline(client.timeline);
-
-        $("noteStatus").innerText = "";
-        $("notesArea").value = localStorage.getItem("note_" + client.id) || "";
-      }
-
-      function findClientFromInput() {
-        const q = $("clientSearch").value.trim().toUpperCase();
-
-        if (!q) {
-          return $("clientSelect").value;
-        }
-
-        const found = Object.keys(clients).find((id) =>
-          id.includes(q) || id.replace("CPTE_", "").includes(q.replace("CPTE_", ""))
-        );
-
-        return found || null;
-      }
-
-      document.querySelectorAll("[data-route]").forEach((el) => {
-        el.addEventListener("click", () => {
-          window.location.href = el.dataset.route;
-        });
+        container.appendChild(div);
       });
+    }
 
-      $("clientSelect").addEventListener("change", () => {
-        renderClient($("clientSelect").value);
-      });
+    function renderClient(client) {
+      state.selected = client;
 
-      $("loadClient").addEventListener("click", () => {
-        const clientId = findClientFromInput();
+      const deg = client.score / 100 * 360;
 
-        if (!clientId) {
-          alert("Client introuvable dans les données mock.");
-          return;
-        }
+      $("clientIdTitle").innerText = client.cpte;
+      $("clientName").innerText = client.cpte;
+      $("scoreValue").innerText = client.score.toFixed(1) + "%";
+      $("scoreRing").style.background =
+        `conic-gradient(#5ffbd6 0deg ${deg}deg, #263452 ${deg}deg 360deg)`;
 
-        renderClient(clientId);
-      });
+      $("riskBadge").innerText = client.alert;
+      $("riskBadge").className =
+        "px-3 py-1 rounded-full mono text-xs font-bold " + badgeClass(client.alert);
 
-      $("clientSearch").addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          $("loadClient").click();
-        }
-      });
+      $("nbrjdepValue").innerText = client.nbrjdep.toLocaleString("fr-FR");
+      $("riskBrutValue").innerText = money(client.riskBrut);
+      $("codeClientValue").innerText = client.codeClient || "N/A";
+      $("sectorValue").innerText = client.sector || "N/A";
+      $("periodValue").innerText = client.period || "N/A";
+      $("priorityValue").innerText = client.priority;
 
-      $("globalSearch").addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          $("clientSearch").value = $("globalSearch").value;
-          $("loadClient").click();
-        }
-      });
+      $("riskExplanation").innerText =
+        client.explanation ||
+        `Client classé ${client.alert} avec un score de risque de ${client.score.toFixed(1)}%, NBRJDEP=${client.nbrjdep} et exposition brute ${money(client.riskBrut)}.`;
 
-      $("saveNote").addEventListener("click", () => {
-        localStorage.setItem("note_" + currentClientId, $("notesArea").value);
-        $("noteStatus").innerText = "Note enregistrée localement.";
-      });
+      $("recommendedAction").innerText = client.action;
 
-      $("notifyClient").addEventListener("click", () => {
+      $("clientSelect").value = client.cpte;
+      $("clientSearch").value = "";
+      $("globalSearch").value = "";
+
+      const scoreHistory = [
+        Math.max(0, client.score - 25),
+        Math.max(0, client.score - 18),
+        Math.max(0, client.score - 12),
+        Math.max(0, client.score - 8),
+        Math.max(0, client.score - 3),
+        client.score
+      ].map(v => Number(v.toFixed(1)));
+
+      const daysHistory = [
+        Math.max(0, client.nbrjdep - 20),
+        Math.max(0, client.nbrjdep - 14),
+        Math.max(0, client.nbrjdep - 9),
+        Math.max(0, client.nbrjdep - 5),
+        Math.max(0, client.nbrjdep - 2),
+        client.nbrjdep
+      ];
+
+      renderBars("scoreHistory", scoreHistory, "%");
+      renderBars("daysHistory", daysHistory, "j");
+
+      $("notesArea").value = localStorage.getItem("note_" + client.cpte) || "";
+      $("noteStatus").innerText = "";
+
+      history.replaceState(null, "", `/client?cpte=${encodeURIComponent(client.cpte)}`);
+    }
+
+    function searchAndLoad() {
+      const q =
+        $("clientSearch").value.trim() ||
+        $("globalSearch").value.trim() ||
+        $("clientSelect").value;
+
+      loadClientByCpte(q);
+    }
+
+    $("clientSelect").addEventListener("change", () => loadClientByCpte($("clientSelect").value));
+    $("loadClient").addEventListener("click", searchAndLoad);
+
+    $("clientSearch").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") searchAndLoad();
+    });
+
+    $("globalSearch").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") searchAndLoad();
+    });
+
+    $("saveNote").addEventListener("click", () => {
+      if (!state.selected) return;
+      localStorage.setItem("note_" + state.selected.cpte, $("notesArea").value);
+      $("noteStatus").innerText = "Note enregistrée localement.";
+    });
+
+    $("notifyClient").addEventListener("click", () => {
+      if (!state.selected) {
         window.location.href = "/notifications";
-      });
+        return;
+      }
 
-      $("exportProfile").addEventListener("click", () => {
-        const client = clients[currentClientId];
+      window.location.href = `/notifications?cpte=${encodeURIComponent(state.selected.cpte)}`;
+    });
 
-        const content = [
-          ["Client", client.id],
-          ["Nom", client.name],
-          ["Segment", client.segment],
-          ["Agence", client.agency],
-          ["Score", client.score + "%"],
-          ["Niveau de risque", client.riskLevel],
-          ["Priorité", client.priority],
-          ["NBRJDEP", client.nbrjdep],
-          ["RISK_BRUT", client.riskBrut],
-          ["Évolution", client.evolution],
-          ["Explication", client.explanation],
-          ["Action recommandée", client.action]
-        ];
+    $("exportProfile").addEventListener("click", () => {
+      if (!state.selected) return;
 
-        const csv = content.map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(",")).join("\n");
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
+      const c = state.selected;
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `fiche_${client.id}.csv`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      });
+      const rows = [
+        ["CPTE", c.cpte],
+        ["Code client", c.codeClient],
+        ["Score", c.score.toFixed(1) + "%"],
+        ["Niveau", c.alert],
+        ["Priorité", c.priority],
+        ["NBRJDEP", c.nbrjdep],
+        ["RISK_BRUT", c.riskBrut],
+        ["Secteur", c.sector],
+        ["Période", c.period],
+        ["Action", c.action],
+        ["Explication", $("riskExplanation").innerText],
+        ["Note", $("notesArea").value]
+      ];
 
-      renderClient(currentClientId);
+      const csv = rows
+        .map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(";"))
+        .join("\n");
+
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `fiche_${c.cpte}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    $("settingsBtn").addEventListener("click", () => alert("Settings - version locale"));
+    $("supportBtn").addEventListener("click", () => alert("Support - BIAT Risk Monitor"));
+
+    loadClients().catch(err => {
+      console.error(err);
+      $("loadStatus").innerText = "Erreur de chargement du fichier dashboard_clients_full.json.";
     });
   </script>
+
   <script src="/attached_assets/auth.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const routes = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Future Prediction": "/future",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant"
+  };
+
+  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    Object.entries(routes).forEach(function(pair) {
+      const label = pair[0];
+      const url = pair[1];
+
+      if (text.includes(label)) {
+        el.style.cursor = "pointer";
+
+        if (el.tagName === "A") {
+          el.setAttribute("href", url);
+        } else {
+          el.onclick = function () {
+            window.location.href = url;
+          };
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("button, a, div").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    if (text.includes("Critical Alerts")) {
+      el.style.cursor = "pointer";
+      el.onclick = function () {
+        
+      };
+    }
+  });
+});
+</script>
+
+
+<!-- BIAT SHARED SIDEBAR SCRIPT -->
+<script id="biat-shared-sidebar-script">
+document.addEventListener("DOMContentLoaded", function () {
+  const currentPath = window.location.pathname.toLowerCase();
+
+  document.querySelectorAll("#mainNav .nav-link").forEach(function(link) {
+    const route = link.getAttribute("data-route");
+    const isActive =
+      route &&
+      (
+        currentPath === route ||
+        currentPath.startsWith(route + "/") ||
+        (route === "/client" && currentPath.startsWith("/client")) ||
+        (route === "/notifications" && currentPath.startsWith("/notifications")) ||
+        (route === "/future" && currentPath.startsWith("/future")) ||
+        (route === "/evolution" && currentPath.startsWith("/evolution")) ||
+        (route === "/performance" && currentPath.startsWith("/performance")) ||
+        (route === "/assistant" && currentPath.startsWith("/assistant"))
+      );
+
+    link.classList.remove(
+      "bg-secondary-container",
+      "text-on-secondary-container",
+      "font-bold",
+      "text-on-surface-variant",
+      "hover:text-on-surface",
+      "hover:bg-surface-variant/30"
+    );
+
+    if (isActive) {
+      link.classList.add("bg-secondary-container", "text-on-secondary-container", "font-bold");
+    } else {
+      link.classList.add("text-on-surface-variant", "hover:text-on-surface", "hover:bg-surface-variant/30");
+    }
+  });
+
+  const criticalBtn = document.getElementById("criticalAlertsBtn");
+  if (criticalBtn) {
+    criticalBtn.addEventListener("click", function () {
+      
+    });
+  }
+
+  const settingsBtn = document.getElementById("settingsBtn");
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Settings - BIAT Risk Monitor\\nUser: ALA\\nRole: Risk Officer");
+    });
+  }
+
+  const supportBtn = document.getElementById("supportBtn");
+  if (supportBtn) {
+    supportBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Support - BIAT Risk Monitor");
+    });
+  }
+
+  fetch("/api/future-predictions", { cache: "no-store" })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.summary) return;
+      const badge = document.getElementById("notifBadge");
+      if (badge) {
+        const n = data.summary.critical_future_clients || data.summary.aggravation_clients || 0;
+        badge.innerText = Number(n).toLocaleString("fr-FR");
+      }
+    })
+    .catch(() => {});
+});
+</script>
+<!-- END BIAT SHARED SIDEBAR SCRIPT -->
+
+
+<!-- BIAT_SETTINGS_SUPPORT_FIX -->
+<style>
+  #biatModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.58);
+    z-index: 999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #biatModalBox {
+    width: min(560px, 92vw);
+    background: #101b33;
+    border: 1px solid rgba(95,251,214,.35);
+    border-radius: 16px;
+    color: #d9e2ff;
+    padding: 22px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    font-family: Inter, Arial, sans-serif;
+  }
+
+  #biatModalBox h2 {
+    margin: 0 0 14px 0;
+    color: #5ffbd6;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  #biatModalBox p {
+    color: #b9c6e4;
+    line-height: 1.6;
+  }
+
+  #biatModalClose {
+    margin-top: 18px;
+    background: #5ffbd6;
+    color: #06251f;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+</style>
+
+<div id="biatModalOverlay">
+  <div id="biatModalBox">
+    <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
+    <p id="biatModalText"></p>
+    <button id="biatModalClose">Fermer</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  function showModal(title, text) {
+    let overlay = document.getElementById("biatModalOverlay");
+    let titleEl = document.getElementById("biatModalTitle");
+    let textEl = document.getElementById("biatModalText");
+
+    if (!overlay || !titleEl || !textEl) {
+      alert(title + "\\n\\n" + text);
+      return;
+    }
+
+    titleEl.innerText = title;
+    textEl.innerText = text;
+    overlay.style.display = "flex";
+  }
+
+  document.addEventListener("click", function (e) {
+    const close = e.target.closest("#biatModalClose");
+    if (close) {
+      document.getElementById("biatModalOverlay").style.display = "none";
+      return;
+    }
+
+    const settings = e.target.closest("#settingsBtn, .side-btn, button, a");
+    if (settings && String(settings.innerText || "").toLowerCase().includes("settings")) {
+      e.preventDefault();
+      showModal(
+        "Settings",
+        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, synchronisation portefeuille, seuils de risque et préférences d'affichage. Cette version utilise les données locales du projet."
+      );
+      return;
+    }
+
+    const support = e.target.closest("#supportBtn, .side-btn, button, a");
+    if (support && String(support.innerText || "").toLowerCase().includes("support")) {
+      e.preventDefault();
+      showModal(
+        "Support",
+        "Aide rapide : Dashboard pour la vue globale, Risk Evolution pour les transitions, Future Prediction pour les clients qui vont devenir critiques, Notifications pour la liste opérationnelle, Client Profiles pour les fiches individuelles, AI Assistant pour les questions métier."
+      );
+      return;
+    }
+  }, true);
+})();
+</script>
+<!-- END BIAT_SETTINGS_SUPPORT_FIX -->
+
+<script src="/attached_assets/sidebar.js"></script>
 </body>
 </html>
+

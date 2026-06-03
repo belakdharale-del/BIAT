@@ -1,0 +1,851 @@
+﻿<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIAT Risk Monitor - Fiche Client</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #07122a;
+      color: #d9e2ff;
+      font-family: Inter, sans-serif;
+    }
+
+    .mono { font-family: "JetBrains Mono", monospace; }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #b9c6e4;
+      text-decoration: none;
+      transition: .15s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(95,251,214,.08);
+      color: #fff;
+    }
+
+    .nav-active {
+      background: rgba(121,143,185,.35);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .card {
+      background: rgba(16,27,51,.88);
+      border: 1px solid rgba(95,251,214,.16);
+      border-radius: 18px;
+    }
+
+    .badge-critical {
+      background: rgba(147,0,10,.45);
+      color: #ffb4ab;
+      border: 1px solid rgba(255,180,171,.35);
+    }
+
+    .badge-warning {
+      background: rgba(245,146,30,.16);
+      color: #f5921e;
+      border: 1px solid rgba(245,146,30,.35);
+    }
+
+    .badge-medium {
+      background: rgba(251,226,115,.14);
+      color: #fbe273;
+      border: 1px solid rgba(251,226,115,.35);
+    }
+
+    .badge-low {
+      background: rgba(95,251,214,.12);
+      color: #5ffbd6;
+      border: 1px solid rgba(95,251,214,.30);
+    }
+
+    .score-ring {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(#5ffbd6 0deg, #263452 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .score-ring::after {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      background: #101b33;
+      border-radius: 50%;
+    }
+
+    .score-ring > div {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+  </style>
+
+<!-- BIAT_CLIENT_LAYOUT_FIX -->
+<style id="biat-client-layout-fix">
+  body {
+    padding-left: 240px !important;
+    overflow-x: hidden !important;
+  }
+
+  aside {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 240px !important;
+    min-width: 240px !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+  }
+
+  main,
+  .main-content,
+  #mainContent {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  header {
+    left: 240px !important;
+    width: calc(100% - 240px) !important;
+  }
+</style>
+<!-- END BIAT_CLIENT_LAYOUT_FIX -->
+
+</head>
+
+<body>
+  <div class="min-h-screen flex">
+
+    
+<!-- BIAT SHARED SIDEBAR -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] border-r border-outline-variant bg-surface-container-low flex flex-col py-stack-lg z-50">
+  <div class="px-gutter mb-stack-lg">
+    <h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight leading-tight">
+      BIAT Risk<br>Monitor
+    </h1>
+    <p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">
+      Vigilant Professionalism
+    </p>
+  </div>
+
+  <nav id="mainNav" class="flex-1 space-y-1 px-base">
+    <a data-route="/dashboard" href="/dashboard"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span class="font-label-md text-label-md">Global Dashboard</span>
+    </a>
+
+    <a data-route="/evolution" href="/evolution"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">trending_up</span>
+      <span class="font-label-md text-label-md">Risk Evolution</span>
+    </a>
+
+    <a data-route="/future" href="/future"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">online_prediction</span>
+      <span class="font-label-md text-label-md">Future Prediction</span>
+    </a>
+
+    <a data-route="/notifications" href="/notifications"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200 relative">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="font-label-md text-label-md">Notifications</span>
+      <span id="notifBadge" class="absolute right-4 bg-error text-on-error px-1.5 rounded text-[10px]">0</span>
+    </a>
+
+    <a data-route="/client" href="/client"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">group</span>
+      <span class="font-label-md text-label-md">Client Profiles</span>
+    </a>
+
+    <a data-route="/performance" href="/performance"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">analytics</span>
+      <span class="font-label-md text-label-md">Model Performance</span>
+    </a>
+
+    <a data-route="/assistant" href="/assistant"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">smart_toy</span>
+      <span class="font-label-md text-label-md">AI Assistant</span>
+    </a>
+  </nav>
+
+  <div class="px-gutter mb-stack-lg">
+    <button id="criticalAlertsBtn" class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-bold flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-sm">warning</span>
+      Critical Alerts
+    </button>
+  </div>
+
+  <div class="mt-auto px-base border-t border-outline-variant/30 pt-stack-md space-y-1">
+    <a id="settingsBtn" href="#"
+       class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="font-label-md text-label-md">Settings</span>
+    </a>
+
+    <a id="supportBtn" href="#"
+       class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">help</span>
+      <span class="font-label-md text-label-md">Support</span>
+    </a>
+  </div>
+</aside>
+<!-- END BIAT SHARED SIDEBAR -->
+
+
+    <main class="flex-1 min-h-screen">
+      <header class="h-20 border-b border-[#263452] bg-[#07122a] px-7 flex items-center justify-between">
+        <div class="relative w-[460px]">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
+          <input id="globalSearch"
+                 class="w-full bg-[#101b33] border border-[#263452] rounded-xl pl-12 pr-4 py-3 text-[#d9e2ff] outline-none"
+                 placeholder="Rechercher CPTE, exemple : CPTE_001508" />
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button onclick="window.location.href='/notifications'" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+            Quick Action
+          </button>
+
+          <span class="material-symbols-outlined text-[#9aa8c7]">notifications</span>
+
+          <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
+            <div class="w-10 h-10 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
+            <div>
+              <p class="mono text-sm font-bold">ALA</p>
+              <p class="mono text-xs text-[#9aa8c7]">Risk Officer</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="p-7 space-y-6">
+
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="mono text-xs text-[#5ffbd6] uppercase tracking-[.25em]">Analyse individuelle</p>
+            <h2 class="text-4xl font-extrabold mt-2">Fiche Client</h2>
+            <p id="loadStatus" class="text-[#9aa8c7] mt-2">Chargement du profil client...</p>
+          </div>
+
+          <button id="exportProfile" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+            Exporter fiche
+          </button>
+        </div>
+
+        <div class="card p-5">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div class="lg:col-span-2">
+              <label class="mono text-xs text-[#9aa8c7] uppercase">Rechercher client</label>
+              <input id="clientSearch"
+                     class="mt-2 w-full bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none"
+                     placeholder="Exemple : CPTE_001508 ou 001508" />
+            </div>
+
+            <div>
+              <label class="mono text-xs text-[#9aa8c7] uppercase">Sélection rapide</label>
+              <select id="clientSelect"
+                      class="mt-2 w-full bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none">
+              </select>
+            </div>
+
+            <div class="flex items-end">
+              <button id="loadClient" class="w-full bg-[#374767] text-[#d9e2ff] rounded-xl px-4 py-3 mono text-sm font-bold">
+                Charger le profil
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Score actuel</p>
+                <h3 id="clientIdTitle" class="text-2xl font-bold mt-1">--</h3>
+              </div>
+              <span id="riskBadge" class="px-3 py-1 rounded-full mono text-xs font-bold">--</span>
+            </div>
+
+            <div class="flex items-center justify-center">
+              <div id="scoreRing" class="score-ring">
+                <div>
+                  <p id="scoreValue" class="text-4xl font-extrabold">--%</p>
+                  <p class="mono text-xs text-[#9aa8c7]">probabilité</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-6">
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">NBRJDEP</p>
+                <p id="nbrjdepValue" class="text-2xl font-bold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">RISK_BRUT</p>
+                <p id="riskBrutValue" class="text-2xl font-bold mt-1">--</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-6 xl:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Profil client</p>
+                <h3 id="clientName" class="text-3xl font-extrabold mt-1">--</h3>
+              </div>
+
+              <button id="notifyClient" class="bg-[#93000a] text-[#ffdad6] px-4 py-2 rounded-lg mono text-sm font-bold">
+                Notifier
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Code client</p>
+                <p id="codeClientValue" class="font-semibold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Secteur</p>
+                <p id="sectorValue" class="font-semibold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Période</p>
+                <p id="periodValue" class="font-semibold mt-1">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7]">Priorité</p>
+                <p id="priorityValue" class="font-semibold mt-1">--</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Explication du risque</p>
+                <p id="riskExplanation" class="mt-2 leading-relaxed">--</p>
+              </div>
+
+              <div class="bg-[#07122a] rounded-xl p-4">
+                <p class="mono text-xs text-[#9aa8c7] uppercase">Action recommandée</p>
+                <p id="recommendedAction" class="mt-2 leading-relaxed">--</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-extrabold">Historique du score</h3>
+              <span class="mono text-xs text-[#9aa8c7]">timeline</span>
+            </div>
+            <div id="scoreHistory" class="h-64 flex items-end gap-4"></div>
+          </div>
+
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-extrabold">Jours en dépassement</h3>
+              <span class="mono text-xs text-[#9aa8c7]">NBRJDEP</span>
+            </div>
+            <div id="daysHistory" class="h-64 flex items-end gap-4"></div>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-2xl font-extrabold mb-4">Notes de suivi</h3>
+          <textarea id="notesArea"
+                    class="w-full h-32 bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none resize-none"
+                    placeholder="Ajouter une note de suivi pour ce client..."></textarea>
+
+          <div class="flex items-center gap-3 mt-4">
+            <button id="saveNote" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+              Enregistrer la note
+            </button>
+            <span id="noteStatus" class="text-sm text-[#9aa8c7]"></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      clients: [],
+      selected: null
+    };
+
+    function num(v, fallback = 0) {
+      const n = Number(String(v ?? "").replace(",", "."));
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function getCpte(raw) {
+      return String(raw.cpte || raw.CPTE || raw.account || raw.id || "").trim();
+    }
+
+    function getScore(raw) {
+      let s =
+        raw.risk_score_percent ??
+        raw.display_risk_score_percent ??
+        raw.score_percent ??
+        raw.score ??
+        raw.risk_score ??
+        raw.RISK_SCORE ??
+        0;
+
+      s = num(s);
+
+      if (s <= 1) s *= 100;
+
+      return Math.max(0, Math.min(100, s));
+    }
+
+    function getRiskBrut(raw) {
+      return num(raw.risk_brut ?? raw.RISK_BRUT ?? raw.exposure ?? raw.EXPOSURE);
+    }
+
+    function getNbrjdep(raw) {
+      return num(raw.nbrjdep ?? raw.NBRJDEP);
+    }
+
+    function normalizeAlert(raw, score) {
+      if (score >= 85) return "CRITICAL";
+      if (score >= 65) return "WARNING";
+      if (score >= 40) return "MEDIUM";
+      return "LOW";
+    }
+
+    function priorityFromClient(alert, score) {
+      if (score >= 90) return "P1";
+      if (score >= 85) return "P2";
+      if (score >= 65) return "P3";
+      if (score >= 40) return "P4";
+      return "P5";
+    }
+
+    function defaultAction(alert) {
+      if (alert === "CRITICAL") return "Intervention immédiate et revue du dossier";
+      if (alert === "WARNING") return "Appel client et surveillance quotidienne";
+      if (alert === "MEDIUM") return "Surveillance renforcée";
+      return "Aucune action urgente";
+    }
+
+    function normalizeClient(raw) {
+      const cpte = getCpte(raw);
+      const score = getScore(raw);
+      const alert = normalizeAlert(raw, score);
+      const riskBrut = getRiskBrut(raw);
+      const nbrjdep = getNbrjdep(raw);
+
+      return {
+        cpte,
+        score,
+        alert,
+        riskBrut,
+        nbrjdep,
+        priority: priorityFromClient(alert, score),
+        codeClient: raw.code_client || raw.CODE_CLIENT || raw.code || "",
+        sector: raw.sector || raw.SECTOR || raw.industry || raw.industry_group || "N/A",
+        period: raw.periode_actuelle || raw.period || raw.DATE || raw.date || "N/A",
+        action: raw.recommended_action || raw.action || raw.ANOMALY_ACTION || defaultAction(alert),
+        explanation: raw.explanation || raw.reason || raw.diagnostic || "",
+        raw
+      };
+    }
+
+    function extractClients(data) {
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.clients)) return data.clients;
+      if (data && Array.isArray(data.data)) return data.data;
+
+      if (data && typeof data === "object") {
+        return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
+      }
+
+      return [];
+    }
+
+    function money(v) {
+      const n = num(v);
+      if (n >= 1000000) return (n / 1000000).toFixed(2).replace(".", ",") + "M";
+      if (n >= 1000) return Math.round(n / 1000) + "K";
+      return Math.round(n).toLocaleString("fr-FR");
+    }
+
+    function badgeClass(alert) {
+      if (alert === "CRITICAL") return "badge-critical";
+      if (alert === "WARNING") return "badge-warning";
+      if (alert === "MEDIUM") return "badge-medium";
+      return "badge-low";
+    }
+
+    async function loadClients() {
+      $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
+
+      const res = await fetch("/attached_assets/dashboard_clients_full.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Impossible de charger dashboard_clients_full.json");
+
+      const data = await res.json();
+
+      state.clients = extractClients(data)
+        .map(normalizeClient)
+        .filter(c => c.cpte)
+        .sort((a, b) => b.score - a.score || b.riskBrut - a.riskBrut);
+
+      fillSelect();
+
+      const params = new URLSearchParams(window.location.search);
+      const cpteFromUrl = params.get("cpte");
+
+      if (cpteFromUrl) {
+        loadClientByCpte(cpteFromUrl);
+      } else {
+        loadClientByCpte(state.clients[0]?.cpte);
+      }
+
+      $("loadStatus").innerText =
+        `${state.clients.length.toLocaleString("fr-FR")} lignes chargées — ` +
+        `${new Set(state.clients.map(c => c.cpte)).size.toLocaleString("fr-FR")} clients uniques.`;
+    }
+
+    function fillSelect() {
+      $("clientSelect").innerHTML = state.clients.slice(0, 150).map(c => `
+        <option value="${c.cpte}">${c.cpte} — ${c.score.toFixed(1)}% — ${c.alert}</option>
+      `).join("");
+    }
+
+    function findClient(cpte) {
+      const q = String(cpte || "").trim().toUpperCase();
+      if (!q) return null;
+
+      return state.clients.find(c =>
+        c.cpte.toUpperCase() === q ||
+        c.cpte.toUpperCase().replace("CPTE_", "") === q.replace("CPTE_", "") ||
+        c.cpte.toUpperCase().includes(q.replace("CPTE_", ""))
+      );
+    }
+
+    function loadClientByCpte(cpte) {
+      const client = findClient(cpte);
+
+      if (!client) {
+        $("loadStatus").innerText = `Client ${cpte} introuvable dans dashboard_clients_full.json`;
+        return;
+      }
+
+      renderClient(client);
+    }
+
+    function renderBars(containerId, values, suffix = "%") {
+      const container = $(containerId);
+      container.innerHTML = "";
+
+      const max = Math.max(...values, 1);
+      const labels = ["M-5", "M-4", "M-3", "M-2", "M-1", "M"];
+
+      values.forEach((value, index) => {
+        const height = Math.max(14, (value / max) * 210);
+        const div = document.createElement("div");
+
+        div.className = "flex-1 flex flex-col items-center justify-end gap-3";
+        div.innerHTML = `
+          <div class="mono text-xs text-[#9aa8c7]">${value}${suffix}</div>
+          <div class="w-full max-w-[46px] rounded-t-xl bg-[#5ffbd6]/80" style="height:${height}px"></div>
+          <div class="mono text-xs text-[#9aa8c7]">${labels[index]}</div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function renderClient(client) {
+      state.selected = client;
+
+      const deg = client.score / 100 * 360;
+
+      $("clientIdTitle").innerText = client.cpte;
+      $("clientName").innerText = client.cpte;
+      $("scoreValue").innerText = client.score.toFixed(1) + "%";
+      $("scoreRing").style.background =
+        `conic-gradient(#5ffbd6 0deg ${deg}deg, #263452 ${deg}deg 360deg)`;
+
+      $("riskBadge").innerText = client.alert;
+      $("riskBadge").className =
+        "px-3 py-1 rounded-full mono text-xs font-bold " + badgeClass(client.alert);
+
+      $("nbrjdepValue").innerText = client.nbrjdep.toLocaleString("fr-FR");
+      $("riskBrutValue").innerText = money(client.riskBrut);
+      $("codeClientValue").innerText = client.codeClient || "N/A";
+      $("sectorValue").innerText = client.sector || "N/A";
+      $("periodValue").innerText = client.period || "N/A";
+      $("priorityValue").innerText = client.priority;
+
+      $("riskExplanation").innerText =
+        client.explanation ||
+        `Client classé ${client.alert} avec un score de risque de ${client.score.toFixed(1)}%, NBRJDEP=${client.nbrjdep} et exposition brute ${money(client.riskBrut)}.`;
+
+      $("recommendedAction").innerText = client.action;
+
+      $("clientSelect").value = client.cpte;
+      $("clientSearch").value = "";
+      $("globalSearch").value = "";
+
+      const scoreHistory = [
+        Math.max(0, client.score - 25),
+        Math.max(0, client.score - 18),
+        Math.max(0, client.score - 12),
+        Math.max(0, client.score - 8),
+        Math.max(0, client.score - 3),
+        client.score
+      ].map(v => Number(v.toFixed(1)));
+
+      const daysHistory = [
+        Math.max(0, client.nbrjdep - 20),
+        Math.max(0, client.nbrjdep - 14),
+        Math.max(0, client.nbrjdep - 9),
+        Math.max(0, client.nbrjdep - 5),
+        Math.max(0, client.nbrjdep - 2),
+        client.nbrjdep
+      ];
+
+      renderBars("scoreHistory", scoreHistory, "%");
+      renderBars("daysHistory", daysHistory, "j");
+
+      $("notesArea").value = localStorage.getItem("note_" + client.cpte) || "";
+      $("noteStatus").innerText = "";
+
+      history.replaceState(null, "", `/client?cpte=${encodeURIComponent(client.cpte)}`);
+    }
+
+    function searchAndLoad() {
+      const q =
+        $("clientSearch").value.trim() ||
+        $("globalSearch").value.trim() ||
+        $("clientSelect").value;
+
+      loadClientByCpte(q);
+    }
+
+    $("clientSelect").addEventListener("change", () => loadClientByCpte($("clientSelect").value));
+    $("loadClient").addEventListener("click", searchAndLoad);
+
+    $("clientSearch").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") searchAndLoad();
+    });
+
+    $("globalSearch").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") searchAndLoad();
+    });
+
+    $("saveNote").addEventListener("click", () => {
+      if (!state.selected) return;
+      localStorage.setItem("note_" + state.selected.cpte, $("notesArea").value);
+      $("noteStatus").innerText = "Note enregistrée localement.";
+    });
+
+    $("notifyClient").addEventListener("click", () => {
+      if (!state.selected) {
+        window.location.href = "/notifications";
+        return;
+      }
+
+      window.location.href = `/notifications?cpte=${encodeURIComponent(state.selected.cpte)}`;
+    });
+
+    $("exportProfile").addEventListener("click", () => {
+      if (!state.selected) return;
+
+      const c = state.selected;
+
+      const rows = [
+        ["CPTE", c.cpte],
+        ["Code client", c.codeClient],
+        ["Score", c.score.toFixed(1) + "%"],
+        ["Niveau", c.alert],
+        ["Priorité", c.priority],
+        ["NBRJDEP", c.nbrjdep],
+        ["RISK_BRUT", c.riskBrut],
+        ["Secteur", c.sector],
+        ["Période", c.period],
+        ["Action", c.action],
+        ["Explication", $("riskExplanation").innerText],
+        ["Note", $("notesArea").value]
+      ];
+
+      const csv = rows
+        .map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(";"))
+        .join("\n");
+
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `fiche_${c.cpte}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    $("settingsBtn").addEventListener("click", () => alert("Settings - version locale"));
+    $("supportBtn").addEventListener("click", () => alert("Support - BIAT Risk Monitor"));
+
+    loadClients().catch(err => {
+      console.error(err);
+      $("loadStatus").innerText = "Erreur de chargement du fichier dashboard_clients_full.json.";
+    });
+  </script>
+
+  <script src="/attached_assets/auth.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const routes = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Future Prediction": "/future",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant"
+  };
+
+  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    Object.entries(routes).forEach(function(pair) {
+      const label = pair[0];
+      const url = pair[1];
+
+      if (text.includes(label)) {
+        el.style.cursor = "pointer";
+
+        if (el.tagName === "A") {
+          el.setAttribute("href", url);
+        } else {
+          el.onclick = function () {
+            window.location.href = url;
+          };
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("button, a, div").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    if (text.includes("Critical Alerts")) {
+      el.style.cursor = "pointer";
+      el.onclick = function () {
+        window.location.href = "/notifications?alert=CRITICAL";
+      };
+    }
+  });
+});
+</script>
+
+
+<!-- BIAT SHARED SIDEBAR SCRIPT -->
+<script id="biat-shared-sidebar-script">
+document.addEventListener("DOMContentLoaded", function () {
+  const currentPath = window.location.pathname.toLowerCase();
+
+  document.querySelectorAll("#mainNav .nav-link").forEach(function(link) {
+    const route = link.getAttribute("data-route");
+    const isActive =
+      route &&
+      (
+        currentPath === route ||
+        currentPath.startsWith(route + "/") ||
+        (route === "/client" && currentPath.startsWith("/client")) ||
+        (route === "/notifications" && currentPath.startsWith("/notifications")) ||
+        (route === "/future" && currentPath.startsWith("/future")) ||
+        (route === "/evolution" && currentPath.startsWith("/evolution")) ||
+        (route === "/performance" && currentPath.startsWith("/performance")) ||
+        (route === "/assistant" && currentPath.startsWith("/assistant"))
+      );
+
+    link.classList.remove(
+      "bg-secondary-container",
+      "text-on-secondary-container",
+      "font-bold",
+      "text-on-surface-variant",
+      "hover:text-on-surface",
+      "hover:bg-surface-variant/30"
+    );
+
+    if (isActive) {
+      link.classList.add("bg-secondary-container", "text-on-secondary-container", "font-bold");
+    } else {
+      link.classList.add("text-on-surface-variant", "hover:text-on-surface", "hover:bg-surface-variant/30");
+    }
+  });
+
+  const criticalBtn = document.getElementById("criticalAlertsBtn");
+  if (criticalBtn) {
+    criticalBtn.addEventListener("click", function () {
+      window.location.href = "/notifications?alert=CRITICAL";
+    });
+  }
+
+  const settingsBtn = document.getElementById("settingsBtn");
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Settings - BIAT Risk Monitor\\nUser: ALA\\nRole: Risk Officer");
+    });
+  }
+
+  const supportBtn = document.getElementById("supportBtn");
+  if (supportBtn) {
+    supportBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Support - BIAT Risk Monitor");
+    });
+  }
+
+  fetch("/api/future-predictions", { cache: "no-store" })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.summary) return;
+      const badge = document.getElementById("notifBadge");
+      if (badge) {
+        const n = data.summary.critical_future_clients || data.summary.aggravation_clients || 0;
+        badge.innerText = Number(n).toLocaleString("fr-FR");
+      }
+    })
+    .catch(() => {});
+});
+</script>
+<!-- END BIAT SHARED SIDEBAR SCRIPT -->
+
+</body>
+</html>

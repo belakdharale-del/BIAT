@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BIAT Risk Monitor - Clients à Notifier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#2a344e",
+                    "surface-container-low": "#101b33",
+                    "on-surface": "#d9e2ff",
+                    "inverse-on-surface": "#263049",
+                    "on-secondary-container": "#a5b5db",
+                    "outline": "#85948e",
+                    "error": "#ffb4ab",
+                    "primary-container": "#5ffbd6",
+                    "tertiary-container": "#fbe273",
+                    "on-tertiary-fixed": "#211b00",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#5ffbd6",
+                    "surface": "#07122a",
+                    "primary": "#ffffff",
+                    "on-tertiary-container": "#756400",
+                    "surface-container-lowest": "#030d25",
+                    "background": "#07122a",
+                    "surface-tint": "#38debb",
+                    "error-container": "#93000a",
+                    "on-secondary": "#20304f",
+                    "on-tertiary": "#393000",
+                    "on-surface-variant": "#bacac3",
+                    "secondary-fixed": "#d8e2ff",
+                    "tertiary-fixed": "#fbe273",
+                    "tertiary-fixed-dim": "#dec65a",
+                    "tertiary": "#ffffff",
+                    "secondary-container": "#374767",
+                    "surface-dim": "#07122a",
+                    "on-primary": "#00382d",
+                    "secondary": "#b6c6ed",
+                    "surface-container-high": "#1f2942",
+                    "surface-container-highest": "#2a344e",
+                    "on-primary-fixed": "#002019",
+                    "on-primary-fixed-variant": "#005142",
+                    "inverse-surface": "#d9e2ff",
+                    "on-error": "#690005",
+                    "outline-variant": "#3c4a45",
+                    "on-secondary-fixed-variant": "#374767",
+                    "secondary-fixed-dim": "#b6c6ed",
+                    "on-primary-container": "#00725e",
+                    "on-secondary-fixed": "#091b39",
+                    "on-background": "#d9e2ff",
+                    "surface-container": "#151f37",
+                    "inverse-primary": "#006b58",
+                    "on-tertiary-fixed-variant": "#534600",
+                    "surface-bright": "#2f3952",
+                    "primary-fixed-dim": "#38debb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "gutter": "16px",
+                    "container-padding": "24px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(17, 34, 64, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(35, 53, 84, 0.5);
+            transition: border-color 0.2s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(100, 255, 218, 0.3);
+        }
+        .risk-glow-red {
+            box-shadow: 0 0 15px rgba(255, 180, 171, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant bg-surface-container-low flex flex-col py-stack-lg z-50">
+<div class="px-container-padding mb-stack-lg">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">BIAT Risk Monitor</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Vigilant Professionalism</p>
+</div>
+<nav class="flex-grow flex flex-col px-base gap-stack-sm">
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Global Dashboard</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-md text-label-md">Risk Evolution</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Client Profiles</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Model Performance</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-md text-label-md">AI Assistant</span>
+</a>
+</nav>
+<div class="mt-auto px-base pt-stack-lg space-y-2 border-t border-outline-variant/30">
+<button class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">warning</span>
+                Critical Alerts
+            </button>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-container-padding sticky top-0 z-40 bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-gutter flex-1">
+<div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-primary-container rounded-lg overflow-hidden">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-lowest border-none py-2 pl-10 pr-4 text-on-surface placeholder:text-outline focus:ring-0 font-body-sm" placeholder="Search accounts, transactions, or client names..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-gutter">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-base border-l border-outline-variant pl-gutter">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface leading-tight">M. Ben Slama</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Risk Officer</p>
+</div>
+<img alt="User Profile" class="h-10 w-10 rounded-full border border-primary-fixed/20 object-cover" data-alt="A professional portrait of a senior financial executive in a dark navy tailored suit. The background is a blurred office setting with cool-toned architectural glass and steel elements. The lighting is sophisticated, focusing on the subject's face to convey authority, trust, and professional vigilance. The color palette matches a dark mode banking interface with deep blues and crisp highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFcxxeV0-Z_YfMsPyUlHiRBdQqN_XLym7hpZ5YTrTcfSlZX83xJCMV7RNWzbtoMUxlNWdLkw2pZIbm_9BZaGg2joflnwuk6Vz2_q1VyQPp-voC7rj6Kmr_KEgnV1T5Gslan2iHXHezSYsMiynKdaggjANBgm6oSxtEi1DXnvYE8IBaXyXhihoHCXt67OUjA_r2h-8-LNvupYnI3RZvRfPT-xWlFedyYNtuYu3odU7L_bzQiifS3CgABSflEuG-9nWYWlJcX99XFWU"/>
+</div>
+</div>
+</header>
+<!-- Operational Worklist Content -->
+<div class="p-container-padding max-w-7xl mx-auto space-y-stack-lg">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Clients à Notifier</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Operational Worklist: Operational Risk Actions &amp; Monitoring</p>
+</div>
+<button class="bg-primary-container text-on-primary-container px-gutter py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">download</span>
+                    CSV Export List
+                </button>
+</div>
+<!-- KPIs Section (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-card p-gutter rounded-xl risk-glow-red">
+<p class="font-label-sm text-label-sm text-error uppercase mb-1">Critical Clients</p>
+<div class="flex justify-between items-end">
+<span class="font-display-lg text-display-lg text-error">24</span>
+<span class="text-error mb-2 material-symbols-outlined">warning</span>
+</div>
+<div class="mt-2 h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-error h-full w-[15%]"></div>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<p class="font-label-sm text-label-sm text-tertiary-fixed uppercase mb-1">High Risk Clients</p>
+<div class="flex justify-between items-end">
+<span class="font-display-lg text-display-lg text-tertiary-fixed">142</span>
+<span class="text-tertiary-fixed mb-2 material-symbols-outlined">trending_up</span>
+</div>
+<div class="mt-2 h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed h-full w-[45%]"></div>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Priority 1 Count</p>
+<div class="flex justify-between items-end">
+<span class="font-display-lg text-display-lg text-on-surface">08</span>
+<span class="text-on-surface-variant mb-2 material-symbols-outlined">priority_high</span>
+</div>
+<div class="mt-2 h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-on-surface h-full w-[8%]"></div>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl border-primary-container/20">
+<p class="font-label-sm text-label-sm text-primary-fixed uppercase mb-1">Total Pending</p>
+<div class="flex justify-between items-end">
+<span class="font-display-lg text-display-lg text-primary-fixed">216</span>
+<span class="text-primary-fixed mb-2 material-symbols-outlined">pending_actions</span>
+</div>
+<div class="mt-2 h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="bg-primary-fixed h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<!-- Filters & Search Bar -->
+<div class="glass-card p-gutter rounded-xl flex flex-wrap items-center gap-gutter">
+<div class="flex-1 min-w-[240px]">
+<div class="relative bg-surface-container-lowest border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-transparent border-none py-2 pl-10 pr-4 text-on-surface placeholder:text-outline focus:ring-0 font-body-sm" placeholder="Search CPTE (Account)..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-base">
+<select class="bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-gutter text-on-surface font-body-sm focus:ring-primary-container min-w-[140px]">
+<option>Alert Level</option>
+<option>Critical</option>
+<option>Warning</option>
+<option>Normal</option>
+</select>
+<select class="bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-gutter text-on-surface font-body-sm focus:ring-primary-container min-w-[140px]">
+<option>Priority 1-5</option>
+<option>P1 - Highest</option>
+<option>P2</option>
+<option>P3</option>
+<option>P4</option>
+<option>P5</option>
+</select>
+<select class="bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-gutter text-on-surface font-body-sm focus:ring-primary-container min-w-[140px]">
+<option>Action Status</option>
+<option>Pending</option>
+<option>Notified</option>
+<option>Escalated</option>
+</select>
+</div>
+<button class="flex items-center gap-base text-on-surface-variant hover:text-primary transition-colors px-base">
+<span class="material-symbols-outlined">filter_list</span>
+<span class="font-label-md">Clear</span>
+</button>
+</div>
+<!-- Main Worklist Table -->
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50 border-b border-outline-variant">
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant">CPTE Account</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant">Score %</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant">Alert Level</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant text-center">Priority</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant">Evolution</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant text-center">NBRJDEP</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant">Recommended Action</th>
+<th class="px-gutter py-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Row 1 (Critical/P1) -->
+<tr class="hover:bg-surface-variant/10 transition-colors">
+<td class="px-gutter py-stack-lg font-label-md text-label-md text-primary">0018-9284-001</td>
+<td class="px-gutter py-stack-lg">
+<div class="flex items-center gap-base">
+<div class="w-16 bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-error h-full w-[94%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-error">94.2%</span>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="bg-error/10 text-error px-2 py-0.5 rounded border border-error/20 font-label-sm text-[10px] uppercase font-bold">Critical</span>
+</td>
+<td class="px-gutter py-stack-lg text-center">
+<div class="inline-flex gap-[2px]">
+<div class="w-1 h-3 bg-error rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="text-error flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12.4%
+                                    </span>
+</td>
+<td class="px-gutter py-stack-lg text-center font-label-md text-label-md">42</td>
+<td class="px-gutter py-stack-lg font-body-sm text-body-sm text-on-surface">Legal Notification Required</td>
+<td class="px-gutter py-stack-lg">
+<button class="flex items-center gap-1 bg-surface-container-highest text-primary-container px-3 py-1 rounded-full border border-primary-container/30 hover:bg-primary-container/20 transition-all font-label-sm text-label-sm">
+                                        Action Required
+                                    </button>
+</td>
+</tr>
+<!-- Row 2 (P2) -->
+<tr class="hover:bg-surface-variant/10 transition-colors">
+<td class="px-gutter py-stack-lg font-label-md text-label-md text-primary">0042-3112-992</td>
+<td class="px-gutter py-stack-lg">
+<div class="flex items-center gap-base">
+<div class="w-16 bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-tertiary-fixed h-full w-[78%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary-fixed">78.1%</span>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="bg-tertiary-fixed/10 text-tertiary-fixed px-2 py-0.5 rounded border border-tertiary-fixed/20 font-label-sm text-[10px] uppercase font-bold">Warning</span>
+</td>
+<td class="px-gutter py-stack-lg text-center">
+<div class="inline-flex gap-[2px]">
+<div class="w-1 h-3 bg-tertiary-fixed rounded-full"></div>
+<div class="w-1 h-3 bg-tertiary-fixed rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="text-tertiary-fixed flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">trending_flat</span> +2.1%
+                                    </span>
+</td>
+<td class="px-gutter py-stack-lg text-center font-label-md text-label-md">18</td>
+<td class="px-gutter py-stack-lg font-body-sm text-body-sm text-on-surface">Client Phone Call</td>
+<td class="px-gutter py-stack-lg">
+<button class="flex items-center gap-1 bg-surface-container-highest text-on-surface-variant px-3 py-1 rounded-full border border-outline-variant/30 font-label-sm text-label-sm">
+                                        Pending
+                                    </button>
+</td>
+</tr>
+<!-- Row 3 (P1) -->
+<tr class="hover:bg-surface-variant/10 transition-colors">
+<td class="px-gutter py-stack-lg font-label-md text-label-md text-primary">0015-4421-505</td>
+<td class="px-gutter py-stack-lg">
+<div class="flex items-center gap-base">
+<div class="w-16 bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-error h-full w-[89%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-error">89.5%</span>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="bg-error/10 text-error px-2 py-0.5 rounded border border-error/20 font-label-sm text-[10px] uppercase font-bold">Critical</span>
+</td>
+<td class="px-gutter py-stack-lg text-center">
+<div class="inline-flex gap-[2px]">
+<div class="w-1 h-3 bg-error rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="text-error flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">trending_up</span> +8.2%
+                                    </span>
+</td>
+<td class="px-gutter py-stack-lg text-center font-label-md text-label-md">35</td>
+<td class="px-gutter py-stack-lg font-body-sm text-body-sm text-on-surface">Account Freezing Pending</td>
+<td class="px-gutter py-stack-lg">
+<button class="flex items-center gap-1 bg-surface-container-highest text-primary-container px-3 py-1 rounded-full border border-primary-container/30 hover:bg-primary-container/20 transition-all font-label-sm text-label-sm">
+                                        Action Required
+                                    </button>
+</td>
+</tr>
+<!-- Row 4 (P3) -->
+<tr class="hover:bg-surface-variant/10 transition-colors">
+<td class="px-gutter py-stack-lg font-label-md text-label-md text-primary">0099-1244-331</td>
+<td class="px-gutter py-stack-lg">
+<div class="flex items-center gap-base">
+<div class="w-16 bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full w-[62%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">62.0%</span>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="bg-secondary/10 text-secondary px-2 py-0.5 rounded border border-secondary/20 font-label-sm text-[10px] uppercase font-bold">Stable</span>
+</td>
+<td class="px-gutter py-stack-lg text-center">
+<div class="inline-flex gap-[2px]">
+<div class="w-1 h-3 bg-secondary rounded-full"></div>
+<div class="w-1 h-3 bg-secondary rounded-full"></div>
+<div class="w-1 h-3 bg-secondary rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+<div class="w-1 h-3 bg-surface-container-high rounded-full"></div>
+</div>
+</td>
+<td class="px-gutter py-stack-lg">
+<span class="text-on-surface-variant flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm">trending_down</span> -4.3%
+                                    </span>
+</td>
+<td class="px-gutter py-stack-lg text-center font-label-md text-label-md">12</td>
+<td class="px-gutter py-stack-lg font-body-sm text-body-sm text-on-surface">Standard Notification</td>
+<td class="px-gutter py-stack-lg">
+<button class="flex items-center gap-1 bg-surface-container-highest text-on-surface px-3 py-1 rounded-full border border-outline-variant font-label-sm text-label-sm">
+                                        Notified
+                                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-gutter py-stack-md flex justify-between items-center border-t border-outline-variant bg-surface-container-high/30">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-10 of 216 clients</p>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="px-4 border border-outline-variant rounded-lg bg-secondary-container text-on-secondary-container font-label-md">1</button>
+<button class="px-4 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant font-label-md">2</button>
+<button class="px-4 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant font-label-md">3</button>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Asymmetric Data Insights (Secondary Info) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter pb-stack-lg">
+<div class="lg:col-span-2 glass-card p-gutter rounded-xl">
+<div class="flex justify-between items-center mb-stack-lg">
+<h3 class="font-headline-md text-headline-md text-primary">Risk Trend Analysis</h3>
+<div class="flex items-center gap-base">
+<span class="flex items-center gap-1 text-[10px] uppercase font-bold text-error">
+<span class="w-2 h-2 rounded-full bg-error"></span> Critical
+                            </span>
+<span class="flex items-center gap-1 text-[10px] uppercase font-bold text-tertiary-fixed">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed"></span> High
+                            </span>
+</div>
+</div>
+<div class="h-48 flex items-end justify-between gap-2">
+<!-- Mock Chart Columns -->
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex flex-col justify-end h-full gap-1">
+<div class="w-full bg-error/20 rounded-t h-[40%]"></div>
+<div class="w-full bg-error rounded h-[20%]"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant font-label-sm">MON</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex flex-col justify-end h-full gap-1">
+<div class="w-full bg-error/20 rounded-t h-[45%]"></div>
+<div class="w-full bg-error rounded h-[25%]"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant font-label-sm">TUE</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex flex-col justify-end h-full gap-1">
+<div class="w-full bg-error/20 rounded-t h-[55%]"></div>
+<div class="w-full bg-error rounded h-[35%]"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant font-label-sm">WED</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex flex-col justify-end h-full gap-1">
+<div class="w-full bg-error/20 rounded-t h-[50%]"></div>
+<div class="w-full bg-error rounded h-[30%]"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant font-label-sm">THU</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full flex flex-col justify-end h-full gap-1">
+<div class="w-full bg-error/20 rounded-t h-[60%]"></div>
+<div class="w-full bg-error rounded h-[40%]"></div>
+</div>
+<span class="text-[10px] text-on-surface-variant font-label-sm">FRI</span>
+</div>
+</div>
+</div>
+<div class="glass-card p-gutter rounded-xl">
+<h3 class="font-headline-md text-headline-md text-primary mb-stack-md">Quick Summary</h3>
+<div class="space-y-gutter">
+<div class="flex items-start gap-gutter">
+<div class="p-2 bg-error/10 text-error rounded-lg">
+<span class="material-symbols-outlined">priority_high</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Priority 1 Surge</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">3 new clients reached Critical status in the last 4 hours.</p>
+</div>
+</div>
+<div class="flex items-start gap-gutter">
+<div class="p-2 bg-primary-container/10 text-primary-container rounded-lg">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Goal Met</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">85% of previous day notifications were processed successfully.</p>
+</div>
+</div>
+<div class="mt-base pt-gutter border-t border-outline-variant/30 text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-base">System Load: Optimal</p>
+<img alt="Data Analytics Visualization" class="w-full h-24 object-cover rounded-lg opacity-40 grayscale hover:grayscale-0 transition-all duration-500" data-alt="A macro photograph of an illuminated circuit board with glowing teal and deep blue lights representing data transfer. The scene is shot with a shallow depth of field, highlighting the precision and complexity of modern financial surveillance systems. The overall mood is high-tech, secure, and futuristic, reinforcing the brand's vigilant professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOJcIfvK7K69rWJrT0ZNsiJKhXwVmJ6S2nmWMrd_YLF26bcfdHP2wXTx91cFJXMytqkIqbFDT7JT05oXyVwaDNsieiwlxM9ImdEpzVC-Xt9XVsZoUH3m8znk3LNml_dquEzsixl7Qyvb7qRtJLNJCfLC87_5Uk3ZtcDTgE5Ex1BR7_ax8lHE9MTU_V7w4fuKfqkJc4QbRsBiMT5WaKjGhO3KXNSAoX4WQPZUlE2pA0iuuDwsnqpRZgN3WBoZwuAQka1JcMKjYuErs"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+
+
+<!-- BIAT_AUTO_NAV_PATCH -->
+<script>
+(() => {
+  const navigationMap = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant",
+    "Critical Alerts": "/notifications"
+  };
+
+  const activeByPath = {
+    "/dashboard": "Global Dashboard",
+    "/evolution": "Risk Evolution",
+    "/notifications": "Notifications",
+    "/client": "Client Profiles",
+    "/performance": "Model Performance",
+    "/assistant": "AI Assistant"
+  };
+
+  const activeLabel = activeByPath[window.location.pathname];
+
+  document.querySelectorAll("a, button").forEach((element) => {
+    const text = element.innerText.trim();
+
+    Object.keys(navigationMap).forEach((label) => {
+      if (text.includes(label)) {
+        const url = navigationMap[label];
+
+        if (element.tagName.toLowerCase() === "a") {
+          element.setAttribute("href", url);
+        } else {
+          element.style.cursor = "pointer";
+          element.onclick = () => {
+            window.location.href = url;
+          };
+        }
+
+        // Remove wrong active state
+        element.classList.remove(
+          "bg-secondary-container",
+          "text-on-secondary-container",
+          "font-bold",
+          "scale-[0.98]"
+        );
+
+        element.classList.add(
+          "text-on-surface-variant",
+          "hover:text-on-surface",
+          "hover:bg-surface-variant/30"
+        );
+
+        // Apply correct active state
+        if (label === activeLabel) {
+          element.classList.remove(
+            "text-on-surface-variant",
+            "hover:text-on-surface",
+            "hover:bg-surface-variant/30"
+          );
+
+          element.classList.add(
+            "bg-secondary-container",
+            "text-on-secondary-container",
+            "rounded-lg",
+            "font-bold",
+            "scale-[0.98]"
+          );
+        }
+      }
+    });
+  });
+})();
+</script>
+
+
+<!-- BIAT_AUTO_NAV_PATCH -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const navigationMap = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant"
+  };
+
+  const activeClasses = [
+    "bg-secondary-container",
+    "text-on-secondary-container",
+    "rounded-lg",
+    "font-bold",
+    "scale-[0.98]"
+  ];
+
+  const inactiveClasses = [
+    "text-on-surface-variant",
+    "hover:text-on-surface",
+    "hover:bg-surface-variant/30"
+  ];
+
+  const currentPath = window.location.pathname;
+
+  document.querySelectorAll("aside a").forEach((link) => {
+    const text = link.innerText.trim();
+
+    Object.entries(navigationMap).forEach(([label, url]) => {
+      if (text.includes(label)) {
+        link.setAttribute("href", url);
+
+        activeClasses.forEach((cls) => link.classList.remove(cls));
+        inactiveClasses.forEach((cls) => link.classList.add(cls));
+
+        if (currentPath === url) {
+          inactiveClasses.forEach((cls) => link.classList.remove(cls));
+          activeClasses.forEach((cls) => link.classList.add(cls));
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("button, a").forEach((element) => {
+    const text = element.innerText.trim();
+
+    if (text.includes("Critical Alerts")) {
+      element.style.cursor = "pointer";
+      element.onclick = () => {
+        window.location.href = "/notifications";
+      };
+    }
+  });
+});
+</script>
+<!-- BIAT_NOTIFICATIONS_FUNCTIONAL_FIX -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const clients = [
+    ["0018-9284-001", 94.2, "CRITICAL", 1, "+12.4%", 42, "Legal Notification Required", "Action Required", 1420000],
+    ["0042-3112-992", 78.1, "WARNING", 2, "+2.1%", 18, "Client Phone Call", "Pending", 845200],
+    ["0015-4421-505", 89.5, "CRITICAL", 1, "+8.2%", 35, "Account Freezing Pending", "Action Required", 980000],
+    ["0009-1244-331", 62.0, "STABLE", 4, "-4.3%", 12, "Standard Notification", "Notified", 310000],
+    ["0025-7710-630", 91.4, "CRITICAL", 1, "+7.7%", 39, "Risk Committee Review", "Action Required", 1120000],
+    ["0067-4409-118", 66.9, "MEDIUM", 4, "-2.6%", 14, "Surveillance Mensuelle", "Notified", 255000],
+    ["0055-3319-777", 81.2, "WARNING", 2, "+3.8%", 25, "Client Phone Call", "Pending", 720000],
+    ["0003-9981-520", 96.5, "CRITICAL", 1, "+10.1%", 49, "Immediate Intervention Today", "Action Required", 2100000],
+    ["0088-2301-771", 84.7, "WARNING", 3, "+5.6%", 21, "Preventive Call Within 48h", "Pending", 690000],
+    ["0094-1002-884", 72.6, "WARNING", 3, "-0.8%", 16, "Account Manager Follow-up", "Notified", 430000],
+    ["0071-5590-214", 58.3, "MEDIUM", 5, "+1.4%", 9, "Monthly Monitoring", "Pending", 190000],
+    ["0036-8712-442", 97.8, "CRITICAL", 1, "+15.9%", 55, "Immediate Intervention Today", "Action Required", 1750000]
+  ].map(row => ({
+    cpte: row[0],
+    score: row[1],
+    alert: row[2],
+    priority: row[3],
+    evolution: row[4],
+    nbrjdep: row[5],
+    action: row[6],
+    status: row[7],
+    amount: row[8]
+  }));
+
+  let currentPage = 1;
+  const rowsPerPage = 4;
+
+  const allInputs = Array.from(document.querySelectorAll("input"));
+  const searchInput =
+    allInputs.find(i => (i.placeholder || "").toLowerCase().includes("cpte")) ||
+    allInputs.find(i => (i.placeholder || "").toLowerCase().includes("account")) ||
+    allInputs[allInputs.length - 1];
+
+  const filterBar = searchInput ? searchInput.closest("div")?.parentElement : document.body;
+
+  function makeSelect(id, options) {
+    const select = document.createElement("select");
+    select.id = id;
+    select.className = "px-4 py-3 rounded-lg bg-surface-container-low text-on-surface border border-outline-variant";
+
+    options.forEach(([value, label]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      select.appendChild(option);
+    });
+
+    return select;
+  }
+
+  const alertSelect = makeSelect("biat-alert-filter", [
+    ["", "Alert Level"],
+    ["CRITICAL", "Critical"],
+    ["WARNING", "Warning"],
+    ["MEDIUM", "Medium"],
+    ["STABLE", "Stable"]
+  ]);
+
+  const prioritySelect = makeSelect("biat-priority-filter", [
+    ["", "Priority 1-5"],
+    ["1", "P1"],
+    ["2", "P2"],
+    ["3", "P3"],
+    ["4", "P4"],
+    ["5", "P5"]
+  ]);
+
+  const statusSelect = makeSelect("biat-status-filter", [
+    ["", "Action Status"],
+    ["Action Required", "Action Required"],
+    ["Pending", "Pending"],
+    ["Notified", "Notified"]
+  ]);
+
+  const oldFilterButtons = Array.from(document.querySelectorAll("button")).filter(btn => {
+    const t = btn.innerText.trim().toLowerCase();
+    return t.includes("alert level") || t.includes("priority") || t.includes("action status");
+  });
+
+  if (oldFilterButtons[0]) oldFilterButtons[0].replaceWith(alertSelect);
+  if (oldFilterButtons[1]) oldFilterButtons[1].replaceWith(prioritySelect);
+  if (oldFilterButtons[2]) oldFilterButtons[2].replaceWith(statusSelect);
+
+  const table = document.querySelector("table");
+  const tbody = table ? table.querySelector("tbody") : null;
+
+  if (!tbody) {
+    console.error("Notifications table not found.");
+    return;
+  }
+
+  function filteredClients() {
+    const q = (searchInput?.value || "").toLowerCase().replace(/\s/g, "");
+    const alert = alertSelect.value;
+    const priority = prioritySelect.value;
+    const status = statusSelect.value;
+
+    return clients.filter(c => {
+      const cpteClean = c.cpte.toLowerCase().replace(/\s/g, "");
+
+      const matchSearch = !q || cpteClean.includes(q);
+      const matchAlert = !alert || c.alert === alert;
+      const matchPriority = !priority || String(c.priority) === priority;
+      const matchStatus = !status || c.status === status;
+
+      return matchSearch && matchAlert && matchPriority && matchStatus;
+    });
+  }
+
+  function alertClass(alert) {
+    if (alert === "CRITICAL") return "bg-red-500/20 text-red-300 border border-red-400/30";
+    if (alert === "WARNING") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
+    if (alert === "MEDIUM") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
+    return "bg-slate-500/20 text-slate-300 border border-slate-400/30";
+  }
+
+  function statusClass(status) {
+    if (status === "Action Required") return "bg-emerald-500/10 text-emerald-300 border border-emerald-400/30";
+    if (status === "Pending") return "bg-slate-500/30 text-slate-200";
+    return "bg-blue-500/10 text-blue-300 border border-blue-400/30";
+  }
+
+  function render() {
+    const data = filteredClients();
+    const totalPages = Math.max(1, Math.ceil(data.length / rowsPerPage));
+
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * rowsPerPage;
+    const pageRows = data.slice(start, start + rowsPerPage);
+
+    tbody.innerHTML = "";
+
+    pageRows.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.className = "border-b border-outline-variant hover:bg-surface-container-low transition-colors";
+
+      tr.innerHTML = `
+        <td class="px-4 py-5 font-mono text-sm">${c.cpte}</td>
+        <td class="px-4 py-5 font-mono text-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-16 h-1 bg-slate-700 rounded">
+              <div class="h-1 bg-red-300 rounded" style="width:${c.score}%"></div>
+            </div>
+            ${c.score.toFixed(1)}%
+          </div>
+        </td>
+        <td class="px-4 py-5">
+          <span class="px-2 py-1 rounded text-xs font-bold ${alertClass(c.alert)}">${c.alert}</span>
+        </td>
+        <td class="px-4 py-5 font-mono text-sm">${c.priority}</td>
+        <td class="px-4 py-5 font-mono text-sm ${c.evolution.includes("+") ? "text-red-300" : "text-emerald-300"}">${c.evolution}</td>
+        <td class="px-4 py-5 font-mono text-sm">${c.nbrjdep}</td>
+        <td class="px-4 py-5 text-sm">${c.action}</td>
+        <td class="px-4 py-5">
+          <button class="biat-status px-4 py-2 rounded-full text-sm font-semibold ${statusClass(c.status)}" data-cpte="${c.cpte}">
+            ${c.status}
+          </button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    updateShowing(data.length, start, pageRows.length);
+    updatePagination(totalPages);
+    bindStatusButtons();
+  }
+
+  function updateShowing(total, start, count) {
+    const showing = Array.from(document.querySelectorAll("*")).find(el =>
+      el.children.length === 0 &&
+      el.innerText &&
+      el.innerText.trim().startsWith("Showing")
+    );
+
+    if (showing) {
+      const from = total === 0 ? 0 : start + 1;
+      const to = start + count;
+      showing.innerText = `Showing ${from}-${to} of ${total} clients`;
+    }
+  }
+
+  function updatePagination(totalPages) {
+    const buttons = Array.from(document.querySelectorAll("button")).filter(btn =>
+      ["1", "2", "3"].includes(btn.innerText.trim())
+    );
+
+    buttons.forEach(btn => {
+      const page = Number(btn.innerText.trim());
+      btn.disabled = page > totalPages;
+      btn.style.opacity = page > totalPages ? "0.35" : "1";
+
+      btn.onclick = () => {
+        currentPage = page;
+        render();
+      };
+    });
+  }
+
+  function bindStatusButtons() {
+    document.querySelectorAll(".biat-status").forEach(btn => {
+      btn.onclick = () => {
+        const client = clients.find(c => c.cpte === btn.dataset.cpte);
+        if (!client) return;
+
+        if (client.status === "Action Required") client.status = "Pending";
+        else if (client.status === "Pending") client.status = "Notified";
+        else client.status = "Action Required";
+
+        render();
+      };
+    });
+  }
+
+  function exportCSV() {
+    const data = filteredClients();
+
+    const header = [
+      "CPTE",
+      "Score",
+      "Alert Level",
+      "Priority",
+      "Evolution",
+      "NBRJDEP",
+      "Recommended Action",
+      "Status",
+      "Risk Amount"
+    ];
+
+    const rows = data.map(c => [
+      c.cpte,
+      c.score,
+      c.alert,
+      c.priority,
+      c.evolution,
+      c.nbrjdep,
+      c.action,
+      c.status,
+      c.amount
+    ]);
+
+    const csv = [header, ...rows]
+      .map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "biat_clients_a_notifier.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+  }
+
+  searchInput?.addEventListener("input", () => {
+    currentPage = 1;
+    render();
+  });
+
+  alertSelect.addEventListener("change", () => {
+    currentPage = 1;
+    render();
+  });
+
+  prioritySelect.addEventListener("change", () => {
+    currentPage = 1;
+    render();
+  });
+
+  statusSelect.addEventListener("change", () => {
+    currentPage = 1;
+    render();
+  });
+
+  const clearBtn = Array.from(document.querySelectorAll("button, a")).find(el =>
+    el.innerText.trim().toLowerCase().includes("clear")
+  );
+
+  clearBtn?.addEventListener("click", () => {
+    if (searchInput) searchInput.value = "";
+    alertSelect.value = "";
+    prioritySelect.value = "";
+    statusSelect.value = "";
+    currentPage = 1;
+    render();
+  });
+
+  const exportBtn = Array.from(document.querySelectorAll("button, a")).find(el =>
+    el.innerText.toLowerCase().includes("csv") ||
+    el.innerText.toLowerCase().includes("export")
+  );
+
+  exportBtn?.addEventListener("click", exportCSV);
+
+  render();
+});
+</script>
+<!-- BIAT_PAGINATION_ARROWS_FIX -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const rowsPerPage = 4;
+  let currentPage = 1;
+
+  function getRows() {
+    const tbody = document.querySelector("tbody");
+    if (!tbody) return [];
+    return Array.from(tbody.querySelectorAll("tr"));
+  }
+
+  function renderPage() {
+    const rows = getRows();
+    const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
+
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    rows.forEach((row, index) => {
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      row.style.display = index >= start && index < end ? "" : "none";
+    });
+
+    const pageButtons = Array.from(document.querySelectorAll("button")).filter(btn =>
+      ["1", "2", "3"].includes(btn.innerText.trim())
+    );
+
+    pageButtons.forEach(btn => {
+      const page = Number(btn.innerText.trim());
+      btn.disabled = page > totalPages;
+      btn.style.opacity = page > totalPages ? "0.35" : "1";
+
+      btn.onclick = () => {
+        if (page <= totalPages) {
+          currentPage = page;
+          renderPage();
+        }
+      };
+    });
+
+    const buttons = Array.from(document.querySelectorAll("button"));
+    const arrowButtons = buttons.filter(btn => {
+      const text = btn.innerText.trim();
+      return text === "" || text === "‹" || text === "›" || btn.innerHTML.includes("chevron");
+    });
+
+    const prevButton = arrowButtons[0];
+    const nextButton = arrowButtons[arrowButtons.length - 1];
+
+    if (prevButton) {
+      prevButton.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderPage();
+        }
+      };
+      prevButton.disabled = currentPage === 1;
+      prevButton.style.opacity = currentPage === 1 ? "0.35" : "1";
+    }
+
+    if (nextButton) {
+      nextButton.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderPage();
+        }
+      };
+      nextButton.disabled = currentPage === totalPages;
+      nextButton.style.opacity = currentPage === totalPages ? "0.35" : "1";
+    }
+  }
+
+  setTimeout(renderPage, 300);
+});
+</script>
+
+</body></html>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const clients = [
+    {
+      cpte: "0018-9284-001",
+      score: 94.2,
+      alert: "CRITICAL",
+      priority: 1,
+      evolution: "+12.4%",
+      nbrjdep: 42,
+      action: "Legal Notification Required",
+      status: "Action Required",
+      riskAmount: 1420000
+    },
+    {
+      cpte: "0042-3112-992",
+      score: 78.1,
+      alert: "WARNING",
+      priority: 2,
+      evolution: "+2.1%",
+      nbrjdep: 18,
+      action: "Client Phone Call",
+      status: "Pending",
+      riskAmount: 845200
+    },
+    {
+      cpte: "0015-4421-505",
+      score: 89.5,
+      alert: "CRITICAL",
+      priority: 1,
+      evolution: "+8.2%",
+      nbrjdep: 35,
+      action: "Account Freezing Pending",
+      status: "Action Required",
+      riskAmount: 980000
+    },
+    {
+      cpte: "0009-1244-331",
+      score: 62.0,
+      alert: "STABLE",
+      priority: 4,
+      evolution: "-4.3%",
+      nbrjdep: 12,
+      action: "Standard Notification",
+      status: "Notified",
+      riskAmount: 310000
+    },
+    {
+      cpte: "0088-2301-771",
+      score: 84.7,
+      alert: "WARNING",
+      priority: 2,
+      evolution: "+5.6%",
+      nbrjdep: 21,
+      action: "Preventive Call Within 48h",
+      status: "Pending",
+      riskAmount: 690000
+    },
+    {
+      cpte: "0036-8712-442",
+      score: 97.8,
+      alert: "CRITICAL",
+      priority: 1,
+      evolution: "+15.9%",
+      nbrjdep: 55,
+      action: "Immediate Intervention Today",
+      status: "Action Required",
+      riskAmount: 1750000
+    },
+    {
+      cpte: "0071-5590-214",
+      score: 58.3,
+      alert: "MEDIUM",
+      priority: 5,
+      evolution: "+1.4%",
+      nbrjdep: 9,
+      action: "Monthly Monitoring",
+      status: "Pending",
+      riskAmount: 190000
+    },
+    {
+      cpte: "0094-1002-884",
+      score: 72.6,
+      alert: "WARNING",
+      priority: 3,
+      evolution: "-0.8%",
+      nbrjdep: 16,
+      action: "Account Manager Follow-up",
+      status: "Notified",
+      riskAmount: 430000
+    },
+    {
+      cpte: "0025-7710-630",
+      score: 91.4,
+      alert: "CRITICAL",
+      priority: 1,
+      evolution: "+7.7%",
+      nbrjdep: 39,
+      action: "Risk Committee Review",
+      status: "Action Required",
+      riskAmount: 1120000
+    },
+    {
+      cpte: "0067-4409-118",
+      score: 66.9,
+      alert: "MEDIUM",
+      priority: 4,
+      evolution: "-2.6%",
+      nbrjdep: 14,
+      action: "Surveillance Mensuelle",
+      status: "Notified",
+      riskAmount: 255000
+    },
+    {
+      cpte: "0055-3319-777",
+      score: 81.2,
+      alert: "WARNING",
+      priority: 2,
+      evolution: "+3.8%",
+      nbrjdep: 25,
+      action: "Client Phone Call",
+      status: "Pending",
+      riskAmount: 720000
+    },
+    {
+      cpte: "0003-9981-520",
+      score: 96.5,
+      alert: "CRITICAL",
+      priority: 1,
+      evolution: "+10.1%",
+      nbrjdep: 49,
+      action: "Immediate Intervention Today",
+      status: "Action Required",
+      riskAmount: 2100000
+    }
+  ];
+
+  let currentPage = 1;
+  const rowsPerPage = 4;
+
+  const searchInput =
+    document.querySelector('input[placeholder*="Search"]') ||
+    document.querySelector("input");
+
+  const selects = Array.from(document.querySelectorAll("select"));
+  const alertSelect = selects[0];
+  const prioritySelect = selects[1];
+  const statusSelect = selects[2];
+
+  const table = document.querySelector("table");
+  const tbody = table ? table.querySelector("tbody") : null;
+
+  const clearButton = Array.from(document.querySelectorAll("button, a")).find(el =>
+    el.innerText.trim().toLowerCase().includes("clear")
+  );
+
+  const exportButton = Array.from(document.querySelectorAll("button, a")).find(el =>
+    el.innerText.trim().toLowerCase().includes("csv") ||
+    el.innerText.trim().toLowerCase().includes("export")
+  );
+
+  const paginationButtons = Array.from(document.querySelectorAll("button")).filter(btn =>
+    ["1", "2", "3"].includes(btn.innerText.trim())
+  );
+
+  if (!tbody) {
+    console.warn("BIAT Notifications script: table body not found.");
+    return;
+  }
+
+  function getFilteredClients() {
+    const searchValue = searchInput ? searchInput.value.toLowerCase().trim() : "";
+    const alertValue = alertSelect ? alertSelect.value.toLowerCase() : "";
+    const priorityValue = prioritySelect ? prioritySelect.value.toLowerCase() : "";
+    const statusValue = statusSelect ? statusSelect.value.toLowerCase() : "";
+
+    return clients.filter(client => {
+      const matchSearch =
+        !searchValue ||
+        client.cpte.toLowerCase().includes(searchValue);
+
+      const matchAlert =
+        !alertValue ||
+        alertValue.includes("alert") ||
+        alertValue.includes("level") ||
+        client.alert.toLowerCase().includes(alertValue);
+
+      const matchPriority =
+        !priorityValue ||
+        priorityValue.includes("priority") ||
+        String(client.priority) === priorityValue.replace(/\D/g, "");
+
+      const matchStatus =
+        !statusValue ||
+        statusValue.includes("status") ||
+        client.status.toLowerCase().includes(statusValue);
+
+      return matchSearch && matchAlert && matchPriority && matchStatus;
+    });
+  }
+
+  function getAlertClass(alert) {
+    if (alert === "CRITICAL") {
+      return "bg-red-500/20 text-red-300 border border-red-400/30";
+    }
+    if (alert === "WARNING") {
+      return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
+    }
+    if (alert === "MEDIUM") {
+      return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
+    }
+    return "bg-slate-500/20 text-slate-300 border border-slate-400/30";
+  }
+
+  function getStatusClass(status) {
+    if (status === "Action Required") {
+      return "bg-emerald-500/10 text-emerald-300 border border-emerald-400/30";
+    }
+    if (status === "Pending") {
+      return "bg-slate-500/30 text-slate-200";
+    }
+    return "bg-blue-500/10 text-blue-300 border border-blue-400/30";
+  }
+
+  function renderTable() {
+    const filtered = getFilteredClients();
+    const totalPages = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
+
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    const start = (currentPage - 1) * rowsPerPage;
+    const pageItems = filtered.slice(start, start + rowsPerPage);
+
+    tbody.innerHTML = "";
+
+    pageItems.forEach(client => {
+      const tr = document.createElement("tr");
+      tr.className = "border-b border-slate-700/60 hover:bg-slate-800/40 transition-colors";
+
+      tr.innerHTML = `
+        <td class="px-4 py-5 font-mono text-sm text-slate-100">${client.cpte}</td>
+        <td class="px-4 py-5 font-mono text-sm text-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-1 bg-slate-600 rounded-full overflow-hidden">
+              <div class="h-full bg-red-300" style="width:${client.score}%"></div>
+            </div>
+            <span>${client.score.toFixed(1)}%</span>
+          </div>
+        </td>
+        <td class="px-4 py-5">
+          <span class="px-2 py-1 rounded text-xs font-bold ${getAlertClass(client.alert)}">${client.alert}</span>
+        </td>
+        <td class="px-4 py-5 font-mono text-sm text-slate-100">${client.priority}</td>
+        <td class="px-4 py-5 font-mono text-sm ${client.evolution.includes("+") ? "text-red-300" : "text-emerald-300"}">${client.evolution}</td>
+        <td class="px-4 py-5 font-mono text-sm text-slate-100">${client.nbrjdep}</td>
+        <td class="px-4 py-5 text-sm text-slate-200">${client.action}</td>
+        <td class="px-4 py-5">
+          <button class="status-btn px-3 py-1 rounded-full text-sm font-semibold ${getStatusClass(client.status)}" data-cpte="${client.cpte}">
+            ${client.status}
+          </button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    updateSummary(filtered);
+    bindStatusButtons();
+    updatePaginationButtons(totalPages);
+  }
+
+  function updateSummary(filtered) {
+    const showingText = Array.from(document.querySelectorAll("*")).find(el =>
+      el.childNodes.length === 1 &&
+      el.innerText &&
+      el.innerText.trim().startsWith("Showing")
+    );
+
+    if (showingText) {
+      const start = filtered.length === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
+      const end = Math.min(currentPage * rowsPerPage, filtered.length);
+      showingText.innerText = `Showing ${start}-${end} of ${filtered.length} clients`;
+    }
+  }
+
+  function bindStatusButtons() {
+    document.querySelectorAll(".status-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const cpte = button.dataset.cpte;
+        const client = clients.find(c => c.cpte === cpte);
+
+        if (!client) return;
+
+        if (client.status === "Action Required") {
+          client.status = "Pending";
+        } else if (client.status === "Pending") {
+          client.status = "Notified";
+        } else {
+          client.status = "Action Required";
+        }
+
+        renderTable();
+      });
+    });
+  }
+
+  function updatePaginationButtons(totalPages) {
+    paginationButtons.forEach(button => {
+      const page = Number(button.innerText.trim());
+
+      button.disabled = page > totalPages;
+      button.style.opacity = page > totalPages ? "0.4" : "1";
+
+      if (page === currentPage) {
+        button.classList.add("bg-secondary-container", "text-on-secondary-container");
+      } else {
+        button.classList.remove("bg-secondary-container", "text-on-secondary-container");
+      }
+    });
+  }
+
+  function exportCSV() {
+    const filtered = getFilteredClients();
+
+    const headers = [
+      "CPTE",
+      "Score",
+      "Alert Level",
+      "Priority",
+      "Evolution",
+      "NBRJDEP",
+      "Recommended Action",
+      "Status",
+      "Risk Amount"
+    ];
+
+    const rows = filtered.map(client => [
+      client.cpte,
+      client.score,
+      client.alert,
+      client.priority,
+      client.evolution,
+      client.nbrjdep,
+      client.action,
+      client.status,
+      client.riskAmount
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "biat_clients_a_notifier.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      currentPage = 1;
+      renderTable();
+    });
+  }
+
+  [alertSelect, prioritySelect, statusSelect].forEach(select => {
+    if (select) {
+      select.addEventListener("change", () => {
+        currentPage = 1;
+        renderTable();
+      });
+    }
+  });
+
+  if (clearButton) {
+    clearButton.addEventListener("click", () => {
+      if (searchInput) searchInput.value = "";
+      if (alertSelect) alertSelect.selectedIndex = 0;
+      if (prioritySelect) prioritySelect.selectedIndex = 0;
+      if (statusSelect) statusSelect.selectedIndex = 0;
+      currentPage = 1;
+      renderTable();
+    });
+  }
+
+  if (exportButton) {
+    exportButton.addEventListener("click", exportCSV);
+  }
+
+  paginationButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      currentPage = Number(button.innerText.trim());
+      renderTable();
+    });
+  });
+
+  renderTable();
+});
+</script>

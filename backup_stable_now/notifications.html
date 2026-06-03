@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BIAT Risk Monitor - Clients à Notifier</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#07122a",
+            surface: "#0b1730",
+            card: "#101b33",
+            border: "#263452",
+            text: "#d9e2ff",
+            muted: "#9aa8c7",
+            mint: "#5ffbd6",
+            yellow: "#fbe273",
+            red: "#ffb4ab"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #07122a;
+      color: #d9e2ff;
+    }
+
+    .mono { font-family: "JetBrains Mono", monospace; }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(95,251,214,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,251,214,.04) 1px, transparent 1px),
+        radial-gradient(circle at 80% 15%, rgba(95,251,214,.12), transparent 28%),
+        radial-gradient(circle at 75% 35%, rgba(251,226,115,.10), transparent 30%);
+      background-size: 36px 36px, 36px 36px, auto, auto;
+    }
+
+    .glass {
+      background: rgba(16,27,51,.86);
+      border: 1px solid rgba(95,251,214,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #b9c6e4;
+      transition: .15s ease;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      background: rgba(95,251,214,.08);
+      color: #ffffff;
+    }
+
+    .nav-active {
+      background: rgba(121,143,185,.35);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .badge-critical { background:#93000a; color:#ffdad6; }
+    .badge-warning { background:#4c3f00; color:#fbe273; }
+    .badge-medium { background:#103a4c; color:#b7eaff; }
+    .badge-low { background:#063a31; color:#5ffbd6; }
+  </style>
+
+<!-- BIAT_NOTIFICATIONS_LAYOUT_FIX -->
+<style id="biat-notifications-layout-fix">
+  body {
+    padding-left: 240px !important;
+    overflow-x: hidden !important;
+  }
+
+  aside {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 240px !important;
+    min-width: 240px !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+  }
+
+  main,
+  .main-content,
+  #mainContent {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  header {
+    left: 240px !important;
+    width: calc(100% - 240px) !important;
+  }
+</style>
+<!-- END BIAT_NOTIFICATIONS_LAYOUT_FIX -->
+
+</head>
+
+<body>
+  <div class="grid-bg"></div>
+
+  <div class="relative z-10 min-h-screen flex">
+    
+<!-- BIAT SHARED SIDEBAR -->
+<aside class="fixed left-0 top-0 h-screen w-[240px] border-r border-outline-variant bg-surface-container-low flex flex-col py-stack-lg z-50">
+  <div class="px-gutter mb-stack-lg">
+    <h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight leading-tight">
+      BIAT Risk<br>Monitor
+    </h1>
+    <p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">
+      Vigilant Professionalism
+    </p>
+  </div>
+
+  <nav id="mainNav" class="flex-1 space-y-1 px-base">
+    <a data-route="/dashboard" href="/dashboard"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span class="font-label-md text-label-md">Global Dashboard</span>
+    </a>
+
+    <a data-route="/evolution" href="/evolution"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">trending_up</span>
+      <span class="font-label-md text-label-md">Risk Evolution</span>
+    </a>
+
+    <a data-route="/future" href="/future"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">online_prediction</span>
+      <span class="font-label-md text-label-md">Future Prediction</span>
+    </a>
+
+    <a data-route="/notifications" href="/notifications"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200 relative">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="font-label-md text-label-md">Notifications</span>
+      <span id="notifBadge" class="absolute right-4 bg-error text-on-error px-1.5 rounded text-[10px]">0</span>
+    </a>
+
+    <a data-route="/client" href="/client"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">group</span>
+      <span class="font-label-md text-label-md">Client Profiles</span>
+    </a>
+
+    <a data-route="/performance" href="/performance"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">analytics</span>
+      <span class="font-label-md text-label-md">Model Performance</span>
+    </a>
+
+    <a data-route="/assistant" href="/assistant"
+       class="nav-link flex items-center gap-base px-gutter py-stack-md rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">smart_toy</span>
+      <span class="font-label-md text-label-md">AI Assistant</span>
+    </a>
+  </nav>
+
+  <div class="px-gutter mb-stack-lg">
+    <button id="criticalAlertsBtn" class="w-full bg-error-container text-on-error-container py-stack-md rounded-lg font-bold flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-sm">warning</span>
+      Critical Alerts
+    </button>
+  </div>
+
+  <div class="mt-auto px-base border-t border-outline-variant/30 pt-stack-md space-y-1">
+    <a id="settingsBtn" href="#"
+       class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="font-label-md text-label-md">Settings</span>
+    </a>
+
+    <a id="supportBtn" href="#"
+       class="flex items-center gap-base px-gutter py-stack-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 rounded-lg transition-colors duration-200">
+      <span class="material-symbols-outlined">help</span>
+      <span class="font-label-md text-label-md">Support</span>
+    </a>
+  </div>
+</aside>
+<!-- END BIAT SHARED SIDEBAR -->
+
+
+    <main class="flex-1 overflow-x-hidden">
+      <header class="h-20 border-b border-border bg-[#07122a]/85 backdrop-blur flex items-center justify-between px-7 sticky top-0 z-20">
+        <div class="relative w-[440px]">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted">search</span>
+          <input id="globalSearch" class="w-full bg-card border border-border rounded-xl pl-12 pr-4 py-3 text-text placeholder:text-muted outline-none focus:ring-2 focus:ring-mint/50"
+                 placeholder="Search real client CPTE, example: CPTE_008608" />
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button onclick="window.location.href='/assistant'" class="bg-mint text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+            Quick Action
+          </button>
+          <span class="material-symbols-outlined text-muted">notifications</span>
+          <div class="flex items-center gap-3 pl-4 border-l border-border">
+            <div class="w-10 h-10 rounded-full border border-mint/40 bg-card"></div>
+            <div>
+              <p class="mono text-sm font-bold">ALA</p>
+              <p class="mono text-xs text-muted">Risk Officer</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="p-7 space-y-6">
+        <div class="flex items-start justify-between gap-5">
+          <div>
+            <p class="mono text-xs text-mint uppercase tracking-[.25em]">Operational Worklist</p>
+            <h2 class="text-4xl font-extrabold mt-2">Clients à Notifier</h2>
+            <p class="text-muted mt-2 max-w-3xl">
+              Liste opérationnelle des clients à traiter selon les scores ML, le niveau d’alerte, la priorité et le statut d’action.
+            </p>
+            <p id="loadStatus" class="mono text-xs text-muted mt-2">Chargement des clients...</p>
+          </div>
+
+          <button id="exportCsv" class="bg-mint text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined">download</span>
+            CSV Export List
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-red uppercase">Critical Clients</p>
+            <p id="kpiCritical" class="text-3xl font-extrabold text-red mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Action immédiate</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-yellow uppercase">High Risk Clients</p>
+            <p id="kpiWarning" class="text-3xl font-extrabold text-yellow mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Suivi quotidien</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-muted uppercase">Priority 1 Count</p>
+            <p id="kpiP1" class="text-3xl font-extrabold mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Dossiers urgents</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-mint uppercase">Total Pending</p>
+            <p id="kpiTotal" class="text-3xl font-extrabold text-mint mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Compliance queue</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-5">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <input id="searchInput" class="bg-card border border-border rounded-xl px-4 py-3 text-text placeholder:text-muted outline-none"
+                   placeholder="Search real CPTE account, example: CPTE_008608" />
+
+            <select id="alertFilter" class="bg-card border border-border rounded-xl px-4 py-3 text-text outline-none">
+              <option value="">Alert Level</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="WARNING">High Risk</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="LOW">Low</option>
+            </select>
+
+            <select id="priorityFilter" class="bg-card border border-border rounded-xl px-4 py-3 text-text outline-none">
+              <option value="">Priority 1-5</option>
+              <option value="1">Priority 1</option>
+              <option value="2">Priority 2</option>
+              <option value="3">Priority 3</option>
+              <option value="4">Priority 4</option>
+              <option value="5">Priority 5</option>
+            </select>
+
+            <button id="clearBtn" class="border border-border rounded-xl px-4 py-3 mono font-bold hover:bg-card">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-[#15213b] border-b border-border">
+                <tr>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">CPTE Account</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score %</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Alert Level</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Priority</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">NBRJDEP</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Risk Brut</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Recommended Action</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Open</th>
+                </tr>
+              </thead>
+              <tbody id="clientRows" class="divide-y divide-border/60">
+                <tr>
+                  <td colspan="8" class="px-4 py-8 text-center text-muted">Loading clients...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl overflow-hidden">
+          <div class="px-5 py-4 border-b border-border flex items-center justify-between">
+            <div>
+              <p class="mono text-xs text-mint uppercase tracking-[.18em]">Unsupervised Anomaly Detection</p>
+              <h3 class="text-2xl font-extrabold mt-2">Clients à comportement atypique</h3>
+              <p class="text-muted mt-1">Détection non supervisée par Isolation Forest.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-3 text-center">
+              <div class="bg-card rounded-xl px-5 py-3">
+                <p class="mono text-[10px] text-muted uppercase">Anomalies</p>
+                <p id="anomCount" class="text-2xl font-bold text-red">0</p>
+              </div>
+              <div class="bg-card rounded-xl px-5 py-3">
+                <p class="mono text-[10px] text-muted uppercase">Fortes</p>
+                <p id="anomStrong" class="text-2xl font-bold text-yellow">0</p>
+              </div>
+              <div class="bg-card rounded-xl px-5 py-3">
+                <p class="mono text-[10px] text-muted uppercase">Stables suspects</p>
+                <p id="anomStable" class="text-2xl font-bold text-mint">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-[#15213b] border-b border-border">
+                <tr>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">CPTE</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score Anomalie</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Niveau</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score Risque</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Diagnostic</th>
+                </tr>
+              </thead>
+              <tbody id="anomalyRows" class="divide-y divide-border/60">
+                <tr>
+                  <td colspan="5" class="px-4 py-8 text-center text-muted">Chargement des anomalies...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      clients: [],
+      filtered: [],
+      anomalies: []
+    };
+
+    function num(v, fallback = 0) {
+      const n = Number(String(v ?? "").replace(",", "."));
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function fmtMoney(v) {
+      const n = num(v);
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + "M TND";
+      if (n >= 1000) return Math.round(n / 1000).toLocaleString("fr-FR") + "K TND";
+      return Math.round(n).toLocaleString("fr-FR") + " TND";
+    }
+
+    function getCpte(raw) {
+      return String(raw.cpte || raw.CPTE || raw.account || raw.id || "").trim();
+    }
+
+    function scorePercent(raw) {
+      let s = raw.risk_score_percent ?? raw.display_risk_score_percent ?? raw.score_percent ?? raw.score ?? raw.risk_score ?? raw.RISK_SCORE ?? 0;
+      s = num(s);
+      if (s <= 1) s *= 100;
+      return Math.max(0, Math.min(100, s));
+    }
+
+    function alertFromScore(score) {
+      if (score >= 85) return "CRITICAL";
+      if (score >= 65) return "WARNING";
+      if (score >= 40) return "MEDIUM";
+      return "LOW";
+    }
+
+    function normalizeAlert(raw, score) {
+      const band = String(raw.alert_level || raw.risk_band || raw.level || raw.ALERT_LEVEL || "").toLowerCase();
+      if (band.includes("crit")) return "CRITICAL";
+      if (band.includes("warning") || band.includes("high") || band.includes("elev") || band.includes("élev")) return "WARNING";
+      if (band.includes("medium") || band.includes("moy")) return "MEDIUM";
+      if (band.includes("low") || band.includes("faible") || band.includes("stable")) return "LOW";
+      return alertFromScore(score);
+    }
+
+    function priorityFromClient(c) {
+      if (c.alert === "CRITICAL" && c.score >= 90) return 1;
+      if (c.alert === "CRITICAL") return 2;
+      if (c.alert === "WARNING") return 3;
+      if (c.alert === "MEDIUM") return 4;
+      return 5;
+    }
+
+    function normalizeClient(raw) {
+      const score = scorePercent(raw);
+      const cpte = getCpte(raw);
+      const alert = normalizeAlert(raw, score);
+      const risk = num(raw.risk_brut ?? raw.RISK_BRUT ?? raw.exposure ?? raw.EXPOSURE);
+      const nbrjdep = num(raw.nbrjdep ?? raw.NBRJDEP);
+      const priority = priorityFromClient({ alert, score });
+
+      let action = raw.recommended_action || raw.action || raw.ANOMALY_ACTION || "";
+      if (!action) {
+        if (alert === "CRITICAL") action = "Immediate risk officer review";
+        else if (alert === "WARNING") action = "Client call and account monitoring";
+        else if (alert === "MEDIUM") action = "Monitor daily";
+        else action = "No immediate action";
+      }
+
+      return {
+        cpte,
+        score,
+        alert,
+        priority,
+        nbrjdep,
+        risk,
+        action,
+        code_client: raw.code_client || raw.CODE_CLIENT || "",
+        raw
+      };
+    }
+
+    function badgeClass(alert) {
+      if (alert === "CRITICAL") return "badge-critical";
+      if (alert === "WARNING") return "badge-warning";
+      if (alert === "MEDIUM") return "badge-medium";
+      return "badge-low";
+    }
+
+    async function fetchJson(url, fallback) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return await res.json();
+      } catch (e) {
+        console.warn("Cannot load", url, e);
+        return fallback;
+      }
+    }
+
+    function extractClients(data) {
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.clients)) return data.clients;
+      if (data && Array.isArray(data.data)) return data.data;
+      if (data && typeof data === "object") {
+        return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
+      }
+      return [];
+    }
+
+    async function loadClients() {
+      $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
+      const data = await fetchJson("/attached_assets/dashboard_clients_full.json", {});
+      const rawClients = extractClients(data);
+
+      state.clients = rawClients
+        .map(normalizeClient)
+        .filter(c => c.cpte)
+        .sort((a, b) => b.score - a.score || b.risk - a.risk);
+
+      $("loadStatus").innerText =
+        `${state.clients.length.toLocaleString("fr-FR")} lignes chargées — ` +
+        `${new Set(state.clients.map(c => c.cpte)).size.toLocaleString("fr-FR")} clients uniques.`;
+
+      renderAll();
+    }
+
+    async function loadAnomalies() {
+      const data = await fetchJson("/attached_assets/anomaly_clients.json", []);
+      let arr = [];
+
+      if (Array.isArray(data)) arr = data;
+      else if (data && Array.isArray(data.clients)) arr = data.clients;
+      else if (data && Array.isArray(data.anomalies)) arr = data.anomalies;
+
+      state.anomalies = arr.slice(0, 50);
+      renderAnomalies();
+    }
+
+    function getFiltered() {
+      const search = $("searchInput").value.trim().toLowerCase().replace(/\s/g, "");
+      const globalSearch = $("globalSearch").value.trim().toLowerCase().replace(/\s/g, "");
+      const q = search || globalSearch;
+      const alert = $("alertFilter").value;
+      const priority = $("priorityFilter").value;
+
+      let arr = state.clients.filter(c => c.alert === "CRITICAL" || c.alert === "WARNING");
+
+      if (alert) arr = arr.filter(c => c.alert === alert);
+      if (priority) arr = arr.filter(c => String(c.priority) === priority);
+
+      if (q) {
+        arr = arr.filter(c =>
+          c.cpte.toLowerCase().replace(/\s/g, "").includes(q) ||
+          String(c.code_client).toLowerCase().includes(q)
+        );
+      }
+
+      return arr;
+    }
+
+    function renderKpis() {
+      const critical = state.clients.filter(c => c.alert === "CRITICAL").length;
+      const warning = state.clients.filter(c => c.alert === "WARNING").length;
+      const priorityOne = state.clients.filter(c => c.priority === 1).length;
+      const total = critical + warning;
+
+      $("kpiCritical").innerText = critical.toLocaleString("fr-FR");
+      $("kpiWarning").innerText = warning.toLocaleString("fr-FR");
+      $("kpiP1").innerText = priorityOne.toLocaleString("fr-FR");
+      $("kpiTotal").innerText = total.toLocaleString("fr-FR");
+    }
+
+    function renderTable() {
+      state.filtered = getFiltered();
+
+      const rows = state.filtered.slice(0, 80).map(c => `
+        <tr class="hover:bg-white/5">
+          <td class="px-4 py-4 mono text-sm font-bold">${c.cpte}</td>
+          <td class="px-4 py-4 mono text-sm">${c.score.toFixed(1)}%</td>
+          <td class="px-4 py-4">
+            <span class="${badgeClass(c.alert)} px-3 py-1 rounded-md mono text-xs font-bold">${c.alert}</span>
+          </td>
+          <td class="px-4 py-4 mono text-sm">${c.priority}</td>
+          <td class="px-4 py-4 mono text-sm">${c.nbrjdep.toLocaleString("fr-FR")}</td>
+          <td class="px-4 py-4 mono text-sm">${fmtMoney(c.risk)}</td>
+          <td class="px-4 py-4 text-sm text-muted">${c.action}</td>
+          <td class="px-4 py-4">
+            <a href="/client?cpte=${encodeURIComponent(c.cpte)}" class="text-mint mono text-sm font-bold hover:underline">Open</a>
+          </td>
+        </tr>
+      `).join("");
+
+      $("clientRows").innerHTML = rows || `
+        <tr><td colspan="8" class="px-4 py-8 text-center text-muted">Aucun client trouvé.</td></tr>
+      `;
+    }
+
+    function renderAnomalies() {
+      $("anomCount").innerText = state.anomalies.length.toLocaleString("fr-FR");
+      $("anomStrong").innerText = state.anomalies.filter(a => num(a.anomaly_score ?? a.score_anomalie ?? a.score) < -0.1).length;
+      $("anomStable").innerText = state.anomalies.filter(a => String(a.alert_level || a.level || "").toLowerCase().includes("low")).length;
+
+      const rows = state.anomalies.slice(0, 25).map(a => {
+        const cpte = getCpte(a);
+        const scoreAnom = a.anomaly_score ?? a.score_anomalie ?? a.score ?? "";
+        const level = a.level || a.niveau || a.alert_level || "Suspect";
+        const risk = scorePercent(a);
+        const diag = a.diagnostic || a.reason || a.action || "Comportement atypique détecté";
+        return `
+          <tr class="hover:bg-white/5">
+            <td class="px-4 py-4 mono text-sm font-bold">${cpte || "N/A"}</td>
+            <td class="px-4 py-4 mono text-sm">${scoreAnom}</td>
+            <td class="px-4 py-4 mono text-sm">${level}</td>
+            <td class="px-4 py-4 mono text-sm">${risk.toFixed(1)}%</td>
+            <td class="px-4 py-4 text-sm text-muted">${diag}</td>
+          </tr>
+        `;
+      }).join("");
+
+      $("anomalyRows").innerHTML = rows || `
+        <tr><td colspan="5" class="px-4 py-8 text-center text-muted">Aucune anomalie chargée.</td></tr>
+      `;
+    }
+
+    function renderAll() {
+      renderKpis();
+      renderTable();
+    }
+
+    function exportCsv() {
+      const rows = [
+        ["cpte", "score", "alert", "priority", "nbrjdep", "risk_brut", "action"],
+        ...state.filtered.map(c => [c.cpte, c.score.toFixed(2), c.alert, c.priority, c.nbrjdep, c.risk, c.action])
+      ];
+
+      const csv = rows.map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+      a.download = "clients_a_notifier_biat.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    $("searchInput").addEventListener("input", renderAll);
+    $("globalSearch").addEventListener("input", renderAll);
+    $("alertFilter").addEventListener("change", renderAll);
+    $("priorityFilter").addEventListener("change", renderAll);
+    $("clearBtn").addEventListener("click", () => {
+      $("searchInput").value = "";
+      $("globalSearch").value = "";
+      $("alertFilter").value = "";
+      $("priorityFilter").value = "";
+      renderAll();
+    });
+    $("exportCsv").addEventListener("click", exportCsv);
+    $("settingsBtn").addEventListener("click", () => alert("Settings - version locale"));
+    $("supportBtn").addEventListener("click", () => alert("Support - BIAT Risk Monitor"));
+
+    Promise.all([loadClients(), loadAnomalies()]).catch(err => {
+      console.error(err);
+      $("loadStatus").innerText = "Erreur de chargement. Ouvre F12 > Console pour le détail.";
+    });
+  </script>
+
+  <script src="/attached_assets/auth.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const routes = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Future Prediction": "/future",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant"
+  };
+
+  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    Object.entries(routes).forEach(function(pair) {
+      const label = pair[0];
+      const url = pair[1];
+
+      if (text.includes(label)) {
+        el.style.cursor = "pointer";
+
+        if (el.tagName === "A") {
+          el.setAttribute("href", url);
+        } else {
+          el.onclick = function () {
+            window.location.href = url;
+          };
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("button, a, div").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    if (text.includes("Critical Alerts")) {
+      el.style.cursor = "pointer";
+      el.onclick = function () {
+        window.location.href = "/notifications?alert=CRITICAL";
+      };
+    }
+  });
+});
+</script>
+
+
+<!-- BIAT SHARED SIDEBAR SCRIPT -->
+<script id="biat-shared-sidebar-script">
+document.addEventListener("DOMContentLoaded", function () {
+  const currentPath = window.location.pathname.toLowerCase();
+
+  document.querySelectorAll("#mainNav .nav-link").forEach(function(link) {
+    const route = link.getAttribute("data-route");
+    const isActive =
+      route &&
+      (
+        currentPath === route ||
+        currentPath.startsWith(route + "/") ||
+        (route === "/client" && currentPath.startsWith("/client")) ||
+        (route === "/notifications" && currentPath.startsWith("/notifications")) ||
+        (route === "/future" && currentPath.startsWith("/future")) ||
+        (route === "/evolution" && currentPath.startsWith("/evolution")) ||
+        (route === "/performance" && currentPath.startsWith("/performance")) ||
+        (route === "/assistant" && currentPath.startsWith("/assistant"))
+      );
+
+    link.classList.remove(
+      "bg-secondary-container",
+      "text-on-secondary-container",
+      "font-bold",
+      "text-on-surface-variant",
+      "hover:text-on-surface",
+      "hover:bg-surface-variant/30"
+    );
+
+    if (isActive) {
+      link.classList.add("bg-secondary-container", "text-on-secondary-container", "font-bold");
+    } else {
+      link.classList.add("text-on-surface-variant", "hover:text-on-surface", "hover:bg-surface-variant/30");
+    }
+  });
+
+  const criticalBtn = document.getElementById("criticalAlertsBtn");
+  if (criticalBtn) {
+    criticalBtn.addEventListener("click", function () {
+      window.location.href = "/notifications?alert=CRITICAL";
+    });
+  }
+
+  const settingsBtn = document.getElementById("settingsBtn");
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Settings - BIAT Risk Monitor\\nUser: ALA\\nRole: Risk Officer");
+    });
+  }
+
+  const supportBtn = document.getElementById("supportBtn");
+  if (supportBtn) {
+    supportBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Support - BIAT Risk Monitor");
+    });
+  }
+
+  fetch("/api/future-predictions", { cache: "no-store" })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.summary) return;
+      const badge = document.getElementById("notifBadge");
+      if (badge) {
+        const n = data.summary.critical_future_clients || data.summary.aggravation_clients || 0;
+        badge.innerText = Number(n).toLocaleString("fr-FR");
+      }
+    })
+    .catch(() => {});
+});
+</script>
+<!-- END BIAT SHARED SIDEBAR SCRIPT -->
+
+</body>
+</html>

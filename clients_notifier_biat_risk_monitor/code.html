@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html class="dark" lang="fr">
+﻿<!DOCTYPE html>
+<html lang="fr" class="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BIAT Risk Monitor - Clients à Notifier</title>
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
@@ -17,32 +16,18 @@
         extend: {
           colors: {
             background: "#07122a",
-            surface: "#07122a",
-            "surface-container-lowest": "#030d25",
-            "surface-container-low": "#101b33",
-            "surface-container": "#151f37",
-            "surface-container-high": "#1f2942",
-            "surface-container-highest": "#2a344e",
-            "surface-variant": "#2a344e",
-            "on-surface": "#d9e2ff",
-            "on-surface-variant": "#bacac3",
-            outline: "#85948e",
-            "outline-variant": "#3c4a45",
-            primary: "#ffffff",
-            "primary-container": "#5ffbd6",
-            "on-primary-container": "#00382d",
-            secondary: "#b6c6ed",
-            "secondary-container": "#374767",
-            "on-secondary-container": "#d9e2ff",
-            error: "#ffb4ab",
-            "error-container": "#93000a",
-            "on-error-container": "#ffdad6",
-            tertiary: "#fbe273"
+            surface: "#0b1730",
+            card: "#101b33",
+            border: "#263452",
+            text: "#d9e2ff",
+            muted: "#9aa8c7",
+            mint: "#5ffbd6",
+            yellow: "#fbe273",
+            red: "#ffb4ab"
           },
           fontFamily: {
-            mono: ["JetBrains Mono"],
-            display: ["Hanken Grotesk"],
-            body: ["Inter"]
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
           }
         }
       }
@@ -50,1105 +35,1012 @@
   </script>
 
   <style>
-    html {
-      background: #07122a !important;
-    }
-
     body {
       font-family: Inter, sans-serif;
-      position: relative;
-      background: #07122a !important;
-      min-height: 100vh;
+      background: #07122a;
+      color: #d9e2ff;
     }
 
-    .mono {
-      font-family: "JetBrains Mono", monospace;
-    }
+    .mono { font-family: "JetBrains Mono", monospace; }
 
-    .display {
-      font-family: "Hanken Grotesk", sans-serif;
-    }
-
-    .glass-card {
-      background: rgba(17, 34, 64, 0.62);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(60, 74, 69, 0.7);
-    }
-
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-
-    #biat-background-safe {
+    .grid-bg {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      overflow: hidden;
       background:
-        radial-gradient(circle at 88% 8%, rgba(245,146,30,0.18) 0%, rgba(245,146,30,0.08) 25%, transparent 48%),
-        radial-gradient(circle at 10% 90%, rgba(30,58,158,0.22) 0%, rgba(30,58,158,0.08) 30%, transparent 55%),
-        linear-gradient(135deg, #061024 0%, #07122a 45%, #0b1b38 100%);
+        linear-gradient(rgba(95,251,214,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,251,214,.04) 1px, transparent 1px),
+        radial-gradient(circle at 80% 15%, rgba(95,251,214,.12), transparent 28%),
+        radial-gradient(circle at 75% 35%, rgba(251,226,115,.10), transparent 30%);
+      background-size: 36px 36px, 36px 36px, auto, auto;
     }
 
-    #biat-background-safe::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(245,146,30,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245,146,30,0.03) 1px, transparent 1px),
-        linear-gradient(rgba(95,251,214,0.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(95,251,214,0.018) 1px, transparent 1px);
-      background-size: 90px 90px, 90px 90px, 24px 24px, 24px 24px;
+    .glass {
+      background: rgba(16,27,51,.86);
+      border: 1px solid rgba(95,251,214,.14);
+      box-shadow: 0 22px 70px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
     }
 
-    .biat-safe-curve {
-      position: absolute;
-      top: -100px;
-      right: -180px;
-      width: 720px;
-      height: 560px;
-      opacity: 0.14;
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #b9c6e4;
+      transition: .15s ease;
+      text-decoration: none;
     }
 
-    .biat-safe-accent {
-      position: absolute;
-      left: 260px;
-      bottom: -190px;
-      width: 680px;
-      height: 390px;
-      opacity: 0.06;
+    .nav-link:hover {
+      background: rgba(95,251,214,.08);
+      color: #ffffff;
     }
 
-    .biat-safe-watermark {
-      position: fixed;
-      right: 28px;
-      bottom: 28px;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.10;
-      user-select: none;
+    .nav-active {
+      background: rgba(121,143,185,.35);
+      color: #ffffff;
+      font-weight: 700;
     }
 
-    .biat-safe-logo {
-      width: 78px;
-      height: 66px;
-      background: #00537a;
-      border-radius: 7px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .biat-safe-logo::before {
-      content: "";
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      width: 65px;
-      height: 46px;
-      background: #f5921e;
-      border-radius: 80% 90% 0 0;
-      transform: skewX(-26deg);
-    }
-
-    .biat-safe-logo::after {
-      content: "";
-      position: absolute;
-      left: 32px;
-      bottom: 18px;
-      width: 58px;
-      height: 11px;
-      background: white;
-      border-radius: 20px;
-      transform: skewX(-28deg);
-    }
-
-    .biat-safe-text {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 8px;
-      color: rgba(255,255,255,0.55);
-      letter-spacing: 4px;
-      margin-top: 6px;
-      text-align: right;
-      text-transform: uppercase;
-    }
-
-    aside,
-    header,
-    main,
-    section {
-      position: relative;
-      z-index: 2;
-    }
-
-    main {
-      background: transparent !important;
-    }
+    .badge-critical { background:#93000a; color:#ffdad6; }
+    .badge-warning { background:#4c3f00; color:#fbe273; }
+    .badge-medium { background:#103a4c; color:#b7eaff; }
+    .badge-low { background:#063a31; color:#5ffbd6; }
   </style>
+
+<!-- BIAT_NOTIFICATIONS_LAYOUT_FIX -->
+<style id="biat-notifications-layout-fix">
+  body {
+    padding-left: 240px !important;
+    overflow-x: hidden !important;
+  }
+
+  aside {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 240px !important;
+    min-width: 240px !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+  }
+
+  main,
+  .main-content,
+  #mainContent {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  header {
+    left: 240px !important;
+    width: calc(100% - 240px) !important;
+  }
+</style>
+<!-- END BIAT_NOTIFICATIONS_LAYOUT_FIX -->
+
+
+
+
 </head>
 
-<body class="bg-background text-on-surface min-h-screen overflow-hidden">
+<body>
+<!-- BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
+<style>
+  body {
+    padding-left: 240px !important;
+  }
 
-  <!-- BIAT background -->
-  <div id="biat-background-safe">
-    <svg class="biat-safe-curve" viewBox="0 0 720 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M720 0 C540 5 295 95 85 330 C5 420 -45 500 -90 560 H720 Z" fill="#f5921e"/>
-      <path d="M720 0 C610 35 405 140 235 330 C145 430 105 505 80 560 H720 Z" fill="#1e3a9e"/>
-      <path d="M700 8 C525 45 315 155 130 380 C70 455 28 515 0 560" stroke="rgba(255,255,255,0.45)" stroke-width="4"/>
-    </svg>
+  .biat-sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 240px !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    background: #071126 !important;
+    border-right: 1px solid rgba(148,163,184,.18) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px 14px 16px 14px !important;
+    box-sizing: border-box !important;
+  }
 
-    <svg class="biat-safe-accent" viewBox="0 0 680 390" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 390 C160 230 370 105 680 0 L680 390 Z" fill="#f5921e"/>
-      <path d="M170 390 C315 245 500 130 680 55 L680 390 Z" fill="#1e3a9e"/>
-    </svg>
+  .biat-sidebar .brand {
+    padding: 0 6px 28px 6px !important;
+  }
+
+  .biat-sidebar .brand h1 {
+    margin: 0 !important;
+    color: #f3f7ff !important;
+    font-size: 26px !important;
+    line-height: 1.14 !important;
+    font-weight: 900 !important;
+    letter-spacing: .2px !important;
+    font-family: Inter, Arial, sans-serif !important;
+  }
+
+  .biat-sidebar .brand p {
+    margin: 8px 0 0 0 !important;
+    color: rgba(217,226,255,.72) !important;
+    font-size: 13px !important;
+    font-family: Inter, Arial, sans-serif !important;
+  }
+
+  .biat-sidebar nav {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+  }
+
+  .biat-sidebar .nav-link {
+    height: 46px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    color: #b9c6e4 !important;
+    text-decoration: none !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+
+  .biat-sidebar .nav-link:hover {
+    background: rgba(95,251,214,.08) !important;
+    color: #ffffff !important;
+  }
+
+  .biat-sidebar .nav-link.active {
+    background: rgba(121,143,185,.35) !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+  }
+
+  .biat-sidebar .material-symbols-outlined {
+    font-size: 22px !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    line-height: 1 !important;
+  }
+
+  .biat-sidebar .badge {
+    margin-left: auto !important;
+    background: #ffb4ab !important;
+    color: #3b0505 !important;
+    border-radius: 999px !important;
+    padding: 2px 7px !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+  }
+
+  .biat-sidebar .bottom {
+    margin-top: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    border-top: 1px solid rgba(148,163,184,.16) !important;
+    padding-top: 14px !important;
+  }
+
+  .biat-sidebar .critical-btn,
+  .biat-sidebar .bottom-btn {
+    height: 46px !important;
+    width: 100% !important;
+    border-radius: 10px !important;
+    border: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+  }
+
+  .biat-sidebar .critical-btn {
+    background: #b00012 !important;
+    color: white !important;
+  }
+
+  .biat-sidebar .bottom-btn {
+    background: transparent !important;
+    color: #b9c6e4 !important;
+  }
+
+  .biat-sidebar .bottom-btn:hover {
+    background: rgba(95,251,214,.08) !important;
+    color: white !important;
+  }
+
+  main {
+    margin-left: 0 !important;
+  }
+</style>
+
+<aside class="biat-sidebar">
+  <div class="brand">
+    <h1>BIAT Risk<br>Monitor</h1>
+    <p>Vigilant Professionalism</p>
   </div>
 
-  <div class="biat-safe-watermark">
-    <div class="biat-safe-logo"></div>
-    <div class="biat-safe-text">Risk Monitor</div>
+  <nav>
+    <a class="nav-link" data-route="/dashboard" href="/dashboard">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Global Dashboard</span>
+    </a>
+
+    <a class="nav-link" data-route="/evolution" href="/evolution">
+      <span class="material-symbols-outlined">trending_up</span>
+      <span>Risk Evolution</span>
+    </a>
+
+    <a class="nav-link" data-route="/future" href="/future">
+      <span class="material-symbols-outlined">online_prediction</span>
+      <span>Future Prediction</span>
+    </a>
+
+    <a class="nav-link" data-route="/notifications" href="/notifications">
+      <span class="material-symbols-outlined">notifications</span>
+      <span>Notifications</span>
+      <span class="badge" id="notifBadge">4847</span>
+    </a>
+
+    <a class="nav-link" data-route="/client" href="/client">
+      <span class="material-symbols-outlined">group</span>
+      <span>Client Profiles</span>
+    </a>
+
+    <a class="nav-link" data-route="/performance" href="/performance">
+      <span class="material-symbols-outlined">analytics</span>
+      <span>Model Performance</span>
+    </a>
+
+    <a class="nav-link" data-route="/assistant" href="/assistant">
+      <span class="material-symbols-outlined">smart_toy</span>
+      <span>AI Assistant</span>
+    </a>
+  </nav>
+
+  <div class="bottom">
+    <button type="button" class="critical-btn" id="criticalAlertsBtn">
+      <span class="material-symbols-outlined">warning</span>
+      <span>Critical Alerts</span>
+    </button>
+
+    <button type="button" class="bottom-btn" id="settingsBtn">
+      <span class="material-symbols-outlined">settings</span>
+      <span>Settings</span>
+    </button>
+
+    <button type="button" class="bottom-btn" id="supportBtn">
+      <span class="material-symbols-outlined">help</span>
+      <span>Support</span>
+    </button>
   </div>
+</aside>
 
-  <!-- Sidebar -->
-  <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-low border-r border-outline-variant flex flex-col z-50">
-    <div class="p-6">
-      <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
-      <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
-    </div>
+<script>
+(function () {
+  const currentPath = window.location.pathname;
 
-    <nav class="flex-1 px-4 space-y-2">
-      <div data-route="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="mono text-sm">Global Dashboard</span>
-      </div>
+  document.querySelectorAll(".biat-sidebar .nav-link").forEach(link => {
+    const route = link.getAttribute("data-route");
 
-      <div data-route="/evolution" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">trending_up</span>
-        <span class="mono text-sm">Risk Evolution</span>
-      </div>
+    if (route === currentPath || (route === "/client" && currentPath.startsWith("/client"))) {
+      link.classList.add("active");
+    }
 
-      <div data-route="/notifications" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary-container text-on-secondary-container font-bold cursor-pointer">
-        <span class="material-symbols-outlined">notifications</span>
-        <span class="mono text-sm">Notifications</span>
-      </div>
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.location.href = this.getAttribute("href");
+    });
+  });
 
-      <div data-route="/client" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">group</span>
-        <span class="mono text-sm">Client Profiles</span>
-      </div>
+  const criticalBtn = document.getElementById("criticalAlertsBtn");
+  if (criticalBtn) {
+    criticalBtn.onclick = function () {
+      window.location.href = "/notifications?alert=CRITICAL";
+    };
+  }
 
-      <div data-route="/performance" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">analytics</span>
-        <span class="mono text-sm">Model Performance</span>
-      </div>
+  const settingsBtn = document.getElementById("settingsBtn");
+  if (settingsBtn) {
+    settingsBtn.onclick = function () {
+      alert("Settings - BIAT Risk Monitor");
+    };
+  }
 
-      <div data-route="/assistant" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
-        <span class="material-symbols-outlined">smart_toy</span>
-        <span class="mono text-sm">AI Assistant</span>
-      </div>
-    </nav>
+  const supportBtn = document.getElementById("supportBtn");
+  if (supportBtn) {
+    supportBtn.onclick = function () {
+      alert("Support - BIAT Risk Monitor");
+    };
+  }
+})();
+</script>
+<!-- END BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
 
-    <div class="p-4 border-t border-outline-variant/40 space-y-3">
-      <button data-route="/notifications" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined">warning</span>
-        Critical Alerts
-      </button>
 
-      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="mono text-sm">Settings</span>
-      </div>
 
-      <div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant">
-        <span class="material-symbols-outlined">help</span>
-        <span class="mono text-sm">Support</span>
-      </div>
-    </div>
-  </aside>
 
-  <!-- Main -->
-  <main class="ml-[280px] h-screen overflow-y-auto bg-background">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 h-16 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant flex items-center justify-between px-6">
-      <div class="relative w-[420px]">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-        <input
-          id="topSearch"
-          autocomplete="off"
-          class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
-          placeholder="Search real client CPTE, example: CPTE_008608"
-        />
-      </div>
+  <div class="grid-bg"></div>
 
-      <div class="flex items-center gap-4">
-        <button data-route="/notifications" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">
-          Quick Action
-        </button>
-        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-        <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
-          <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+  <div class="relative z-10 min-h-screen flex">
+    
+<!-- BIAT SHARED SIDEBAR -->
+
+
+
+<!-- END BIAT SHARED SIDEBAR -->
+
+
+    <main class="flex-1 overflow-x-hidden">
+      <header class="h-20 border-b border-border bg-[#07122a]/85 backdrop-blur flex items-center justify-between px-7 sticky top-0 z-20">
+        <div class="relative w-[440px]">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted">search</span>
+          <input id="globalSearch" class="w-full bg-card border border-border rounded-xl pl-12 pr-4 py-3 text-text placeholder:text-muted outline-none focus:ring-2 focus:ring-mint/50"
+                 placeholder="Search real client CPTE, example: CPTE_008608" />
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button onclick="window.location.href='/assistant'" class="bg-mint text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
+            Quick Action
+          </button>
+          <span class="material-symbols-outlined text-muted">notifications</span>
+          <div class="flex items-center gap-3 pl-4 border-l border-border">
+            <div class="w-10 h-10 rounded-full border border-mint/40 bg-card"></div>
+            <div>
+              <p class="mono text-sm font-bold">ALA</p>
+              <p class="mono text-xs text-muted">Risk Officer</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="p-7 space-y-6">
+        <div class="flex items-start justify-between gap-5">
           <div>
-            <p class="mono text-sm font-bold">D. Ben Salem</p>
-            <p class="mono text-xs text-on-surface-variant">Risk Officer</p>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <section class="p-6 space-y-6">
-
-      <!-- Page title -->
-      <div class="flex items-start justify-between">
-        <div>
-          <p class="mono text-xs text-primary-container uppercase tracking-widest">Operational Worklist</p>
-          <h2 class="display text-4xl font-bold mt-2">Clients à Notifier</h2>
-          <p class="text-on-surface-variant mt-2 max-w-3xl">
-            Liste opérationnelle des clients à traiter selon les vrais scores ML, le niveau d’alerte, la priorité et le statut d’action.
-          </p>
-        </div>
-
-        <button id="exportCsv" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold flex items-center gap-2">
-          <span class="material-symbols-outlined">download</span>
-          CSV Export List
-        </button>
-      </div>
-
-      <!-- KPIs -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="glass-card rounded-2xl p-5">
-          <p class="mono text-xs text-error uppercase">Critical Clients</p>
-          <div class="flex items-end justify-between mt-3">
-            <p id="kpiCritical" class="display text-3xl font-bold text-error">0</p>
-            <span class="material-symbols-outlined text-error">warning</span>
-          </div>
-          <div class="mt-4 h-1 bg-surface-container-high rounded-full">
-            <div id="barCritical" class="h-1 bg-error rounded-full w-[0%]"></div>
-          </div>
-        </div>
-
-        <div class="glass-card rounded-2xl p-5">
-          <p class="mono text-xs text-tertiary uppercase">High Risk Clients</p>
-          <div class="flex items-end justify-between mt-3">
-            <p id="kpiWarning" class="display text-3xl font-bold text-tertiary">0</p>
-            <span class="material-symbols-outlined text-tertiary">trending_up</span>
-          </div>
-          <div class="mt-4 h-1 bg-surface-container-high rounded-full">
-            <div id="barWarning" class="h-1 bg-tertiary rounded-full w-[0%]"></div>
-          </div>
-        </div>
-
-        <div class="glass-card rounded-2xl p-5">
-          <p class="mono text-xs text-on-surface-variant uppercase">Priority 1 Count</p>
-          <div class="flex items-end justify-between mt-3">
-            <p id="kpiP1" class="display text-3xl font-bold">0</p>
-            <span class="material-symbols-outlined text-on-surface-variant">priority_high</span>
-          </div>
-          <div class="mt-4 h-1 bg-surface-container-high rounded-full">
-            <div id="barP1" class="h-1 bg-on-surface rounded-full w-[0%]"></div>
-          </div>
-        </div>
-
-        <div class="glass-card rounded-2xl p-5">
-          <p class="mono text-xs text-primary-container uppercase">Total Pending</p>
-          <div class="flex items-end justify-between mt-3">
-            <p id="kpiPending" class="display text-3xl font-bold text-primary-container">0</p>
-            <span class="material-symbols-outlined text-primary-container">pending_actions</span>
-          </div>
-          <div class="mt-4 h-1 bg-surface-container-high rounded-full">
-            <div id="barPending" class="h-1 bg-primary-container rounded-full w-[0%]"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="glass-card rounded-2xl p-5">
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
-          <div class="lg:col-span-2 relative">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-            <input
-              id="searchInput"
-              autocomplete="off"
-              class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container"
-              placeholder="Search real CPTE account, example: CPTE_008608"
-            />
+            <p class="mono text-xs text-mint uppercase tracking-[.25em]">Operational Worklist</p>
+            <h2 class="text-4xl font-extrabold mt-2">Clients à Notifier</h2>
+            <p class="text-muted mt-2 max-w-3xl">
+              Liste opérationnelle des clients à traiter selon les scores ML, le niveau d’alerte, la priorité et le statut d’action.
+            </p>
+            <p id="loadStatus" class="mono text-xs text-muted mt-2">Chargement des clients...</p>
           </div>
 
-          <select id="alertFilter" class="bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
-            <option value="">Alert Level</option>
-            <option value="CRITICAL">Critical</option>
-            <option value="WARNING">Warning</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="STABLE">Stable</option>
-          </select>
-
-          <select id="priorityFilter" class="bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
-            <option value="">Priority 1-5</option>
-            <option value="1">P1</option>
-            <option value="2">P2</option>
-            <option value="3">P3</option>
-            <option value="4">P4</option>
-            <option value="5">P5</option>
-          </select>
-
-          <select id="statusFilter" class="bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container">
-            <option value="">Action Status</option>
-            <option value="Action Required">Action Required</option>
-            <option value="Pending">Pending</option>
-            <option value="Notified">Notified</option>
-          </select>
-        </div>
-
-        <div class="flex justify-end mt-4">
-          <button id="clearFilters" class="text-on-surface-variant hover:text-primary flex items-center gap-2 mono text-sm">
-            <span class="material-symbols-outlined">filter_list_off</span>
-            Clear
+          <button id="exportCsv" class="bg-mint text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined">download</span>
+            CSV Export List
           </button>
         </div>
-      </div>
 
-      <!-- Table -->
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead class="bg-surface-container-high/50 border-b border-outline-variant">
-              <tr>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE Account</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score %</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Alert Level</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Priority</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">NBRJDEP</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">RISK BRUT</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Recommended Action</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Status</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Open</th>
-              </tr>
-            </thead>
-
-            <tbody id="tableBody" class="divide-y divide-outline-variant/30"></tbody>
-          </table>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-red uppercase">Critical Clients</p>
+            <p id="kpiCritical" class="text-3xl font-extrabold text-red mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Action immédiate</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-yellow uppercase">High Risk Clients</p>
+            <p id="kpiWarning" class="text-3xl font-extrabold text-yellow mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Suivi quotidien</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-muted uppercase">Priority 1 Count</p>
+            <p id="kpiP1" class="text-3xl font-extrabold mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Dossiers urgents</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <p class="mono text-xs text-mint uppercase">Total Pending</p>
+            <p id="kpiTotal" class="text-3xl font-extrabold text-mint mt-3">0</p>
+            <p class="text-muted text-sm mt-2">Compliance queue</p>
+          </div>
         </div>
 
-        <div class="px-4 py-4 flex justify-between items-center border-t border-outline-variant bg-surface-container-high/30">
-          <p id="showingText" class="text-sm text-on-surface-variant">Loading clients...</p>
+        <div class="glass rounded-2xl p-5">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <input id="searchInput" class="bg-card border border-border rounded-xl px-4 py-3 text-text placeholder:text-muted outline-none"
+                   placeholder="Search real CPTE account, example: CPTE_008608" />
 
-          <div class="flex gap-2">
-            <button id="prevPage" class="p-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant">
-              <span class="material-symbols-outlined">chevron_left</span>
+            <select id="alertFilter" class="bg-card border border-border rounded-xl px-4 py-3 text-text outline-none">
+              <option value="">Alert Level</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="WARNING">High Risk</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="LOW">Low</option>
+            </select>
+
+            <select id="priorityFilter" class="bg-card border border-border rounded-xl px-4 py-3 text-text outline-none">
+              <option value="">Priority 1-5</option>
+              <option value="1">Priority 1</option>
+              <option value="2">Priority 2</option>
+              <option value="3">Priority 3</option>
+              <option value="4">Priority 4</option>
+              <option value="5">Priority 5</option>
+            </select>
+
+            <button id="clearBtn" class="border border-border rounded-xl px-4 py-3 mono font-bold hover:bg-card">
+              Clear
             </button>
-
-            <div id="pageButtons" class="flex gap-2"></div>
-
-            <button id="nextPage" class="p-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant">
-              <span class="material-symbols-outlined">chevron_right</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Anomaly Detection Section -->
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <div class="p-5 border-b border-outline-variant bg-surface-container-high/30 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div>
-            <p class="mono text-xs text-primary-container uppercase tracking-widest">Unsupervised Anomaly Detection</p>
-            <h3 class="display text-2xl font-bold mt-1">Clients à comportement atypique</h3>
-            <p class="text-sm text-on-surface-variant mt-1">
-              Détection non supervisée par Isolation Forest : clients dont le comportement diffère du portefeuille normal.
-            </p>
-          </div>
-
-          <div class="grid grid-cols-3 gap-3 min-w-[420px]">
-            <div class="bg-surface-container-low rounded-xl p-3 border border-outline-variant/40">
-              <p class="mono text-[10px] text-on-surface-variant uppercase">Anomalies</p>
-              <p id="kpiAnomalyTotal" class="display text-2xl font-bold text-error mt-1">0</p>
-            </div>
-            <div class="bg-surface-container-low rounded-xl p-3 border border-outline-variant/40">
-              <p class="mono text-[10px] text-on-surface-variant uppercase">Fortes</p>
-              <p id="kpiAnomalyStrong" class="display text-2xl font-bold text-tertiary mt-1">0</p>
-            </div>
-            <div class="bg-surface-container-low rounded-xl p-3 border border-outline-variant/40">
-              <p class="mono text-[10px] text-on-surface-variant uppercase">Stables suspects</p>
-              <p id="kpiStableSuspicious" class="display text-2xl font-bold text-primary-container mt-1">0</p>
-            </div>
           </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead class="bg-surface-container-high/50 border-b border-outline-variant">
-              <tr>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score anomalie</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Niveau</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score risque</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">NBRJDEP</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">RISK BRUT</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Diagnostic</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Open</th>
-              </tr>
-            </thead>
-
-            <tbody id="anomalyTableBody" class="divide-y divide-outline-variant/30">
-              <tr>
-                <td colspan="8" class="px-4 py-8 text-center text-on-surface-variant">
-                  Chargement des anomalies...
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="px-4 py-4 border-t border-outline-variant bg-surface-container-high/30">
-          <p id="anomalyShowingText" class="text-sm text-on-surface-variant">Loading anomaly clients...</p>
-        </div>
-      </div>
-
-      <!-- Bottom section -->
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
-        <div class="xl:col-span-2 glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="display text-2xl font-bold">Risk Trend Analysis</h3>
-
-            <div class="flex items-center gap-4 mono text-xs">
-              <span class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-error"></span>
-                Critical
-              </span>
-
-              <span class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-tertiary"></span>
-                High
-              </span>
-            </div>
-          </div>
-
-          <div id="riskTrendChart" class="h-64 flex items-end justify-between gap-6 px-4"></div>
-
-          <div class="mt-6 grid grid-cols-3 gap-4">
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">Peak Critical</p>
-              <p id="peakCritical" class="display text-2xl font-bold text-error mt-1">0</p>
-            </div>
-
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">High Risk Sample</p>
-              <p id="weeklyHighRisk" class="display text-2xl font-bold text-tertiary mt-1">0</p>
-            </div>
-
-            <div class="bg-surface-container-low rounded-xl p-4">
-              <p class="mono text-xs text-on-surface-variant">Top score</p>
-              <p id="topScore" class="display text-2xl font-bold text-error mt-1">0%</p>
-            </div>
+        <div class="glass rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-[#15213b] border-b border-border">
+                <tr>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">CPTE Account</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score %</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Alert Level</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Priority</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">NBRJDEP</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Risk Brut</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Recommended Action</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Open</th>
+                </tr>
+              </thead>
+              <tbody id="clientRows" class="divide-y divide-border/60">
+                <tr>
+                  <td colspan="8" class="px-4 py-8 text-center text-muted">Loading clients...</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-6">
-          <h3 class="display text-2xl font-bold mb-5">Quick Summary</h3>
-
-          <div class="space-y-5">
-            <div class="flex gap-4">
-              <div class="w-10 h-10 rounded-xl bg-error/10 text-error flex items-center justify-center">
-                <span class="material-symbols-outlined">priority_high</span>
+        <div class="glass rounded-2xl overflow-hidden">
+          <div class="px-5 py-4 border-b border-border flex items-center justify-between">
+            <div>
+              <p class="mono text-xs text-mint uppercase tracking-[.18em]">Unsupervised Anomaly Detection</p>
+              <h3 class="text-2xl font-extrabold mt-2">Clients à comportement atypique</h3>
+              <p class="text-muted mt-1">Détection non supervisée par Isolation Forest.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-3 text-center">
+              <div class="bg-card rounded-xl px-5 py-3">
+                <p class="mono text-[10px] text-muted uppercase">Anomalies</p>
+                <p id="anomCount" class="text-2xl font-bold text-red">0</p>
               </div>
-              <div>
-                <p class="mono font-bold">Priority 1 Surge</p>
-                <p id="summaryPriority" class="text-sm text-on-surface-variant mt-1">
-                  Loading ML risk queue...
-                </p>
+              <div class="bg-card rounded-xl px-5 py-3">
+                <p class="mono text-[10px] text-muted uppercase">Fortes</p>
+                <p id="anomStrong" class="text-2xl font-bold text-yellow">0</p>
               </div>
-            </div>
-
-            <div class="flex gap-4">
-              <div class="w-10 h-10 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center">
-                <span class="material-symbols-outlined">check_circle</span>
-              </div>
-              <div>
-                <p class="mono font-bold">Operational Queue</p>
-                <p id="summaryQueue" class="text-sm text-on-surface-variant mt-1">
-                  Waiting for client data.
-                </p>
-              </div>
-            </div>
-
-            <div class="pt-5 border-t border-outline-variant/30">
-              <p class="mono text-center text-on-surface-variant">System Load: Optimal</p>
-              <div class="mt-4 h-24 rounded-xl bg-surface-container-low border border-outline-variant/30 flex items-center justify-center">
-                <span class="material-symbols-outlined text-5xl text-primary-container/50">memory</span>
+              <div class="bg-card rounded-xl px-5 py-3">
+                <p class="mono text-[10px] text-muted uppercase">Stables suspects</p>
+                <p id="anomStable" class="text-2xl font-bold text-mint">0</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-    </section>
-  </main>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-[#15213b] border-b border-border">
+                <tr>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">CPTE</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score Anomalie</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Niveau</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score Risque</th>
+                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Diagnostic</th>
+                </tr>
+              </thead>
+              <tbody id="anomalyRows" class="divide-y divide-border/60">
+                <tr>
+                  <td colspan="5" class="px-4 py-8 text-center text-muted">Chargement des anomalies...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const state = {
-        clients: [],
-        filtered: [],
-        currentPage: 1,
-        rowsPerPage: 8,
-        anomalies: []
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      clients: [],
+      filtered: [],
+      anomalies: []
+    };
+
+    function num(v, fallback = 0) {
+      const n = Number(String(v ?? "").replace(",", "."));
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function fmtMoney(v) {
+      const n = num(v);
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + "M TND";
+      if (n >= 1000) return Math.round(n / 1000).toLocaleString("fr-FR") + "K TND";
+      return Math.round(n).toLocaleString("fr-FR") + " TND";
+    }
+
+    function getCpte(raw) {
+      return String(raw.cpte || raw.CPTE || raw.account || raw.id || "").trim();
+    }
+
+    function scorePercent(raw) {
+      let s = raw.risk_score_percent ?? raw.display_risk_score_percent ?? raw.score_percent ?? raw.score ?? raw.risk_score ?? raw.RISK_SCORE ?? 0;
+      s = num(s);
+      if (s <= 1) s *= 100;
+      return Math.max(0, Math.min(100, s));
+    }
+
+    function alertFromScore(score) {
+      if (score >= 85) return "CRITICAL";
+      if (score >= 65) return "WARNING";
+      if (score >= 40) return "MEDIUM";
+      return "LOW";
+    }
+
+    function normalizeAlert(raw, score) {
+      const band = String(raw.alert_level || raw.risk_band || raw.level || raw.ALERT_LEVEL || "").toLowerCase();
+      if (band.includes("crit")) return "CRITICAL";
+      if (band.includes("warning") || band.includes("high") || band.includes("elev") || band.includes("élev")) return "WARNING";
+      if (band.includes("medium") || band.includes("moy")) return "MEDIUM";
+      if (band.includes("low") || band.includes("faible") || band.includes("stable")) return "LOW";
+      return alertFromScore(score);
+    }
+
+    function priorityFromClient(c) {
+      if (c.alert === "CRITICAL" && c.score >= 90) return 1;
+      if (c.alert === "CRITICAL") return 2;
+      if (c.alert === "WARNING") return 3;
+      if (c.alert === "MEDIUM") return 4;
+      return 5;
+    }
+
+    function normalizeClient(raw) {
+      const score = scorePercent(raw);
+      const cpte = getCpte(raw);
+      const alert = normalizeAlert(raw, score);
+      const risk = num(raw.risk_brut ?? raw.RISK_BRUT ?? raw.exposure ?? raw.EXPOSURE);
+      const nbrjdep = num(raw.nbrjdep ?? raw.NBRJDEP);
+      const priority = priorityFromClient({ alert, score });
+
+      let action = raw.recommended_action || raw.action || raw.ANOMALY_ACTION || "";
+      if (!action) {
+        if (alert === "CRITICAL") action = "Immediate risk officer review";
+        else if (alert === "WARNING") action = "Client call and account monitoring";
+        else if (alert === "MEDIUM") action = "Monitor daily";
+        else action = "No immediate action";
+      }
+
+      return {
+        cpte,
+        score,
+        alert,
+        priority,
+        nbrjdep,
+        risk,
+        action,
+        code_client: raw.code_client || raw.CODE_CLIENT || "",
+        raw
       };
+    }
 
-      const tableBody = document.getElementById("tableBody");
-      const searchInput = document.getElementById("searchInput");
-      const topSearch = document.getElementById("topSearch");
-      const alertFilter = document.getElementById("alertFilter");
-      const priorityFilter = document.getElementById("priorityFilter");
-      const statusFilter = document.getElementById("statusFilter");
-      const clearFilters = document.getElementById("clearFilters");
-      const showingText = document.getElementById("showingText");
-      const prevPage = document.getElementById("prevPage");
-      const nextPage = document.getElementById("nextPage");
-      const pageButtons = document.getElementById("pageButtons");
-      const anomalyTableBody = document.getElementById("anomalyTableBody");
-      const anomalyShowingText = document.getElementById("anomalyShowingText");
+    function badgeClass(alert) {
+      if (alert === "CRITICAL") return "badge-critical";
+      if (alert === "WARNING") return "badge-warning";
+      if (alert === "MEDIUM") return "badge-medium";
+      return "badge-low";
+    }
 
-      document.querySelectorAll("[data-route]").forEach(el => {
-        const route = el.getAttribute("data-route");
-        if (!route) return;
-        el.addEventListener("click", () => {
-          window.location.href = route;
-        });
-      });
+    async function fetchJson(url, fallback) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return await res.json();
+      } catch (e) {
+        console.warn("Cannot load", url, e);
+        return fallback;
+      }
+    }
 
-      function number(value, fallback = 0) {
-        const n = Number(value);
-        return Number.isFinite(n) ? n : fallback;
+    function extractClients(data) {
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.clients)) return data.clients;
+      if (data && Array.isArray(data.data)) return data.data;
+      if (data && typeof data === "object") {
+        return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
+      }
+      return [];
+    }
+
+    async function loadClients() {
+      $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
+      const data = await fetchJson("/attached_assets/dashboard_clients_full.json", {});
+      const rawClients = extractClients(data);
+
+      state.clients = rawClients
+        .map(normalizeClient)
+        .filter(c => c.cpte)
+        .sort((a, b) => b.score - a.score || b.risk - a.risk);
+
+      $("loadStatus").innerText =
+        `${state.clients.length.toLocaleString("fr-FR")} lignes chargées — ` +
+        `${new Set(state.clients.map(c => c.cpte)).size.toLocaleString("fr-FR")} clients uniques.`;
+
+      renderAll();
+    }
+
+    async function loadAnomalies() {
+      const data = await fetchJson("/attached_assets/anomaly_clients.json", []);
+      let arr = [];
+
+      if (Array.isArray(data)) arr = data;
+      else if (data && Array.isArray(data.clients)) arr = data.clients;
+      else if (data && Array.isArray(data.anomalies)) arr = data.anomalies;
+
+      state.anomalies = arr.slice(0, 50);
+      renderAnomalies();
+    }
+
+    function getFiltered() {
+      const search = $("searchInput").value.trim().toLowerCase().replace(/\s/g, "");
+      const globalSearch = $("globalSearch").value.trim().toLowerCase().replace(/\s/g, "");
+      const q = search || globalSearch;
+      const alert = $("alertFilter").value;
+      const priority = $("priorityFilter").value;
+
+      let arr = state.clients.filter(c => c.alert === "CRITICAL" || c.alert === "WARNING");
+
+      if (alert) arr = arr.filter(c => c.alert === alert);
+      if (priority) arr = arr.filter(c => String(c.priority) === priority);
+
+      if (q) {
+        arr = arr.filter(c =>
+          c.cpte.toLowerCase().replace(/\s/g, "").includes(q) ||
+          String(c.code_client).toLowerCase().includes(q)
+        );
       }
 
-      function percent(value) {
-        const n = number(value);
-        return n > 1 ? n : n * 100;
-      }
-
-      function getAlertLevel(client) {
-        const score = percent(client.risk_score_percent ?? client.risk_score);
-        if (score >= 85) return "CRITICAL";
-        if (score >= 65) return "WARNING";
-        if (score >= 40) return "MEDIUM";
-        return "STABLE";
-      }
-
-      function getPriority(client) {
-        const score = percent(client.risk_score_percent ?? client.risk_score);
-        if (score >= 85) return 1;
-        if (score >= 75) return 2;
-        if (score >= 65) return 3;
-        if (score >= 40) return 4;
-        return 5;
-      }
-
-      function getStatus(client) {
-        return client.status || (getAlertLevel(client) === "CRITICAL" ? "Action Required" : "Pending");
-      }
-
-      function formatMoney(value) {
-        const n = number(value);
-        if (n >= 1000000) return (n / 1000000).toFixed(2) + "M";
-        if (n >= 1000) return Math.round(n / 1000) + "K";
-        return Math.round(n).toString();
-      }
-
-      function alertClass(alert) {
-        if (alert === "CRITICAL") return "bg-red-500/20 text-red-300 border border-red-400/30";
-        if (alert === "WARNING") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
-        if (alert === "MEDIUM") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
-        return "bg-slate-500/20 text-slate-300 border border-slate-400/30";
-      }
-
-      function statusClass(status) {
-        if (status === "Action Required") return "bg-emerald-500/10 text-emerald-300 border border-emerald-400/30";
-        if (status === "Pending") return "bg-slate-500/30 text-slate-200";
-        return "bg-blue-500/10 text-blue-300 border border-blue-400/30";
-      }
-
-      function normalizeClient(raw) {
-        const scorePercent = percent(raw.risk_score_percent ?? raw.risk_score);
-        const alert = getAlertLevel(raw);
-        const priority = getPriority(raw);
-        return {
-          cpte: raw.cpte || raw.CPTE || "-",
-          code_client: raw.code_client || raw.CODE_CLIENT || "",
-          score: scorePercent,
-          alert,
-          priority,
-          nbrjdep: number(raw.nbrjdep ?? raw.NBRJDEP),
-          risk_brut: number(raw.risk_brut ?? raw.RISK_BRUT),
-          action: raw.recommended_action || raw.action || "Review client file",
-          status: getStatus(raw),
-          sector: raw.sector || "UNKNOWN",
-          industry: raw.industry || "",
-          periode: raw.periode || "",
-          raw
-        };
-      }
-
-      async function loadClients() {
-        try {
-          const response = await fetch("/attached_assets/top_risky_clients.json", { cache: "no-store" });
-          if (!response.ok) throw new Error("HTTP " + response.status);
-          const data = await response.json();
-          state.clients = Array.isArray(data) ? data.map(normalizeClient) : [];
-        } catch (error) {
-          console.error("Erreur chargement top_risky_clients.json:", error);
-          showingText.innerText = "Erreur: impossible de charger /attached_assets/top_risky_clients.json";
-          state.clients = [];
-        }
-      }
-
-
-      function anomalyLevelClass(level) {
-        if (level === "Anomalie forte") return "bg-red-500/20 text-red-300 border border-red-400/30";
-        if (level === "Anomalie modérée") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
-        if (level === "Surveillance") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
-        return "bg-slate-500/20 text-slate-300 border border-slate-400/30";
-      }
-
-      function normalizeAnomalyClient(raw) {
-        const stableSuspicious = Number(raw.stable_but_suspicious || 0) === 1;
-        return {
-          cpte: raw.cpte || raw.CPTE || "-",
-          periode: raw.periode || "",
-          anomaly_score: number(raw.anomaly_score ?? raw.ANOMALY_SCORE),
-          anomaly_level: raw.anomaly_level || raw.ANOMALY_LEVEL || "Normal",
-          risk_score: number(raw.risk_score ?? raw.RISK_SCORE),
-          nbrjdep: number(raw.nbrjdep ?? raw.NBRJDEP),
-          risk_brut: number(raw.risk_brut ?? raw.RISK_BRUT),
-          action: raw.action || raw.ANOMALY_ACTION || "Contrôle manuel du comportement client",
-          stable_but_suspicious: stableSuspicious
-        };
-      }
-
-      async function loadAnomalies() {
-        try {
-          const response = await fetch("/attached_assets/anomaly_clients.json", { cache: "no-store" });
-          if (!response.ok) throw new Error("HTTP " + response.status);
-          const data = await response.json();
-          state.anomalies = Array.isArray(data) ? data.map(normalizeAnomalyClient) : (data.clients || []).map(normalizeAnomalyClient);
-
-          document.getElementById("kpiAnomalyTotal").innerText = data.total_anomalies ?? state.anomalies.length;
-          document.getElementById("kpiAnomalyStrong").innerText =
-            data.strong_anomalies ?? state.anomalies.filter(c => c.anomaly_level === "Anomalie forte").length;
-          document.getElementById("kpiStableSuspicious").innerText =
-            data.stable_but_suspicious ?? state.anomalies.filter(c => c.stable_but_suspicious).length;
-        } catch (error) {
-          console.error("Erreur chargement anomaly_clients.json:", error);
-          state.anomalies = [];
-          if (anomalyTableBody) {
-            anomalyTableBody.innerHTML = `
-              <tr>
-                <td colspan="8" class="px-4 py-8 text-center text-error">
-                  Erreur: impossible de charger /attached_assets/anomaly_clients.json
-                </td>
-              </tr>
-            `;
-          }
-          if (anomalyShowingText) anomalyShowingText.innerText = "Aucune donnée d'anomalie chargée.";
-        }
-      }
-
-      function renderAnomalyTable() {
-        if (!anomalyTableBody) return;
-
-        const rows = state.anomalies.slice(0, 8);
-        anomalyTableBody.innerHTML = "";
-
-        if (rows.length === 0) {
-          anomalyTableBody.innerHTML = `
-            <tr>
-              <td colspan="8" class="px-4 py-8 text-center text-on-surface-variant">
-                Aucune anomalie détectée ou fichier anomaly_clients.json introuvable.
-              </td>
-            </tr>
-          `;
-          if (anomalyShowingText) anomalyShowingText.innerText = "No anomaly clients.";
-          return;
-        }
-
-        rows.forEach(client => {
-          const cpteSafe = encodeURIComponent(client.cpte);
-          const diagnostic = client.stable_but_suspicious
-            ? "Stable mais comportement suspect"
-            : client.action;
-
-          const tr = document.createElement("tr");
-          tr.className = "hover:bg-surface-variant/10 transition-colors";
-          tr.innerHTML = `
-            <td class="px-4 py-5">
-              <p class="mono text-sm text-primary font-bold">${client.cpte}</p>
-              <p class="text-xs text-on-surface-variant">${client.periode}</p>
-            </td>
-
-            <td class="px-4 py-5 mono text-sm">
-              <div class="flex items-center gap-3">
-                <div class="w-16 h-1 bg-surface-container-high rounded-full overflow-hidden">
-                  <div class="h-full bg-tertiary rounded-full" style="width:${Math.min(100, client.anomaly_score)}%"></div>
-                </div>
-                ${client.anomaly_score.toFixed(1)}
-              </div>
-            </td>
-
-            <td class="px-4 py-5">
-              <span class="px-2 py-1 rounded text-xs font-bold ${anomalyLevelClass(client.anomaly_level)}">${client.anomaly_level}</span>
-            </td>
-
-            <td class="px-4 py-5 mono text-sm">${client.risk_score.toFixed(1)}%</td>
-            <td class="px-4 py-5 mono text-sm">${client.nbrjdep}</td>
-            <td class="px-4 py-5 mono text-sm">${formatMoney(client.risk_brut)}</td>
-
-            <td class="px-4 py-5 text-sm">
-              ${client.stable_but_suspicious ? '<span class="text-primary-container font-bold">Stable mais suspect</span>' : diagnostic}
-            </td>
-
-            <td class="px-4 py-5">
-              <button class="openAnomalyBtn text-primary-container mono font-bold hover:underline" data-cpte="${client.cpte}">
-                Open
-              </button>
-            </td>
-          `;
-          anomalyTableBody.appendChild(tr);
-        });
-
-        if (anomalyShowingText) {
-          anomalyShowingText.innerText =
-            `Showing 1-${rows.length} of ${state.anomalies.length} anomaly clients detected by Isolation Forest`;
-        }
-
-        document.querySelectorAll(".openAnomalyBtn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const cpte = encodeURIComponent(btn.dataset.cpte);
-            window.location.href = `/client?cpte=${cpte}&id=${cpte}`;
-          });
-        });
-      }
-
-
-      function filteredClients() {
-        const q = (searchInput.value || "").trim().toLowerCase().replace(/\s/g, "");
-        const alert = alertFilter.value;
-        const priority = priorityFilter.value;
-        const status = statusFilter.value;
-
-        return state.clients.filter(client => {
-          const cpte = String(client.cpte || "").toLowerCase().replace(/\s/g, "");
-          const code = String(client.code_client || "").toLowerCase().replace(/\s/g, "");
-          const sector = String(client.sector || "").toLowerCase();
-          const industry = String(client.industry || "").toLowerCase();
-
-          return (
-            (!q || cpte.includes(q) || code.includes(q) || sector.includes(q) || industry.includes(q)) &&
-            (!alert || client.alert === alert) &&
-            (!priority || String(client.priority) === priority) &&
-            (!status || client.status === status)
-          );
-        });
-      }
-
-      function updateKpis() {
-        const total = Math.max(state.clients.length, 1);
-        const critical = state.clients.filter(c => c.alert === "CRITICAL").length;
-        const warning = state.clients.filter(c => c.alert === "WARNING").length;
-        const p1 = state.clients.filter(c => c.priority === 1).length;
-        const pending = state.clients.filter(c => c.status !== "Notified").length;
-
-        document.getElementById("kpiCritical").innerText = critical;
-        document.getElementById("kpiWarning").innerText = warning;
-        document.getElementById("kpiP1").innerText = p1;
-        document.getElementById("kpiPending").innerText = pending;
-
-        document.getElementById("barCritical").style.width = Math.min(100, critical / total * 100) + "%";
-        document.getElementById("barWarning").style.width = Math.min(100, warning / total * 100) + "%";
-        document.getElementById("barP1").style.width = Math.min(100, p1 / total * 100) + "%";
-        document.getElementById("barPending").style.width = Math.min(100, pending / total * 100) + "%";
-
-        const top = state.clients.length ? Math.max(...state.clients.map(c => c.score)) : 0;
-        document.getElementById("peakCritical").innerText = critical;
-        document.getElementById("weeklyHighRisk").innerText = warning;
-        document.getElementById("topScore").innerText = top.toFixed(1) + "%";
-
-        document.getElementById("summaryPriority").innerText =
-          `${p1} clients P1 détectés par le modèle ML doivent être traités en priorité.`;
-        document.getElementById("summaryQueue").innerText =
-          `${pending} dossiers restent dans la file opérationnelle, sur ${state.clients.length} clients risqués exportés.`;
-      }
-
-      function renderPageButtons(totalPages) {
-        pageButtons.innerHTML = "";
-
-        const maxButtons = Math.min(totalPages, 5);
-        let start = Math.max(1, state.currentPage - 2);
-        let end = Math.min(totalPages, start + maxButtons - 1);
-        start = Math.max(1, end - maxButtons + 1);
-
-        for (let page = start; page <= end; page++) {
-          const btn = document.createElement("button");
-          btn.className = page === state.currentPage
-            ? "px-4 py-2 border border-outline-variant rounded-lg bg-secondary-container text-on-secondary-container mono"
-            : "px-4 py-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant mono";
-          btn.textContent = page;
-          btn.addEventListener("click", () => {
-            state.currentPage = page;
-            renderTable();
-          });
-          pageButtons.appendChild(btn);
-        }
-      }
-
-      function renderTable() {
-        state.filtered = filteredClients();
-        const totalPages = Math.max(1, Math.ceil(state.filtered.length / state.rowsPerPage));
-
-        if (state.currentPage > totalPages) state.currentPage = totalPages;
-        if (state.currentPage < 1) state.currentPage = 1;
-
-        const start = (state.currentPage - 1) * state.rowsPerPage;
-        const rows = state.filtered.slice(start, start + state.rowsPerPage);
-
-        tableBody.innerHTML = "";
-
-        if (rows.length === 0) {
-          tableBody.innerHTML = `
-            <tr>
-              <td colspan="9" class="px-4 py-10 text-center text-on-surface-variant">
-                Aucun client ne correspond aux filtres sélectionnés.
-              </td>
-            </tr>
-          `;
-        }
-
-        rows.forEach(client => {
-          const cpteSafe = encodeURIComponent(client.cpte);
-          const tr = document.createElement("tr");
-          tr.className = "hover:bg-surface-variant/10 transition-colors";
-
-          tr.innerHTML = `
-            <td class="px-4 py-5">
-              <p class="mono text-sm text-primary font-bold">${client.cpte}</p>
-              <p class="text-xs text-on-surface-variant">${client.sector}</p>
-            </td>
-
-            <td class="px-4 py-5 mono text-sm">
-              <div class="flex items-center gap-3">
-                <div class="w-16 h-1 bg-surface-container-high rounded-full overflow-hidden">
-                  <div class="h-full bg-red-300 rounded-full" style="width:${Math.min(100, client.score)}%"></div>
-                </div>
-                ${client.score.toFixed(1)}%
-              </div>
-            </td>
-
-            <td class="px-4 py-5">
-              <span class="px-2 py-1 rounded text-xs font-bold ${alertClass(client.alert)}">${client.alert}</span>
-            </td>
-
-            <td class="px-4 py-5 mono text-sm font-bold">P${client.priority}</td>
-
-            <td class="px-4 py-5 mono text-sm">${client.nbrjdep}</td>
-
-            <td class="px-4 py-5 mono text-sm">${formatMoney(client.risk_brut)}</td>
-
-            <td class="px-4 py-5 text-sm">${client.action}</td>
-
-            <td class="px-4 py-5">
-              <button class="statusBtn px-4 py-2 rounded-full text-sm font-semibold ${statusClass(client.status)}" data-cpte="${client.cpte}">
-                ${client.status}
-              </button>
-            </td>
-
-            <td class="px-4 py-5">
-              <button class="openBtn text-primary-container mono font-bold hover:underline" data-cpte="${client.cpte}">
-                Open
-              </button>
-            </td>
-          `;
-
-          tableBody.appendChild(tr);
-        });
-
-        const from = state.filtered.length === 0 ? 0 : start + 1;
-        const to = Math.min(start + rows.length, state.filtered.length);
-        showingText.innerText = `Showing ${from}-${to} of ${state.filtered.length} clients`;
-
-        prevPage.disabled = state.currentPage === 1;
-        nextPage.disabled = state.currentPage === totalPages;
-        prevPage.style.opacity = prevPage.disabled ? "0.35" : "1";
-        nextPage.style.opacity = nextPage.disabled ? "0.35" : "1";
-
-        renderPageButtons(totalPages);
-
-        document.querySelectorAll(".statusBtn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const client = state.clients.find(c => c.cpte === btn.dataset.cpte);
-            if (!client) return;
-
-            if (client.status === "Action Required") client.status = "Pending";
-            else if (client.status === "Pending") client.status = "Notified";
-            else client.status = "Action Required";
-
-            renderTable();
-            updateKpis();
-          });
-        });
-
-        document.querySelectorAll(".openBtn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const cpte = encodeURIComponent(btn.dataset.cpte);
-            window.location.href = `/client?cpte=${cpte}&id=${cpte}`;
-          });
-        });
-      }
-
-      function renderTrendChart() {
-        const chart = document.getElementById("riskTrendChart");
-
-        const buckets = [
-          { day: "MON", critical: 0, high: 0 },
-          { day: "TUE", critical: 0, high: 0 },
-          { day: "WED", critical: 0, high: 0 },
-          { day: "THU", critical: 0, high: 0 },
-          { day: "FRI", critical: 0, high: 0 }
-        ];
-
-        state.clients.forEach((client, index) => {
-          const bucket = buckets[index % buckets.length];
-          if (client.alert === "CRITICAL") bucket.critical += 1;
-          if (client.alert === "WARNING") bucket.high += 1;
-        });
-
-        const maxValue = Math.max(1, ...buckets.map(b => Math.max(b.critical, b.high)));
-
-        chart.innerHTML = "";
-
-        buckets.forEach(item => {
-          const criticalHeight = Math.max(8, item.critical / maxValue * 160);
-          const highHeight = Math.max(8, item.high / maxValue * 160);
-
-          const wrapper = document.createElement("div");
-          wrapper.className = "flex-1 flex flex-col items-center justify-end gap-3";
-
-          wrapper.innerHTML = `
-            <div class="flex items-end gap-2 h-44">
-              <div class="w-7 rounded-t-lg bg-error/80" style="height:${criticalHeight}px"></div>
-              <div class="w-7 rounded-t-lg bg-tertiary/80" style="height:${highHeight}px"></div>
-            </div>
-
-            <div class="mono text-xs text-on-surface-variant">${item.day}</div>
-
-            <div class="mono text-xs">
-              <span class="text-error">${item.critical}</span>
-              <span class="text-on-surface-variant"> / </span>
-              <span class="text-tertiary">${item.high}</span>
-            </div>
-          `;
-
-          chart.appendChild(wrapper);
-        });
-      }
-
-      function exportCsv() {
-        const data = state.filtered.length ? state.filtered : filteredClients();
-
-        const header = [
-          "CPTE",
-          "Score",
-          "Alert Level",
-          "Priority",
-          "NBRJDEP",
-          "Risk Brut",
-          "Recommended Action",
-          "Status"
-        ];
-
-        const rows = data.map(c => [
-          c.cpte,
-          c.score.toFixed(2),
-          c.alert,
-          "P" + c.priority,
-          c.nbrjdep,
-          c.risk_brut,
-          c.action,
-          c.status
-        ]);
-
-        const csv = [header, ...rows]
-          .map(row => row.map(v => `"${String(v ?? "").replaceAll('"', '""')}"`).join(","))
-          .join("\n");
-
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "biat_clients_a_notifier_ml.csv";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        URL.revokeObjectURL(url);
-      }
-
-      searchInput.addEventListener("input", () => {
-        state.currentPage = 1;
-        renderTable();
-      });
-
-      topSearch.addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-          searchInput.value = topSearch.value;
-          state.currentPage = 1;
-          renderTable();
-        }
-      });
-
-      alertFilter.addEventListener("change", () => {
-        state.currentPage = 1;
-        renderTable();
-      });
-
-      priorityFilter.addEventListener("change", () => {
-        state.currentPage = 1;
-        renderTable();
-      });
-
-      statusFilter.addEventListener("change", () => {
-        state.currentPage = 1;
-        renderTable();
-      });
-
-      clearFilters.addEventListener("click", () => {
-        searchInput.value = "";
-        topSearch.value = "";
-        alertFilter.value = "";
-        priorityFilter.value = "";
-        statusFilter.value = "";
-        state.currentPage = 1;
-        renderTable();
-      });
-
-      prevPage.addEventListener("click", () => {
-        state.currentPage--;
-        renderTable();
-      });
-
-      nextPage.addEventListener("click", () => {
-        state.currentPage++;
-        renderTable();
-      });
-
-      document.getElementById("exportCsv").addEventListener("click", exportCsv);
-
-      await loadClients();
-      await loadAnomalies();
-      updateKpis();
-      renderTrendChart();
+      return arr;
+    }
+
+    function renderKpis() {
+      const critical = state.clients.filter(c => c.alert === "CRITICAL").length;
+      const warning = state.clients.filter(c => c.alert === "WARNING").length;
+      const priorityOne = state.clients.filter(c => c.priority === 1).length;
+      const total = critical + warning;
+
+      $("kpiCritical").innerText = critical.toLocaleString("fr-FR");
+      $("kpiWarning").innerText = warning.toLocaleString("fr-FR");
+      $("kpiP1").innerText = priorityOne.toLocaleString("fr-FR");
+      $("kpiTotal").innerText = total.toLocaleString("fr-FR");
+    }
+
+    function renderTable() {
+      state.filtered = getFiltered();
+
+      const rows = state.filtered.slice(0, 80).map(c => `
+        <tr class="hover:bg-white/5">
+          <td class="px-4 py-4 mono text-sm font-bold">${c.cpte}</td>
+          <td class="px-4 py-4 mono text-sm">${c.score.toFixed(1)}%</td>
+          <td class="px-4 py-4">
+            <span class="${badgeClass(c.alert)} px-3 py-1 rounded-md mono text-xs font-bold">${c.alert}</span>
+          </td>
+          <td class="px-4 py-4 mono text-sm">${c.priority}</td>
+          <td class="px-4 py-4 mono text-sm">${c.nbrjdep.toLocaleString("fr-FR")}</td>
+          <td class="px-4 py-4 mono text-sm">${fmtMoney(c.risk)}</td>
+          <td class="px-4 py-4 text-sm text-muted">${c.action}</td>
+          <td class="px-4 py-4">
+            <a href="/client?cpte=${encodeURIComponent(c.cpte)}" class="text-mint mono text-sm font-bold hover:underline">Open</a>
+          </td>
+        </tr>
+      `).join("");
+
+      $("clientRows").innerHTML = rows || `
+        <tr><td colspan="8" class="px-4 py-8 text-center text-muted">Aucun client trouvé.</td></tr>
+      `;
+    }
+
+    function renderAnomalies() {
+      $("anomCount").innerText = state.anomalies.length.toLocaleString("fr-FR");
+      $("anomStrong").innerText = state.anomalies.filter(a => num(a.anomaly_score ?? a.score_anomalie ?? a.score) < -0.1).length;
+      $("anomStable").innerText = state.anomalies.filter(a => String(a.alert_level || a.level || "").toLowerCase().includes("low")).length;
+
+      const rows = state.anomalies.slice(0, 25).map(a => {
+        const cpte = getCpte(a);
+        const scoreAnom = a.anomaly_score ?? a.score_anomalie ?? a.score ?? "";
+        const level = a.level || a.niveau || a.alert_level || "Suspect";
+        const risk = scorePercent(a);
+        const diag = a.diagnostic || a.reason || a.action || "Comportement atypique détecté";
+        return `
+          <tr class="hover:bg-white/5">
+            <td class="px-4 py-4 mono text-sm font-bold">${cpte || "N/A"}</td>
+            <td class="px-4 py-4 mono text-sm">${scoreAnom}</td>
+            <td class="px-4 py-4 mono text-sm">${level}</td>
+            <td class="px-4 py-4 mono text-sm">${risk.toFixed(1)}%</td>
+            <td class="px-4 py-4 text-sm text-muted">${diag}</td>
+          </tr>
+        `;
+      }).join("");
+
+      $("anomalyRows").innerHTML = rows || `
+        <tr><td colspan="5" class="px-4 py-8 text-center text-muted">Aucune anomalie chargée.</td></tr>
+      `;
+    }
+
+    function renderAll() {
+      renderKpis();
       renderTable();
-      renderAnomalyTable();
+    }
+
+    function exportCsv() {
+      const rows = [
+        ["cpte", "score", "alert", "priority", "nbrjdep", "risk_brut", "action"],
+        ...state.filtered.map(c => [c.cpte, c.score.toFixed(2), c.alert, c.priority, c.nbrjdep, c.risk, c.action])
+      ];
+
+      const csv = rows.map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+      a.download = "clients_a_notifier_biat.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    $("searchInput").addEventListener("input", renderAll);
+    $("globalSearch").addEventListener("input", renderAll);
+    $("alertFilter").addEventListener("change", renderAll);
+    $("priorityFilter").addEventListener("change", renderAll);
+    $("clearBtn").addEventListener("click", () => {
+      $("searchInput").value = "";
+      $("globalSearch").value = "";
+      $("alertFilter").value = "";
+      $("priorityFilter").value = "";
+      renderAll();
+    });
+    $("exportCsv").addEventListener("click", exportCsv);
+    $("settingsBtn").addEventListener("click", () => alert("Settings - version locale"));
+    $("supportBtn").addEventListener("click", () => alert("Support - BIAT Risk Monitor"));
+
+    Promise.all([loadClients(), loadAnomalies()]).catch(err => {
+      console.error(err);
+      $("loadStatus").innerText = "Erreur de chargement. Ouvre F12 > Console pour le détail.";
     });
   </script>
+
   <script src="/attached_assets/auth.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const routes = {
+    "Global Dashboard": "/dashboard",
+    "Risk Evolution": "/evolution",
+    "Future Prediction": "/future",
+    "Notifications": "/notifications",
+    "Client Profiles": "/client",
+    "Model Performance": "/performance",
+    "AI Assistant": "/assistant"
+  };
+
+  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    Object.entries(routes).forEach(function(pair) {
+      const label = pair[0];
+      const url = pair[1];
+
+      if (text.includes(label)) {
+        el.style.cursor = "pointer";
+
+        if (el.tagName === "A") {
+          el.setAttribute("href", url);
+        } else {
+          el.onclick = function () {
+            window.location.href = url;
+          };
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll("button, a, div").forEach(function(el) {
+    const text = (el.innerText || "").trim();
+
+    if (text.includes("Critical Alerts")) {
+      el.style.cursor = "pointer";
+      el.onclick = function () {
+        
+      };
+    }
+  });
+});
+</script>
+
+
+<!-- BIAT SHARED SIDEBAR SCRIPT -->
+<script id="biat-shared-sidebar-script">
+document.addEventListener("DOMContentLoaded", function () {
+  const currentPath = window.location.pathname.toLowerCase();
+
+  document.querySelectorAll("#mainNav .nav-link").forEach(function(link) {
+    const route = link.getAttribute("data-route");
+    const isActive =
+      route &&
+      (
+        currentPath === route ||
+        currentPath.startsWith(route + "/") ||
+        (route === "/client" && currentPath.startsWith("/client")) ||
+        (route === "/notifications" && currentPath.startsWith("/notifications")) ||
+        (route === "/future" && currentPath.startsWith("/future")) ||
+        (route === "/evolution" && currentPath.startsWith("/evolution")) ||
+        (route === "/performance" && currentPath.startsWith("/performance")) ||
+        (route === "/assistant" && currentPath.startsWith("/assistant"))
+      );
+
+    link.classList.remove(
+      "bg-secondary-container",
+      "text-on-secondary-container",
+      "font-bold",
+      "text-on-surface-variant",
+      "hover:text-on-surface",
+      "hover:bg-surface-variant/30"
+    );
+
+    if (isActive) {
+      link.classList.add("bg-secondary-container", "text-on-secondary-container", "font-bold");
+    } else {
+      link.classList.add("text-on-surface-variant", "hover:text-on-surface", "hover:bg-surface-variant/30");
+    }
+  });
+
+  const criticalBtn = document.getElementById("criticalAlertsBtn");
+  if (criticalBtn) {
+    criticalBtn.addEventListener("click", function () {
+      
+    });
+  }
+
+  const settingsBtn = document.getElementById("settingsBtn");
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Settings - BIAT Risk Monitor\\nUser: ALA\\nRole: Risk Officer");
+    });
+  }
+
+  const supportBtn = document.getElementById("supportBtn");
+  if (supportBtn) {
+    supportBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      alert("Support - BIAT Risk Monitor");
+    });
+  }
+
+  fetch("/api/future-predictions", { cache: "no-store" })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.summary) return;
+      const badge = document.getElementById("notifBadge");
+      if (badge) {
+        const n = data.summary.critical_future_clients || data.summary.aggravation_clients || 0;
+        badge.innerText = Number(n).toLocaleString("fr-FR");
+      }
+    })
+    .catch(() => {});
+});
+</script>
+<!-- END BIAT SHARED SIDEBAR SCRIPT -->
+
+
+<!-- BIAT_SETTINGS_SUPPORT_FIX -->
+<style>
+  #biatModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.58);
+    z-index: 999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #biatModalBox {
+    width: min(560px, 92vw);
+    background: #101b33;
+    border: 1px solid rgba(95,251,214,.35);
+    border-radius: 16px;
+    color: #d9e2ff;
+    padding: 22px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    font-family: Inter, Arial, sans-serif;
+  }
+
+  #biatModalBox h2 {
+    margin: 0 0 14px 0;
+    color: #5ffbd6;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  #biatModalBox p {
+    color: #b9c6e4;
+    line-height: 1.6;
+  }
+
+  #biatModalClose {
+    margin-top: 18px;
+    background: #5ffbd6;
+    color: #06251f;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+</style>
+
+<div id="biatModalOverlay">
+  <div id="biatModalBox">
+    <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
+    <p id="biatModalText"></p>
+    <button id="biatModalClose">Fermer</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  function showModal(title, text) {
+    let overlay = document.getElementById("biatModalOverlay");
+    let titleEl = document.getElementById("biatModalTitle");
+    let textEl = document.getElementById("biatModalText");
+
+    if (!overlay || !titleEl || !textEl) {
+      alert(title + "\\n\\n" + text);
+      return;
+    }
+
+    titleEl.innerText = title;
+    textEl.innerText = text;
+    overlay.style.display = "flex";
+  }
+
+  document.addEventListener("click", function (e) {
+    const close = e.target.closest("#biatModalClose");
+    if (close) {
+      document.getElementById("biatModalOverlay").style.display = "none";
+      return;
+    }
+
+    const settings = e.target.closest("#settingsBtn, .side-btn, button, a");
+    if (settings && String(settings.innerText || "").toLowerCase().includes("settings")) {
+      e.preventDefault();
+      showModal(
+        "Settings",
+        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, synchronisation portefeuille, seuils de risque et préférences d'affichage. Cette version utilise les données locales du projet."
+      );
+      return;
+    }
+
+    const support = e.target.closest("#supportBtn, .side-btn, button, a");
+    if (support && String(support.innerText || "").toLowerCase().includes("support")) {
+      e.preventDefault();
+      showModal(
+        "Support",
+        "Aide rapide : Dashboard pour la vue globale, Risk Evolution pour les transitions, Future Prediction pour les clients qui vont devenir critiques, Notifications pour la liste opérationnelle, Client Profiles pour les fiches individuelles, AI Assistant pour les questions métier."
+      );
+      return;
+    }
+  }, true);
+})();
+</script>
+<!-- END BIAT_SETTINGS_SUPPORT_FIX -->
+
+<script src="/attached_assets/sidebar.js"></script>
 </body>
 </html>

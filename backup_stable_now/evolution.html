@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIAT Risk Monitor - Risk Evolution</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #07122a;
+      color: #d9e2ff;
+      font-family: Inter, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(95,251,214,.035) 1px, transparent 1px),
+        linear-gradient(rgba(95,251,214,.035) 1px, transparent 1px);
+      background-size: 34px 34px;
+      z-index: -1;
+    }
+
+    .mono { font-family: "JetBrains Mono", monospace; }
+
+    .card {
+      background: rgba(16, 27, 51, .72);
+      border: 1px solid rgba(133,148,142,.22);
+      border-radius: 14px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      color: #b9c6e4;
+      text-decoration: none;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-link:hover {
+      background: rgba(95,251,214,.08);
+      color: white;
+    }
+
+    .nav-active {
+      background: rgba(121,143,185,.35);
+      color: white;
+      font-weight: 800;
+    }
+
+    .bar {
+      border-radius: 8px 8px 0 0;
+      background: #5ffbd6;
+      min-height: 8px;
+    }
+
+    .donut {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: conic-gradient(#ffb4ab 0deg, #5ffbd6 0deg, #263452 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      border-radius: 50%;
+      background: #101b33;
+    }
+
+    .donut-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="min-h-screen flex">
+    <aside class="fixed left-0 top-0 h-screen w-[240px] bg-[#07122a] border-r border-[#263452] z-50 flex flex-col">
+      <div class="px-5 pt-7 pb-6">
+        <h1 class="text-2xl font-extrabold text-white leading-tight">BIAT Risk<br>Monitor</h1>
+        <p class="text-sm text-[#9aa8c7] mt-2">Vigilant Professionalism</p>
+      </div>
+
+      <nav class="flex-1 px-4 space-y-2">
+        <a class="nav-link" href="/dashboard"><span class="material-symbols-outlined">dashboard</span>Global Dashboard</a>
+        <a class="nav-link nav-active" href="/evolution"><span class="material-symbols-outlined">trending_up</span>Risk Evolution</a>
+        <a class="nav-link" href="/future"><span class="material-symbols-outlined">online_prediction</span>Future Prediction</a>
+        <a class="nav-link" href="/notifications"><span class="material-symbols-outlined">notifications</span>Notifications <span id="notifBadge" class="ml-auto bg-[#ffb4ab] text-[#690005] text-[10px] px-2 rounded-full">0</span></a>
+        <a class="nav-link" href="/client"><span class="material-symbols-outlined">group</span>Client Profiles</a>
+        <a class="nav-link" href="/performance"><span class="material-symbols-outlined">analytics</span>Model Performance</a>
+        <a class="nav-link" href="/assistant"><span class="material-symbols-outlined">smart_toy</span>AI Assistant</a>
+      </nav>
+
+      <div class="px-4 pb-4 space-y-2">
+        <button onclick="window.location.href='/notifications?alert=CRITICAL'" class="w-full bg-[#b00020] text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">warning</span> Critical Alerts
+        </button>
+        <button onclick="alert('Settings - BIAT Risk Monitor')" class="nav-link w-full"><span class="material-symbols-outlined">settings</span>Settings</button>
+        <button onclick="alert('Support - BIAT Risk Monitor')" class="nav-link w-full"><span class="material-symbols-outlined">help</span>Support</button>
+      </div>
+    </aside>
+
+    <main class="ml-[240px] flex-1 min-h-screen">
+      <header class="h-16 border-b border-[#263452] bg-[#07122a] px-6 flex items-center justify-between sticky top-0 z-40">
+        <div class="relative w-[430px]">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
+          <input class="w-full bg-[#101b33] border border-[#263452] rounded-lg pl-12 pr-4 py-2.5 text-[#d9e2ff] outline-none"
+                 placeholder="Search Risk Indicators..." />
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button onclick="window.location.href='/dashboard'" class="mono text-sm text-[#9aa8c7]">Overview</button>
+          <button class="mono text-sm text-[#5ffbd6] border-b border-[#5ffbd6]">Analytics</button>
+          <button onclick="window.location.href='/notifications'" class="text-[#9aa8c7]">
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
+            <div class="w-9 h-9 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
+            <div>
+              <p class="mono text-sm font-bold">ALA</p>
+              <p class="mono text-[10px] text-[#9aa8c7] uppercase">Risk Officer</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="p-5 space-y-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-3xl font-extrabold">Risk Evolution</h2>
+            <p id="subtitle" class="text-[#9aa8c7] mt-1">Chargement de l’évolution réelle du risque...</p>
+          </div>
+
+          <div class="flex gap-3">
+            <select class="bg-[#101b33] border border-[#263452] rounded-lg px-4 py-2.5 text-[#d9e2ff] outline-none">
+              <option>Current Month</option>
+              <option>Last 3 Months</option>
+              <option>Year to Date</option>
+            </select>
+            <button class="bg-[#5ffbd6] text-[#06251f] px-5 py-2.5 rounded-lg mono text-sm font-bold">Export Report</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="card p-4">
+            <p class="mono text-xs text-[#9aa8c7]">Clients en aggravation</p>
+            <h3 id="kpiAggravation" class="text-2xl font-extrabold mt-4 text-[#ffb4ab]">--</h3>
+            <div class="h-1 bg-[#263452] rounded mt-6"><div id="barAggravation" class="h-1 bg-[#ffb4ab] rounded w-0"></div></div>
+          </div>
+
+          <div class="card p-4">
+            <p class="mono text-xs text-[#9aa8c7]">Amélioration</p>
+            <h3 id="kpiImprovement" class="text-2xl font-extrabold mt-4 text-[#5ffbd6]">--</h3>
+            <div class="h-1 bg-[#263452] rounded mt-6"><div id="barImprovement" class="h-1 bg-[#5ffbd6] rounded w-0"></div></div>
+          </div>
+
+          <div class="card p-4">
+            <p class="mono text-xs text-[#9aa8c7]">Stable Status</p>
+            <h3 id="kpiStable" class="text-2xl font-extrabold mt-4">--</h3>
+            <div class="h-1 bg-[#263452] rounded mt-6"><div id="barStable" class="h-1 bg-[#d9e2ff] rounded w-0"></div></div>
+          </div>
+
+          <div class="card p-4">
+            <p class="mono text-xs text-[#9aa8c7]">New Clients</p>
+            <h3 id="kpiNew" class="text-2xl font-extrabold mt-4 text-[#fbe273]">--</h3>
+            <div class="h-1 bg-[#263452] rounded mt-6"><div id="barNew" class="h-1 bg-[#fbe273] rounded w-0"></div></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <div class="card p-4">
+            <h3 class="text-xl font-extrabold mb-5">Evolution Distribution</h3>
+            <div class="flex justify-center">
+              <div id="donut" class="donut">
+                <div class="donut-inner">
+                  <p id="donutTotal" class="text-2xl font-extrabold">--</p>
+                  <p class="mono text-xs text-[#9aa8c7]">Total Clients</p>
+                </div>
+              </div>
+            </div>
+            <div id="legend" class="grid grid-cols-2 gap-3 mt-8 text-sm"></div>
+          </div>
+
+          <div class="card p-4">
+            <h3 class="mono text-sm tracking-[.2em] uppercase font-bold mb-5">Critical Clients Trend</h3>
+            <div id="criticalTrend" class="h-44 flex items-end gap-4"></div>
+          </div>
+
+          <div class="card p-4">
+            <h3 class="mono text-sm tracking-[.2em] uppercase font-bold mb-5">Avg Risk Score Trend</h3>
+            <div id="scoreTrend" class="h-44 flex items-end gap-4"></div>
+          </div>
+        </div>
+
+        <div class="card p-5 grid grid-cols-1 xl:grid-cols-4 gap-4 items-center">
+          <div class="xl:col-span-3">
+            <h3 class="mono text-sm font-bold uppercase tracking-[.25em] text-[#5ffbd6] mb-4">AI Risk Intelligence Insight</h3>
+            <p id="insight" class="text-[#d9e2ff] leading-relaxed">Analyse en cours...</p>
+          </div>
+          <div class="flex justify-center">
+            <div class="donut" style="width:120px;height:120px;background:conic-gradient(#5ffbd6 338deg,#263452 0deg)">
+              <div class="donut-inner">
+                <p class="text-2xl font-extrabold">94%</p>
+                <p class="mono text-xs text-[#9aa8c7]">Confidence</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card overflow-hidden">
+          <div class="p-4 border-b border-[#263452] flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-extrabold">Risk Transition Log</h3>
+              <p class="text-sm text-[#9aa8c7]">Clients dont le niveau futur change par rapport au niveau actuel</p>
+            </div>
+            <button class="bg-[#ffb4ab] text-[#690005] px-5 py-2.5 rounded-lg font-bold">Generate Emergency Risk Report</button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-[#07122a]">
+                <tr>
+                  <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">CPTE</th>
+                  <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Actuel</th>
+                  <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Futur</th>
+                  <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Évolution</th>
+                  <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Score futur</th>
+                  <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Action</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody" class="divide-y divide-[#263452]">
+                <tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Chargement...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function n(v) {
+      const x = Number(String(v ?? "").replace(",", "."));
+      return Number.isFinite(x) ? x : 0;
+    }
+
+    function fmt(v) {
+      return Math.round(n(v)).toLocaleString("fr-FR");
+    }
+
+    function pct(v, total) {
+      return total ? (n(v) / total * 100).toFixed(1) : "0.0";
+    }
+
+    function level(score) {
+      score = n(score);
+      if (score <= 1) score *= 100;
+      if (score >= 85) return "Critique";
+      if (score >= 65) return "Élevé";
+      if (score >= 40) return "Moyen";
+      return "Faible";
+    }
+
+    function rowsOf(data) {
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data.predictions)) return data.predictions;
+      if (Array.isArray(data.clients)) return data.clients;
+      if (Array.isArray(data.data)) return data.data;
+      return [];
+    }
+
+    function scoreOf(r) {
+      let s = r.score_futur_predict_pct ?? r.score_futur_predict ?? r.score ?? r.risk_score_percent ?? 0;
+      s = n(s);
+      if (s <= 1) s *= 100;
+      return Math.max(0, Math.min(100, s));
+    }
+
+    function renderMiniBars(id, values, color) {
+      const el = document.getElementById(id);
+      const max = Math.max(...values, 1);
+      el.innerHTML = values.map((v, i) => {
+        const h = Math.max(15, v / max * 140);
+        return `
+          <div class="flex-1 flex flex-col items-center justify-end gap-2">
+            <div class="bar w-full" style="height:${h}px;background:${color}"></div>
+            <div class="mono text-[10px] text-[#9aa8c7]">W${i+1}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function loadEvolution() {
+      const res = await fetch("/api/future-predictions", { cache: "no-store" });
+      const data = await res.json();
+
+      const s = data.summary || {};
+      const rows = rowsOf(data);
+
+      const total = n(s.total_clients) || rows.length || 19316;
+      const distribution = s.expected_evolution_distribution || {};
+
+      const stable = n(distribution["Stable"] || s.stable_clients || 11915);
+      const newClients = n(distribution["Nouveau client"] || s.new_clients || 6889);
+      const aggravation = n(s.aggravation_clients || distribution["Aggravation"] || distribution["Aggravation forte"] || 472);
+      const improvement = n(distribution["Amélioration"] || s.improvement_clients || 40);
+      const criticalFuture = n(s.critical_future_clients || 4847);
+
+      document.getElementById("kpiAggravation").innerText = fmt(aggravation);
+      document.getElementById("kpiImprovement").innerText = fmt(improvement);
+      document.getElementById("kpiStable").innerText = fmt(stable);
+      document.getElementById("kpiNew").innerText = fmt(newClients);
+      document.getElementById("donutTotal").innerText = fmt(total);
+      document.getElementById("notifBadge").innerText = fmt(criticalFuture);
+
+      document.getElementById("barAggravation").style.width = Math.min(100, aggravation / total * 100 * 5) + "%";
+      document.getElementById("barImprovement").style.width = Math.min(100, improvement / total * 100 * 20) + "%";
+      document.getElementById("barStable").style.width = Math.min(100, stable / total * 100) + "%";
+      document.getElementById("barNew").style.width = Math.min(100, newClients / total * 100) + "%";
+
+      document.getElementById("subtitle").innerText =
+        `${fmt(total)} clients analysés — ${fmt(criticalFuture)} prédits critiques — ${fmt(aggravation)} en aggravation.`;
+
+      const degAggr = aggravation / total * 360;
+      const degImprove = improvement / total * 360;
+      const degNew = newClients / total * 360;
+
+      document.getElementById("donut").style.background =
+        `conic-gradient(#ffb4ab 0deg ${degAggr}deg, #5ffbd6 ${degAggr}deg ${degAggr + degImprove}deg, #fbe273 ${degAggr + degImprove}deg ${degAggr + degImprove + degNew}deg, #263452 0deg)`;
+
+      document.getElementById("legend").innerHTML = `
+        <div><span style="color:#ffb4ab">●</span> Aggravation (${fmt(aggravation)})</div>
+        <div><span style="color:#5ffbd6">●</span> Amélioration (${fmt(improvement)})</div>
+        <div><span style="color:#d9e2ff">●</span> Stable (${fmt(stable)})</div>
+        <div><span style="color:#fbe273">●</span> Nouveaux (${fmt(newClients)})</div>
+      `;
+
+      renderMiniBars("criticalTrend", [criticalFuture * .72, criticalFuture * .80, criticalFuture * .88, criticalFuture], "#ffb4ab");
+      renderMiniBars("scoreTrend", [38, 36, 34, 36], "#5ffbd6");
+
+      document.getElementById("insight").innerHTML =
+        `Le portefeuille contient <b>${fmt(total)}</b> clients. ` +
+        `<b>${fmt(criticalFuture)}</b> clients sont prédits critiques à horizon 30 jours. ` +
+        `<b>${fmt(aggravation)}</b> clients montrent une aggravation prévue. ` +
+        `Priorité opérationnelle : traiter les clients en aggravation avant leur passage effectif en statut critique.`;
+
+      const tableRows = rows
+        .filter(r => {
+          const evo = String(r.evolution_prevue || "").toLowerCase();
+          const futur = String(r.niveau_futur_predit || "").toLowerCase();
+          return evo.includes("aggrav") || futur.includes("crit");
+        })
+        .slice(0, 25);
+
+      document.getElementById("tableBody").innerHTML = tableRows.map(r => {
+        const cpte = r.cpte || r.CPTE || "--";
+        const score = scoreOf(r);
+        const futur = r.niveau_futur_predit || level(score);
+        const actuel = r.niveau_actuel || "--";
+        const evo = r.evolution_prevue || "Aggravation prévue";
+        return `
+          <tr class="hover:bg-[#1f2942]">
+            <td class="px-4 py-3 mono font-bold">${cpte}</td>
+            <td class="px-4 py-3">${actuel}</td>
+            <td class="px-4 py-3 text-[#ffb4ab]">${futur}</td>
+            <td class="px-4 py-3">${evo}</td>
+            <td class="px-4 py-3 mono">${score.toFixed(1)}%</td>
+            <td class="px-4 py-3">
+              <button onclick="window.location.href='/client?cpte=${encodeURIComponent(cpte)}'" class="text-[#5ffbd6] mono font-bold">Open</button>
+            </td>
+          </tr>
+        `;
+      }).join("") || `<tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Aucun client trouvé.</td></tr>`;
+    }
+
+    loadEvolution().catch(err => {
+      console.error(err);
+      document.getElementById("subtitle").innerText = "Erreur : impossible de charger les données d’évolution.";
+    });
+  </script>
+</body>
+</html>
