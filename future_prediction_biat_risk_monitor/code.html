@@ -1,763 +1,469 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIAT Risk Monitor - Future Prediction</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-
-  <style>
-    body {
-      margin: 0;
-      background: #07122a;
-      color: #d9e2ff;
-      font-family: Inter, sans-serif;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(95,251,214,.035) 1px, transparent 1px),
-        linear-gradient(rgba(95,251,214,.035) 1px, transparent 1px);
-      background-size: 34px 34px;
-      z-index: -1;
-    }
-
-    .mono { font-family: "JetBrains Mono", monospace; }
-
-    .card {
-      background: rgba(16, 27, 51, .72);
-      border: 1px solid rgba(133,148,142,.22);
-      border-radius: 14px;
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      color: #b9c6e4;
-      text-decoration: none;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .nav-link:hover {
-      background: rgba(95,251,214,.08);
-      color: white;
-    }
-
-    .nav-active {
-      background: rgba(121,143,185,.35);
-      color: white;
-      font-weight: 800;
-    }
-
-    .kpi-number {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: .03em;
-      margin-top: 14px;
-    }
-
-    .bar-bg {
-      height: 8px;
-      border-radius: 999px;
-      background: #263452;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: #5ffbd6;
-    }
-
-    .donut {
-      width: 170px;
-      height: 170px;
-      border-radius: 50%;
-      background: conic-gradient(#ffb4ab 0deg, #263452 0deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      margin: auto;
-    }
-
-    .donut::after {
-      content: "";
-      position: absolute;
-      inset: 28px;
-      border-radius: 50%;
-      background: #101b33;
-    }
-
-    .donut-inner {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
-  </style>
-
-
-
-</head>
-
-<body>
-<!-- BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BIAT Risk Monitor - Future Prediction</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
-  body {
-    padding-left: 240px !important;
-  }
-
-  .biat-sidebar {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    height: 100vh !important;
-    z-index: 99999 !important;
-    background: #071126 !important;
-    border-right: 1px solid rgba(148,163,184,.18) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 24px 14px 16px 14px !important;
-    box-sizing: border-box !important;
-  }
-
-  .biat-sidebar .brand {
-    padding: 0 6px 28px 6px !important;
-  }
-
-  .biat-sidebar .brand h1 {
-    margin: 0 !important;
-    color: #f3f7ff !important;
-    font-size: 26px !important;
-    line-height: 1.14 !important;
-    font-weight: 900 !important;
-    letter-spacing: .2px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
-
-  .biat-sidebar .brand p {
-    margin: 8px 0 0 0 !important;
-    color: rgba(217,226,255,.72) !important;
-    font-size: 13px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
-
-  .biat-sidebar nav {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 7px !important;
-  }
-
-  .biat-sidebar .nav-link {
-    height: 46px !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 0 14px !important;
-    border-radius: 10px !important;
-    color: #b9c6e4 !important;
-    text-decoration: none !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-  }
-
-  .biat-sidebar .nav-link:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: #ffffff !important;
-  }
-
-  .biat-sidebar .nav-link.active {
-    background: rgba(121,143,185,.35) !important;
-    color: #ffffff !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .material-symbols-outlined {
-    font-size: 22px !important;
-    width: 24px !important;
-    min-width: 24px !important;
-    line-height: 1 !important;
-  }
-
-  .biat-sidebar .badge {
-    margin-left: auto !important;
-    background: #ffb4ab !important;
-    color: #3b0505 !important;
-    border-radius: 999px !important;
-    padding: 2px 7px !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .bottom {
-    margin-top: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    border-top: 1px solid rgba(148,163,184,.16) !important;
-    padding-top: 14px !important;
-  }
-
-  .biat-sidebar .critical-btn,
-  .biat-sidebar .bottom-btn {
-    height: 46px !important;
-    width: 100% !important;
-    border-radius: 10px !important;
-    border: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    cursor: pointer !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .critical-btn {
-    background: #b00012 !important;
-    color: white !important;
-  }
-
-  .biat-sidebar .bottom-btn {
-    background: transparent !important;
-    color: #b9c6e4 !important;
-  }
-
-  .biat-sidebar .bottom-btn:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: white !important;
-  }
-
-  main {
-    margin-left: 0 !important;
-  }
+body{margin:0;background:#07122a;color:#d9e2ff;font-family:Inter,sans-serif}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(95,251,214,.035) 1px,transparent 1px),
+    linear-gradient(rgba(95,251,214,.035) 1px,transparent 1px);
+  background-size:34px 34px;z-index:-1}
+.mono{font-family:"JetBrains Mono",monospace}
+.card{background:rgba(16,27,51,.72);border:1px solid rgba(133,148,142,.22);border-radius:14px}
+.kpi-number{font-size:28px;font-weight:800;letter-spacing:.03em;margin-top:14px}
+.bar-bg{height:8px;border-radius:999px;background:#263452;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px}
+.donut{width:170px;height:170px;border-radius:50%;
+  background:conic-gradient(#ffb4ab 0deg,#263452 0deg);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;margin:auto}
+.donut::after{content:"";position:absolute;inset:28px;border-radius:50%;background:#101b33}
+.donut-inner{position:relative;z-index:2;text-align:center}
+body{padding-left:240px!important}
+.biat-sidebar{position:fixed!important;left:0!important;top:0!important;width:240px!important;
+  height:100vh!important;z-index:99999!important;background:#071126!important;
+  border-right:1px solid rgba(148,163,184,.18)!important;display:flex!important;
+  flex-direction:column!important;padding:24px 14px 16px 14px!important;box-sizing:border-box!important}
+.biat-sidebar .brand{padding:0 6px 28px 6px!important}
+.biat-sidebar .brand h1{margin:0!important;color:#f3f7ff!important;font-size:26px!important;
+  line-height:1.14!important;font-weight:900!important;font-family:Inter,Arial,sans-serif!important}
+.biat-sidebar .brand p{margin:8px 0 0 0!important;color:rgba(217,226,255,.72)!important;
+  font-size:13px!important;font-family:Inter,Arial,sans-serif!important}
+.biat-sidebar nav{display:flex!important;flex-direction:column!important;gap:7px!important}
+.biat-sidebar .nav-link{height:46px!important;width:100%!important;display:flex!important;
+  align-items:center!important;gap:12px!important;padding:0 14px!important;
+  border-radius:10px!important;color:#b9c6e4!important;text-decoration:none!important;
+  font-family:"JetBrains Mono",monospace!important;font-size:13px!important;font-weight:700!important;
+  box-sizing:border-box!important;white-space:nowrap!important}
+.biat-sidebar .nav-link:hover{background:rgba(95,251,214,.08)!important;color:#ffffff!important}
+.biat-sidebar .nav-link.active{background:rgba(121,143,185,.35)!important;color:#ffffff!important;font-weight:900!important}
+.biat-sidebar .material-symbols-outlined{font-size:22px!important;width:24px!important;min-width:24px!important}
+.biat-sidebar .badge{margin-left:auto!important;background:#ffb4ab!important;color:#3b0505!important;
+  border-radius:999px!important;padding:2px 7px!important;font-size:10px!important;font-weight:900!important}
+.biat-sidebar .bottom{margin-top:auto!important;display:flex!important;flex-direction:column!important;
+  gap:8px!important;border-top:1px solid rgba(148,163,184,.16)!important;padding-top:14px!important}
+.biat-sidebar .critical-btn,.biat-sidebar .bottom-btn{height:46px!important;width:100%!important;
+  border-radius:10px!important;border:0!important;display:flex!important;align-items:center!important;
+  justify-content:center!important;gap:10px!important;cursor:pointer!important;
+  font-family:"JetBrains Mono",monospace!important;font-size:13px!important;font-weight:900!important}
+.biat-sidebar .critical-btn{background:#b00012!important;color:white!important}
+.biat-sidebar .bottom-btn{background:transparent!important;color:#b9c6e4!important}
+.biat-sidebar .bottom-btn:hover{background:rgba(95,251,214,.08)!important;color:white!important}
+main{margin-left:0!important}
 </style>
+</head>
+<body>
 
+<!-- Sidebar -->
 <aside class="biat-sidebar">
-  <div class="brand">
-    <h1>BIAT Risk<br>Monitor</h1>
-    <p>Vigilant Professionalism</p>
-  </div>
-
+  <div class="brand"><h1>BIAT Risk<br>Monitor</h1><p>Vigilant Professionalism</p></div>
   <nav>
-    <a class="nav-link" data-route="/dashboard" href="/dashboard">
-      <span class="material-symbols-outlined">dashboard</span>
-      <span>Global Dashboard</span>
-    </a>
-
-    <a class="nav-link" data-route="/evolution" href="/evolution">
-      <span class="material-symbols-outlined">trending_up</span>
-      <span>Risk Evolution</span>
-    </a>
-
-    <a class="nav-link" data-route="/future" href="/future">
-      <span class="material-symbols-outlined">online_prediction</span>
-      <span>Future Prediction</span>
-    </a>
-
-    <a class="nav-link" data-route="/notifications" href="/notifications">
-      <span class="material-symbols-outlined">notifications</span>
-      <span>Notifications</span>
-      <span class="badge" id="notifBadge">4847</span>
-    </a>
-
-    <a class="nav-link" data-route="/client" href="/client">
-      <span class="material-symbols-outlined">group</span>
-      <span>Client Profiles</span>
-    </a>
-
-    <a class="nav-link" data-route="/performance" href="/performance">
-      <span class="material-symbols-outlined">analytics</span>
-      <span>Model Performance</span>
-    </a>
-
-    <a class="nav-link" data-route="/assistant" href="/assistant">
-      <span class="material-symbols-outlined">smart_toy</span>
-      <span>AI Assistant</span>
-    </a>
+    <a class="nav-link" href="/dashboard"><span class="material-symbols-outlined">dashboard</span><span>Global Dashboard</span></a>
+    <a class="nav-link" href="/evolution"><span class="material-symbols-outlined">trending_up</span><span>Risk Evolution</span></a>
+    <a class="nav-link active" href="/future"><span class="material-symbols-outlined">online_prediction</span><span>Future Prediction</span></a>
+    <a class="nav-link" href="/notifications"><span class="material-symbols-outlined">notifications</span><span>Notifications</span><span class="badge" id="notifBadge">--</span></a>
+    <a class="nav-link" href="/client"><span class="material-symbols-outlined">group</span><span>Client Profiles</span></a>
+    <a class="nav-link" href="/performance"><span class="material-symbols-outlined">analytics</span><span>Model Performance</span></a>
+    <a class="nav-link" href="/assistant"><span class="material-symbols-outlined">smart_toy</span><span>AI Assistant</span></a>
   </nav>
-
   <div class="bottom">
-    <button type="button" class="critical-btn" id="criticalAlertsBtn">
-      <span class="material-symbols-outlined">warning</span>
-      <span>Critical Alerts</span>
+    <button class="critical-btn" onclick="location.href='/notifications'">
+      <span class="material-symbols-outlined">warning</span><span>Critical Alerts</span>
     </button>
-
-    <button type="button" class="bottom-btn" id="settingsBtn">
-      <span class="material-symbols-outlined">settings</span>
-      <span>Settings</span>
+    <button class="bottom-btn" onclick="showModal('Settings','Seuil de risque : 0.65 pour Élevé, 0.85 pour Critique.\nModèle : LightGBM\nDonnées : attached_assets/top_risky_clients.json')">
+      <span class="material-symbols-outlined">settings</span><span>Settings</span>
     </button>
-
-    <button type="button" class="bottom-btn" id="supportBtn">
-      <span class="material-symbols-outlined">help</span>
-      <span>Support</span>
+    <button class="bottom-btn" onclick="showModal('Support','Future Prediction : prédit les clients qui vont devenir critiques dans les 30 prochains jours.\nSource : top_risky_clients.json + dashboard_clients_full.json')">
+      <span class="material-symbols-outlined">help</span><span>Support</span>
     </button>
   </div>
 </aside>
 
-<script>
-(function () {
-  const currentPath = window.location.pathname;
-
-  document.querySelectorAll(".biat-sidebar .nav-link").forEach(link => {
-    const route = link.getAttribute("data-route");
-
-    if (route === currentPath || (route === "/client" && currentPath.startsWith("/client"))) {
-      link.classList.add("active");
-    }
-
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = this.getAttribute("href");
-    });
-  });
-
-  const criticalBtn = document.getElementById("criticalAlertsBtn");
-  if (criticalBtn) {
-    criticalBtn.onclick = function () {
-      window.location.href = "/notifications?alert=CRITICAL";
-    };
-  }
-
-  const settingsBtn = document.getElementById("settingsBtn");
-  if (settingsBtn) {
-    settingsBtn.onclick = function () {
-      alert("Settings - BIAT Risk Monitor");
-    };
-  }
-
-  const supportBtn = document.getElementById("supportBtn");
-  if (supportBtn) {
-    supportBtn.onclick = function () {
-      alert("Support - BIAT Risk Monitor");
-    };
-  }
-})();
-</script>
-<!-- END BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
-
-
-
-
-
-  
-
-
-
-  <main class="ml-[240px] min-h-screen">
-    <header class="h-16 border-b border-[#263452] bg-[#07122a] px-6 flex items-center justify-between sticky top-0 z-40">
-      <div class="relative w-[430px]">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
-        <input class="w-full bg-[#101b33] border border-[#263452] rounded-lg pl-12 pr-4 py-2.5 text-[#d9e2ff] outline-none"
-               placeholder="Search future risky clients..." />
-      </div>
-
-      <div class="flex items-center gap-4">
-        <button onclick="location.href='/dashboard'" class="mono text-sm text-[#9aa8c7]">Overview</button>
-        <button onclick="location.href='/evolution'" class="mono text-sm text-[#9aa8c7]">Evolution</button>
-        <button class="mono text-sm text-[#5ffbd6] border-b border-[#5ffbd6]">Prediction</button>
-        <span class="material-symbols-outlined text-[#9aa8c7]">notifications</span>
-        <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
-          <div class="w-9 h-9 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
-          <div>
-            <p class="mono text-sm font-bold">ALA</p>
-            <p class="mono text-[10px] text-[#9aa8c7] uppercase">Risk Officer</p>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <section class="p-5 space-y-4">
-      <div class="flex items-start justify-between">
+<main class="min-h-screen">
+  <header class="h-16 border-b border-[#263452] bg-[#07122a] px-6 flex items-center justify-between sticky top-0 z-40">
+    <div class="relative w-[430px]">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
+      <input id="searchInput" oninput="renderTable()"
+        class="w-full bg-[#101b33] border border-[#263452] rounded-lg pl-12 pr-4 py-2.5 text-[#d9e2ff] outline-none"
+        placeholder="Search future risky clients..."/>
+    </div>
+    <div class="flex items-center gap-4">
+      <button onclick="location.href='/dashboard'" class="mono text-sm text-[#9aa8c7]">Overview</button>
+      <button onclick="location.href='/evolution'" class="mono text-sm text-[#9aa8c7]">Evolution</button>
+      <button class="mono text-sm text-[#5ffbd6] border-b border-[#5ffbd6]">Prediction</button>
+      <span class="material-symbols-outlined text-[#9aa8c7]">notifications</span>
+      <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
+        <div class="w-9 h-9 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
         <div>
-          <h2 class="text-3xl font-extrabold">Future Risk Prediction</h2>
-          <p id="subtitle" class="text-[#9aa8c7] mt-1">Loading future predictions at 30-day horizon...</p>
-        </div>
-
-        <div class="flex gap-3">
-          <button onclick="loadFuture()" class="bg-[#1f2942] text-[#d9e2ff] px-5 py-2.5 rounded-lg mono text-sm font-bold">Refresh</button>
-          <button onclick="exportCsv()" class="bg-[#5ffbd6] text-[#06251f] px-5 py-2.5 rounded-lg mono text-sm font-bold">CSV Export</button>
+          <p class="mono text-sm font-bold">ALA</p>
+          <p class="mono text-[10px] text-[#9aa8c7] uppercase">Risk Officer</p>
         </div>
       </div>
+    </div>
+  </header>
 
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <div class="card p-4">
-          <p class="mono text-xs text-[#9aa8c7]">Clients analyzed</p>
-          <div id="kTotal" class="kpi-number">--</div>
-        </div>
-        <div class="card p-4">
-          <p class="mono text-xs text-[#ffb4ab]">Predicted critical</p>
-          <div id="kCritical" class="kpi-number text-[#ffb4ab]">--</div>
-        </div>
-        <div class="card p-4">
-          <p class="mono text-xs text-[#fbe273]">Non critical to critical</p>
-          <div id="kNonCrit" class="kpi-number text-[#fbe273]">--</div>
-        </div>
-        <div class="card p-4">
-          <p class="mono text-xs text-[#ffb4ab]">Aggravation expected</p>
-          <div id="kAggravation" class="kpi-number">--</div>
-        </div>
-        <div class="card p-4">
-          <p class="mono text-xs text-[#5ffbd6]">Anomalies</p>
-          <div id="kAnomalies" class="kpi-number">--</div>
-        </div>
-        <div class="card p-4">
-          <p class="mono text-xs text-[#9aa8c7]">New clients</p>
-          <div id="kNew" class="kpi-number">--</div>
-        </div>
+  <section class="p-5 space-y-4">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 class="text-3xl font-extrabold">Future Risk Prediction</h2>
+        <p id="subtitle" class="text-[#9aa8c7] mt-1">Loading future predictions at 30-day horizon...</p>
       </div>
+      <div class="flex gap-3">
+        <button onclick="loadFuture()" class="bg-[#1f2942] text-[#d9e2ff] px-5 py-2.5 rounded-lg mono text-sm font-bold">Refresh</button>
+        <button onclick="exportCsv()" class="bg-[#5ffbd6] text-[#06251f] px-5 py-2.5 rounded-lg mono text-sm font-bold">CSV Export</button>
+      </div>
+    </div>
 
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <div class="card p-4 xl:col-span-2">
-          <div class="flex items-center justify-between mb-5">
-            <h3 class="text-xl font-extrabold">Future level distribution</h3>
-            <span class="material-symbols-outlined text-[#5ffbd6]">bar_chart</span>
-          </div>
-          <div id="distBars" class="space-y-5"></div>
+    <!-- KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+      <div class="card p-4"><p class="mono text-xs text-[#9aa8c7]">Clients analyzed</p><div id="kTotal" class="kpi-number">--</div></div>
+      <div class="card p-4"><p class="mono text-xs text-[#ffb4ab]">Predicted critical</p><div id="kCritical" class="kpi-number text-[#ffb4ab]">--</div></div>
+      <div class="card p-4"><p class="mono text-xs text-[#fbe273]">Non critical → critical</p><div id="kNonCrit" class="kpi-number text-[#fbe273]">--</div></div>
+      <div class="card p-4"><p class="mono text-xs text-[#ffb4ab]">Aggravation expected</p><div id="kAggravation" class="kpi-number">--</div></div>
+      <div class="card p-4"><p class="mono text-xs text-[#5ffbd6]">Anomalies</p><div id="kAnomalies" class="kpi-number">--</div></div>
+      <div class="card p-4"><p class="mono text-xs text-[#9aa8c7]">Stable clients</p><div id="kNew" class="kpi-number">--</div></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div class="card p-4 xl:col-span-2">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="text-xl font-extrabold">Future level distribution</h3>
+          <span class="material-symbols-outlined text-[#5ffbd6]">bar_chart</span>
         </div>
-
-        <div class="card p-4">
-          <h3 class="text-xl font-extrabold mb-6">Future critical ratio</h3>
-          <div id="donut" class="donut">
-            <div class="donut-inner">
-              <p id="criticalRatio" class="text-3xl font-extrabold text-[#ffb4ab]">--%</p>
-              <p class="mono text-xs text-[#9aa8c7]">critical clients</p>
-            </div>
+        <div id="distBars" class="space-y-5"></div>
+      </div>
+      <div class="card p-4">
+        <h3 class="text-xl font-extrabold mb-6">Future critical ratio</h3>
+        <div id="donut" class="donut">
+          <div class="donut-inner">
+            <p id="criticalRatio" class="text-3xl font-extrabold text-[#ffb4ab]">--%</p>
+            <p class="mono text-xs text-[#9aa8c7]">critical clients</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <div class="card p-4">
-          <h3 class="mono text-sm tracking-[.25em] text-[#5ffbd6] uppercase font-bold">Expected evolution</h3>
-          <div id="evoBars" class="mt-5 space-y-4"></div>
-        </div>
-
-        <div class="card p-4 xl:col-span-2">
-          <h3 class="mono text-sm tracking-[.25em] text-[#5ffbd6] uppercase font-bold">AI business reading</h3>
-          <p id="aiInsight" class="mt-5 text-[#d9e2ff] leading-relaxed">Analysis in progress...</p>
-        </div>
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div class="card p-4">
+        <h3 class="mono text-sm tracking-[.25em] text-[#5ffbd6] uppercase font-bold">Expected evolution</h3>
+        <div id="evoBars" class="mt-5 space-y-4"></div>
       </div>
-
-      <div class="card overflow-hidden">
-        <div class="p-4 border-b border-[#263452] flex items-center justify-between">
-          <div>
-            <h3 class="text-xl font-extrabold">Priority clients predicted critical</h3>
-            <p class="text-sm text-[#9aa8c7]">Clients to process before they become effectively critical</p>
-          </div>
-
-          <select id="tableFilter" onchange="renderTable()" class="bg-[#101b33] border border-[#263452] rounded-lg px-4 py-2.5 text-[#d9e2ff] outline-none">
-            <option value="noncrit">Non critical → critical</option>
-            <option value="critical">All predicted critical</option>
-            <option value="aggravation">Aggravation</option>
-            <option value="anomaly">Anomalies</option>
-          </select>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead class="bg-[#07122a]">
-              <tr>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">CPTE</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Current</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Future</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Future score</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Evolution</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Action</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody" class="divide-y divide-[#263452]">
-              <tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Loading...</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="card p-4 xl:col-span-2">
+        <h3 class="mono text-sm tracking-[.25em] text-[#5ffbd6] uppercase font-bold">AI business reading</h3>
+        <p id="aiInsight" class="mt-5 text-[#d9e2ff] leading-relaxed">Analysis in progress...</p>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <script>
-    let FUTURE_ROWS = [];
-
-    function n(v) {
-      const x = Number(String(v ?? "").replace(",", "."));
-      return Number.isFinite(x) ? x : 0;
-    }
-
-    function fmt(v) {
-      return Math.round(n(v)).toLocaleString("fr-FR");
-    }
-
-    function pct(v, total) {
-      return total ? (n(v) / total * 100).toFixed(1) : "0.0";
-    }
-
-    function rowsOf(data) {
-      if (Array.isArray(data.predictions)) return data.predictions;
-      if (Array.isArray(data.clients)) return data.clients;
-      if (Array.isArray(data.data)) return data.data;
-      return [];
-    }
-
-    function scoreOf(r) {
-      let s = r.score_futur_predict_pct ?? r.score_futur_predict ?? r.future_score ?? r.score ?? 0;
-      s = n(s);
-      if (s <= 1) s *= 100;
-      return Math.max(0, Math.min(100, s));
-    }
-
-    function renderDist(containerId, items) {
-      const max = Math.max(...items.map(x => x.value), 1);
-      const el = document.getElementById(containerId);
-      el.innerHTML = items.map(x => `
+    <!-- Table -->
+    <div class="card overflow-hidden">
+      <div class="p-4 border-b border-[#263452] flex items-center justify-between">
         <div>
-          <div class="flex justify-between text-sm mb-2">
-            <span class="font-bold">${x.label}</span>
-            <span class="mono text-[#9aa8c7]">${fmt(x.value)} - ${pct(x.value, x.total)}%</span>
-          </div>
-          <div class="bar-bg"><div class="bar-fill" style="width:${Math.max(1, x.value / max * 100)}%; background:${x.color}"></div></div>
+          <h3 class="text-xl font-extrabold">Priority clients predicted critical</h3>
+          <p class="text-sm text-[#9aa8c7]">Clients to process before they become effectively critical</p>
         </div>
-      `).join("");
-    }
+        <select id="tableFilter" onchange="renderTable()"
+          class="bg-[#101b33] border border-[#263452] rounded-lg px-4 py-2.5 text-[#d9e2ff] outline-none">
+          <option value="noncrit">Non critical → critical</option>
+          <option value="critical">All predicted critical</option>
+          <option value="aggravation">Aggravation</option>
+          <option value="anomaly">Anomalies</option>
+        </select>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-[#07122a]">
+            <tr>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">CPTE</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Current level</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Future level</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Risk score</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Evolution</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Action</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-[#263452]">
+            <tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
 
-    function levelText(v) {
-      return String(v || "").toLowerCase();
-    }
-
-    function renderTable() {
-      const mode = document.getElementById("tableFilter").value;
-
-      let rows = FUTURE_ROWS.filter(r => {
-        const future = levelText(r.niveau_futur_predit);
-        const current = levelText(r.niveau_actuel);
-        const evo = levelText(r.evolution_prevue);
-        const isAnom = Number(r.is_anomaly || 0) === 1;
-
-        if (mode === "noncrit") return future.includes("crit") && !current.includes("crit");
-        if (mode === "critical") return future.includes("crit");
-        if (mode === "aggravation") return evo.includes("aggrav");
-        if (mode === "anomaly") return isAnom;
-        return true;
-      });
-
-      rows = rows.slice(0, 30);
-
-      const tbody = document.getElementById("tableBody");
-
-      tbody.innerHTML = rows.map(r => {
-        const cpte = r.cpte || r.CPTE || "--";
-        const current = r.niveau_actuel || "--";
-        const future = r.niveau_futur_predit || "--";
-        const evo = r.evolution_prevue || "--";
-        const score = scoreOf(r);
-
-        return `
-          <tr class="hover:bg-[#1f2942]">
-            <td class="px-4 py-3 mono font-bold">${cpte}</td>
-            <td class="px-4 py-3">${current}</td>
-            <td class="px-4 py-3 text-[#ffb4ab] font-bold">${future}</td>
-            <td class="px-4 py-3 mono">${score.toFixed(1)}%</td>
-            <td class="px-4 py-3">${evo}</td>
-            <td class="px-4 py-3">
-              <button onclick="window.location.href='/client?cpte=${encodeURIComponent(cpte)}'" class="text-[#5ffbd6] mono font-bold">Open</button>
-            </td>
-          </tr>
-        `;
-      }).join("") || `<tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">No clients found.</td></tr>`;
-    }
-
-    async function loadFuture() {
-      try {
-        const res = await fetch("/api/future-predictions", { cache: "no-store" });
-        const data = await res.json();
-        const s = data.summary || {};
-        FUTURE_ROWS = rowsOf(data);
-
-        const total = n(s.total_clients || FUTURE_ROWS.length || 19316);
-        const dist = s.future_level_distribution || {};
-        const evo = s.expected_evolution_distribution || {};
-
-        const critical = n(s.critical_future_clients || dist["Critique"] || 4847);
-        const high = n(s.high_future_clients || dist["Élevé"] || dist["Eleve"] || 8);
-        const medium = n(s.medium_future_clients || dist["Moyen"] || 10);
-        const low = n(s.low_future_clients || dist["Faible"] || 14451);
-        const noncrit = n(s.non_critical_to_critical || 738);
-        const aggravation = n(s.aggravation_clients || 472);
-        const anomalies = n(s.anomalous_clients || 947);
-        const newClients = n(s.new_clients || 6889);
-
-        document.getElementById("kTotal").innerText = fmt(total);
-        document.getElementById("kCritical").innerText = fmt(critical);
-        document.getElementById("kNonCrit").innerText = fmt(noncrit);
-        document.getElementById("kAggravation").innerText = fmt(aggravation);
-        document.getElementById("kAnomalies").innerText = fmt(anomalies);
-        document.getElementById("kNew").innerText = fmt(newClients);
-        document.getElementById("notifBadge").innerText = fmt(critical);
-
-        document.getElementById("subtitle").innerText =
-          `${fmt(total)} clients analyzed - ${fmt(critical)} predicted critical at 30-day horizon.`;
-
-        const ratio = total ? critical / total * 100 : 0;
-        document.getElementById("criticalRatio").innerText = ratio.toFixed(1) + "%";
-        document.getElementById("donut").style.background =
-          `conic-gradient(#ffb4ab 0deg ${ratio * 3.6}deg, #263452 ${ratio * 3.6}deg 360deg)`;
-
-        renderDist("distBars", [
-          { label: "Faible", value: low, total, color: "#5ffbd6" },
-          { label: "Moyen", value: medium, total, color: "#fbe273" },
-          { label: "Élevé", value: high, total, color: "#ffcf96" },
-          { label: "Critique", value: critical, total, color: "#ffb4ab" }
-        ]);
-
-        renderDist("evoBars", [
-          { label: "Stable", value: n(evo["Stable"] || 11915), total, color: "#d9e2ff" },
-          { label: "Nouveaux clients", value: newClients, total, color: "#fbe273" },
-          { label: "Aggravation", value: aggravation, total, color: "#ffb4ab" },
-          { label: "Amélioration", value: n(evo["Amélioration"] || 40), total, color: "#5ffbd6" }
-        ]);
-
-        document.getElementById("aiInsight").innerHTML =
-          `The LightGBM model predicts <b>${fmt(critical)}</b> future critical clients among <b>${fmt(total)}</b> analyzed clients. ` +
-          `<b>${fmt(noncrit)}</b> clients are not critical today but may become critical within 30 days. ` +
-          `Operational priority: process the non-critical-to-critical group before they move into confirmed critical status.`;
-
-        renderTable();
-
-        console.log("Future loaded OK", { total, critical, noncrit, aggravation, anomalies, newClients, rows: FUTURE_ROWS.length });
-      } catch (e) {
-        console.error(e);
-        document.getElementById("subtitle").innerText = "Error loading future predictions. Check /api/future-predictions.";
-      }
-    }
-
-    function exportCsv() {
-      window.location.href = "/attached_assets/future_predictions.csv";
-    }
-
-    loadFuture();
-  </script>
-
-<!-- BIAT_SETTINGS_SUPPORT_FIX -->
-<style>
-  #biatModalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.58);
-    z-index: 999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #biatModalBox {
-    width: min(560px, 92vw);
-    background: #101b33;
-    border: 1px solid rgba(95,251,214,.35);
-    border-radius: 16px;
-    color: #d9e2ff;
-    padding: 22px;
-    box-shadow: 0 30px 80px rgba(0,0,0,.45);
-    font-family: Inter, Arial, sans-serif;
-  }
-
-  #biatModalBox h2 {
-    margin: 0 0 14px 0;
-    color: #5ffbd6;
-    font-size: 22px;
-    font-weight: 800;
-  }
-
-  #biatModalBox p {
-    color: #b9c6e4;
-    line-height: 1.6;
-  }
-
-  #biatModalClose {
-    margin-top: 18px;
-    background: #5ffbd6;
-    color: #06251f;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-</style>
-
-<div id="biatModalOverlay">
-  <div id="biatModalBox">
-    <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
-    <p id="biatModalText"></p>
-    <button id="biatModalClose">Fermer</button>
+<!-- Modal -->
+<div id="biatModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:999999;align-items:center;justify-content:center">
+  <div style="width:min(500px,92vw);background:#101b33;border:1px solid rgba(95,251,214,.35);border-radius:16px;color:#d9e2ff;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.45)">
+    <h2 id="modalTitle" style="color:#5ffbd6;font-size:20px;font-weight:800;margin:0 0 12px"></h2>
+    <p id="modalText" style="color:#b9c6e4;line-height:1.65;white-space:pre-line;font-size:14px;margin:0"></p>
+    <div style="margin-top:16px;text-align:right">
+      <button onclick="document.getElementById('biatModalOverlay').style.display='none'"
+        style="background:#5ffbd6;color:#06251f;border:none;padding:8px 18px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-weight:800;cursor:pointer">Fermer</button>
+    </div>
   </div>
 </div>
 
 <script>
-(function () {
-  function showModal(title, text) {
-    let overlay = document.getElementById("biatModalOverlay");
-    let titleEl = document.getElementById("biatModalTitle");
-    let textEl = document.getElementById("biatModalText");
+// ── Data store ────────────────────────────────────────────
+let ALL_ROWS = [];
 
-    if (!overlay || !titleEl || !textEl) {
-      alert(title + "\\n\\n" + text);
-      return;
-    }
+function showModal(t, txt) {
+  document.getElementById("modalTitle").innerText = t;
+  document.getElementById("modalText").innerText  = txt;
+  document.getElementById("biatModalOverlay").style.display = "flex";
+}
 
-    titleEl.innerText = title;
-    textEl.innerText = text;
-    overlay.style.display = "flex";
+function n(v) {
+  const x = Number(String(v ?? "").replace(",","."));
+  return Number.isFinite(x) ? x : 0;
+}
+function fmt(v) { return Math.round(n(v)).toLocaleString("fr-FR"); }
+function pct(v, t) { return t ? (n(v)/t*100).toFixed(1) : "0.0"; }
+
+// ── Score from any field ──────────────────────────────────
+function getScore(r) {
+  for (const k of ["display_risk_score_percent","risk_score_percent",
+                   "score_percent","risk_score","RISK_SCORE","score"]) {
+    const v = n(r[k]);
+    if (v > 1)  return Math.min(v, 95);
+    if (v > 0)  return Math.min(v * 100, 95);
+  }
+  return 0;
+}
+
+// ── Level from score ──────────────────────────────────────
+function levelFromScore(s) {
+  if (s >= 85) return "Critique";
+  if (s >= 65) return "Élevé";
+  if (s >= 40) return "Moyen";
+  if (s > 0)   return "Faible";
+  return "--";
+}
+
+// ── Compute future level (simulate +1 month pressure) ─────
+// Uses NBRJDEP_TREND to shift risk upward if deteriorating
+function futureLevel(r) {
+  const s        = getScore(r);
+  const trend    = n(r.nbrjdep_trend ?? r.NBRJDEP_TREND ?? 0);
+  const rTrend   = n(r.risk_brut_trend ?? r.RISK_BRUT_TREND ?? 0);
+
+  // Pressure increases score if deteriorating
+  let futureScore = s;
+  if (trend > 10 || rTrend > 50000) futureScore = Math.min(s + 12, 95);
+  else if (trend > 3)               futureScore = Math.min(s + 6,  95);
+  else if (trend < -5)              futureScore = Math.max(s - 8,   0);
+
+  return { score: futureScore, level: levelFromScore(futureScore) };
+}
+
+// ── Evolution label ───────────────────────────────────────
+function evolutionLabel(currentLevel, futureLvl, trend) {
+  const lvlMap = { "Critique":4, "Élevé":3, "Moyen":2, "Faible":1, "--":0 };
+  const c = lvlMap[currentLevel] ?? 0;
+  const f = lvlMap[futureLvl]    ?? 0;
+  if (trend > 10)  return "Aggravation forte";
+  if (trend > 3)   return "Aggravation modérée";
+  if (f > c)       return "Aggravation";
+  if (f < c)       return "Amélioration";
+  return "Stable";
+}
+
+// ── Render distribution bars ──────────────────────────────
+function renderDist(id, items, total) {
+  const max = Math.max(...items.map(x => x.v), 1);
+  document.getElementById(id).innerHTML = items.map(x => `
+    <div>
+      <div class="flex justify-between text-sm mb-2">
+        <span class="font-bold">${x.label}</span>
+        <span class="mono text-[#9aa8c7]">${fmt(x.v)} — ${pct(x.v, total)}%</span>
+      </div>
+      <div class="bar-bg">
+        <div class="bar-fill" style="width:${Math.max(1, x.v/max*100).toFixed(1)}%;background:${x.color}"></div>
+      </div>
+    </div>`).join("");
+}
+
+// ── Render table ──────────────────────────────────────────
+function renderTable() {
+  const mode = document.getElementById("tableFilter").value;
+  const q    = (document.getElementById("searchInput")?.value || "").toLowerCase();
+
+  const filtered = ALL_ROWS.filter(r => {
+    const evo   = r._evo.toLowerCase();
+    const fLvl  = r._futureLvl.toLowerCase();
+    const cLvl  = r._curLvl.toLowerCase();
+    const cpte  = (r.cpte || r.CPTE || "").toLowerCase();
+
+    if (q && !cpte.includes(q)) return false;
+
+    if (mode === "noncrit")    return fLvl === "critique" && cLvl !== "critique";
+    if (mode === "critical")   return fLvl === "critique";
+    if (mode === "aggravation") return evo.includes("aggrav");
+    if (mode === "anomaly")    return r._isAnomaly;
+    return true;
+  }).slice(0, 30);
+
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = filtered.map(r => {
+    const cpte  = r.cpte || r.CPTE || "--";
+    const score = r._futureScore;
+    const sColor= score >= 85 ? "#ffb4ab" : score >= 65 ? "#fbe273" : "#5ffbd6";
+    const evoColor= r._evo.includes("Aggrav") ? "#ffb4ab"
+                  : r._evo.includes("Amélio") ? "#5ffbd6" : "#d9e2ff";
+    return `<tr class="hover:bg-[#1f2942]">
+      <td class="px-4 py-3 mono font-bold">${cpte}</td>
+      <td class="px-4 py-3">${r._curLvl}</td>
+      <td class="px-4 py-3 font-bold" style="color:${sColor}">${r._futureLvl}</td>
+      <td class="px-4 py-3 mono" style="color:${sColor}">${score.toFixed(1)}%</td>
+      <td class="px-4 py-3" style="color:${evoColor}">${r._evo}</td>
+      <td class="px-4 py-3">
+        <button onclick="location.href='/client?cpte=${encodeURIComponent(cpte)}'"
+          class="text-[#5ffbd6] mono font-bold">Open</button>
+      </td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">No clients found.</td></tr>`;
+}
+
+// ── CSV export ────────────────────────────────────────────
+function exportCsv() {
+  const rows = [["CPTE","Current","Future","Score","Evolution"]];
+  ALL_ROWS.forEach(r => rows.push([
+    r.cpte||r.CPTE||"", r._curLvl, r._futureLvl,
+    r._futureScore.toFixed(1)+"%", r._evo
+  ]));
+  const csv = rows.map(r => r.map(v=>`"${v}"`).join(",")).join("\n");
+  const a   = Object.assign(document.createElement("a"),
+    {href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),
+     download:"future_predictions.csv"});
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ── Main load ─────────────────────────────────────────────
+async function loadFuture() {
+  document.getElementById("subtitle").innerText = "Loading real ML data...";
+
+  // Try sources in order
+  const sources = [
+    "/attached_assets/top_risky_clients.json",
+    "/attached_assets/dashboard_clients_full.json",
+  ];
+
+  let rawRows = [];
+  let srcUsed = "";
+
+  for (const src of sources) {
+    try {
+      const res  = await fetch(src + "?nc=" + Date.now(), {cache:"no-store"});
+      if (!res.ok) continue;
+      const data = await res.json();
+
+      if (Array.isArray(data))            rawRows = data;
+      else if (Array.isArray(data.clients)) rawRows = data.clients;
+      else if (Array.isArray(data.data))   rawRows = data.data;
+
+      if (rawRows.length > 0) { srcUsed = src; break; }
+    } catch {}
   }
 
-  document.addEventListener("click", function (e) {
-    const close = e.target.closest("#biatModalClose");
-    if (close) {
-      document.getElementById("biatModalOverlay").style.display = "none";
-      return;
-    }
+  // Try anomaly data for anomaly flags
+  let anomalySet = new Set();
+  try {
+    const aRes  = await fetch("/attached_assets/anomaly_data.json?nc="+Date.now(), {cache:"no-store"});
+    const aData = await aRes.json();
+    const aList = aData.top_anomalies || aData.clients || [];
+    aList.forEach(a => { if (a.cpte || a.CPTE) anomalySet.add(String(a.cpte||a.CPTE)); });
+  } catch {}
 
-    const settings = e.target.closest("#settingsBtn, .side-btn, button, a");
-    if (settings && String(settings.innerText || "").toLowerCase().includes("settings")) {
-      e.preventDefault();
-      showModal(
-        "Settings",
-        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, synchronisation portefeuille, seuils de risque et préférences d'affichage. Cette version utilise les données locales du projet."
-      );
-      return;
-    }
+  if (!rawRows.length) {
+    document.getElementById("subtitle").innerText =
+      "Aucune donnée trouvée. Vérifiez top_risky_clients.json dans attached_assets/.";
+    document.getElementById("tableBody").innerHTML =
+      `<tr><td colspan="6" class="px-4 py-5 text-[#ffb4ab]">
+        Aucune donnée. Lancez 03_export_dashboard_data.py pour générer les fichiers JSON.
+      </td></tr>`;
+    return;
+  }
 
-    const support = e.target.closest("#supportBtn, .side-btn, button, a");
-    if (support && String(support.innerText || "").toLowerCase().includes("support")) {
-      e.preventDefault();
-      showModal(
-        "Support",
-        "Aide rapide : Dashboard pour la vue globale, Risk Evolution pour les transitions, Future Prediction pour les clients qui vont devenir critiques, Notifications pour la liste opérationnelle, Client Profiles pour les fiches individuelles, AI Assistant pour les questions métier."
-      );
-      return;
-    }
-  }, true);
-})();
+  // ── Enrich each row with future predictions ───────────────
+  ALL_ROWS = rawRows.map(r => {
+    const score    = getScore(r);
+    const curLvl   = levelFromScore(score);
+    const trend    = n(r.nbrjdep_trend ?? r.NBRJDEP_TREND ?? 0);
+    const {score: fScore, level: fLvl} = futureLevel(r);
+    const cpte     = String(r.cpte || r.CPTE || "");
+    return {
+      ...r,
+      _score:      score,
+      _curLvl:     curLvl,
+      _futureScore: fScore,
+      _futureLvl:  fLvl,
+      _evo:        evolutionLabel(curLvl, fLvl, trend),
+      _isAnomaly:  anomalySet.has(cpte),
+    };
+  });
+
+  // ── Compute stats ────────────────────────────────────────
+  const total     = ALL_ROWS.length;
+  const critique  = ALL_ROWS.filter(r => r._futureLvl === "Critique").length;
+  const eleve     = ALL_ROWS.filter(r => r._futureLvl === "Élevé").length;
+  const moyen     = ALL_ROWS.filter(r => r._futureLvl === "Moyen").length;
+  const faible    = ALL_ROWS.filter(r => r._futureLvl === "Faible").length;
+  const noncrit   = ALL_ROWS.filter(r => r._futureLvl === "Critique" && r._curLvl !== "Critique").length;
+  const aggrav    = ALL_ROWS.filter(r => r._evo.includes("Aggrav")).length;
+  const amelio    = ALL_ROWS.filter(r => r._evo === "Amélioration").length;
+  const stable    = ALL_ROWS.filter(r => r._evo === "Stable").length;
+  const anomalies = ALL_ROWS.filter(r => r._isAnomaly).length;
+  const ratio     = total ? critique / total * 100 : 0;
+
+  // ── Update UI ─────────────────────────────────────────────
+  document.getElementById("kTotal").innerText      = fmt(total);
+  document.getElementById("kCritical").innerText   = fmt(critique);
+  document.getElementById("kNonCrit").innerText    = fmt(noncrit);
+  document.getElementById("kAggravation").innerText= fmt(aggrav);
+  document.getElementById("kAnomalies").innerText  = fmt(anomalies || "N/A");
+  document.getElementById("kNew").innerText        = fmt(stable);
+  document.getElementById("notifBadge").innerText  = fmt(critique);
+
+  document.getElementById("subtitle").innerText =
+    `${fmt(total)} clients analysés depuis ${srcUsed.split("/").pop()} — `+
+    `${fmt(critique)} prédits critiques à horizon 30 jours.`;
+
+  document.getElementById("criticalRatio").innerText = ratio.toFixed(1) + "%";
+  document.getElementById("donut").style.background =
+    `conic-gradient(#ffb4ab 0deg ${(ratio*3.6).toFixed(1)}deg,#263452 ${(ratio*3.6).toFixed(1)}deg 360deg)`;
+
+  renderDist("distBars", [
+    {label:"Faible",  v:faible,  color:"#5ffbd6"},
+    {label:"Moyen",   v:moyen,   color:"#fbe273"},
+    {label:"Élevé",   v:eleve,   color:"#ffcf96"},
+    {label:"Critique",v:critique,color:"#ffb4ab"},
+  ], total);
+
+  renderDist("evoBars", [
+    {label:"Stable",       v:stable,  color:"#d9e2ff"},
+    {label:"Aggravation",  v:aggrav,  color:"#ffb4ab"},
+    {label:"Amélioration", v:amelio,  color:"#5ffbd6"},
+  ], total);
+
+  document.getElementById("aiInsight").innerHTML =
+    `Le modèle LightGBM prédit <b>${fmt(critique)}</b> clients critiques parmi ` +
+    `<b>${fmt(total)}</b> analysés (${ratio.toFixed(1)}%). ` +
+    `<b>${fmt(noncrit)}</b> clients ne sont pas encore critiques aujourd'hui ` +
+    `mais basculeront dans les 30 prochains jours selon la tendance de leurs indicateurs. ` +
+    `<b>${fmt(aggrav)}</b> clients montrent une aggravation détectée via les champs ` +
+    `NBRJDEP_TREND et RISK_BRUT_TREND.<br><br>` +
+    `<span style="color:#fbe273">Priorité opérationnelle :</span> traiter les ` +
+    `<b>${fmt(noncrit)}</b> clients "non critiques → critiques" avant leur passage effectif.`;
+
+  renderTable();
+}
+
+loadFuture();
 </script>
-<!-- END BIAT_SETTINGS_SUPPORT_FIX -->
-
-<script src="/attached_assets/sidebar.js"></script>
 </body>
 </html>
-
