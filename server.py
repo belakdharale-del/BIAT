@@ -28,9 +28,18 @@ ROUTES = {
 }
 
 
+# =========================================================
+# OUTILS DE LECTURE
+# =========================================================
+
 def read_json(path, default):
+    """
+    Lecture sécurisée d'un fichier JSON.
+    Si le fichier n'existe pas ou s'il est mal formé, on retourne default.
+    """
     try:
         full_path = BASE_DIR / path
+
         if not full_path.exists():
             return default
 
@@ -50,72 +59,196 @@ def safe_float(x, default=0.0):
         return default
 
 
-def normalize_clients(raw):
-    if isinstance(raw, dict):
-        clients = raw.get("clients", [])
-        if isinstance(clients, list):
-            return clients
+def normalize_text(value):
+    return str(value or "").strip().upper()
 
+
+def normalize_clients(raw):
+    """
+    Certains fichiers JSON contiennent directement une liste.
+    D'autres contiennent un dictionnaire avec une clé clients/data/records.
+    Cette fonction uniformise le format.
+    """
     if isinstance(raw, list):
         return raw
+
+    if isinstance(raw, dict):
+        for key in ["clients", "data", "records", "rows", "all_clients"]:
+            value = raw.get(key)
+            if isinstance(value, list):
+                return value
 
     return []
 
 
+def extract_list(raw):
+    """
+    Extraction générique d'une liste depuis un JSON.
+    Utile pour anomalies, métriques ou prédictions.
+    """
+    if isinstance(raw, list):
+        return raw
+
+    if isinstance(raw, dict):
+        for key in [
+            "clients",
+            "data",
+            "records",
+            "rows",
+            "anomalies",
+            "all_future_predictions",
+            "top_future_risk_clients",
+            "predictions",
+            "metrics",
+            "model_metrics",
+        ]:
+            value = raw.get(key)
+            if isinstance(value, list):
+                return value
+
+    return []
+
+
+def get_client_id(client):
+    return (
+        client.get("cpte")
+        or client.get("compte")
+        or client.get("client_id")
+        or client.get("id_client")
+        or client.get("id")
+        or "N/A"
+    )
+
+
+def get_score(client):
+    return safe_float(
+        client.get(
+            "risk_score_percent",
+            client.get(
+                "score",
+                client.get(
+                    "score_risque",
+                    client.get("risk_score", 0)
+                )
+            )
+        )
+    )
+
+
+def get_level(client):
+    return (
+        client.get("alert_level")
+        or client.get("niveau_risque")
+        or client.get("risk_level")
+        or client.get("level")
+        or client.get("classe")
+        or "N/A"
+    )
+
+
+def get_exposure(client):
+    return safe_float(
+        client.get(
+            "risk_brut",
+            client.get(
+                "exposure",
+                client.get(
+                    "montant_exposition",
+                    client.get("exposition", 0)
+                )
+            )
+        )
+    )
+
+
+def format_money(value):
+    try:
+        return f"{float(value):,.2f} TND".replace(",", " ")
+    except Exception:
+        return f"{value} TND"
+
+
+def is_critical(client):
+    level = normalize_text(get_level(client))
+    score = get_score(client)
+
+    return (
+        level in ["CRITICAL", "CRITIQUE", "CRITIQUE CLIENT", "VERY HIGH"]
+        or score >= 85
+    )
+
+
+def is_high(client):
+    level = normalize_text(get_level(client))
+    score = get_score(client)
+
+    return (
+        level in ["WARNING", "HIGH", "ÉLEVÉ", "ELEVE", "ELEVÉ", "ALERTE"]
+        or 65 <= score < 85
+    )
+
+
+def is_medium(client):
+    level = normalize_text(get_level(client))
+    score = get_score(client)
+
+    return (
+        level in ["MEDIUM", "MOYEN"]
+        or 40 <= score < 65
+    )
+
+
+def is_low(client):
+    level = normalize_text(get_level(client))
+    score = get_score(client)
+
+    return (
+        level in ["LOW", "FAIBLE"]
+        or score < 40
+    )
+
+
+# =========================================================
+# CONTEXTE PORTEFEUILLE
+# =========================================================
+
 def build_portfolio_context(question=""):
     dashboard = read_json("attached_assets/dashboard_clients_full.json", {})
-    anomalies = read_json("attached_assets/anomaly_clients.json", {})
-    metrics = read_json("attached_assets/model_metrics.json", [])
-    top_risky = read_json("attached_assets/top_risky_clients.json", [])
+    anomalies_raw = read_json("attached_assets/anomaly_clients.json", {})
+    metrics_raw = read_json("attached_assets/model_metrics.json", [])
+    top_risky_raw = read_json("attached_assets/top_risky_clients.json", [])
 
     clients = normalize_clients(dashboard)
+    anomaly_list = extract_list(anomalies_raw)
+    metrics = extract_list(metrics_raw)
+
+    if isinstance(top_risky_raw, list):
+        top_risky_file = top_risky_raw
+    else:
+        top_risky_file = extract_list(top_risky_raw)
 
     total_rows = len(clients)
     unique_clients = len(
-        set(str(c.get("cpte", "")) for c in clients if c.get("cpte"))
+        set(str(get_client_id(c)) for c in clients if get_client_id(c) != "N/A")
     )
 
-    critical = [
-        c for c in clients
-        if str(c.get("alert_level", "")).upper() in ["CRITICAL", "CRITIQUE"]
-    ]
-
-    warning = [
-        c for c in clients
-        if str(c.get("alert_level", "")).upper() in ["WARNING", "HIGH", "ÉLEVÉ", "ELEVE"]
-    ]
-
-    medium = [
-        c for c in clients
-        if str(c.get("alert_level", "")).upper() in ["MEDIUM", "MOYEN"]
-    ]
-
-    low = [
-        c for c in clients
-        if str(c.get("alert_level", "")).upper() in ["LOW", "FAIBLE"]
-    ]
+    critical = [c for c in clients if is_critical(c)]
+    high = [c for c in clients if is_high(c)]
+    medium = [c for c in clients if is_medium(c)]
+    low = [c for c in clients if is_low(c)]
 
     if clients:
-        avg_score = sum(
-            safe_float(c.get("risk_score_percent", c.get("score", 0)))
-            for c in clients
-        ) / len(clients)
+        avg_score = sum(get_score(c) for c in clients) / len(clients)
     else:
         avg_score = 0
 
-    exposure = sum(
-        safe_float(c.get("risk_brut", c.get("exposure", 0)))
-        for c in clients
-    )
+    exposure = sum(get_exposure(c) for c in clients)
 
     top_clients = sorted(
         clients,
-        key=lambda c: (
-            safe_float(c.get("risk_score_percent", c.get("score", 0))),
-            safe_float(c.get("risk_brut", c.get("exposure", 0))),
-        ),
+        key=lambda c: (get_score(c), get_exposure(c)),
         reverse=True,
-    )[:20]
+    )[:30]
 
     selected_client = None
     cpte_match = re.search(r"CPTE[_-]?\d+", str(question).upper())
@@ -124,41 +257,34 @@ def build_portfolio_context(question=""):
         searched = cpte_match.group(0).replace("-", "_")
 
         for c in clients:
-            if str(c.get("cpte", "")).upper() == searched:
+            if normalize_text(get_client_id(c)) == searched:
                 selected_client = c
                 break
-
-    if isinstance(anomalies, dict):
-        anomaly_list = (
-            anomalies.get("clients", [])
-            or anomalies.get("anomalies", [])
-            or []
-        )
-    elif isinstance(anomalies, list):
-        anomaly_list = anomalies
-    else:
-        anomaly_list = []
 
     return {
         "portfolio_summary": {
             "total_rows": total_rows,
             "unique_clients": unique_clients,
             "critical_clients": len(critical),
-            "high_risk_clients": len(warning),
+            "high_risk_clients": len(high),
             "medium_clients": len(medium),
             "low_clients": len(low),
-            "clients_to_notify": len(critical) + len(warning),
+            "clients_to_notify": len(critical) + len(high),
             "average_score_percent": round(avg_score, 2),
             "total_exposure_tnd": round(exposure, 2),
         },
         "top_risky_clients": top_clients,
         "selected_client": selected_client,
         "anomaly_count": len(anomaly_list),
-        "sample_anomalies": anomaly_list[:5],
-        "model_metrics": metrics,
-        "top_risky_file": top_risky[:5] if isinstance(top_risky, list) else top_risky,
+        "sample_anomalies": anomaly_list[:10],
+        "model_metrics": metrics if metrics else metrics_raw,
+        "top_risky_file": top_risky_file[:10] if isinstance(top_risky_file, list) else top_risky_file,
     }
 
+
+# =========================================================
+# CONTEXTE FUTURE PREDICTION
+# =========================================================
 
 def build_future_context():
     future = read_json("attached_assets/future_predictions.json", {})
@@ -175,12 +301,7 @@ def build_future_context():
             or []
         )
 
-        top_rows = (
-            future.get("top_future_risk_clients")
-            or rows[:200]
-            if isinstance(rows, list)
-            else []
-        )
+        top_rows = future.get("top_future_risk_clients") or rows[:200]
 
     elif isinstance(future, list):
         summary = {}
@@ -201,125 +322,301 @@ def build_future_context():
     if not summary:
         total = len(rows)
 
-        future_critical = [
-            r for r in rows
-            if str(
+        future_critical = []
+        worsening = []
+
+        for r in rows:
+            future_level = normalize_text(
                 r.get(
                     "niveau_futur_predit",
                     r.get(
                         "future_level",
-                        r.get("predicted_level", r.get("niveau_futur", ""))
+                        r.get(
+                            "predicted_level",
+                            r.get("niveau_futur", "")
+                        )
                     )
                 )
-            ).upper() in ["CRITICAL", "CRITIQUE"]
-        ]
+            )
+
+            current_level = normalize_text(
+                r.get(
+                    "niveau_actuel",
+                    r.get(
+                        "current_level",
+                        r.get("alert_level", "")
+                    )
+                )
+            )
+
+            if future_level in ["CRITICAL", "CRITIQUE"]:
+                future_critical.append(r)
+
+            if current_level not in ["CRITICAL", "CRITIQUE"] and future_level in ["CRITICAL", "CRITIQUE"]:
+                worsening.append(r)
 
         summary = {
             "total_clients": total,
             "critical_future_clients": len(future_critical),
+            "new_critical_clients": len(worsening),
+            "horizon_days": 30,
         }
 
     return {
         "summary": summary,
-
-        # Pour compatibilité avec la page HTML actuelle
         "all_future_predictions": rows,
         "top_future_risk_clients": top_rows,
-
-        # Pour compatibilité API générale
         "predictions": rows,
         "clients": rows,
         "data": rows,
     }
 
 
+# =========================================================
+# ASSISTANT LOCAL DYNAMIQUE
+# =========================================================
+
 def local_risk_answer(question, context):
     q = question.lower()
+
     summary = context.get("portfolio_summary", {})
     top_clients = context.get("top_risky_clients", [])
     selected_client = context.get("selected_client")
     anomaly_count = context.get("anomaly_count", 0)
+    sample_anomalies = context.get("sample_anomalies", [])
+    model_metrics = context.get("model_metrics", [])
+    future = context.get("future_prediction", {})
+    future_summary = future.get("summary", {}) if isinstance(future, dict) else {}
 
+    # =====================================================
+    # 1) Client précis
+    # =====================================================
     if selected_client:
-        cpte = selected_client.get("cpte", "client inconnu")
-        score = selected_client.get(
-            "risk_score_percent",
-            selected_client.get("score", 0),
-        )
-        level = selected_client.get("alert_level", "non défini")
-        risk_brut = selected_client.get(
-            "risk_brut",
-            selected_client.get("exposure", 0),
-        )
+        cpte = get_client_id(selected_client)
+        score = get_score(selected_client)
+        level = get_level(selected_client)
+        exposure = get_exposure(selected_client)
 
         return f"""
 Analyse du client {cpte} :
 
 - Score de risque : {score} %
 - Niveau d'alerte : {level}
-- Exposition / risque brut : {risk_brut} TND
+- Exposition / risque brut : {format_money(exposure)}
 
-Ce client doit être analysé en priorité si son niveau est CRITICAL ou WARNING.
-La décision recommandée est de vérifier son comportement récent, ses dépassements, son exposition et la présence éventuelle d'anomalies détectées.
+Interprétation :
+Ce client doit être analysé en priorité si son niveau est CRITICAL, CRITIQUE, WARNING ou ÉLEVÉ.
+Il faut vérifier son historique de dépassement, son exposition actuelle, son comportement récent et la présence éventuelle d'anomalies.
+
+Action recommandée :
+- contrôler les derniers mouvements du compte ;
+- vérifier la fréquence des dépassements ;
+- prioriser le contact client si le score est supérieur à 85 % ;
+- suivre l'évolution du risque dans les prochains jours.
 """
 
-    if "future" in q or "futur" in q or "prédit" in q or "pred" in q:
-        future = context.get("future_prediction", {})
-        fs = future.get("summary", {})
+    # =====================================================
+    # 2) Future Prediction
+    # =====================================================
+    if (
+        "future" in q
+        or "futur" in q
+        or "prédit" in q
+        or "pred" in q
+        or "30 jours" in q
+        or "devenir critique" in q
+    ):
+        top_future = []
+        if isinstance(future, dict):
+            top_future = future.get("top_future_risk_clients", [])[:8]
 
-        return f"""
-Module Future Prediction :
+        txt = f"""
+Module de prédiction future :
 
-- Clients analysés : {fs.get("total_clients", 0)}
-- Clients prédits critiques : {fs.get("critical_future_clients", 0)}
-- Horizon : 30 jours
+- Clients analysés : {future_summary.get("total_clients", 0)}
+- Clients prédits critiques : {future_summary.get("critical_future_clients", 0)}
+- Nouveaux clients susceptibles de devenir critiques : {future_summary.get("new_critical_clients", 0)}
+- Horizon de prédiction : {future_summary.get("horizon_days", 30)} jours
 
-Ce module sert à identifier les clients qui risquent de devenir critiques avant le passage réel en situation critique.
+Interprétation :
+Ce module permet d'identifier les clients qui ne sont pas encore critiques aujourd'hui, mais qui présentent un risque d'aggravation dans les prochains jours.
 """
 
-    if "critique" in q or "critical" in q:
-        return f"""
-Le portefeuille contient actuellement {summary.get("critical_clients", 0)} clients critiques.
+        if top_future:
+            txt += "\nClients à surveiller en priorité selon la prédiction future :\n\n"
 
-Nombre total de lignes analysées : {summary.get("total_rows", 0)}
-Nombre de clients uniques : {summary.get("unique_clients", 0)}
-Clients à notifier : {summary.get("clients_to_notify", 0)}
-"""
+            for i, c in enumerate(top_future, start=1):
+                txt += (
+                    f"{i}. {get_client_id(c)} | "
+                    f"Score: {get_score(c)}% | "
+                    f"Niveau: {get_level(c)} | "
+                    f"Exposition: {format_money(get_exposure(c))}\n"
+                )
 
-    if "anomal" in q:
-        return f"""
-Le module de détection d'anomalies a identifié {anomaly_count} cas/anomalies.
-
-Ces anomalies permettent de repérer des comportements inhabituels qui ne sont pas toujours visibles uniquement avec le score ML.
-"""
-
-    if "top" in q or "priorité" in q or "priorite" in q or "notifier" in q:
-        txt = "Clients à traiter en priorité :\n\n"
-
-        for i, c in enumerate(top_clients[:8], start=1):
-            txt += (
-                f"{i}. {c.get('cpte', 'N/A')} | "
-                f"Score: {c.get('risk_score_percent', c.get('score', 0))}% | "
-                f"Niveau: {c.get('alert_level', 'N/A')} | "
-                f"Risque brut: {c.get('risk_brut', c.get('exposure', 0))} TND\n"
-            )
-
-        txt += "\nRecommandation : commencer par les clients CRITICAL avec le score le plus élevé."
         return txt
 
+    # =====================================================
+    # 3) Clients critiques
+    # =====================================================
+    if "critique" in q or "critical" in q:
+        return f"""
+Situation des clients critiques :
+
+- Clients critiques : {summary.get("critical_clients", 0)}
+- Clients high risk / warning : {summary.get("high_risk_clients", 0)}
+- Clients à notifier : {summary.get("clients_to_notify", 0)}
+- Score moyen du portefeuille : {summary.get("average_score_percent", 0)} %
+- Exposition totale estimée : {format_money(summary.get("total_exposure_tnd", 0))}
+
+Interprétation :
+Les clients critiques doivent être traités en priorité, car ils présentent le niveau de risque le plus élevé.
+"""
+
+    # =====================================================
+    # 4) Anomalies
+    # =====================================================
+    if "anomal" in q or "inhabituel" in q or "atypique" in q:
+        txt = f"""
+Détection d'anomalies :
+
+- Nombre total d'anomalies détectées : {anomaly_count}
+
+Interprétation :
+Les anomalies permettent de repérer des comportements inhabituels qui ne sont pas toujours visibles uniquement avec le score ML.
+Un client peut avoir un score acceptable mais présenter un comportement atypique qui mérite une analyse plus approfondie.
+"""
+
+        if sample_anomalies:
+            txt += "\nExemples d'anomalies détectées :\n\n"
+
+            for i, c in enumerate(sample_anomalies[:5], start=1):
+                txt += (
+                    f"{i}. {get_client_id(c)} | "
+                    f"Score: {get_score(c)}% | "
+                    f"Niveau: {get_level(c)} | "
+                    f"Exposition: {format_money(get_exposure(c))}\n"
+                )
+
+        return txt
+
+    # =====================================================
+    # 5) Clients à notifier / priorité
+    # =====================================================
+    if (
+        "notifier" in q
+        or "priorité" in q
+        or "priorite" in q
+        or "top" in q
+        or "traiter" in q
+        or "urgent" in q
+    ):
+        txt = "Clients à traiter en priorité :\n\n"
+
+        for i, c in enumerate(top_clients[:10], start=1):
+            txt += (
+                f"{i}. {get_client_id(c)} | "
+                f"Score: {get_score(c)}% | "
+                f"Niveau: {get_level(c)} | "
+                f"Exposition: {format_money(get_exposure(c))}\n"
+            )
+
+        txt += """
+Recommandation :
+Commencer par les clients CRITICAL ou CRITIQUE avec le score le plus élevé et l'exposition la plus importante.
+"""
+
+        return txt
+
+    # =====================================================
+    # 6) Performance modèle
+    # =====================================================
+    if (
+        "performance" in q
+        or "modèle" in q
+        or "modele" in q
+        or "recall" in q
+        or "precision" in q
+        or "f1" in q
+        or "auc" in q
+    ):
+        txt = "Performance du modèle prédictif :\n\n"
+
+        if model_metrics:
+            if isinstance(model_metrics, list):
+                for i, m in enumerate(model_metrics[:10], start=1):
+                    txt += f"{i}. {m}\n"
+            elif isinstance(model_metrics, dict):
+                for key, value in model_metrics.items():
+                    txt += f"- {key} : {value}\n"
+            else:
+                txt += f"{model_metrics}\n"
+        else:
+            txt += "Aucune métrique détaillée n'a été trouvée dans les fichiers JSON.\n"
+
+        txt += """
+Interprétation :
+Dans un projet de risque bancaire, le rappel est une métrique très importante, car il mesure la capacité du modèle à détecter les clients réellement risqués.
+"""
+
+        return txt
+
+    # =====================================================
+    # 7) Score moyen / exposition
+    # =====================================================
+    if "score moyen" in q or "exposition" in q or "montant" in q:
+        return f"""
+Indicateurs financiers et scoring :
+
+- Score moyen du portefeuille : {summary.get("average_score_percent", 0)} %
+- Exposition totale estimée : {format_money(summary.get("total_exposure_tnd", 0))}
+- Clients uniques : {summary.get("unique_clients", 0)}
+- Lignes analysées : {summary.get("total_rows", 0)}
+
+Ces indicateurs permettent d'avoir une vision globale du niveau de risque et de l'exposition associée.
+"""
+
+    # =====================================================
+    # 8) Aide / exemples de questions
+    # =====================================================
+    if "aide" in q or "help" in q or "question" in q or "quoi demander" in q:
+        return """
+Tu peux me poser par exemple ces questions :
+
+- Combien de clients critiques avons-nous ?
+- Quels sont les clients à notifier en priorité ?
+- Analyse le client CPTE_001508.
+- Combien d'anomalies sont détectées ?
+- Quels clients risquent de devenir critiques dans 30 jours ?
+- Donne-moi un résumé global du portefeuille.
+- Quelles sont les performances du modèle ?
+- Quelle est l'exposition totale du portefeuille ?
+"""
+
+    # =====================================================
+    # 9) Résumé global par défaut
+    # =====================================================
     return f"""
-Résumé du portefeuille BIAT Risk Monitor :
+Résumé global du portefeuille BIAT Risk Monitor :
 
 - Lignes analysées : {summary.get("total_rows", 0)}
 - Clients uniques : {summary.get("unique_clients", 0)}
 - Clients critiques : {summary.get("critical_clients", 0)}
 - Clients high risk / warning : {summary.get("high_risk_clients", 0)}
+- Clients moyens : {summary.get("medium_clients", 0)}
+- Clients faibles : {summary.get("low_clients", 0)}
 - Clients à notifier : {summary.get("clients_to_notify", 0)}
 - Score moyen : {summary.get("average_score_percent", 0)} %
-- Exposition totale : {summary.get("total_exposure_tnd", 0)} TND
+- Exposition totale : {format_money(summary.get("total_exposure_tnd", 0))}
 - Anomalies détectées : {anomaly_count}
+
+Interprétation :
+Le portefeuille doit être suivi en priorité à travers les clients critiques, les clients à notifier et les anomalies détectées.
 """
 
+
+# =========================================================
+# GROQ API
+# =========================================================
 
 def call_groq(question, context):
     api_key = os.environ.get("GROQ_API_KEY")
@@ -334,7 +631,19 @@ Tu es l'assistant IA du projet BIAT Risk Monitor.
 Tu réponds comme un analyste risque bancaire.
 Utilise uniquement le contexte fourni.
 Réponds en français sauf si l'utilisateur écrit dans une autre langue.
+Ne donne jamais d'informations inventées.
+Si une donnée manque, dis clairement qu'elle n'est pas disponible dans le contexte.
 """
+
+    compact_context = {
+        "portfolio_summary": context.get("portfolio_summary", {}),
+        "selected_client": context.get("selected_client"),
+        "anomaly_count": context.get("anomaly_count", 0),
+        "sample_anomalies": context.get("sample_anomalies", [])[:5],
+        "top_risky_clients": context.get("top_risky_clients", [])[:10],
+        "future_prediction": context.get("future_prediction", {}),
+        "model_metrics": context.get("model_metrics", {}),
+    }
 
     payload = {
         "model": model,
@@ -345,14 +654,14 @@ Réponds en français sauf si l'utilisateur écrit dans une autre langue.
                 "content": json.dumps(
                     {
                         "question": question,
-                        "context": context,
+                        "context": compact_context,
                     },
                     ensure_ascii=False,
                 ),
             },
         ],
-        "temperature": 0.3,
-        "max_tokens": 900,
+        "temperature": 0.25,
+        "max_tokens": 1000,
     }
 
     req = urllib.request.Request(
@@ -373,6 +682,10 @@ Réponds en français sauf si l'utilisateur écrit dans une autre langue.
     except Exception:
         return local_risk_answer(question, context)
 
+
+# =========================================================
+# SERVEUR HTTP
+# =========================================================
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_OPTIONS(self):
@@ -427,7 +740,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 body = self.rfile.read(content_length).decode("utf-8")
                 data = json.loads(body)
 
-                question = str(data.get("message", "")).strip()
+                question = str(
+                    data.get("message")
+                    or data.get("question")
+                    or data.get("prompt")
+                    or ""
+                ).strip()
 
                 if not question:
                     self.send_json({
@@ -445,6 +763,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     or "prédit" in q
                     or "pred" in q
                     or "30 jours" in q
+                    or "devenir critique" in q
                 ):
                     context["future_prediction"] = build_future_context()
 
@@ -453,6 +772,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_json({
                     "answer": answer,
                     "context_used": True,
+                    "groq_used": bool(os.environ.get("GROQ_API_KEY")),
                 })
 
             except Exception as e:
@@ -476,7 +796,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(encoded)
 
     def log_message(self, format, *args):
-        print(f"{self.address_string()} - {format % args}")
+        try:
+            print(f"{self.address_string()} - {format % args}")
+        except Exception:
+            pass
 
 
 class ThreadingReusableTCPServer(socketserver.ThreadingTCPServer):
@@ -500,4 +823,5 @@ if __name__ == "__main__":
         print(f"API Chat:       http://localhost:{PORT}/api/chat")
         print(f"API Portfolio:  http://localhost:{PORT}/api/portfolio")
         print(f"API Future:     http://localhost:{PORT}/api/future-predictions")
+        print(f"Groq configured: {bool(os.environ.get('GROQ_API_KEY'))}")
         httpd.serve_forever()

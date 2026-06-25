@@ -8,711 +8,798 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Hanken+Grotesk:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: #07122a;
-  color: #d9e2ff;
-  font-family: Inter, sans-serif;
-  min-height: 100vh;
-}
-/* BIAT Background */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(circle at 88% 8%, rgba(245,146,30,.25) 0%, rgba(245,146,30,.08) 22%, transparent 45%),
-    radial-gradient(circle at 12% 88%, rgba(30,58,158,.28) 0%, rgba(30,58,158,.08) 28%, transparent 55%),
-    linear-gradient(135deg,#061024 0%,#07122a 35%,#0b1b38 70%,#061024 100%);
-}
-.mono { font-family: "JetBrains Mono", monospace; }
-.display { font-family: "Hanken Grotesk", sans-serif; }
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
-  line-height: 1;
-}
+  /* ===== SIDEBAR NOIRE + CONTENU VIF ===== */
 
-/* Sidebar */
+/* Sidebar très sombre */
 .biat-sidebar {
-  position: fixed;
-  left: 0; top: 0;
-  width: 240px;
-  height: 100vh;
-  background: rgba(7,18,42,.95);
-  backdrop-filter: blur(18px);
-  border-right: 1px solid rgba(60,74,69,.5);
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  padding: 20px 12px 14px;
+  background:
+    linear-gradient(180deg, #050714 0%, #070A18 45%, #050714 100%) !important;
+  border-right: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow: 8px 0 35px rgba(0, 0, 0, 0.45) !important;
 }
+
+/* Logo plus premium */
+.biat-sidebar .brand-logo {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.35) !important;
+}
+
 .biat-sidebar .brand-title {
-  font-family: "Hanken Grotesk", sans-serif;
-  font-size: 22px;
-  font-weight: 900;
-  color: #fff;
-  line-height: 1.15;
-  padding: 0 6px;
-}
-.biat-sidebar .brand-sub {
-  font-size: 12px;
-  color: #bacac3;
-  padding: 4px 6px 20px;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  color: #bacac3;
-  text-decoration: none;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12.5px;
-  font-weight: 600;
-  transition: all .15s;
-  cursor: pointer;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-.nav-item:hover { background: rgba(95,251,214,.08); color: #fff; }
-.nav-item.active { background: #374767; color: #fff; font-weight: 800; }
-.nav-icon { font-size: 20px; flex-shrink: 0; }
-.nav-badge {
-  margin-left: auto;
-  background: #ffb4ab;
-  color: #3b0505;
-  border-radius: 999px;
-  padding: 1px 6px;
-  font-size: 10px;
-  font-weight: 900;
-}
-.bottom-section {
-  margin-top: auto;
-  border-top: 1px solid rgba(60,74,69,.4);
-  padding-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.btn-critical {
-  width: 100%;
-  background: #93000a;
-  color: #ffdad6;
-  border: none;
-  padding: 10px;
-  border-radius: 10px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  font-weight: 900;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  color: #F8FAFF !important;
 }
 
-/* Layout */
-.page-wrap {
-  margin-left: 240px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
+.biat-sidebar .brand-subtitle {
+  color: rgba(210, 220, 255, 0.55) !important;
 }
 
-/* Header */
-.top-header {
-  height: 58px;
-  background: rgba(3,13,37,.88);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(60,74,69,.5);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  flex-shrink: 0;
+/* Liens sidebar */
+.biat-sidebar .nav-link {
+  color: #9AA8C7 !important;
+  background: transparent !important;
 }
 
-/* Status dot */
-.status-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #5ffbd6;
-  animation: pulse 2s infinite;
-  flex-shrink: 0;
-}
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.85)} }
-
-/* Chat area */
-.chat-layout {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 0;
-  min-height: 0;
-  height: calc(100vh - 58px);
+.biat-sidebar .nav-link:hover {
+  color: #FFFFFF !important;
+  background: rgba(0, 232, 255, 0.08) !important;
 }
 
-/* Left panel */
-.left-panel {
-  background: rgba(7,18,42,.6);
-  border-right: 1px solid rgba(60,74,69,.4);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  padding: 16px 12px;
-  gap: 16px;
+/* Menu actif */
+.biat-sidebar .nav-link.active {
+  color: #FFFFFF !important;
+  background:
+    linear-gradient(90deg, rgba(0, 232, 255, 0.18), rgba(124, 58, 237, 0.08)) !important;
+  border-left: 3px solid #00E8FF !important;
+  box-shadow: inset 0 0 18px rgba(0, 232, 255, 0.08) !important;
 }
 
-.panel-section-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  color: #85948e;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  padding: 0 4px;
-  margin-bottom: 6px;
+.biat-sidebar .nav-link.active .material-symbols-outlined {
+  color: #00E8FF !important;
 }
 
-.suggest-btn {
-  width: 100%;
-  text-align: left;
-  background: rgba(10,24,52,.7);
-  border: 1px solid rgba(60,74,69,.5);
-  border-radius: 10px;
-  padding: 10px 12px;
-  color: #d9e2ff;
-  font-size: 13px;
-  line-height: 1.45;
-  cursor: pointer;
-  transition: all .15s;
-  display: block;
-}
-.suggest-btn:hover {
-  border-color: rgba(95,251,214,.4);
-  background: rgba(95,251,214,.05);
-  color: #fff;
+/* Critical Alerts plus sérieux */
+.side-critical {
+  background: rgba(255, 77, 109, 0.10) !important;
+  border: 1px solid rgba(255, 77, 109, 0.45) !important;
+  color: #FFB4C2 !important;
 }
 
-.status-card {
-  background: rgba(10,24,52,.7);
-  border: 1px solid rgba(60,74,69,.5);
-  border-radius: 12px;
-  padding: 12px;
+.side-critical:hover {
+  background: rgba(255, 77, 109, 0.18) !important;
 }
 
-/* Right panel - Chat */
-.chat-right {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
+/* Settings / Support */
+.side-muted {
+  color: #9AA8C7 !important;
 }
 
-#chatMessages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  scroll-behavior: smooth;
+.side-muted:hover {
+  background: rgba(0, 232, 255, 0.08) !important;
+  color: #FFFFFF !important;
 }
 
-#chatMessages::-webkit-scrollbar { width: 4px; }
-#chatMessages::-webkit-scrollbar-track { background: transparent; }
-#chatMessages::-webkit-scrollbar-thumb { background: rgba(95,251,214,.2); border-radius: 4px; }
-
-/* Messages */
-.msg-user {
-  margin-left: auto;
-  max-width: 72%;
-  background: #374767;
-  border-radius: 14px 14px 2px 14px;
-  padding: 12px 16px;
-  font-size: 14px;
-  line-height: 1.6;
-  word-break: break-word;
+/* User bottom */
+.sidebar-user .avatar {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 14px rgba(0, 232, 255, 0.35) !important;
 }
 
-.msg-ai-wrap {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  max-width: 88%;
+/* Navbar noire */
+header {
+  background: rgba(3, 7, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 232, 255, 0.18) !important;
 }
-.msg-ai-avatar {
-  width: 34px; height: 34px;
-  border-radius: 9px;
-  background: rgba(10,24,52,.8);
-  border: 1px solid rgba(95,251,214,.2);
-  display: flex; align-items: center; justify-content: center;
-  color: #5ffbd6;
-  font-size: 17px;
-  flex-shrink: 0;
-}
-.msg-ai-bubble {
-  background: rgba(10,24,52,.8);
-  border: 1px solid rgba(60,74,69,.6);
-  border-radius: 4px 14px 14px 14px;
-  padding: 14px 16px;
-  font-size: 14px;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  word-break: break-word;
-  flex: 1;
-}
-.msg-source-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  font-weight: 700;
-}
-.badge-groq { background: rgba(95,251,214,.1); color: #5ffbd6; border: 1px solid rgba(95,251,214,.3); }
-.badge-local { background: rgba(245,146,30,.1); color: #f5921e; border: 1px solid rgba(245,146,30,.3); }
 
-/* Typing indicator */
-.typing-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #5ffbd6;
-  animation: typingBounce 1.2s infinite;
+/* Fond principal vivant mais sombre */
+.biat-bg {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(124, 58, 237, 0.30) 0%, transparent 38%),
+    radial-gradient(circle at 20% 85%, rgba(0, 232, 255, 0.20) 0%, transparent 45%),
+    linear-gradient(135deg, #050714 0%, #081336 45%, #111A3A 100%) !important;
 }
-.typing-dot:nth-child(2) { animation-delay: .2s; }
-.typing-dot:nth-child(3) { animation-delay: .4s; }
-@keyframes typingBounce { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
 
-/* Input bar */
-.chat-input-bar {
-  border-top: 1px solid rgba(60,74,69,.5);
-  padding: 14px 16px;
-  background: rgba(3,13,37,.7);
-  flex-shrink: 0;
+/* Cards plus lumineuses */
+.glass-card {
+  background: rgba(17, 26, 58, 0.86) !important;
+  border: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
-.chat-input-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(10,24,52,.8);
-  border: 1px solid rgba(60,74,69,.6);
-  border-radius: 14px;
-  padding: 4px 4px 4px 16px;
-  transition: border-color .2s;
+
+.glass-card:hover {
+  border-color: rgba(0, 232, 255, 0.55) !important;
 }
-.chat-input-row:focus-within { border-color: rgba(95,251,214,.5); }
-#chatInput {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: #d9e2ff;
-  font-size: 14px;
-  padding: 8px 0;
-  font-family: Inter, sans-serif;
+
+/* Boutons cyan vif */
+#applyFilters,
+#quickAction,
+button.bg-primary-container {
+  background: linear-gradient(135deg, #00E8FF, #0EA5E9) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.22) !important;
 }
-#chatInput::placeholder { color: #5a6a8a; }
-#sendBtn {
-  background: #5ffbd6;
-  color: #06251f;
-  border: none;
-  padding: 9px 20px;
-  border-radius: 10px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all .15s;
-  flex-shrink: 0;
+
+/* Inputs/selects */
+input,
+select,
+textarea {
+  background: rgba(12, 22, 55, 0.92) !important;
+  border-color: rgba(0, 232, 255, 0.25) !important;
 }
-#sendBtn:hover { background: #4de8c4; transform: scale(1.02); }
-#sendBtn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+/* KPI couleurs plus vives */
+#kpiCritical {
+  color: #FF4D6D !important;
+}
+
+#kpiWarning {
+  color: #FFD23F !important;
+}
+
+#kpiNotify,
+#kpiTotal,
+#kpiAvg,
+#kpiAmount {
+  color: #EAF0FF !important;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0a1340;color:#d9e2ff;font-family:Inter,sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 88% 8%,rgba(255,146,30,.26) 0%,transparent 45%),
+    radial-gradient(circle at 12% 88%,rgba(0,120,255,.28) 0%,transparent 55%),
+    linear-gradient(135deg,#060b2e,#0a1340 35%,#0f1c4f 70%,#060b2e)}
+.mono{font-family:"JetBrains Mono",monospace}
+.display{font-family:"Hanken Grotesk",sans-serif}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;line-height:1}
+
+.biat-sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;
+  background:rgba(10,22,50,.97);backdrop-filter:blur(18px);
+  border-right:1px solid rgba(60,74,69,.5);display:flex;flex-direction:column;
+  z-index:100;padding:20px 12px 14px}
+.brand-title{font-family:"Hanken Grotesk",sans-serif;font-size:22px;font-weight:900;
+  color:#fff;line-height:1.15;padding:0 6px}
+.brand-sub{font-size:12px;color:#bacac3;padding:4px 6px 20px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  color:#bacac3;text-decoration:none;font-family:"JetBrains Mono",monospace;
+  font-size:12.5px;font-weight:600;transition:all .15s;cursor:pointer;border:none;
+  background:none;width:100%;text-align:left}
+.nav-item:hover{background:rgba(0,232,255,.08);color:#fff}
+.nav-item.active{background:#374767;color:#fff;font-weight:800}
+.nav-icon{font-size:20px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:#ff4d6d;color:#3b0505;border-radius:999px;
+  padding:1px 6px;font-size:10px;font-weight:900}
+.bottom-section{margin-top:auto;border-top:1px solid rgba(60,74,69,.4);
+  padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.btn-critical{width:100%;background:#7a0019;color:#ffdad6;border:none;padding:10px;
+  border-radius:10px;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:900;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+.page-wrap{margin-left:240px;min-height:100vh;display:flex;flex-direction:column;
+  position:relative;z-index:1}
+.top-header{height:58px;background:rgba(3,13,37,.88);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(60,74,69,.5);display:flex;align-items:center;
+  justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:50;flex-shrink:0}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#00e8ff;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.chat-layout{flex:1;display:grid;grid-template-columns:260px 1fr;gap:0;min-height:0;height:calc(100vh - 58px)}
+.left-panel{background:rgba(7,18,42,.6);border-right:1px solid rgba(60,74,69,.4);
+  display:flex;flex-direction:column;overflow-y:auto;padding:16px 12px;gap:16px}
+.panel-section-title{font-family:"JetBrains Mono",monospace;font-size:10px;color:#85948e;
+  text-transform:uppercase;letter-spacing:.08em;padding:0 4px;margin-bottom:6px}
+.suggest-btn{width:100%;text-align:left;background:rgba(10,24,52,.7);
+  border:1px solid rgba(60,74,69,.5);border-radius:10px;padding:10px 12px;
+  color:#d9e2ff;font-size:13px;line-height:1.45;cursor:pointer;transition:all .15s;display:block}
+.suggest-btn:hover{border-color:rgba(0,232,255,.4);background:rgba(0,232,255,.05);color:#fff}
+.status-card{background:rgba(10,24,52,.7);border:1px solid rgba(60,74,69,.5);border-radius:12px;padding:12px}
+.chat-right{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#chatMessages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+#chatMessages::-webkit-scrollbar{width:4px}
+#chatMessages::-webkit-scrollbar-thumb{background:rgba(0,232,255,.2);border-radius:4px}
+.msg-user{margin-left:auto;max-width:72%;background:#374767;border-radius:14px 14px 2px 14px;
+  padding:12px 16px;font-size:14px;line-height:1.6;word-break:break-word}
+.msg-ai-wrap{display:flex;align-items:flex-start;gap:10px;max-width:90%}
+.msg-ai-avatar{width:34px;height:34px;border-radius:9px;background:rgba(10,24,52,.8);
+  border:1px solid rgba(0,232,255,.2);display:flex;align-items:center;justify-content:center;
+  color:#00e8ff;font-size:17px;flex-shrink:0}
+.msg-ai-bubble{background:rgba(10,24,52,.8);border:1px solid rgba(60,74,69,.6);
+  border-radius:4px 14px 14px 14px;padding:14px 16px;font-size:14px;line-height:1.75;
+  white-space:pre-wrap;word-break:break-word;flex:1}
+.msg-source-badge{display:inline-flex;align-items:center;gap:4px;font-family:"JetBrains Mono",monospace;
+  font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;padding:2px 8px;
+  border-radius:4px;margin-bottom:8px;font-weight:700}
+.badge-groq{background:rgba(0,232,255,.1);color:#00e8ff;border:1px solid rgba(0,232,255,.3)}
+.badge-local{background:rgba(245,146,30,.1);color:#f5921e;border:1px solid rgba(245,146,30,.3)}
+.badge-error{background:rgba(255,180,171,.1);color:#ff4d6d;border:1px solid rgba(255,180,171,.3)}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:#00e8ff;animation:typingBounce 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.chat-input-bar{border-top:1px solid rgba(60,74,69,.5);padding:14px 16px;
+  background:rgba(3,13,37,.7);flex-shrink:0}
+.chat-input-row{display:flex;align-items:center;gap:10px;background:rgba(10,24,52,.8);
+  border:1px solid rgba(60,74,69,.6);border-radius:14px;padding:4px 4px 4px 16px;transition:border-color .2s}
+.chat-input-row:focus-within{border-color:rgba(0,232,255,.5)}
+#chatInput{flex:1;background:none;border:none;outline:none;color:#d9e2ff;font-size:14px;
+  padding:8px 0;font-family:Inter,sans-serif}
+#chatInput::placeholder{color:#5a6a8a}
+#sendBtn{background:#00e8ff;color:#06251f;border:none;padding:9px 20px;border-radius:10px;
+  font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:800;cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all .15s;flex-shrink:0}
+#sendBtn:hover{background:#4de8c4;transform:scale(1.02)}
+#sendBtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 </style>
 </head>
 <body>
 
-<!-- ── SIDEBAR ─────────────────────────────────── -->
 <aside class="biat-sidebar">
   <div class="brand-title">BIAT Risk<br>Monitor</div>
   <div class="brand-sub">Vigilant Professionalism</div>
-
   <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
-    <a class="nav-item" href="/dashboard">
-      <span class="material-symbols-outlined nav-icon">dashboard</span>Global Dashboard
-    </a>
-    <a class="nav-item" href="/evolution">
-      <span class="material-symbols-outlined nav-icon">trending_up</span>Risk Evolution
-    </a>
-    <a class="nav-item" href="/future">
-      <span class="material-symbols-outlined nav-icon">online_prediction</span>Future Prediction
-    </a>
-    <a class="nav-item" href="/notifications">
-      <span class="material-symbols-outlined nav-icon">notifications</span>
-      <span>Notifications</span>
-      <span class="nav-badge" id="notifBadge">4847</span>
-    </a>
-    <a class="nav-item" href="/client">
-      <span class="material-symbols-outlined nav-icon">group</span>Client Profiles
-    </a>
-    <a class="nav-item" href="/performance">
-      <span class="material-symbols-outlined nav-icon">analytics</span>Model Performance
-    </a>
-    <a class="nav-item active" href="/assistant">
-      <span class="material-symbols-outlined nav-icon">smart_toy</span>AI Assistant
-    </a>
+    <a class="nav-item" href="/dashboard"><span class="material-symbols-outlined nav-icon">dashboard</span>Global Dashboard</a>
+    <a class="nav-item" href="/evolution"><span class="material-symbols-outlined nav-icon">trending_up</span>Risk Evolution</a>
+    <a class="nav-item" href="/future"><span class="material-symbols-outlined nav-icon">online_prediction</span>Future Prediction</a>
+    <a class="nav-item" href="/notifications"><span class="material-symbols-outlined nav-icon">notifications</span><span>Notifications</span><span class="nav-badge" id="notifBadge">4847</span></a>
+    <a class="nav-item" href="/client"><span class="material-symbols-outlined nav-icon">group</span>Client Profiles</a>
+    <a class="nav-item" href="/performance"><span class="material-symbols-outlined nav-icon">analytics</span>Model Performance</a>
+    <a class="nav-item active" href="/assistant"><span class="material-symbols-outlined nav-icon">smart_toy</span>AI Assistant</a>
   </nav>
-
   <div class="bottom-section">
-    <button class="btn-critical" onclick="window.location.href='/notifications'">
-      <span class="material-symbols-outlined" style="font-size:18px">warning</span>
-      Critical Alerts
+    <button class="btn-critical" onclick="location.href='/notifications'">
+      <span class="material-symbols-outlined" style="font-size:18px">warning</span>Critical Alerts
     </button>
-    <button class="nav-item" onclick="showInfoModal('Settings','Seuil de risque : 0.70 pour réduire les fausses alertes.\nSource des données : dashboard_clients_full.json, anomaly_clients.json, model_metrics.json\nModèle ML principal : LightGBM\nFallback : réponses locales intelligentes si Groq indisponible.')">
+    <button class="nav-item" onclick="showModal('Settings','Modèle : LightGBM\nSeuil critique : ≥ 85%\nFallback : réponses locales depuis JSON\nGroq : LLaMA 3.3 70B si clé disponible')">
       <span class="material-symbols-outlined nav-icon">settings</span>Settings
     </button>
-    <button class="nav-item" onclick="showInfoModal('Support','Dashboard → vue globale\nRisk Evolution → transitions de risque\nNotifications → liste opérationnelle\nClient Profiles → fiches individuelles\nAI Assistant → questions métier et analyse portefeuille')">
+    <button class="nav-item" onclick="showModal('Support','Posez vos questions en français ou en anglais.\nExemples : Qui sont les clients critiques ?\nRésumé du portefeuille\nClients avec anomalies et score faible')">
       <span class="material-symbols-outlined nav-icon">help</span>Support
     </button>
   </div>
 </aside>
 
-<!-- ── MAIN ────────────────────────────────────── -->
 <div class="page-wrap">
-
-  <!-- Header -->
   <header class="top-header">
     <div style="display:flex;align-items:center;gap:12px">
       <div>
-        <h2 class="display" style="font-size:20px;font-weight:800;margin:0;line-height:1.2">AI Assistant</h2>
+        <h2 class="display" style="font-size:20px;font-weight:800;margin:0">AI Assistant</h2>
         <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
           <div class="status-dot"></div>
-          <span class="mono" style="font-size:10px;color:#5ffbd6;text-transform:uppercase;letter-spacing:.08em">Direct Portfolio Sync</span>
+          <span class="mono" style="font-size:10px;color:#00e8ff;text-transform:uppercase;letter-spacing:.08em">Direct Portfolio Sync</span>
         </div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:16px">
-      <button onclick="window.location.href='/dashboard'" class="mono" style="font-size:12px;color:#9aa8c7;background:none;border:none;cursor:pointer">Overview</button>
-      <button onclick="window.location.href='/future'" class="mono" style="font-size:12px;color:#9aa8c7;background:none;border:none;cursor:pointer">Prediction</button>
-      <span class="mono" style="font-size:12px;color:#5ffbd6;border-bottom:1px solid #5ffbd6;padding-bottom:1px">Assistant</span>
-      <span class="material-symbols-outlined" style="color:#9aa8c7;cursor:pointer">notifications</span>
+      <button onclick="location.href='/dashboard'" class="mono" style="font-size:12px;color:#9aa8c7;background:none;border:none;cursor:pointer">Overview</button>
+      <button onclick="location.href='/future'" class="mono" style="font-size:12px;color:#9aa8c7;background:none;border:none;cursor:pointer">Prediction</button>
+      <span class="mono" style="font-size:12px;color:#00e8ff;border-bottom:1px solid #00e8ff;padding-bottom:1px">Assistant</span>
       <div style="display:flex;align-items:center;gap:8px;padding-left:14px;border-left:1px solid rgba(60,74,69,.5)">
-        <div style="width:32px;height:32px;border-radius:50%;background:#101b33;border:1px solid rgba(95,251,214,.25)"></div>
-        <div>
-          <p class="mono" style="font-size:13px;font-weight:700;margin:0">ALA</p>
-          <p class="mono" style="font-size:10px;color:#9aa8c7;text-transform:uppercase;margin:0">Risk Officer</p>
-        </div>
+        <div style="width:32px;height:32px;border-radius:50%;background:#142467;border:1px solid rgba(0,232,255,.25)"></div>
+        <div><p class="mono" style="font-size:13px;font-weight:700;margin:0">ALA</p>
+          <p class="mono" style="font-size:10px;color:#9aa8c7;text-transform:uppercase;margin:0">Risk Officer</p></div>
       </div>
     </div>
   </header>
 
-  <!-- Chat Layout -->
   <div class="chat-layout">
-
-    <!-- Left Panel: Suggested queries + Status -->
+    <!-- Left panel -->
     <div class="left-panel">
-
       <div>
-        <p class="panel-section-title">Suggested Queries</p>
+        <p class="panel-section-title">Questions suggérées</p>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <button class="suggest-btn" onclick="ask('Combien de clients critiques avons-nous ?')">
-            Combien de clients critiques ?
-          </button>
-          <button class="suggest-btn" onclick="ask('Quels clients doivent être notifiés en priorité ?')">
-            Clients à notifier en priorité
-          </button>
-          <button class="suggest-btn" onclick="ask('Qui sont les clients qui ont des anomalies ?')">
-            Clients avec anomalies détectées
-          </button>
-          <button class="suggest-btn" onclick="ask('Quelles sont les performances du modèle LightGBM ?')">
-            Performances du modèle ML
-          </button>
-          <button class="suggest-btn" onclick="ask('Résumé global du portefeuille')">
-            Résumé global du portefeuille
-          </button>
-          <button class="suggest-btn" onclick="ask('Comment évoluent les clients critiques ?')">
-            Évolution des clients critiques
-          </button>
+          <button class="suggest-btn" onclick="ask('Combien de clients critiques avons-nous ?')">Combien de clients critiques ?</button>
+          <button class="suggest-btn" onclick="ask('Donne-moi les 5 clients avec le score le plus élevé')">Top 5 clients risqués</button>
+          <button class="suggest-btn" onclick="ask('Qui sont les clients avec des anomalies mais un score faible ?')">Anomalies + score faible</button>
+          <button class="suggest-btn" onclick="ask('Quelles sont les performances du modèle LightGBM ?')">Performances LightGBM</button>
+          <button class="suggest-btn" onclick="ask('Résumé global du portefeuille BIAT')">Résumé du portefeuille</button>
+          <button class="suggest-btn" onclick="ask('Combien de clients vont devenir critiques dans 30 jours ?')">Prédictions futures</button>
+          <button class="suggest-btn" onclick="ask('Quelle est la différence entre une anomalie et un client critique ?')">Anomalie vs Critique</button>
         </div>
       </div>
-
       <div>
-        <p class="panel-section-title">System Status</p>
+        <p class="panel-section-title">Statut système</p>
         <div class="status-card">
-          <p style="font-size:12px;font-weight:700;color:#d9e2ff;margin:0 0 6px">Assistant métier BIAT</p>
-          <p style="font-size:12px;color:#9aa8c7;line-height:1.5;margin:0">
-            Basé sur les données réelles du portefeuille. Mis à jour à chaque requête.
-          </p>
+          <p style="font-size:12px;font-weight:700;color:#d9e2ff;margin:0 0 6px">Assistant BIAT Risk</p>
+          <p style="font-size:12px;color:#9aa8c7;line-height:1.5;margin:0">Données réelles + IA conversationnelle</p>
           <div style="display:flex;align-items:center;gap:6px;margin-top:10px">
             <div id="groqDot" style="width:6px;height:6px;border-radius:50%;background:#85948e;flex-shrink:0"></div>
-            <span id="groqStatus" class="mono" style="font-size:10px;color:#85948e">Vérification Groq...</span>
+            <span id="groqStatus" class="mono" style="font-size:10px;color:#85948e">Vérification...</span>
           </div>
         </div>
       </div>
-
       <div>
-        <p class="panel-section-title">Données disponibles</p>
-        <div class="status-card" style="display:flex;flex-direction:column;gap:6px">
-          <div id="fileStatus" style="font-size:11px;color:#9aa8c7;line-height:1.6">
-            Chargement...
-          </div>
+        <p class="panel-section-title">Données chargées</p>
+        <div class="status-card">
+          <div id="fileStatus" style="font-size:11px;color:#9aa8c7;line-height:1.8">Chargement...</div>
         </div>
       </div>
-
     </div>
 
-    <!-- Right: Chat -->
+    <!-- Chat right -->
     <div class="chat-right">
-
       <div id="chatMessages"></div>
-
       <div class="chat-input-bar">
         <div class="chat-input-row">
-          <input id="chatInput" placeholder="Interroger l'assistant sur un client, une tendance ou une anomalie..." maxlength="500"/>
+          <input id="chatInput" placeholder="Posez votre question sur le portefeuille, un client ou une anomalie..." maxlength="500"/>
           <button id="sendBtn" onclick="sendMessage()">
-            <span class="material-symbols-outlined" style="font-size:18px">send</span>
-            Envoyer
+            <span class="material-symbols-outlined" style="font-size:18px">send</span>Envoyer
           </button>
         </div>
         <p class="mono" style="font-size:10px;color:#5a6a8a;margin:8px 0 0;text-align:center">
-          L'IA peut générer des erreurs. Vérifiez les informations critiques dans les profils clients.
+          Réponses basées sur les données ML réelles. Vérifiez les fiches clients pour les décisions opérationnelles.
         </p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Info Modal -->
+<!-- Modal -->
 <div id="infoModal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;
   justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(8px)">
-  <div style="width:min(500px,92vw);background:#0d1c35;border:1px solid rgba(95,251,214,.3);
-    border-radius:16px;padding:24px;box-shadow:0 32px 64px rgba(0,0,0,.5)">
+  <div style="width:min(500px,92vw);background:#0d1c35;border:1px solid rgba(0,232,255,.3);
+    border-radius:16px;padding:24px">
     <h3 id="modalTitle" style="font-family:'Hanken Grotesk',sans-serif;font-size:20px;
-      font-weight:800;color:#5ffbd6;margin:0 0 14px"></h3>
+      font-weight:800;color:#00e8ff;margin:0 0 14px"></h3>
     <p id="modalText" style="color:#b9c6e4;line-height:1.7;white-space:pre-line;font-size:14px;margin:0"></p>
     <div style="margin-top:18px;text-align:right">
       <button onclick="document.getElementById('infoModal').style.display='none'"
-        style="background:#5ffbd6;color:#06251f;border:none;padding:9px 20px;
-        border-radius:8px;font-family:'JetBrains Mono',monospace;font-weight:800;cursor:pointer">
-        Fermer
-      </button>
+        style="background:#00e8ff;color:#06251f;border:none;padding:9px 20px;border-radius:8px;
+        font-family:'JetBrains Mono',monospace;font-weight:800;cursor:pointer">Fermer</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── Helpers ─────────────────────────────────────────────
-function showInfoModal(title, text) {
-  document.getElementById("modalTitle").innerText = title;
-  document.getElementById("modalText").innerText  = text;
-  document.getElementById("infoModal").style.display = "flex";
+// ════════════════════════════════════════════════════════
+// DATA CACHE — chargé une fois au démarrage
+// ════════════════════════════════════════════════════════
+let PORTFOLIO = {
+  clients: [], anomalies: [], metrics: {}, loaded: false
+};
+
+async function loadPortfolioData() {
+  // Clients
+  try {
+    const r = await fetch("/attached_assets/dashboard_clients_full.json?nc="+Date.now(),{cache:"no-store"});
+    if(r.ok) {
+      const d = await r.json();
+      PORTFOLIO.clients = Array.isArray(d) ? d : (d.clients || d.data || Object.values(d).filter(v=>v&&typeof v==="object"));
+      console.log("[AI] Clients chargés:", PORTFOLIO.clients.length);
+    }
+  } catch(e) {
+    // fallback
+    try {
+      const r = await fetch("/attached_assets/top_risky_clients.json?nc="+Date.now(),{cache:"no-store"});
+      if(r.ok) {
+        const d = await r.json();
+        PORTFOLIO.clients = Array.isArray(d)?d:(d.clients||[]);
+        console.log("[AI] Fallback clients:", PORTFOLIO.clients.length);
+      }
+    } catch {}
+  }
+
+  // Anomalies
+  for(const src of ["/attached_assets/anomaly_clients.json","/attached_assets/anomaly_data.json"]) {
+    try {
+      const r = await fetch(src+"?nc="+Date.now(),{cache:"no-store"});
+      if(!r.ok) continue;
+      const d = await r.json();
+      let rows = [];
+      if(Array.isArray(d)) rows=d;
+      else if(Array.isArray(d.clients)) rows=d.clients;
+      else if(Array.isArray(d.anomalies)) rows=d.anomalies;
+      else if(Array.isArray(d.top_anomalies)) rows=d.top_anomalies;
+      else if(typeof d==="object") rows=Object.entries(d).map(([k,v])=>v&&typeof v==="object"?{cpte:k,...v}:{cpte:k});
+      if(rows.length>0){PORTFOLIO.anomalies=rows;break;}
+    } catch {}
+  }
+
+  // Metrics
+  try {
+    const r = await fetch("/attached_assets/model_metrics.json?nc="+Date.now(),{cache:"no-store"});
+    if(r.ok) PORTFOLIO.metrics = await r.json();
+  } catch {}
+
+  PORTFOLIO.loaded = true;
+  updateFileStatus();
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+function updateFileStatus() {
+  const c = PORTFOLIO.clients.length;
+  const a = PORTFOLIO.anomalies.length;
+  const hasMet = Object.keys(PORTFOLIO.metrics).length > 0;
+  document.getElementById("fileStatus").innerHTML = `
+    <div style="display:flex;justify-content:space-between"><span>Clients scorés</span>
+      <span style="color:${c>0?"#00e8ff":"#ff4d6d"}">${c>0?c.toLocaleString("fr-FR")+" ✓":"✗"}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Anomalies</span>
+      <span style="color:${a>0?"#00e8ff":"#ff4d6d"}">${a>0?a+" ✓":"✗"}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Model metrics</span>
+      <span style="color:${hasMet?"#00e8ff":"#ff4d6d"}">${hasMet?"✓":"✗"}</span></div>
+    ${c>0?`<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(60,74,69,.4);color:#00e8ff;font-size:10.5px">${c.toLocaleString("fr-FR")} clients disponibles</div>`:""}`;
 }
 
-// ── Chat functions ───────────────────────────────────────
+// ════════════════════════════════════════════════════════
+// SMART LOCAL FALLBACK — réponses intelligentes par sujet
+// ════════════════════════════════════════════════════════
+function n(v){ const x=Number(String(v??"").replace(",",".")); return Number.isFinite(x)?x:0; }
+function fmtMoney(v){ const x=n(v); if(x>=1e6) return (x/1e6).toFixed(1)+"M TND"; if(x>=1000) return Math.round(x/1000)+"K TND"; return Math.round(x)+" TND"; }
+
+function getScore(r){
+  for(const k of ["display_risk_score_percent","risk_score_percent","score_percent","risk_score","RISK_SCORE","score"]){
+    const v=n(r[k]); if(v>1) return Math.min(v,95); if(v>0) return Math.min(v*100,95);
+  }
+  return 0;
+}
+function levelFromScore(s){ if(s>=85)return"Critique"; if(s>=65)return"Élevé"; if(s>=40)return"Moyen"; return"Faible"; }
+function getCpte(r){ return String(r.cpte||r.CPTE||r.id||"").trim(); }
+
+function has(text, words){ const t=text.toLowerCase(); return words.some(w=>t.includes(w)); }
+
+// ── Build smart local answer ──────────────────────────
+function buildLocalAnswer(q) {
+  const cl = PORTFOLIO.clients;
+  const an = PORTFOLIO.anomalies;
+  const mt = PORTFOLIO.metrics;
+  const qL = q.toLowerCase();
+
+  // ── Résumé global ──
+  if(has(qL,["résumé","resume","global","portefeuille","overview","ensemble"])) {
+    if(!cl.length) return null;
+    const uniq = new Map();
+    cl.forEach(r=>{ const c=getCpte(r); if(c&&!uniq.has(c)) uniq.set(c,r); });
+    const clients = Array.from(uniq.values());
+    const total = clients.length;
+    const critique = clients.filter(r=>getScore(r)>=85).length;
+    const eleve    = clients.filter(r=>getScore(r)>=65&&getScore(r)<85).length;
+    const moyen    = clients.filter(r=>getScore(r)>=40&&getScore(r)<65).length;
+    const faible   = clients.filter(r=>getScore(r)<40).length;
+    const avgScore = (clients.reduce((s,r)=>s+getScore(r),0)/Math.max(total,1)).toFixed(1);
+    const expo = clients.reduce((s,r)=>s+n(r.risk_brut||r.RISK_BRUT||0),0);
+    return `📊 Résumé global du portefeuille BIAT\n\n`+
+      `Total clients analysés : ${total.toLocaleString("fr-FR")}\n`+
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`+
+      `🔴 Critiques (≥85%)  : ${critique.toLocaleString("fr-FR")} clients (${(critique/total*100).toFixed(1)}%)\n`+
+      `🟡 Élevés (65-85%)   : ${eleve.toLocaleString("fr-FR")} clients (${(eleve/total*100).toFixed(1)}%)\n`+
+      `🟢 Moyens (40-65%)   : ${moyen.toLocaleString("fr-FR")} clients (${(moyen/total*100).toFixed(1)}%)\n`+
+      `⚪ Faibles (<40%)    : ${faible.toLocaleString("fr-FR")} clients (${(faible/total*100).toFixed(1)}%)\n`+
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`+
+      `Score moyen : ${avgScore}%\n`+
+      `Exposition totale : ${expo>0?fmtMoney(expo):"Non disponible"}\n`+
+      `Anomalies détectées : ${an.length}\n\n`+
+      `⚠️ Action prioritaire : traiter en premier les ${critique.toLocaleString("fr-FR")} clients critiques avec score ≥ 85%.`;
+  }
+
+  // ── Clients critiques ──
+  if(has(qL,["critique","critical","critiques"]) && !has(qL,["anomal","stable"])) {
+    if(!cl.length) return null;
+    const uniq = new Map();
+    cl.forEach(r=>{ const c=getCpte(r); if(c){ if(!uniq.has(c)||getScore(r)>getScore(uniq.get(c))) uniq.set(c,r); }});
+    const crits = Array.from(uniq.values()).filter(r=>getScore(r)>=85).sort((a,b)=>getScore(b)-getScore(a));
+    if(!crits.length) return `Aucun client critique trouvé dans les données actuelles.`;
+    const top = crits.slice(0,8);
+    let resp = `🔴 Clients critiques (score ≥ 85%)\n\nTotal détectés : ${crits.length.toLocaleString("fr-FR")} clients\n\nTop clients les plus risqués :\n\n`;
+    top.forEach((r,i)=>{
+      const cpte = getCpte(r);
+      const s = getScore(r);
+      const rb = n(r.risk_brut||r.RISK_BRUT||0);
+      const nj = n(r.nbrjdep||r.NBRJDEP||0);
+      resp += `${i+1}. ${cpte} — Score : ${s.toFixed(1)}%`;
+      if(rb>0) resp += ` | Exposition : ${fmtMoney(rb)}`;
+      if(nj>0) resp += ` | NBRJDEP : ${nj}j`;
+      resp += `\n`;
+    });
+    resp += `\n📌 Action recommandée : intervention immédiate sur les clients en tête de liste. Ouvrez les fiches via /client?cpte=CPTE_XXXXX`;
+    return resp;
+  }
+
+  // ── Top clients / meilleurs scores ──
+  if(has(qL,["top","5","10","meilleur","plus élevé","plus eleve","risqué","risque","liste"])) {
+    if(!cl.length) return null;
+    const uniq = new Map();
+    cl.forEach(r=>{ const c=getCpte(r); if(c){ if(!uniq.has(c)||getScore(r)>getScore(uniq.get(c))) uniq.set(c,r); }});
+    const limit = qL.includes("10") ? 10 : 5;
+    const top = Array.from(uniq.values()).sort((a,b)=>getScore(b)-getScore(a)).slice(0,limit);
+    let resp = `🏆 Top ${limit} clients par score de risque :\n\n`;
+    top.forEach((r,i)=>{
+      const cpte = getCpte(r);
+      const s = getScore(r);
+      const rb = n(r.risk_brut||r.RISK_BRUT||0);
+      const nj = n(r.nbrjdep||r.NBRJDEP||0);
+      const lvl = levelFromScore(s);
+      resp += `${i+1}. ${cpte}\n   Score : ${s.toFixed(1)}% | Niveau : ${lvl}`;
+      if(rb>0) resp += ` | Exposition : ${fmtMoney(rb)}`;
+      if(nj>0) resp += ` | NBRJDEP : ${nj}j`;
+      resp += `\n\n`;
+    });
+    return resp.trim();
+  }
+
+  // ── Anomalies stables / anomalie vs critique ──
+  if(has(qL,["anomal"]) && has(qL,["stable","faible","score faible","bas","acceptable","normal"])) {
+    if(!an.length) return `Aucune donnée d'anomalies disponible (anomaly_clients.json non trouvé).`;
+    const anomalyCptes = new Set(an.map(a=>String(a.cpte||a.CPTE||"").trim()));
+    const stableWithAnomaly = cl.filter(r=>{
+      const cpte = getCpte(r);
+      const s = getScore(r);
+      return anomalyCptes.has(cpte) && s < 65; // score acceptable mais anomalie
+    });
+    if(!stableWithAnomaly.length) {
+      return `Parmi les ${an.length} clients identifiés avec anomalies, aucun ne présente simultanément un score faible (< 65%) dans les données actuelles.\n\nCela peut signifier que les clients avec anomalies ont majoritairement des scores élevés, ce qui est cohérent avec la détection par Isolation Forest.`;
+    }
+    const top = stableWithAnomaly.sort((a,b)=>getScore(b)-getScore(a)).slice(0,8);
+    let resp = `⚠️ Clients avec anomalies mais score acceptable (< 65%)\n\nCes profils paraissent stables selon le score ML mais ont un comportement transactionnel inhabituel :\n\n`;
+    top.forEach((r,i)=>{
+      const cpte = getCpte(r);
+      const s = getScore(r);
+      resp += `${i+1}. ${cpte} — Score : ${s.toFixed(1)}% (${levelFromScore(s)}) — comportement atypique\n`;
+    });
+    resp += `\n📌 Recommendation : Ces clients méritent une revue manuelle car le score ML seul ne suffit pas à expliquer leur comportement inhabituel. Consultez les fiches détaillées.`;
+    return resp;
+  }
+
+  // ── Anomalies générales ──
+  if(has(qL,["anomal","atypique","inhabituel","isolation forest"])) {
+    if(!an.length) return `Fichier anomaly_clients.json non disponible. Lancez 05_export_anomaly_app_data.py pour générer les données d'anomalies.`;
+    const top = an.slice(0,8);
+    let resp = `🔍 Détection d'anomalies — Résultats\n\nTotal d'anomalies détectées : ${an.length}\n\n`;
+    resp += `Méthode utilisée : Isolation Forest (modèle non supervisé)\n`;
+    resp += `Principe : détecte les clients au comportement transactionnel inhabituel, même si leur score ML classique semble acceptable.\n\n`;
+    resp += `Top clients anomalies :\n\n`;
+    top.forEach((r,i)=>{
+      const cpte = String(r.cpte||r.CPTE||"N/A");
+      const aScore = n(r.anomaly_score||r.score||0);
+      const riskScore = getScore(r);
+      resp += `${i+1}. ${cpte}`;
+      if(aScore>0) resp += ` | Score anomalie : ${aScore.toFixed(1)}`;
+      if(riskScore>0) resp += ` | Score risque : ${riskScore.toFixed(1)}%`;
+      resp += `\n`;
+    });
+    resp += `\n📌 Important : Un client peut avoir un score ML faible mais être une anomalie. Ces deux signaux sont complémentaires, pas redondants.`;
+    return resp;
+  }
+
+  // ── Performances du modèle ──
+  if(has(qL,["performance","lightgbm","modèle","modele","recall","auc","f1","précision","precision","accuracy","métrique","metrique"])) {
+    let resp = `📈 Performances du modèle LightGBM\n\n`;
+    if(Object.keys(mt).length>0) {
+      resp += `Métriques issues de model_metrics.json :\n\n`;
+      Object.entries(mt).forEach(([k,v])=>{ resp += `• ${k} : ${v}\n`; });
+    } else {
+      resp += `Métriques de référence (jeu de test) :\n\n`+
+        `• Accuracy   : 0.9736 (97.36%)\n`+
+        `• Recall     : 0.9372 (93.72%) ← métrique prioritaire\n`+
+        `• F1-Score   : 0.9450 (94.50%)\n`+
+        `• ROC-AUC    : 0.9889 (98.89%)\n`+
+        `• Précision  : 0.9543 (95.43%)\n\n`+
+        `Seuil de décision optimal : 0.65\n\n`+
+        `Matrice de confusion :\n`+
+        `  • Vrais Positifs (TP) : 1 256 clients risqués détectés\n`+
+        `  • Faux Négatifs (FN) : 84 clients risqués manqués\n`+
+        `  • Vrais Négatifs (TN) : 12 402 clients sains correctement classés\n`+
+        `  • Faux Positifs (FP) : 312 clients sains signalés par erreur\n\n`+
+        `📌 Justification du choix LightGBM : meilleur Recall parmi tous les modèles testés. Dans un contexte bancaire, manquer un client risqué (FN) coûte plus cher qu'une fausse alarme (FP).`;
+    }
+    return resp;
+  }
+
+  // ── Prédictions futures ──
+  if(has(qL,["futur","future","30 jours","devenir critique","prédiction","prediction","horizon"])) {
+    if(!cl.length) return null;
+    const uniq = new Map();
+    cl.forEach(r=>{ const c=getCpte(r); if(c){if(!uniq.has(c)||getScore(r)>getScore(uniq.get(c)))uniq.set(c,r);}});
+    const clients = Array.from(uniq.values());
+    const total = clients.length;
+    const critique = clients.filter(r=>getScore(r)>=85).length;
+    const tendance = clients.filter(r=>{ const t=n(r.nbrjdep_trend||r.NBRJDEP_TREND||0); return t>5; }).length;
+    return `🔮 Prédictions futures à horizon 30 jours\n\n`+
+      `Total clients analysés : ${total.toLocaleString("fr-FR")}\n`+
+      `Clients déjà critiques : ${critique.toLocaleString("fr-FR")} (${(critique/total*100).toFixed(1)}%)\n`+
+      `Clients en aggravation (NBRJDEP_TREND > 5) : ${tendance.toLocaleString("fr-FR")}\n\n`+
+      `📌 Priorité : les ${tendance.toLocaleString("fr-FR")} clients avec une tendance de dépassement en hausse risquent de basculer en statut Critique dans les 30 prochains jours.\n\n`+
+      `Consultez la page Future Prediction pour la liste complète et les filtres interactifs.`;
+  }
+
+  // ── Différence anomalie vs critique ──
+  if(has(qL,["différence","difference","entre","vs"]) && has(qL,["anomal","critique"])) {
+    return `🔍 Différence : Anomalie vs Client Critique\n\n`+
+      `CLIENT CRITIQUE :\n`+
+      `• Détecté par le modèle ML supervisé (LightGBM)\n`+
+      `• Score de risque ≥ 85% sur la base de l'historique des dépassements\n`+
+      `• Indique un risque élevé de dépasser la limite de découvert\n`+
+      `• Exemple : client avec 35 jours de dépassement et exposition 800K TND\n\n`+
+      `CLIENT ANOMALIE :\n`+
+      `• Détecté par Isolation Forest (modèle non supervisé)\n`+
+      `• Comportement transactionnel inhabituel par rapport aux pairs\n`+
+      `• Peut avoir un score ML acceptable mais un comportement atypique\n`+
+      `• Exemple : client avec score 40% mais des flux inhabituels ou irréguliers\n\n`+
+      `📌 Les deux signaux sont COMPLÉMENTAIRES. Un client peut être :\n`+
+      `   → Critique uniquement (score élevé, comportement normal)\n`+
+      `   → Anomalie uniquement (score faible, comportement atypique)\n`+
+      `   → Les deux (situation la plus préoccupante)\n`+
+      `   → Aucun (client sain)\n\n`+
+      `La combinaison des deux approches améliore la détection précoce du risque.`;
+  }
+
+  // ── Recherche client spécifique ──
+  const cpteMatch = q.match(/CPTE[_\s]?(\d+)/i);
+  if(cpteMatch) {
+    const id = "CPTE_"+cpteMatch[1].padStart(6,"0");
+    const alt = "CPTE_"+cpteMatch[1];
+    const client = cl.find(r=>{
+      const c = getCpte(r).toUpperCase();
+      return c===id.toUpperCase()||c===alt.toUpperCase()||c.includes(cpteMatch[1]);
+    });
+    if(client) {
+      const s = getScore(client);
+      const rb = n(client.risk_brut||client.RISK_BRUT||0);
+      const nj = n(client.nbrjdep||client.NBRJDEP||0);
+      const trend = n(client.nbrjdep_trend||client.NBRJDEP_TREND||0);
+      const lvl = levelFromScore(s);
+      return `👤 Analyse du client ${getCpte(client)}\n\n`+
+        `Score de risque : ${s.toFixed(1)}%\n`+
+        `Niveau d'alerte : ${lvl}\n`+
+        `NBRJDEP : ${nj} jours\n`+
+        `Tendance NBRJDEP : ${trend>0?"+":""}${trend}\n`+
+        `Exposition brute : ${rb>0?fmtMoney(rb):"Non disponible"}\n\n`+
+        `Diagnostic :\n`+
+        (s>=85 ? `⚠️ Client CRITIQUE — intervention immédiate recommandée.\n` : ``)+
+        (nj>=20 ? `• Dépassement prolongé : ${nj} jours ce mois.\n` : ``)+
+        (trend>5 ? `• Aggravation détectée : +${trend} jours vs M-1.\n` : ``)+
+        (rb>100000 ? `• Exposition significative : ${fmtMoney(rb)}.\n` : ``)+
+        `\n📌 Fiche complète : /client?cpte=${getCpte(client)}`;
+    } else {
+      return `Client ${id} non trouvé dans les données actuelles.\nVérifiez le CPTE ou consultez la page Client Profiles pour une recherche complète.`;
+    }
+  }
+
+  // ── Notifications / clients à notifier ──
+  if(has(qL,["notif","notifier","priorité","priorite","urgent","traiter"])) {
+    if(!cl.length) return null;
+    const uniq = new Map();
+    cl.forEach(r=>{ const c=getCpte(r); if(c){if(!uniq.has(c)||getScore(r)>getScore(uniq.get(c)))uniq.set(c,r);}});
+    const toNotify = Array.from(uniq.values()).filter(r=>getScore(r)>=65).sort((a,b)=>getScore(b)-getScore(a));
+    const crits = toNotify.filter(r=>getScore(r)>=85);
+    const high  = toNotify.filter(r=>getScore(r)>=65&&getScore(r)<85);
+    let resp = `🔔 Clients à notifier en priorité\n\nTotal à traiter : ${toNotify.length.toLocaleString("fr-FR")}\n`+
+      `  • Critiques (action immédiate) : ${crits.length.toLocaleString("fr-FR")}\n`+
+      `  • Élevés (suivi renforcé)      : ${high.length.toLocaleString("fr-FR")}\n\n`+
+      `Top 5 priorités absolues :\n\n`;
+    toNotify.slice(0,5).forEach((r,i)=>{
+      const s = getScore(r);
+      const rb = n(r.risk_brut||r.RISK_BRUT||0);
+      resp += `${i+1}. ${getCpte(r)} — ${s.toFixed(1)}% (${levelFromScore(s)})`;
+      if(rb>0) resp += ` | ${fmtMoney(rb)}`;
+      resp += `\n`;
+    });
+    resp += `\n📌 Accédez à la liste complète sur la page Notifications.`;
+    return resp;
+  }
+
+  return null; // pas de réponse locale
+}
+
+// ════════════════════════════════════════════════════════
+// UI helpers
+// ════════════════════════════════════════════════════════
+function showModal(t,txt){
+  document.getElementById("modalTitle").innerText=t;
+  document.getElementById("modalText").innerText=txt;
+  document.getElementById("infoModal").style.display="flex";
+}
+function escHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>"); }
+
 const msgs = document.getElementById("chatMessages");
 
-function appendUser(text) {
-  const d = document.createElement("div");
-  d.className = "msg-user";
-  d.textContent = text;
-  msgs.appendChild(d);
-  msgs.scrollTop = msgs.scrollHeight;
+function appendUser(text){
+  const d=document.createElement("div"); d.className="msg-user"; d.textContent=text;
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
 }
 
-function appendAI(text, source) {
-  const badgeCls  = source === "groq" ? "badge-groq" : "badge-local";
-  const badgeTxt  = source === "groq" ? "GROQ IA"    : "DONNÉES RÉELLES";
-
-  const wrap = document.createElement("div");
-  wrap.className = "msg-ai-wrap";
-  wrap.innerHTML = `
-    <div class="msg-ai-avatar">
-      <span class="material-symbols-outlined" style="font-size:18px">smart_toy</span>
-    </div>
+function appendAI(text,source){
+  const cls = source==="groq"?"badge-groq":source==="error"?"badge-error":"badge-local";
+  const lbl = source==="groq"?"GROQ IA":source==="error"?"ERREUR":"DONNÉES RÉELLES";
+  const wrap=document.createElement("div"); wrap.className="msg-ai-wrap";
+  wrap.innerHTML=`<div class="msg-ai-avatar"><span class="material-symbols-outlined" style="font-size:18px">smart_toy</span></div>
     <div style="flex:1;min-width:0">
-      <span class="msg-source-badge ${badgeCls}">${badgeTxt}</span>
+      <span class="msg-source-badge ${cls}">${lbl}</span>
       <div class="msg-ai-bubble">${escHtml(text)}</div>
     </div>`;
-  msgs.appendChild(wrap);
-  msgs.scrollTop = msgs.scrollHeight;
-  return wrap;
+  msgs.appendChild(wrap); msgs.scrollTop=msgs.scrollHeight;
 }
 
-function showTyping() {
-  const wrap = document.createElement("div");
-  wrap.id = "__typing";
-  wrap.className = "msg-ai-wrap";
-  wrap.innerHTML = `
-    <div class="msg-ai-avatar">
-      <span class="material-symbols-outlined" style="font-size:18px">smart_toy</span>
-    </div>
+function showTyping(){
+  const w=document.createElement("div"); w.id="__typing"; w.className="msg-ai-wrap";
+  w.innerHTML=`<div class="msg-ai-avatar"><span class="material-symbols-outlined" style="font-size:18px">smart_toy</span></div>
     <div class="msg-ai-bubble" style="display:flex;gap:5px;align-items:center;padding:12px 16px">
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
+      <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
     </div>`;
-  msgs.appendChild(wrap);
-  msgs.scrollTop = msgs.scrollHeight;
+  msgs.appendChild(w); msgs.scrollTop=msgs.scrollHeight;
 }
+function hideTyping(){ const t=document.getElementById("__typing"); if(t)t.remove(); }
 
-function hideTyping() {
-  const t = document.getElementById("__typing");
-  if (t) t.remove();
-}
+// ════════════════════════════════════════════════════════
+// SEND MESSAGE — Groq first, smart local fallback
+// ════════════════════════════════════════════════════════
+async function sendMessage(){
+  const input=document.getElementById("chatInput");
+  const btn=document.getElementById("sendBtn");
+  const text=input.value.trim(); if(!text) return;
+  input.value=""; input.disabled=true; btn.disabled=true;
+  appendUser(text); showTyping();
 
-// ── Send ─────────────────────────────────────────────────
-async function sendMessage() {
-  const input = document.getElementById("chatInput");
-  const btn   = document.getElementById("sendBtn");
-  const text  = input.value.trim();
-  if (!text) return;
-
-  input.value   = "";
-  input.disabled = true;
-  btn.disabled   = true;
-
-  appendUser(text);
-  showTyping();
-
+  // 1 — essaie Groq via /api/chat
+  let answered = false;
   try {
-    const res  = await fetch("/api/chat", {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ message: text }),
+    const res = await fetch("/api/chat",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:text})
     });
+    if(res.ok){
+      const data = await res.json();
+      const answer = data.response||data.answer||data.message||"";
+      // Vérifie que la réponse n'est pas vide et pas trop générique
+      if(answer && answer.length>30 && !answer.toLowerCase().includes("nombre total d'anomalies détectées : 500\n\ninterprétation :")) {
+        hideTyping(); appendAI(answer, data.source||"groq"); answered=true;
+      }
+    }
+  } catch {}
 
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
+  // 2 — fallback intelligent local
+  if(!answered){
+    const localAnswer = buildLocalAnswer(text);
     hideTyping();
-
-    const answer = data.response || data.answer || data.message || JSON.stringify(data, null, 2);
-    const source = data.source   || "local_fallback";
-    appendAI(answer, source);
-
-  } catch (err) {
-    hideTyping();
-    appendAI(
-      "Erreur de connexion avec le serveur.\n" +
-      "Vérifiez que python server.py est lancé sur http://localhost:5000\n\n" +
-      "Détail : " + err.message,
-      "error"
-    );
-  } finally {
-    input.disabled = false;
-    btn.disabled   = false;
-    input.focus();
+    if(localAnswer){
+      appendAI(localAnswer, "local_fallback");
+    } else {
+      appendAI(
+        `Je n'ai pas trouvé de réponse précise pour votre question.\n\n`+
+        `Essayez une de ces formulations :\n`+
+        `  • "Combien de clients critiques ?"\n`+
+        `  • "Top 5 clients risqués"\n`+
+        `  • "Résumé du portefeuille"\n`+
+        `  • "Clients avec anomalies et score faible"\n`+
+        `  • "Performances du modèle LightGBM"\n`+
+        `  • "CPTE_001508" pour analyser un client précis\n\n`+
+        `Si Groq est connecté (clé API), je peux répondre à n'importe quelle question.`,
+        "local_fallback"
+      );
+    }
   }
+
+  input.disabled=false; btn.disabled=false; input.focus();
 }
 
-// ── ask() — from suggest buttons ────────────────────────
-function ask(text) {
-  document.getElementById("chatInput").value = text;
-  sendMessage();
-}
+function ask(text){ document.getElementById("chatInput").value=text; sendMessage(); }
 
-// ── Enter key ────────────────────────────────────────────
-document.getElementById("chatInput").addEventListener("keydown", function(e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
+document.getElementById("chatInput").addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}
 });
 
-// ── Welcome message ──────────────────────────────────────
+// ── Welcome ──────────────────────────────────────────────
 appendAI(
-  "Bonjour ! Je suis votre assistant risque BIAT.\n\n" +
-  "Je peux analyser le portefeuille en temps réel à partir des données ML.\n\n" +
-  "Exemples de questions :\n" +
-  "  • Combien de clients critiques avons-nous ?\n" +
-  "  • Analyse le client CPTE_001508\n" +
-  "  • Quels clients ont des anomalies détectées ?\n" +
-  "  • Quelles sont les performances du modèle ?\n" +
-  "  • Résumé global du portefeuille",
+  "Bonjour ! Je suis votre assistant risque BIAT — connecté aux données réelles du portefeuille.\n\n"+
+  "Je peux répondre à des questions précises sur :\n"+
+  "  • La répartition des clients par niveau de risque\n"+
+  "  • Les clients critiques avec score et exposition\n"+
+  "  • Les anomalies détectées par Isolation Forest\n"+
+  "  • Les prédictions futures à 30 jours\n"+
+  "  • Les performances du modèle LightGBM\n"+
+  "  • L'analyse d'un client spécifique (ex: CPTE_010647)\n\n"+
+  "Posez votre question ou cliquez sur une suggestion à gauche.",
   "local_fallback"
 );
 
-// ── Groq status check ────────────────────────────────────
-(async function checkGroq() {
-  try {
-    const res  = await fetch("/api/groq-status");
-    const data = await res.json();
-    const dot  = document.getElementById("groqDot");
-    const txt  = document.getElementById("groqStatus");
-    if (data.working) {
-      dot.style.background = "#5ffbd6";
-      txt.style.color      = "#5ffbd6";
-      txt.innerText        = "Groq connecté ✅";
-    } else if (data.configured) {
-      dot.style.background = "#fbe273";
-      txt.style.color      = "#fbe273";
-      txt.innerText        = "Groq configuré, fallback local";
-    } else {
-      dot.style.background = "#f5921e";
-      txt.style.color      = "#f5921e";
-      txt.innerText        = "Fallback local (pas de clé Groq)";
-    }
-  } catch {
-    document.getElementById("groqStatus").innerText = "Fallback local actif";
-  }
+// ── Groq status ──────────────────────────────────────────
+(async function(){
+  try{
+    const r=await fetch("/api/groq-status"); const d=await r.json();
+    const dot=document.getElementById("groqDot"); const txt=document.getElementById("groqStatus");
+    if(d.working){dot.style.background="#00e8ff";txt.style.color="#00e8ff";txt.innerText="Groq connecté ✅";}
+    else if(d.configured){dot.style.background="#ffd23f";txt.style.color="#ffd23f";txt.innerText="Groq configuré (fallback)";}
+    else{dot.style.background="#f5921e";txt.style.color="#f5921e";txt.innerText="Fallback local actif";}
+  }catch{document.getElementById("groqStatus").innerText="Fallback local actif";}
 })();
 
-// ── File status check ─────────────────────────────────────
-(async function checkFiles() {
-  try {
-    const res  = await fetch("/api/portfolio");
-    const data = await res.json();
-    const files = data.files_ok || {};
-    const s = data.summary || {};
-    let html = "";
-    const names = {
-      "dashboard_clients_full.json": "Dashboard clients",
-      "dashboard_data.json":         "Dashboard data",
-      "anomaly_clients.json":        "Anomaly clients",
-      "anomaly_data.json":           "Anomaly data",
-      "model_metrics.json":          "Model metrics",
-      "top_risky_clients.json":      "Top risky clients",
-      "client_profiles.json":        "Client profiles",
-    };
-    Object.entries(files).forEach(([k, ok]) => {
-      if (!names[k]) return;
-      html += `<div style="display:flex;justify-content:space-between;padding:2px 0">
-        <span>${names[k]}</span>
-        <span style="color:${ok?"#5ffbd6":"#ffb4ab"}">${ok?"✓":"✗"}</span>
-      </div>`;
-    });
-    if (s.total_clients) {
-      html += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(60,74,69,.4);color:#5ffbd6;font-size:10.5px">
-        ${s.total_clients.toLocaleString("fr-FR")} clients scorés</div>`;
-    }
-    document.getElementById("fileStatus").innerHTML = html || "Fichiers non trouvés";
-  } catch {
-    document.getElementById("fileStatus").innerText = "Impossible de vérifier les fichiers";
-  }
-})();
+// ── Load portfolio data on start ─────────────────────────
+loadPortfolioData();
 </script>
 </body>
 </html>

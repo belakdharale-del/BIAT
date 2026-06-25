@@ -1,931 +1,796 @@
 ﻿<!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
+<html class="dark" lang="fr">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BIAT Risk Monitor - Model Performance</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-variant": "#2a344e",
-                        "surface-container-low": "#101b33",
-                        "on-surface": "#d9e2ff",
-                        "inverse-on-surface": "#263049",
-                        "on-secondary-container": "#a5b5db",
-                        "outline": "#85948e",
-                        "error": "#ffb4ab",
-                        "primary-container": "#5ffbd6",
-                        "tertiary-container": "#fbe273",
-                        "on-tertiary-fixed": "#211b00",
-                        "on-error-container": "#ffdad6",
-                        "primary-fixed": "#5ffbd6",
-                        "surface": "#07122a",
-                        "primary": "#ffffff",
-                        "on-tertiary-container": "#756400",
-                        "surface-container-lowest": "#030d25",
-                        "background": "#07122a",
-                        "surface-tint": "#38debb",
-                        "error-container": "#93000a",
-                        "on-secondary": "#20304f",
-                        "on-tertiary": "#393000",
-                        "on-surface-variant": "#bacac3",
-                        "secondary-fixed": "#d8e2ff",
-                        "tertiary-fixed": "#fbe273",
-                        "tertiary-fixed-dim": "#dec65a",
-                        "tertiary": "#ffffff",
-                        "secondary-container": "#374767",
-                        "surface-dim": "#07122a",
-                        "on-primary": "#00382d",
-                        "secondary": "#b6c6ed",
-                        "surface-container-high": "#1f2942",
-                        "surface-container-highest": "#2a344e",
-                        "on-primary-fixed": "#002019",
-                        "on-primary-fixed-variant": "#005142",
-                        "inverse-surface": "#d9e2ff",
-                        "on-error": "#690005",
-                        "outline-variant": "#3c4a45",
-                        "on-secondary-fixed-variant": "#374767",
-                        "secondary-fixed-dim": "#b6c6ed",
-                        "on-primary-container": "#00725e",
-                        "on-secondary-fixed": "#091b39",
-                        "on-background": "#d9e2ff",
-                        "surface-container": "#151f37",
-                        "inverse-primary": "#006b58",
-                        "on-tertiary-fixed-variant": "#534600",
-                        "surface-bright": "#2f3952",
-                        "primary-fixed-dim": "#38debb"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "base": "8px",
-                        "stack-md": "12px",
-                        "stack-sm": "4px",
-                        "gutter": "16px",
-                        "container-padding": "24px",
-                        "stack-lg": "32px"
-                    },
-                    "fontFamily": {
-                        "label-sm": ["JetBrains Mono"],
-                        "label-md": ["JetBrains Mono"],
-                        "headline-lg": ["Hanken Grotesk"],
-                        "body-md": ["Inter"],
-                        "headline-lg-mobile": ["Hanken Grotesk"],
-                        "body-sm": ["Inter"],
-                        "headline-md": ["Hanken Grotesk"],
-                        "body-lg": ["Inter"],
-                        "display-lg": ["Hanken Grotesk"]
-                    },
-                    "fontSize": {
-                        "label-sm": ["12px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
-                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
-                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
-                    }
-                },
-            },
-        }
-    </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
 <style>
-        .glass-card {
-            background: rgba(17, 34, 64, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid #233554;
-            transition: border-color 0.3s ease;
-        }
-        .glass-card:hover {
-            border-color: rgba(100, 255, 218, 0.3);
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .neon-glow {
-            text-shadow: 0 0 8px rgba(95, 251, 214, 0.4);
-        }
-    </style>
+  /* ===== SIDEBAR NOIRE + CONTENU VIF ===== */
 
-<!-- BIAT_STANDARD_SIDEBAR_CSS -->
-<style id="biat-standard-sidebar-css">
-  body {
-    padding-left: 240px !important;
-    overflow-x: hidden !important;
-  }
+/* Sidebar très sombre */
+.biat-sidebar {
+  background:
+    linear-gradient(180deg, #050714 0%, #070A18 45%, #050714 100%) !important;
+  border-right: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow: 8px 0 35px rgba(0, 0, 0, 0.45) !important;
+}
 
-  .biat-sidebar {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    min-width: 240px !important;
-    height: 100vh !important;
-    z-index: 99999 !important;
-    background: #07122a !important;
-    border-right: 1px solid #263452 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    color: #d9e2ff !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
+/* Logo plus premium */
+.biat-sidebar .brand-logo {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.35) !important;
+}
 
-  .biat-brand {
-    padding: 28px 20px 22px 20px !important;
-  }
+.biat-sidebar .brand-title {
+  color: #F8FAFF !important;
+}
 
-  .biat-brand h1 {
-    margin: 0 !important;
-    color: white !important;
-    font-size: 25px !important;
-    line-height: 1.15 !important;
-    font-weight: 800 !important;
-  }
+.biat-sidebar .brand-subtitle {
+  color: rgba(210, 220, 255, 0.55) !important;
+}
 
-  .biat-brand p {
-    margin-top: 8px !important;
-    color: #9aa8c7 !important;
-    font-size: 13px !important;
-  }
+/* Liens sidebar */
+.biat-sidebar .nav-link {
+  color: #9AA8C7 !important;
+  background: transparent !important;
+}
 
-  .biat-nav {
-    flex: 1 !important;
-    padding: 0 14px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 7px !important;
-  }
+.biat-sidebar .nav-link:hover {
+  color: #FFFFFF !important;
+  background: rgba(0, 232, 255, 0.08) !important;
+}
 
-  .biat-nav a,
-  .side-btn {
-    min-height: 42px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 10px 14px !important;
-    border-radius: 10px !important;
-    color: #b9c6e4 !important;
-    text-decoration: none !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    background: transparent !important;
-    border: 0 !important;
-    cursor: pointer !important;
-    width: 100% !important;
-    text-align: left !important;
-  }
+/* Menu actif */
+.biat-sidebar .nav-link.active {
+  color: #FFFFFF !important;
+  background:
+    linear-gradient(90deg, rgba(0, 232, 255, 0.18), rgba(124, 58, 237, 0.08)) !important;
+  border-left: 3px solid #00E8FF !important;
+  box-shadow: inset 0 0 18px rgba(0, 232, 255, 0.08) !important;
+}
 
-  .biat-nav a:hover,
-  .side-btn:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: white !important;
-  }
+.biat-sidebar .nav-link.active .material-symbols-outlined {
+  color: #00E8FF !important;
+}
 
-  .biat-nav a.active {
-    background: rgba(121,143,185,.38) !important;
-    color: white !important;
-    font-weight: 800 !important;
-  }
+/* Critical Alerts plus sérieux */
+.side-critical {
+  background: rgba(255, 77, 109, 0.10) !important;
+  border: 1px solid rgba(255, 77, 109, 0.45) !important;
+  color: #FFB4C2 !important;
+}
 
-  .biat-nav .material-symbols-outlined,
-  .side-btn .material-symbols-outlined {
-    font-size: 22px !important;
-  }
+.side-critical:hover {
+  background: rgba(255, 77, 109, 0.18) !important;
+}
 
-  #notifBadge {
-    margin-left: auto !important;
-    background: #ffb4ab !important;
-    color: #690005 !important;
-    border-radius: 999px !important;
-    padding: 1px 7px !important;
-    font-size: 10px !important;
-  }
+/* Settings / Support */
+.side-muted {
+  color: #9AA8C7 !important;
+}
 
-  .biat-sidebar-bottom {
-    padding: 14px !important;
-    border-top: 1px solid rgba(133,148,142,.25) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
+.side-muted:hover {
+  background: rgba(0, 232, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
 
-  .critical-btn {
-    width: 100% !important;
-    min-height: 46px !important;
-    background: #b00020 !important;
-    color: white !important;
-    border: 0 !important;
-    border-radius: 10px !important;
-    font-weight: 800 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    cursor: pointer !important;
-  }
+/* User bottom */
+.sidebar-user .avatar {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 14px rgba(0, 232, 255, 0.35) !important;
+}
 
-  main,
-  .main-content,
-  #mainContent {
-    margin-left: 0 !important;
-    max-width: none !important;
-  }
+/* Navbar noire */
+header {
+  background: rgba(3, 7, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 232, 255, 0.18) !important;
+}
 
-  header {
-    left: 240px !important;
-    width: calc(100% - 240px) !important;
-  }
+/* Fond principal vivant mais sombre */
+.biat-bg {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(124, 58, 237, 0.30) 0%, transparent 38%),
+    radial-gradient(circle at 20% 85%, rgba(0, 232, 255, 0.20) 0%, transparent 45%),
+    linear-gradient(135deg, #050714 0%, #081336 45%, #111A3A 100%) !important;
+}
+
+/* Cards plus lumineuses */
+.glass-card {
+  background: rgba(17, 26, 58, 0.86) !important;
+  border: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 232, 255, 0.55) !important;
+}
+
+/* Boutons cyan vif */
+#applyFilters,
+#quickAction,
+button.bg-primary-container {
+  background: linear-gradient(135deg, #00E8FF, #0EA5E9) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.22) !important;
+}
+
+/* Inputs/selects */
+input,
+select,
+textarea {
+  background: rgba(12, 22, 55, 0.92) !important;
+  border-color: rgba(0, 232, 255, 0.25) !important;
+}
+
+/* KPI couleurs plus vives */
+#kpiCritical {
+  color: #FF4D6D !important;
+}
+
+#kpiWarning {
+  color: #FFD23F !important;
+}
+
+#kpiNotify,
+#kpiTotal,
+#kpiAvg,
+#kpiAmount {
+  color: #EAF0FF !important;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0a1340;color:#d9e2ff;font-family:Inter,sans-serif;padding-left:240px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 88% 8%,rgba(245,146,30,.28) 0%,transparent 42%),
+    radial-gradient(circle at 12% 88%,rgba(30,58,158,.32) 0%,transparent 52%),
+    linear-gradient(135deg,#060b2e,#0a1340 38%,#0f1c4f 70%,#060b2e)}
+.mono{font-family:"JetBrains Mono",monospace}
+.display{font-family:"Hanken Grotesk",sans-serif}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;line-height:1}
+.card{background:rgba(18,38,80,.88);backdrop-filter:blur(14px);
+  border:1px solid rgba(80,100,130,.5);border-radius:14px;transition:border-color .2s}
+.card:hover{border-color:rgba(0,232,255,.2)}
+
+/* Sidebar */
+.biat-sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;
+  background:rgba(10,22,50,.97);backdrop-filter:blur(18px);
+  border-right:1px solid rgba(60,74,69,.5);
+  display:flex;flex-direction:column;z-index:100;padding:20px 12px 14px}
+.brand-title{font-size:22px;font-weight:900;color:#fff;line-height:1.15;padding:0 6px}
+.brand-sub{font-size:12px;color:#bacac3;padding:4px 6px 20px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  color:#bacac3;text-decoration:none;font-family:"JetBrains Mono",monospace;
+  font-size:12.5px;font-weight:600;transition:all .15s;border:none;
+  background:none;width:100%;text-align:left;cursor:pointer}
+.nav-item:hover{background:rgba(0,232,255,.08);color:#fff}
+.nav-item.active{background:#374767;color:#fff;font-weight:800}
+.bottom-section{margin-top:auto;border-top:1px solid rgba(60,74,69,.4);
+  padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.btn-critical{width:100%;background:#7a0019;color:#ffdad6;border:none;
+  padding:10px;border-radius:10px;font-family:"JetBrains Mono",monospace;
+  font-size:12px;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* Model selector tabs */
+.model-tab{
+  padding:10px 20px;border-radius:10px;border:1px solid rgba(80,100,130,.5);
+  background:rgba(18,38,80,.5);color:#bacac3;
+  font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px
+}
+.model-tab:hover{border-color:rgba(0,232,255,.4);color:#fff;background:rgba(0,232,255,.06)}
+.model-tab.active{border-color:rgba(0,232,255,.7);color:#00e8ff;
+  background:rgba(0,232,255,.1);box-shadow:0 0 16px rgba(0,232,255,.12)}
+.model-tab .winner-badge{
+  background:#00e8ff;color:#003828;padding:1px 7px;border-radius:999px;
+  font-size:9px;font-weight:900
+}
+
+/* KPI card animation */
+.kpi-card{transition:all .4s cubic-bezier(.4,0,.2,1)}
+.kpi-val{transition:all .3s ease;display:inline-block}
+
+/* Metric bar */
+.metric-bar-wrap{background:rgba(42,52,78,.5);border-radius:999px;height:10px;overflow:hidden}
+.metric-bar-fill{height:100%;border-radius:999px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* Confusion matrix cell */
+.cm-cell{border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:16px 8px;
+  transition:all .4s ease;aspect-ratio:1}
+
+/* Feature bar */
+.feat-bar{height:32px;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;padding-left:10px}
+
+/* ROC curve SVG */
+#rocCurve{transition:all .5s ease}
+
+/* Highlight pulse */
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(0,232,255,.3)} 50%{box-shadow:0 0 0 6px rgba(0,232,255,.0)}}
+.winner-pulse{animation:pulse-green 2s infinite}
 </style>
-<!-- END BIAT_STANDARD_SIDEBAR_CSS -->
-
-
-
-
 </head>
-<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
-<!-- BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
-<style>
-  body {
-    padding-left: 240px !important;
-  }
+<body>
 
-  .biat-sidebar {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    height: 100vh !important;
-    z-index: 99999 !important;
-    background: #071126 !important;
-    border-right: 1px solid rgba(148,163,184,.18) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 24px 14px 16px 14px !important;
-    box-sizing: border-box !important;
-  }
-
-  .biat-sidebar .brand {
-    padding: 0 6px 28px 6px !important;
-  }
-
-  .biat-sidebar .brand h1 {
-    margin: 0 !important;
-    color: #f3f7ff !important;
-    font-size: 26px !important;
-    line-height: 1.14 !important;
-    font-weight: 900 !important;
-    letter-spacing: .2px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
-
-  .biat-sidebar .brand p {
-    margin: 8px 0 0 0 !important;
-    color: rgba(217,226,255,.72) !important;
-    font-size: 13px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
-
-  .biat-sidebar nav {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 7px !important;
-  }
-
-  .biat-sidebar .nav-link {
-    height: 46px !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 0 14px !important;
-    border-radius: 10px !important;
-    color: #b9c6e4 !important;
-    text-decoration: none !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-  }
-
-  .biat-sidebar .nav-link:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: #ffffff !important;
-  }
-
-  .biat-sidebar .nav-link.active {
-    background: rgba(121,143,185,.35) !important;
-    color: #ffffff !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .material-symbols-outlined {
-    font-size: 22px !important;
-    width: 24px !important;
-    min-width: 24px !important;
-    line-height: 1 !important;
-  }
-
-  .biat-sidebar .badge {
-    margin-left: auto !important;
-    background: #ffb4ab !important;
-    color: #3b0505 !important;
-    border-radius: 999px !important;
-    padding: 2px 7px !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .bottom {
-    margin-top: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    border-top: 1px solid rgba(148,163,184,.16) !important;
-    padding-top: 14px !important;
-  }
-
-  .biat-sidebar .critical-btn,
-  .biat-sidebar .bottom-btn {
-    height: 46px !important;
-    width: 100% !important;
-    border-radius: 10px !important;
-    border: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    cursor: pointer !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .critical-btn {
-    background: #b00012 !important;
-    color: white !important;
-  }
-
-  .biat-sidebar .bottom-btn {
-    background: transparent !important;
-    color: #b9c6e4 !important;
-  }
-
-  .biat-sidebar .bottom-btn:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: white !important;
-  }
-
-  main {
-    margin-left: 0 !important;
-  }
-</style>
-
+<!-- Sidebar -->
 <aside class="biat-sidebar">
-  <div class="brand">
-    <h1>BIAT Risk<br>Monitor</h1>
-    <p>Vigilant Professionalism</p>
-  </div>
-
-  <nav>
-    <a class="nav-link" data-route="/dashboard" href="/dashboard">
-      <span class="material-symbols-outlined">dashboard</span>
-      <span>Global Dashboard</span>
-    </a>
-
-    <a class="nav-link" data-route="/evolution" href="/evolution">
-      <span class="material-symbols-outlined">trending_up</span>
-      <span>Risk Evolution</span>
-    </a>
-
-    <a class="nav-link" data-route="/future" href="/future">
-      <span class="material-symbols-outlined">online_prediction</span>
-      <span>Future Prediction</span>
-    </a>
-
-    <a class="nav-link" data-route="/notifications" href="/notifications">
-      <span class="material-symbols-outlined">notifications</span>
-      <span>Notifications</span>
-      <span class="badge" id="notifBadge">4847</span>
-    </a>
-
-    <a class="nav-link" data-route="/client" href="/client">
-      <span class="material-symbols-outlined">group</span>
-      <span>Client Profiles</span>
-    </a>
-
-    <a class="nav-link" data-route="/performance" href="/performance">
-      <span class="material-symbols-outlined">analytics</span>
-      <span>Model Performance</span>
-    </a>
-
-    <a class="nav-link" data-route="/assistant" href="/assistant">
-      <span class="material-symbols-outlined">smart_toy</span>
-      <span>AI Assistant</span>
-    </a>
+  <div class="brand-title">BIAT Risk<br>Monitor</div>
+  <div class="brand-sub">Vigilant Professionalism</div>
+  <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
+    <a class="nav-item" href="/dashboard"><span class="material-symbols-outlined" style="font-size:20px">dashboard</span>Global Dashboard</a>
+    <a class="nav-item" href="/evolution"><span class="material-symbols-outlined" style="font-size:20px">trending_up</span>Risk Evolution</a>
+    <a class="nav-item" href="/future"><span class="material-symbols-outlined" style="font-size:20px">online_prediction</span>Future Prediction</a>
+    <a class="nav-item" href="/notifications"><span class="material-symbols-outlined" style="font-size:20px">notifications</span><span>Notifications</span><span style="margin-left:auto;background:#ff4d6d;color:#3b0505;border-radius:999px;padding:1px 7px;font-size:10px;font-weight:900">4847</span></a>
+    <a class="nav-item" href="/client"><span class="material-symbols-outlined" style="font-size:20px">group</span>Client Profiles</a>
+    <a class="nav-item active" href="/performance"><span class="material-symbols-outlined" style="font-size:20px">analytics</span>Model Performance</a>
+    <a class="nav-item" href="/assistant"><span class="material-symbols-outlined" style="font-size:20px">smart_toy</span>AI Assistant</a>
   </nav>
-
-  <div class="bottom">
-    <button type="button" class="critical-btn" id="criticalAlertsBtn">
-      <span class="material-symbols-outlined">warning</span>
-      <span>Critical Alerts</span>
+  <div class="bottom-section">
+    <button class="btn-critical" onclick="location.href='/notifications'">
+      <span class="material-symbols-outlined" style="font-size:18px">warning</span>Critical Alerts
     </button>
-
-    <button type="button" class="bottom-btn" id="settingsBtn">
-      <span class="material-symbols-outlined">settings</span>
-      <span>Settings</span>
-    </button>
-
-    <button type="button" class="bottom-btn" id="supportBtn">
-      <span class="material-symbols-outlined">help</span>
-      <span>Support</span>
+    <button class="nav-item" onclick="location.href='/dashboard'">
+      <span class="material-symbols-outlined" style="font-size:20px">home</span>Dashboard
     </button>
   </div>
 </aside>
 
-<script>
-(function () {
-  const currentPath = window.location.pathname;
+<!-- Main -->
+<main style="position:relative;z-index:1;min-height:100vh">
 
-  document.querySelectorAll(".biat-sidebar .nav-link").forEach(link => {
-    const route = link.getAttribute("data-route");
+  <!-- Header -->
+  <header style="height:58px;background:rgba(8,18,42,.92);backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(60,74,69,.5);display:flex;align-items:center;
+    justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:50">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="material-symbols-outlined" style="color:#00e8ff">analytics</span>
+      <h2 class="display" style="font-size:20px;font-weight:800;margin:0">Model Performance</h2>
+      <span id="modelBadge" class="mono" style="font-size:11px;padding:3px 10px;border-radius:6px;
+        background:rgba(0,232,255,.1);color:#00e8ff;border:1px solid rgba(0,232,255,.3)">LightGBM</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span class="mono" style="font-size:11px;color:#85948e">Cliquez sur un modèle pour comparer</span>
+      <div style="width:32px;height:32px;border-radius:50%;background:#142467;
+        border:1px solid rgba(0,232,255,.2)"></div>
+      <div><p class="mono" style="font-size:13px;font-weight:700;margin:0">ALA</p>
+        <p class="mono" style="font-size:10px;color:#9aa8c7;text-transform:uppercase;margin:0">Risk Officer</p></div>
+    </div>
+  </header>
 
-    if (route === currentPath || (route === "/client" && currentPath.startsWith("/client"))) {
-      link.classList.add("active");
-    }
+  <div style="padding:20px;display:flex;flex-direction:column;gap:16px">
 
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = this.getAttribute("href");
-    });
-  });
+    <!-- ── Model selector ── -->
+    <div class="card" style="padding:16px">
+      <p class="mono" style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;
+        color:#85948e;margin:0 0 12px">Sélectionnez un modèle pour voir ses métriques</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap" id="modelTabs">
+        <button class="model-tab active" onclick="selectModel('lightgbm')" id="tab-lightgbm">
+          <span class="material-symbols-outlined" style="font-size:16px">bolt</span>
+          LightGBM
+          <span class="winner-badge">CHAMPION</span>
+        </button>
+        <button class="model-tab" onclick="selectModel('rf')" id="tab-rf">
+          <span class="material-symbols-outlined" style="font-size:16px">forest</span>
+          Random Forest
+        </button>
+        <button class="model-tab" onclick="selectModel('lr')" id="tab-lr">
+          <span class="material-symbols-outlined" style="font-size:16px">linear_scale</span>
+          Régression Logistique
+        </button>
+        <button class="model-tab" onclick="selectModel('lstm')" id="tab-lstm">
+          <span class="material-symbols-outlined" style="font-size:16px">memory</span>
+          LSTM (Deep Learning)
+        </button>
+      </div>
+    </div>
 
-  const criticalBtn = document.getElementById("criticalAlertsBtn");
-  if (criticalBtn) {
-    criticalBtn.onclick = function () {
-      window.location.href = "/notifications?alert=CRITICAL";
-    };
-  }
+    <!-- ── KPI Cards ── -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div class="card kpi-card" id="kpiAccuracy" style="padding:16px">
+        <p class="mono" style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#85948e;margin:0 0 6px">Accuracy</p>
+        <p id="valAccuracy" class="display kpi-val" style="font-size:32px;font-weight:800;margin:0;color:#fff">0.9736</p>
+        <p id="subAccuracy" class="mono" style="font-size:10px;color:#85948e;margin:6px 0 0"></p>
+      </div>
+      <div class="card kpi-card winner-pulse" id="kpiRecall" style="padding:16px;border-color:rgba(0,232,255,.4)">
+        <p class="mono" style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#00e8ff;margin:0 0 6px">Recall ★</p>
+        <p id="valRecall" class="display kpi-val" style="font-size:32px;font-weight:800;margin:0;color:#00e8ff">0.9372</p>
+        <p class="mono" style="font-size:10px;color:#00e8ff;margin:6px 0 0">Priorité métrique #1</p>
+      </div>
+      <div class="card kpi-card" id="kpiF1" style="padding:16px">
+        <p class="mono" style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#85948e;margin:0 0 6px">F1-Score</p>
+        <p id="valF1" class="display kpi-val" style="font-size:32px;font-weight:800;margin:0;color:#fff">0.9450</p>
+        <p class="mono" style="font-size:10px;color:#85948e;margin:6px 0 0">Moyenne harmonique</p>
+      </div>
+      <div class="card kpi-card" id="kpiRoc" style="padding:16px">
+        <p class="mono" style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#85948e;margin:0 0 6px">ROC-AUC</p>
+        <p id="valRoc" class="display kpi-val" style="font-size:32px;font-weight:800;margin:0;color:#ffd23f">0.9889</p>
+        <p class="mono" style="font-size:10px;color:#85948e;margin:6px 0 0">Séparation excellente</p>
+      </div>
+    </div>
 
-  const settingsBtn = document.getElementById("settingsBtn");
-  if (settingsBtn) {
-    settingsBtn.onclick = function () {
-      alert("Settings - BIAT Risk Monitor");
-    };
-  }
+    <!-- ── Justification + Radar ── -->
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:16px">
 
-  const supportBtn = document.getElementById("supportBtn");
-  if (supportBtn) {
-    supportBtn.onclick = function () {
-      alert("Support - BIAT Risk Monitor");
-    };
-  }
-})();
-</script>
-<!-- END BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
+      <!-- Justification -->
+      <div class="card" style="padding:20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <span class="material-symbols-outlined" style="color:#00e8ff;font-size:22px">psychology</span>
+          <h3 class="display" style="font-size:20px;font-weight:800;margin:0" id="justifTitle">
+            Sélection stratégique : LightGBM
+          </h3>
+        </div>
+        <p id="justifText" style="font-size:14px;color:#bacac3;line-height:1.75;margin:0">
+          Le modèle <strong style="color:#fff">LightGBM</strong> a été retenu comme modèle champion pour la
+          surveillance du risque BIAT. Son algorithme GOSS (Gradient-based One-Side Sampling) permet de gérer
+          efficacement les données déséquilibrées typiques du risque bancaire.
+          <br><br>
+          Dans ce contexte, le <strong style="color:#00e8ff">Recall est la métrique prioritaire</strong>.
+          Un faux négatif (client risqué non détecté) représente un coût institutionnel bien supérieur à un
+          faux positif (client sain contacté par erreur). LightGBM atteint un Recall de 0,9372
+          tout en maintenant une Accuracy de 97,36%.
+        </p>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap" id="justifBadges">
+          <span class="mono" style="font-size:10px;padding:4px 10px;border-radius:6px;
+            background:rgba(0,232,255,.1);color:#00e8ff;border:1px solid rgba(0,232,255,.25)">
+            Recall : 0.9372
+          </span>
+          <span class="mono" style="font-size:10px;padding:4px 10px;border-radius:6px;
+            background:rgba(251,226,115,.1);color:#ffd23f;border:1px solid rgba(251,226,115,.25)">
+            ROC-AUC : 0.9889
+          </span>
+          <span class="mono" style="font-size:10px;padding:4px 10px;border-radius:6px;
+            background:rgba(255,180,171,.1);color:#ff4d6d;border:1px solid rgba(255,180,171,.25)">
+            FN minimisés : 84
+          </span>
+        </div>
+      </div>
 
+      <!-- Mini radar / score card -->
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <h4 class="mono" style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;
+          color:#85948e;margin:0 0 16px;text-align:center">Score global</h4>
+        <svg width="200" height="200" viewBox="0 0 200 200" id="radarSvg">
+          <!-- Background circles -->
+          <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <!-- Axes -->
+          <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <line x1="20" y1="100" x2="180" y2="100" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <line x1="43" y1="43" x2="157" y2="157" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <line x1="157" y1="43" x2="43" y2="157" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <!-- Data polygon -->
+          <polygon id="radarPoly" fill="rgba(0,232,255,.15)" stroke="#00e8ff" stroke-width="2"
+            points="" style="transition:all .5s ease"/>
+          <!-- Axis labels -->
+          <text x="100" y="14" text-anchor="middle" fill="#00e8ff" font-size="9" font-family="JetBrains Mono">Recall</text>
+          <text x="185" y="104" text-anchor="start" fill="#bacac3" font-size="9" font-family="JetBrains Mono">F1</text>
+          <text x="100" y="195" text-anchor="middle" fill="#bacac3" font-size="9" font-family="JetBrains Mono">Accuracy</text>
+          <text x="10" y="104" text-anchor="start" fill="#bacac3" font-size="9" font-family="JetBrains Mono">AUC</text>
+          <text x="155" y="40" text-anchor="middle" fill="#bacac3" font-size="9" font-family="JetBrains Mono">Prec.</text>
+          <!-- Score center -->
+          <text id="radarScore" x="100" y="97" text-anchor="middle" fill="#fff"
+            font-size="18" font-family="Hanken Grotesk" font-weight="700">97.4%</text>
+          <text x="100" y="112" text-anchor="middle" fill="#85948e"
+            font-size="9" font-family="JetBrains Mono">score global</text>
+        </svg>
+      </div>
+    </div>
 
+    <!-- ── Benchmark bars + Confusion matrix ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
 
+      <!-- Benchmark bars -->
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+            color:#00e8ff;margin:0">Comparaison des métriques</h3>
+          <span id="benchWinner" class="mono" style="font-size:10px;padding:2px 8px;border-radius:5px;
+            background:rgba(0,232,255,.1);color:#00e8ff">LightGBM sélectionné</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px" id="benchBars">
+          <!-- filled by JS -->
+        </div>
+        <!-- All models comparison table -->
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(60,74,69,.4)">
+          <p class="mono" style="font-size:9px;text-transform:uppercase;color:#85948e;margin:0 0 10px">
+            Tableau comparatif — tous les modèles
+          </p>
+          <table style="width:100%;border-collapse:collapse" id="compareTable">
+            <thead>
+              <tr style="border-bottom:1px solid rgba(60,74,69,.4)">
+                <th class="mono" style="font-size:10px;color:#85948e;text-align:left;padding:4px 8px">Modèle</th>
+                <th class="mono" style="font-size:10px;color:#85948e;text-align:right;padding:4px 8px">Accuracy</th>
+                <th class="mono" style="font-size:10px;color:#85948e;text-align:right;padding:4px 8px">Recall</th>
+                <th class="mono" style="font-size:10px;color:#85948e;text-align:right;padding:4px 8px">F1</th>
+                <th class="mono" style="font-size:10px;color:#85948e;text-align:right;padding:4px 8px">AUC</th>
+              </tr>
+            </thead>
+            <tbody id="compareTableBody"></tbody>
+          </table>
+        </div>
+      </div>
 
+      <!-- Confusion matrix -->
+      <div class="card" style="padding:20px">
+        <h3 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+          color:#00e8ff;margin:0 0 16px">Matrice de confusion — <span id="cmModelName">LightGBM</span></h3>
 
+        <!-- Column headers -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+          <div></div>
+          <p class="mono" style="font-size:9px;text-align:center;color:#85948e;margin:0">PRÉDIT NORMAL</p>
+          <p class="mono" style="font-size:9px;text-align:center;color:#85948e;margin:0">PRÉDIT RISQUÉ</p>
+        </div>
 
-<!-- BIAT_STANDARD_SIDEBAR -->
+        <!-- Row 1 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+          <p class="mono" style="font-size:9px;color:#85948e;margin:0;writing-mode:horizontal-tb;
+            display:flex;align-items:center;justify-content:flex-end;padding-right:6px">RÉEL NORMAL</p>
+          <div class="cm-cell" id="cmTN" style="background:rgba(42,52,78,.5);border:1px solid rgba(60,74,69,.4)">
+            <span class="mono" style="font-size:9px;color:#85948e">TN</span>
+            <span id="valTN" class="display" style="font-size:22px;font-weight:800;color:#fff">12 402</span>
+          </div>
+          <div class="cm-cell" id="cmFP" style="background:rgba(147,0,10,.15);border:1px solid rgba(255,180,171,.25)">
+            <span class="mono" style="font-size:9px;color:#ff4d6d">FP</span>
+            <span id="valFP" class="display" style="font-size:22px;font-weight:800;color:#ff4d6d">312</span>
+            <span class="mono" style="font-size:8px;color:#ff4d6d">Fausse alarme</span>
+          </div>
+        </div>
 
+        <!-- Row 2 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <p class="mono" style="font-size:9px;color:#85948e;margin:0;
+            display:flex;align-items:center;justify-content:flex-end;padding-right:6px">RÉEL RISQUÉ</p>
+          <div class="cm-cell" id="cmFN" style="background:rgba(147,0,10,.35);border:2px solid #ff4d6d">
+            <span class="mono" style="font-size:9px;color:#ff4d6d;font-weight:700">FN ⚠️</span>
+            <span id="valFN" class="display" style="font-size:22px;font-weight:800;color:#ff4d6d">84</span>
+            <span class="mono" style="font-size:8px;color:#ff4d6d">À minimiser</span>
+          </div>
+          <div class="cm-cell" id="cmTP" style="background:rgba(0,232,255,.12);border:1px solid rgba(0,232,255,.3)">
+            <span class="mono" style="font-size:9px;color:#00e8ff">TP</span>
+            <span id="valTP" class="display" style="font-size:22px;font-weight:800;color:#00e8ff">1 256</span>
+            <span class="mono" style="font-size:8px;color:#00e8ff">Détectés</span>
+          </div>
+        </div>
 
+        <div style="margin-top:14px;padding:10px;background:rgba(0,0,0,.2);border-radius:8px">
+          <p id="cmNote" class="mono" style="font-size:11px;color:#bacac3;margin:0;line-height:1.6">
+            <strong style="color:#00e8ff">Objectif clé :</strong> minimiser les FN (Faux Négatifs — clients risqués non détectés).
+            LightGBM génère seulement 84 FN sur l'ensemble de test.
+          </p>
+        </div>
+      </div>
+    </div>
 
-<!-- END BIAT_STANDARD_SIDEBAR -->
+    <!-- ── Feature importance + ROC curve ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:20px">
 
-<!-- SideNavBar -->
+      <!-- Feature importance -->
+      <div class="card" style="padding:20px">
+        <h3 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+          color:#00e8ff;margin:0 0 16px">Importance des variables (SHAP)</h3>
+        <div id="featBars" style="display:flex;flex-direction:column;gap:10px">
+          <!-- filled by JS -->
+        </div>
+        <p class="mono" style="font-size:10px;color:#85948e;margin:14px 0 0;font-style:italic">
+          NBRJDEP — variable dominante dans tous les modèles
+        </p>
+      </div>
 
+      <!-- ROC + threshold -->
+      <div class="card" style="padding:20px">
+        <h3 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+          color:#00e8ff;margin:0 0 16px">Courbe ROC — <span id="rocModelName">LightGBM</span></h3>
+        <svg width="100%" viewBox="0 0 280 220" id="rocChart">
+          <!-- Grid -->
+          <line x1="40" y1="10" x2="40" y2="180" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <line x1="40" y1="180" x2="270" y2="180" stroke="rgba(60,74,69,.4)" stroke-width="1"/>
+          <!-- Diagonal random -->
+          <line x1="40" y1="180" x2="270" y2="10" stroke="rgba(133,148,142,.3)" stroke-width="1" stroke-dasharray="4"/>
+          <text x="155" y="198" text-anchor="middle" fill="#85948e" font-size="9" font-family="JetBrains Mono">False Positive Rate</text>
+          <text x="14" y="98" text-anchor="middle" fill="#85948e" font-size="9" font-family="JetBrains Mono" transform="rotate(-90,14,98)">True Positive Rate</text>
+          <!-- Y axis labels -->
+          <text x="36" y="183" text-anchor="end" fill="#85948e" font-size="8" font-family="JetBrains Mono">0</text>
+          <text x="36" y="100" text-anchor="end" fill="#85948e" font-size="8" font-family="JetBrains Mono">0.5</text>
+          <text x="36" y="15"  text-anchor="end" fill="#85948e" font-size="8" font-family="JetBrains Mono">1.0</text>
+          <!-- ROC path -->
+          <path id="rocPath" fill="rgba(0,232,255,.08)" stroke="#00e8ff" stroke-width="2.5" fill-rule="evenodd"
+            d="" style="transition:d .5s ease"/>
+          <!-- AUC label -->
+          <text id="rocAucLabel" x="160" y="60" fill="#00e8ff" font-size="11"
+            font-family="JetBrains Mono" font-weight="700">AUC = 0.9889</text>
+        </svg>
 
+        <!-- Threshold info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+          <div style="background:rgba(0,0,0,.2);border-radius:8px;padding:10px;text-align:center">
+            <p class="mono" style="font-size:9px;color:#85948e;margin:0 0 4px">SEUIL OPTIMAL</p>
+            <p id="threshVal" class="display" style="font-size:18px;font-weight:800;color:#ffd23f;margin:0">0.65</p>
+          </div>
+          <div style="background:rgba(0,0,0,.2);border-radius:8px;padding:10px;text-align:center">
+            <p class="mono" style="font-size:9px;color:#85948e;margin:0 0 4px">PRÉCISION</p>
+            <p id="precVal" class="display" style="font-size:18px;font-weight:800;color:#fff;margin:0">0.9543</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<!-- TopAppBar -->
-<header class="flex justify-between items-center h-16 px-container-padding ml-[240px] bg-surface-dim/80 backdrop-blur-xl border-b border-outline-variant sticky top-0 z-50 shadow-sm">
-<div class="flex items-center gap-gutter">
-<span class="font-headline-md text-headline-md font-extrabold text-primary">Model Performance</span>
-<div class="relative flex items-center bg-surface-container-lowest border border-outline-variant rounded-full px-base py-1">
-<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
-<input class="bg-transparent border-none focus:ring-0 text-body-sm text-on-surface w-64 p-0" placeholder="Search models or metrics..." type="text"/>
-</div>
-</div>
-<div class="flex items-center gap-gutter">
-<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-stack-sm">
-<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
-<span class="font-label-md text-label-md">Quick Action</span>
-</button>
-<div class="flex items-center gap-stack-md">
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="account_circle">account_circle</span>
-</div>
-</div>
-</header>
-<!-- Main Content -->
-<main class="ml-[240px] p-container-padding space-y-gutter">
-<!-- KPIs Hero Section -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Accuracy</span>
-<span class="font-headline-lg text-primary neon-glow">0.9736</span>
-<div class="flex items-center gap-1 text-primary-fixed text-xs">
-<span class="material-symbols-outlined text-sm" data-icon="arrow_upward">arrow_upward</span>
-<span>+0.002% vs prev iteration</span>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm border-l-4 border-l-primary-container">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">Recall</span>
-<span class="font-headline-lg text-primary-fixed neon-glow">0.9372</span>
-<span class="text-xs text-on-surface-variant italic">Prioritized for Risk Mitigation</span>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">F1-Score</span>
-<span class="font-headline-lg text-primary neon-glow">0.9450</span>
-<div class="flex items-center gap-1 text-on-surface-variant text-xs">
-<span>Harmonic mean stability</span>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col gap-stack-sm">
-<span class="font-label-md text-on-surface-variant uppercase tracking-wider">ROC-AUC</span>
-<span class="font-headline-lg text-primary neon-glow">0.9889</span>
-<div class="flex items-center gap-1 text-primary-fixed text-xs">
-<span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
-<span>Excellent separation</span>
-</div>
-</div>
-</div>
-<!-- Narrative & Selection Justification -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-<div class="lg:col-span-2 glass-card p-gutter rounded-xl">
-<div class="flex items-center gap-base mb-stack-md">
-<span class="material-symbols-outlined text-primary-container" data-icon="psychology">psychology</span>
-<h3 class="font-headline-md text-primary">Strategic Selection: LightGBM</h3>
-</div>
-<div class="space-y-stack-md text-body-md text-on-surface-variant leading-relaxed">
-<p>
-                        The selection of <strong class="text-primary">LightGBM</strong> as the champion model for BIAT's surveillance infrastructure is driven by its exceptional handling of large-scale banking data and its robustness against imbalanced classes.
-                    </p>
-<p>
-                        In our context, <strong class="text-primary-container">Recall is the primary optimization objective.</strong> Missing a single risky client (False Negative) carries significantly higher institutional cost than a manual review of a low-risk client (False Positive). LightGBM's gradient-based one-side sampling (GOSS) allows us to maintain a high Recall of 0.9372 without degrading general Accuracy.
-                    </p>
-</div>
-</div>
-<div class="glass-card p-gutter rounded-xl flex flex-col justify-center border-t-2 border-t-tertiary-container">
-<div class="text-center space-y-base">
-<span class="material-symbols-outlined text-display-lg text-tertiary-container" data-icon="shield">shield</span>
-<h4 class="font-headline-md text-primary">Why Recall Matters?</h4>
-<p class="font-body-sm text-on-surface-variant">
-                        "Failure to detect a high-risk entity threatens capital stability. We prioritize discovery over precision to ensure absolute vigilance."
-                    </p>
-<div class="pt-stack-md">
-<span class="font-label-sm text-tertiary-container border border-tertiary-container/30 px-gutter py-1 rounded-full">CORE MANDATE</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Charts Grid (Bento Style) -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Model Comparison Bar Chart -->
-<div class="lg:col-span-7 glass-card p-gutter rounded-xl">
-<div class="flex justify-between items-center mb-stack-lg">
-<h3 class="font-label-md text-primary uppercase tracking-widest">Benchmark Metrics Comparison</h3>
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="bar_chart">bar_chart</span>
-</div>
-<div class="space-y-gutter">
-<!-- Accuracy Row -->
-<div class="space-y-stack-sm">
-<div class="flex justify-between text-xs font-label-sm">
-<span>Accuracy</span>
-<span class="text-on-surface-variant">LightGBM (Winner)</span>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden flex">
-<div class="bg-primary-container w-[97%] h-full" title="LightGBM: 0.97"></div>
-<div class="bg-secondary-container w-[92%] h-full" title="Random Forest: 0.92"></div>
-<div class="bg-surface-variant w-[85%] h-full" title="Logistic Regression: 0.85"></div>
-</div>
-</div>
-<!-- Recall Row -->
-<div class="space-y-stack-sm">
-<div class="flex justify-between text-xs font-label-sm">
-<span>Recall (Critical)</span>
-<span class="text-on-surface-variant">0.937 vs 0.881</span>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-<div class="bg-primary-container w-[93.7%] h-full"></div>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-<div class="bg-secondary-container w-[88.1%] h-full"></div>
-</div>
-<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-<div class="bg-surface-variant w-[76.4%] h-full"></div>
-</div>
-</div>
-<!-- Legends -->
-<div class="flex gap-gutter pt-stack-md border-t border-outline-variant/30">
-<div class="flex items-center gap-stack-sm">
-<div class="w-3 h-3 bg-primary-container rounded-sm"></div>
-<span class="text-xs font-label-sm text-on-surface-variant">LightGBM</span>
-</div>
-<div class="flex items-center gap-stack-sm">
-<div class="w-3 h-3 bg-secondary-container rounded-sm"></div>
-<span class="text-xs font-label-sm text-on-surface-variant">Random Forest</span>
-</div>
-<div class="flex items-center gap-stack-sm">
-<div class="w-3 h-3 bg-surface-variant rounded-sm"></div>
-<span class="text-xs font-label-sm text-on-surface-variant">Logistic Regression</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Confusion Matrix -->
-<div class="lg:col-span-5 glass-card p-gutter rounded-xl">
-<h3 class="font-label-md text-primary uppercase tracking-widest mb-stack-lg">Confusion Matrix (LightGBM)</h3>
-<div class="grid grid-cols-2 gap-stack-sm relative">
-<!-- Column Labels -->
-<div class="col-start-1 text-center font-label-sm text-on-surface-variant text-[10px]">PREDICTED NORMAL</div>
-<div class="col-start-2 text-center font-label-sm text-on-surface-variant text-[10px]">PREDICTED RISKY</div>
-<!-- True Negative -->
-<div class="aspect-square bg-surface-container-highest/50 border border-outline-variant/20 flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-on-surface-variant text-[10px]">TN</span>
-<span class="font-headline-md text-primary">12,402</span>
-</div>
-<!-- False Positive -->
-<div class="aspect-square bg-error-container/20 border border-error/30 flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-error text-[10px]">FP (Noise)</span>
-<span class="font-headline-md text-error">312</span>
-</div>
-<!-- Row Labels (Absolute Positioned for style) -->
-<div class="col-start-1 text-center font-label-sm text-on-surface-variant text-[10px]">ACTUAL NORMAL</div>
-<div class="col-start-2 text-center font-label-sm text-on-surface-variant text-[10px]">ACTUAL RISKY</div>
-<!-- False Negative -->
-<div class="aspect-square bg-error-container/40 border-2 border-error flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-error font-bold text-[10px]">FN (Risk!)</span>
-<span class="font-headline-md text-error">84</span>
-</div>
-<!-- True Positive -->
-<div class="aspect-square bg-primary-container/20 border border-primary-container/40 flex flex-col items-center justify-center rounded-lg">
-<span class="font-label-sm text-primary-container text-[10px]">TP</span>
-<span class="font-headline-md text-primary-container">1,256</span>
-</div>
-</div>
-<p class="mt-gutter text-[10px] text-on-surface-variant text-center font-label-sm italic">
-                    Focus: Minimizing FN (Lower Left Quad) is the key surveillance objective.
-                </p>
-</div>
-</div>
-<!-- Feature Importance & Data Insights -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-<!-- Feature Importance Horizontal Chart -->
-<div class="lg:col-span-8 glass-card p-gutter rounded-xl">
-<h3 class="font-label-md text-primary uppercase tracking-widest mb-stack-lg">Feature Importance (SHAP values)</h3>
-<div class="space-y-stack-md">
-<!-- Feature 1 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">NBRJDEP</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[92%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.245</span>
-</div>
-<!-- Feature 2 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">MVT</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[84%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.198</span>
-</div>
-<!-- Feature 3 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">AVG_DEP_3M</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[76%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.162</span>
-</div>
-<!-- Feature 4 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">DR_CR_RATIO</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[65%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.134</span>
-</div>
-<!-- Feature 5 -->
-<div class="flex items-center gap-gutter">
-<span class="w-32 font-label-sm text-xs text-on-surface">ACC_AGE_DAYS</span>
-<div class="flex-1 h-8 bg-surface-container flex items-center">
-<div class="h-full bg-primary-container/60 border-r-2 border-primary-container w-[48%]"></div>
-</div>
-<span class="w-12 font-label-sm text-xs text-right">0.089</span>
-</div>
-</div>
-</div>
-<!-- Visualization / Graphic -->
-<div class="lg:col-span-4 glass-card overflow-hidden rounded-xl relative group">
-<img alt="Neural network visualization" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500" data-alt="A highly complex digital visualization of a neural network with glowing interconnected nodes and fiber-optic-like pathways. The aesthetic is tech-noir with deep navy blues and sharp cyan highlights. Tiny data particles flow through the connections, representing high-frequency financial transactions. The lighting is dark and cinematic, emphasizing the precision and complexity of the model architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoDBBZioK5UzkKBXPPiFkcXKRcVi71yeANVO6GmpGptMJ_AXbzWBri145_XMAcjWvaFM-dkAmO5zihab1_-pZKAdoYM6qWllsn_Z9L4e0OuQ-ixfgWK4jn3FhjbFphAbfpBPYfjF3RcpmYmLq31q5v_J5lQMxR1CxnWq3FGaWRtGG23mIVJXW4fAhK_NqQwDSh-6yjghi3FRRsx9sdlfntW2IKzBZW6Ij5H4PcAoLWhCv-PK8sjzHPNBvLXp2_PY9D9q8DaAx485Y"/>
-<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent flex flex-col justify-end p-gutter">
-<h4 class="font-headline-md text-primary">Latent Feature Space</h4>
-<p class="font-body-sm text-on-surface-variant">The model effectively maps 152 dimensional input vectors into a distinct risk-profile manifold.</p>
-</div>
-</div>
-</div>
-</main>
-<!-- FAB for quick report generation (as per instructions, only on home/dashboard, but added here for 'Model Performance' context as it's a primary view) -->
-<div class="fixed bottom-gutter right-gutter z-50">
-<button class="bg-primary-container text-on-primary-container w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
-<span class="material-symbols-outlined" data-icon="file_download">file_download</span>
-</button>
-</div>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const routes = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Future Prediction": "/future",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
-    const text = (el.innerText || "").trim();
-
-    Object.entries(routes).forEach(function(pair) {
-      const label = pair[0];
-      const url = pair[1];
-
-      if (text.includes(label)) {
-        el.style.cursor = "pointer";
-
-        if (el.tagName === "A") {
-          el.setAttribute("href", url);
-        } else {
-          el.onclick = function () {
-            window.location.href = url;
-          };
-        }
-      }
-    });
-  });
-
-  document.querySelectorAll("button, a, div").forEach(function(el) {
-    const text = (el.innerText || "").trim();
-
-    if (text.includes("Critical Alerts")) {
-      el.style.cursor = "pointer";
-      el.onclick = function () {
-        
-      };
-    }
-  });
-});
-</script>
-
-<script src="/attached_assets/auth.js"></script>
-
-
-
-
-<!-- BIAT_STANDARD_SIDEBAR_JS -->
-<script>
-(function () {
-  function activateSidebar() {
-    const path = window.location.pathname;
-    document.querySelectorAll(".biat-nav a").forEach(a => {
-      if (a.getAttribute("data-route") === path) {
-        a.classList.add("active");
-      }
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", activateSidebar);
-  } else {
-    activateSidebar();
-  }
-})();
-</script>
-<!-- END BIAT_STANDARD_SIDEBAR_JS -->
-
-
-<!-- BIAT_SETTINGS_SUPPORT_FIX -->
-<style>
-  #biatModalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.58);
-    z-index: 999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #biatModalBox {
-    width: min(560px, 92vw);
-    background: #101b33;
-    border: 1px solid rgba(95,251,214,.35);
-    border-radius: 16px;
-    color: #d9e2ff;
-    padding: 22px;
-    box-shadow: 0 30px 80px rgba(0,0,0,.45);
-    font-family: Inter, Arial, sans-serif;
-  }
-
-  #biatModalBox h2 {
-    margin: 0 0 14px 0;
-    color: #5ffbd6;
-    font-size: 22px;
-    font-weight: 800;
-  }
-
-  #biatModalBox p {
-    color: #b9c6e4;
-    line-height: 1.6;
-  }
-
-  #biatModalClose {
-    margin-top: 18px;
-    background: #5ffbd6;
-    color: #06251f;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-</style>
-
-<div id="biatModalOverlay">
-  <div id="biatModalBox">
-    <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
-    <p id="biatModalText"></p>
-    <button id="biatModalClose">Fermer</button>
   </div>
-</div>
+</main>
 
 <script>
-(function () {
-  function showModal(title, text) {
-    let overlay = document.getElementById("biatModalOverlay");
-    let titleEl = document.getElementById("biatModalTitle");
-    let textEl = document.getElementById("biatModalText");
+// ── Model data ────────────────────────────────────────────
+const MODELS = {
+  lightgbm: {
+    name: "LightGBM", isChampion: true,
+    accuracy: 0.9736, recall: 0.9372, f1: 0.9450, auc: 0.9889, precision: 0.9543,
+    threshold: 0.65,
+    tn: 12402, fp: 312, fn: 84, tp: 1256,
+    globalScore: 97.4,
+    features: [
+      {name:"NBRJDEP",     val:0.245, pct:92},
+      {name:"MVT",         val:0.198, pct:78},
+      {name:"AVG_DEP_3M",  val:0.162, pct:64},
+      {name:"DR_CR_RATIO", val:0.134, pct:52},
+      {name:"RISK_BRUT",   val:0.089, pct:35},
+    ],
+    rocPoints: "40,180 50,60 80,35 120,22 180,16 230,13 270,10 270,180",
+    color: "#00e8ff",
+    justif: `Le modèle <strong style="color:#fff">LightGBM</strong> a été retenu comme modèle champion. Son algorithme GOSS (Gradient-based One-Side Sampling) gère efficacement les données déséquilibrées du risque bancaire.<br><br>Le <strong style="color:#00e8ff">Recall (0.9372)</strong> est la métrique prioritaire : un faux négatif coûte bien plus qu'un faux positif. Seulement 84 clients risqués non détectés sur l'ensemble de test.`,
+    badges: [
+      {label:"Recall : 0.9372", c:"#00e8ff"},
+      {label:"AUC : 0.9889", c:"#ffd23f"},
+      {label:"FN : 84", c:"#ff4d6d"},
+    ],
+    cmNote: "<strong style=\"color:#00e8ff\">Objectif clé :</strong> LightGBM minimise les FN. Seulement 84 clients risqués non détectés — le meilleur résultat parmi tous les modèles."
+  },
+  rf: {
+    name: "Random Forest", isChampion: false,
+    accuracy: 0.9759, recall: 0.9314, f1: 0.9493, auc: 0.9903, precision: 0.9680,
+    threshold: 0.50,
+    tn: 12476, fp: 238, fn: 115, tp: 1225,
+    globalScore: 96.8,
+    features: [
+      {name:"NBRJDEP",     val:0.231, pct:88},
+      {name:"AVG_DEP_3M",  val:0.204, pct:80},
+      {name:"MVT",         val:0.177, pct:68},
+      {name:"DR_CR_RATIO", val:0.120, pct:47},
+      {name:"RISK_BRUT",   val:0.098, pct:38},
+    ],
+    rocPoints: "40,180 52,58 85,32 125,20 182,15 232,12 270,10 270,180",
+    color: "#ffd23f",
+    justif: `Le modèle <strong style="color:#fff">Random Forest</strong> est une méthode ensembliste basée sur 200 arbres de décision. Il obtient le meilleur F1-Score (0.9493) et le meilleur ROC-AUC (0.9903).<br><br>Cependant, son <strong style="color:#ffd23f">Recall (0.9314)</strong> est légèrement inférieur à LightGBM, ce qui signifie plus de faux négatifs. Dans un contexte bancaire, ce compromis le défavorise malgré ses autres métriques supérieures.`,
+    badges: [
+      {label:"Recall : 0.9314", c:"#ffd23f"},
+      {label:"AUC : 0.9903", c:"#00e8ff"},
+      {label:"FN : 115", c:"#ff4d6d"},
+    ],
+    cmNote: "<strong style=\"color:#ffd23f\">Random Forest :</strong> F1 et AUC légèrement supérieurs à LightGBM, mais 115 FN contre 84 — défavorable en contexte bancaire."
+  },
+  lr: {
+    name: "Régression Logistique", isChampion: false,
+    accuracy: 0.9750, recall: 0.9072, f1: 0.9461, auc: 0.9684, precision: 0.9892,
+    threshold: 0.50,
+    tn: 12538, fp: 176, fn: 194, tp: 1146,
+    globalScore: 94.2,
+    features: [
+      {name:"NBRJDEP",     val:0.198, pct:76},
+      {name:"AVG_DEP_3M",  val:0.165, pct:63},
+      {name:"RISK_BRUT",   val:0.143, pct:55},
+      {name:"MVT",         val:0.112, pct:43},
+      {name:"DR_CR_RATIO", val:0.087, pct:34},
+    ],
+    rocPoints: "40,180 60,80 95,55 140,38 190,28 240,20 270,10 270,180",
+    color: "#bacac3",
+    justif: `La <strong style="color:#fff">Régression Logistique</strong> est utilisée comme modèle de référence (baseline). Elle offre des performances solides malgré sa simplicité, confirmant la pertinence des variables construites.<br><br>Avec un <strong style="color:#bacac3">Recall de 0.9072</strong>, elle génère 194 faux négatifs — trop élevé pour un déploiement en production bancaire. Sa principale valeur est d'être interprétable.`,
+    badges: [
+      {label:"Recall : 0.9072", c:"#bacac3"},
+      {label:"AUC : 0.9684", c:"#ffd23f"},
+      {label:"FN : 194", c:"#ff4d6d"},
+    ],
+    cmNote: "<strong style=\"color:#bacac3\">Régression Logistique :</strong> Modèle baseline interprétable. 194 FN — trop élevé pour la production bancaire mais utile pour valider le feature engineering."
+  },
+  lstm: {
+    name: "LSTM (Deep Learning)", isChampion: false,
+    accuracy: 0.9388, recall: 0.8214, f1: 0.8846, auc: 0.9883, precision: 0.9621,
+    threshold: 0.50,
+    tn: 12214, fp: 500, fn: 299, tp: 1041,
+    globalScore: 91.0,
+    features: [
+      {name:"NBRJDEP seq",  val:0.288, pct:95},
+      {name:"MVT seq",      val:0.201, pct:78},
+      {name:"RISK_BRUT seq",val:0.155, pct:60},
+      {name:"AVG_DEP_3M",   val:0.098, pct:38},
+      {name:"Temporel",     val:0.076, pct:30},
+    ],
+    rocPoints: "40,180 65,90 100,65 145,48 195,35 242,22 270,10 270,180",
+    color: "#ff4d6d",
+    justif: `Le réseau <strong style="color:#fff">LSTM</strong> est une architecture de Deep Learning adaptée aux séquences temporelles. Il capture les patterns de comportement sur plusieurs mois consécutifs.<br><br>Avec un <strong style="color:#ff4d6d">Recall de 0.8214</strong>, il est le moins performant sur cet ensemble de données. Les modèles LSTM nécessitent généralement des volumes de données bien plus importants pour exprimer leur plein potentiel. Pertinent pour un futur déploiement avec plus de données.`,
+    badges: [
+      {label:"Recall : 0.8214", c:"#ff4d6d"},
+      {label:"AUC : 0.9883", c:"#ffd23f"},
+      {label:"FN : 299", c:"#ff4d6d"},
+    ],
+    cmNote: "<strong style=\"color:#ff4d6d\">LSTM :</strong> 299 FN — trop élevé pour la production. Prometteur avec plus de données historiques. Son AUC (0.9883) reste excellent."
+  }
+};
 
-    if (!overlay || !titleEl || !textEl) {
-      alert(title + "\\n\\n" + text);
-      return;
-    }
+// ── Current active model ──────────────────────────────────
+let currentModel = "lightgbm";
 
-    titleEl.innerText = title;
-    textEl.innerText = text;
-    overlay.style.display = "flex";
+// ── Radar polygon calculation ─────────────────────────────
+function radarPoint(angle, value, cx, cy, maxR) {
+  const r = maxR * value;
+  const x = cx + r * Math.cos(angle - Math.PI/2);
+  const y = cy + r * Math.sin(angle - Math.PI/2);
+  return `${x.toFixed(1)},${y.toFixed(1)}`;
+}
+
+function updateRadar(m) {
+  const metrics = [m.recall, m.f1, m.accuracy, m.auc, m.precision];
+  const angles  = [0, 1, 2, 3, 4].map(i => i * (2*Math.PI/5));
+  const cx = 100, cy = 100, maxR = 78;
+  const pts = metrics.map((v,i) => radarPoint(angles[i], v, cx, cy, maxR)).join(" ");
+  document.getElementById("radarPoly").setAttribute("points", pts);
+  document.getElementById("radarScore").innerText = m.globalScore.toFixed(1)+"%";
+}
+
+// ── ROC path ──────────────────────────────────────────────
+function updateROC(m) {
+  // Generate smooth ROC path
+  const pts = m.rocPoints.split(" ").map(p=>p.split(",").map(Number));
+  let d = `M ${pts[0][0]} ${pts[0][1]}`;
+  for(let i=1;i<pts.length;i++) d += ` L ${pts[i][0]} ${pts[i][1]}`;
+  d += " Z";
+  document.getElementById("rocPath").setAttribute("d", d);
+  document.getElementById("rocAucLabel").innerText = `AUC = ${m.auc.toFixed(4)}`;
+  document.getElementById("rocAucLabel").setAttribute("fill", m.color);
+  document.getElementById("rocModelName").innerText = m.name;
+}
+
+// ── Benchmark bars ────────────────────────────────────────
+function updateBenchBars(m) {
+  const metrics = [
+    {label:"Accuracy", val:m.accuracy, max:1},
+    {label:"Recall ★", val:m.recall, max:1, highlight:true},
+    {label:"F1-Score", val:m.f1, max:1},
+    {label:"ROC-AUC",  val:m.auc, max:1},
+  ];
+  document.getElementById("benchBars").innerHTML = metrics.map(met => `
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+        <span class="mono" style="font-size:11px;color:${met.highlight?"#00e8ff":"#bacac3"}">${met.label}</span>
+        <span class="mono" style="font-size:11px;color:#fff;font-weight:700">${met.val.toFixed(4)}</span>
+      </div>
+      <div class="metric-bar-wrap">
+        <div class="metric-bar-fill" style="width:${(met.val*100).toFixed(1)}%;
+          background:${met.highlight?m.color:"rgba(0,232,255,.4)"}"></div>
+      </div>
+    </div>`).join("");
+
+  document.getElementById("benchWinner").innerText = m.name + (m.isChampion?" ✓ Champion":"");
+  document.getElementById("benchWinner").style.color = m.color;
+}
+
+// ── Compare table ─────────────────────────────────────────
+function updateCompareTable(activeKey) {
+  const rows = Object.entries(MODELS).map(([key, m]) => {
+    const isActive = key === activeKey;
+    const bg = isActive ? `background:rgba(${m.color==="#00e8ff"?"95,251,214":"255,180,171"},.06)` : "";
+    const fw = isActive ? "font-weight:800" : "";
+    return `<tr style="border-bottom:1px solid rgba(60,74,69,.3);${bg}">
+      <td class="mono" style="font-size:10px;padding:5px 8px;color:${m.color};${fw}">
+        ${m.name}${m.isChampion?' ⭐':''}
+      </td>
+      <td class="mono" style="font-size:10px;padding:5px 8px;text-align:right;color:${isActive?'#fff':'#bacac3'}">${m.accuracy.toFixed(4)}</td>
+      <td class="mono" style="font-size:10px;padding:5px 8px;text-align:right;color:${isActive?m.color:'#bacac3'};font-weight:${isActive?700:400}">${m.recall.toFixed(4)}</td>
+      <td class="mono" style="font-size:10px;padding:5px 8px;text-align:right;color:${isActive?'#fff':'#bacac3'}">${m.f1.toFixed(4)}</td>
+      <td class="mono" style="font-size:10px;padding:5px 8px;text-align:right;color:${isActive?'#fff':'#bacac3'}">${m.auc.toFixed(4)}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("compareTableBody").innerHTML = rows;
+}
+
+// ── Feature bars ──────────────────────────────────────────
+function updateFeatBars(m) {
+  document.getElementById("featBars").innerHTML = m.features.map(f => `
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="mono" style="width:100px;font-size:10px;color:#bacac3;flex-shrink:0">${f.name}</span>
+      <div style="flex:1;background:rgba(42,52,78,.5);border-radius:4px;height:28px;overflow:hidden">
+        <div class="feat-bar" style="width:${f.pct}%;background:${m.color}33;border-right:2px solid ${m.color}">
+          <span class="mono" style="font-size:9px;color:${m.color}">${f.name}</span>
+        </div>
+      </div>
+      <span class="mono" style="width:36px;text-align:right;font-size:10px;color:#fff">${f.val}</span>
+    </div>`).join("");
+}
+
+// ── Update all UI ─────────────────────────────────────────
+function selectModel(key) {
+  currentModel = key;
+  const m = MODELS[key];
+
+  // Update tabs
+  document.querySelectorAll(".model-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("tab-"+key).classList.add("active");
+
+  // Header badge
+  document.getElementById("modelBadge").innerText = m.name;
+  document.getElementById("modelBadge").style.color = m.color;
+  document.getElementById("modelBadge").style.borderColor = m.color+"44";
+
+  // KPI values with animation
+  function animNum(id, val, decimals=4) {
+    const el = document.getElementById(id);
+    el.style.opacity = "0";
+    el.style.transform = "translateY(-8px)";
+    setTimeout(() => {
+      el.innerText = val.toFixed(decimals);
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+      el.style.transition = "all .3s ease";
+    }, 150);
   }
 
-  document.addEventListener("click", function (e) {
-    const close = e.target.closest("#biatModalClose");
-    if (close) {
-      document.getElementById("biatModalOverlay").style.display = "none";
-      return;
-    }
+  animNum("valAccuracy", m.accuracy);
+  animNum("valRecall",   m.recall);
+  animNum("valF1",       m.f1);
+  animNum("valRoc",      m.auc);
 
-    const settings = e.target.closest("#settingsBtn, .side-btn, button, a");
-    if (settings && String(settings.innerText || "").toLowerCase().includes("settings")) {
-      e.preventDefault();
-      showModal(
-        "Settings",
-        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, synchronisation portefeuille, seuils de risque et préférences d'affichage. Cette version utilise les données locales du projet."
-      );
-      return;
-    }
+  // Recall card color
+  document.getElementById("valRecall").style.color = m.color;
+  document.getElementById("valRoc").style.color    = m.color=="#00e8ff"?"#ffd23f":m.color;
 
-    const support = e.target.closest("#supportBtn, .side-btn, button, a");
-    if (support && String(support.innerText || "").toLowerCase().includes("support")) {
-      e.preventDefault();
-      showModal(
-        "Support",
-        "Aide rapide : Dashboard pour la vue globale, Risk Evolution pour les transitions, Future Prediction pour les clients qui vont devenir critiques, Notifications pour la liste opérationnelle, Client Profiles pour les fiches individuelles, AI Assistant pour les questions métier."
-      );
-      return;
-    }
-  }, true);
-})();
+  // KPI recall card border
+  document.getElementById("kpiRecall").style.borderColor = m.color+"66";
+
+  // Justification
+  document.getElementById("justifTitle").innerText = m.isChampion
+    ? `Sélection stratégique : ${m.name}`
+    : `Analyse : ${m.name}`;
+  document.getElementById("justifText").innerHTML = m.justif;
+  document.getElementById("justifBadges").innerHTML = m.badges.map(b=>
+    `<span class="mono" style="font-size:10px;padding:4px 10px;border-radius:6px;
+      background:${b.c}18;color:${b.c};border:1px solid ${b.c}44">${b.label}</span>`
+  ).join("");
+
+  // Confusion matrix
+  document.getElementById("cmModelName").innerText = m.name;
+  function animCell(id, val) {
+    const el = document.getElementById(id);
+    el.style.opacity = "0";
+    setTimeout(() => {
+      el.innerText = val.toLocaleString("fr-FR");
+      el.style.opacity = "1"; el.style.transition = "opacity .3s";
+    }, 200);
+  }
+  animCell("valTN", m.tn); animCell("valFP", m.fp);
+  animCell("valFN", m.fn); animCell("valTP", m.tp);
+  document.getElementById("cmNote").innerHTML = m.cmNote;
+
+  // Threshold
+  document.getElementById("threshVal").innerText = m.threshold.toFixed(2);
+  document.getElementById("precVal").innerText   = m.precision.toFixed(4);
+
+  // Charts
+  updateBenchBars(m);
+  updateCompareTable(key);
+  updateFeatBars(m);
+  updateRadar(m);
+  updateROC(m);
+}
+
+// ── Init ──────────────────────────────────────────────────
+selectModel("lightgbm");
 </script>
-<!-- END BIAT_SETTINGS_SUPPORT_FIX -->
-
-<script src="/attached_assets/sidebar.js"></script>
-</body></html>
+</body>
+</html>

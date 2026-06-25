@@ -7,23 +7,55 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
+
 <style>
-body{margin:0;background:#07122a;color:#d9e2ff;font-family:Inter,sans-serif}
+  
+  
+body{margin:0;background:#060b2e;color:#d9e2ff;font-family:Inter,sans-serif}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,rgba(95,251,214,.035) 1px,transparent 1px),
-    linear-gradient(rgba(95,251,214,.035) 1px,transparent 1px);
+  background:linear-gradient(90deg,rgba(0,232,255,.035) 1px,transparent 1px),
+    linear-gradient(rgba(0,232,255,.035) 1px,transparent 1px);
   background-size:34px 34px;z-index:-1}
 .mono{font-family:"JetBrains Mono",monospace}
-.card{background:rgba(16,27,51,.72);border:1px solid rgba(133,148,142,.22);border-radius:14px}
+.card{background:rgba(16,27,51,.72);border:1px solid rgba(133,148,142,.22);border-radius:14px;
+  transition:border-color .2s}
+.card:hover{border-color:rgba(0,232,255,.2)}
 .kpi-number{font-size:28px;font-weight:800;letter-spacing:.03em;margin-top:14px}
-.bar-bg{height:8px;border-radius:999px;background:#263452;overflow:hidden}
-.bar-fill{height:100%;border-radius:999px}
+.bar-bg{height:10px;border-radius:999px;background:#263452;overflow:hidden;cursor:pointer}
+.bar-bg:hover{background:#2e3d5e}
+.bar-fill{height:100%;border-radius:999px;transition:width .4s ease}
 .donut{width:170px;height:170px;border-radius:50%;
-  background:conic-gradient(#ffb4ab 0deg,#263452 0deg);
+  background:conic-gradient(#ff4d6d 0deg,#263452 0deg);
   display:flex;align-items:center;justify-content:center;
-  position:relative;margin:auto}
-.donut::after{content:"";position:absolute;inset:28px;border-radius:50%;background:#101b33}
+  position:relative;margin:auto;transition:background .4s}
+.donut::after{content:"";position:absolute;inset:28px;border-radius:50%;background:#142467}
 .donut-inner{position:relative;z-index:2;text-align:center}
+
+/* Clickable KPI card */
+.kpi-card{cursor:pointer;transition:border-color .2s,transform .1s}
+.kpi-card:hover{transform:translateY(-2px)}
+.kpi-card.active{border-color:rgba(0,232,255,.6)!important;
+  background:rgba(0,232,255,.05)!important}
+
+/* Clickable dist row */
+.dist-row{cursor:pointer;padding:6px 8px;border-radius:8px;
+  transition:background .15s;margin-bottom:12px}
+.dist-row:hover{background:rgba(0,232,255,.06)}
+.dist-row.active{background:rgba(0,232,255,.1);
+  outline:1px solid rgba(0,232,255,.3)}
+
+/* Active filter badge */
+.filter-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,232,255,.1);border:1px solid rgba(0,232,255,.35);
+  border-radius:999px;padding:4px 12px;
+  font-family:"JetBrains Mono",monospace;font-size:11px;
+  color:#00e8ff;font-weight:700;cursor:pointer;
+  transition:background .15s;
+}
+.filter-badge:hover{background:rgba(0,232,255,.2)}
+.filter-badge .x{color:#00e8ff;font-size:14px;line-height:1}
+
 body{padding-left:240px!important}
 .biat-sidebar{position:fixed!important;left:0!important;top:0!important;width:240px!important;
   height:100vh!important;z-index:99999!important;background:#071126!important;
@@ -33,17 +65,17 @@ body{padding-left:240px!important}
 .biat-sidebar .brand h1{margin:0!important;color:#f3f7ff!important;font-size:26px!important;
   line-height:1.14!important;font-weight:900!important;font-family:Inter,Arial,sans-serif!important}
 .biat-sidebar .brand p{margin:8px 0 0 0!important;color:rgba(217,226,255,.72)!important;
-  font-size:13px!important;font-family:Inter,Arial,sans-serif!important}
+  font-size:13px!important}
 .biat-sidebar nav{display:flex!important;flex-direction:column!important;gap:7px!important}
 .biat-sidebar .nav-link{height:46px!important;width:100%!important;display:flex!important;
   align-items:center!important;gap:12px!important;padding:0 14px!important;
   border-radius:10px!important;color:#b9c6e4!important;text-decoration:none!important;
   font-family:"JetBrains Mono",monospace!important;font-size:13px!important;font-weight:700!important;
   box-sizing:border-box!important;white-space:nowrap!important}
-.biat-sidebar .nav-link:hover{background:rgba(95,251,214,.08)!important;color:#ffffff!important}
-.biat-sidebar .nav-link.active{background:rgba(121,143,185,.35)!important;color:#ffffff!important;font-weight:900!important}
+.biat-sidebar .nav-link:hover{background:rgba(0,232,255,.08)!important;color:#fff!important}
+.biat-sidebar .nav-link.active{background:rgba(121,143,185,.35)!important;color:#fff!important;font-weight:900!important}
 .biat-sidebar .material-symbols-outlined{font-size:22px!important;width:24px!important;min-width:24px!important}
-.biat-sidebar .badge{margin-left:auto!important;background:#ffb4ab!important;color:#3b0505!important;
+.biat-sidebar .badge{margin-left:auto!important;background:#ff4d6d!important;color:#3b0505!important;
   border-radius:999px!important;padding:2px 7px!important;font-size:10px!important;font-weight:900!important}
 .biat-sidebar .bottom{margin-top:auto!important;display:flex!important;flex-direction:column!important;
   gap:8px!important;border-top:1px solid rgba(148,163,184,.16)!important;padding-top:14px!important}
@@ -53,13 +85,12 @@ body{padding-left:240px!important}
   font-family:"JetBrains Mono",monospace!important;font-size:13px!important;font-weight:900!important}
 .biat-sidebar .critical-btn{background:#b00012!important;color:white!important}
 .biat-sidebar .bottom-btn{background:transparent!important;color:#b9c6e4!important}
-.biat-sidebar .bottom-btn:hover{background:rgba(95,251,214,.08)!important;color:white!important}
+.biat-sidebar .bottom-btn:hover{background:rgba(0,232,255,.08)!important;color:white!important}
 main{margin-left:0!important}
 </style>
 </head>
 <body>
 
-<!-- Sidebar -->
 <aside class="biat-sidebar">
   <div class="brand"><h1>BIAT Risk<br>Monitor</h1><p>Vigilant Professionalism</p></div>
   <nav>
@@ -72,123 +103,171 @@ main{margin-left:0!important}
     <a class="nav-link" href="/assistant"><span class="material-symbols-outlined">smart_toy</span><span>AI Assistant</span></a>
   </nav>
   <div class="bottom">
-    <button class="critical-btn" onclick="location.href='/notifications'">
+    <button class="critical-btn" onclick="applyLevelFilter('Critique')">
       <span class="material-symbols-outlined">warning</span><span>Critical Alerts</span>
     </button>
-    <button class="bottom-btn" onclick="showModal('Settings','Seuil de risque : 0.65 pour Élevé, 0.85 pour Critique.\nModèle : LightGBM\nDonnées : attached_assets/top_risky_clients.json')">
+    <button class="bottom-btn" onclick="showModal('Settings','Cliquez sur une barre de niveau, un KPI ou le donut pour filtrer le tableau.\nModèle : LightGBM\nSource : dashboard_clients_full.json')">
       <span class="material-symbols-outlined">settings</span><span>Settings</span>
     </button>
-    <button class="bottom-btn" onclick="showModal('Support','Future Prediction : prédit les clients qui vont devenir critiques dans les 30 prochains jours.\nSource : top_risky_clients.json + dashboard_clients_full.json')">
-      <span class="material-symbols-outlined">help</span><span>Support</span>
+    <button class="bottom-btn" onclick="clearFilter()">
+      <span class="material-symbols-outlined">filter_alt_off</span><span>Clear filter</span>
     </button>
   </div>
 </aside>
 
 <main class="min-h-screen">
-  <header class="h-16 border-b border-[#263452] bg-[#07122a] px-6 flex items-center justify-between sticky top-0 z-40">
-    <div class="relative w-[430px]">
-      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
-      <input id="searchInput" oninput="renderTable()"
-        class="w-full bg-[#101b33] border border-[#263452] rounded-lg pl-12 pr-4 py-2.5 text-[#d9e2ff] outline-none"
-        placeholder="Search future risky clients..."/>
+  <header class="h-16 border-b border-[#263452] bg-[#060b2e] px-6 flex items-center justify-between sticky top-0 z-40">
+    <div class="flex items-center gap-3 flex-1">
+      <div class="relative w-[380px]">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
+        <input id="searchInput" oninput="renderTable()"
+          class="w-full bg-[#142467] border border-[#263452] rounded-lg pl-12 pr-4 py-2.5 text-[#d9e2ff] outline-none"
+          placeholder="Search CPTE..."/>
+      </div>
+      <!-- Active filter badge -->
+      <div id="activeFilterWrap" style="display:none">
+        <span id="activeFilterBadge" class="filter-badge" onclick="clearFilter()">
+          <span class="material-symbols-outlined" style="font-size:14px">filter_alt</span>
+          <span id="activeFilterLabel">--</span>
+          <span class="x">×</span>
+        </span>
+      </div>
     </div>
     <div class="flex items-center gap-4">
       <button onclick="location.href='/dashboard'" class="mono text-sm text-[#9aa8c7]">Overview</button>
       <button onclick="location.href='/evolution'" class="mono text-sm text-[#9aa8c7]">Evolution</button>
-      <button class="mono text-sm text-[#5ffbd6] border-b border-[#5ffbd6]">Prediction</button>
+      <button class="mono text-sm text-[#00e8ff] border-b border-[#00e8ff]">Prediction</button>
       <span class="material-symbols-outlined text-[#9aa8c7]">notifications</span>
       <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
-        <div class="w-9 h-9 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
-        <div>
-          <p class="mono text-sm font-bold">ALA</p>
-          <p class="mono text-[10px] text-[#9aa8c7] uppercase">Risk Officer</p>
-        </div>
+        <div class="w-9 h-9 rounded-full border border-[#00e8ff]/40 bg-[#142467]"></div>
+        <div><p class="mono text-sm font-bold">ALA</p><p class="mono text-[10px] text-[#9aa8c7] uppercase">Risk Officer</p></div>
       </div>
     </div>
   </header>
 
   <section class="p-5 space-y-4">
+    <!-- Title -->
     <div class="flex items-start justify-between">
       <div>
         <h2 class="text-3xl font-extrabold">Future Risk Prediction</h2>
-        <p id="subtitle" class="text-[#9aa8c7] mt-1">Loading future predictions at 30-day horizon...</p>
+        <p id="subtitle" class="text-[#9aa8c7] mt-1">Chargement...</p>
       </div>
       <div class="flex gap-3">
         <button onclick="loadFuture()" class="bg-[#1f2942] text-[#d9e2ff] px-5 py-2.5 rounded-lg mono text-sm font-bold">Refresh</button>
-        <button onclick="exportCsv()" class="bg-[#5ffbd6] text-[#06251f] px-5 py-2.5 rounded-lg mono text-sm font-bold">CSV Export</button>
+        <button onclick="exportCsv()" class="bg-[#00e8ff] text-[#06251f] px-5 py-2.5 rounded-lg mono text-sm font-bold">CSV Export</button>
       </div>
     </div>
 
-    <!-- KPIs -->
-    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-      <div class="card p-4"><p class="mono text-xs text-[#9aa8c7]">Clients analyzed</p><div id="kTotal" class="kpi-number">--</div></div>
-      <div class="card p-4"><p class="mono text-xs text-[#ffb4ab]">Predicted critical</p><div id="kCritical" class="kpi-number text-[#ffb4ab]">--</div></div>
-      <div class="card p-4"><p class="mono text-xs text-[#fbe273]">Non critical → critical</p><div id="kNonCrit" class="kpi-number text-[#fbe273]">--</div></div>
-      <div class="card p-4"><p class="mono text-xs text-[#ffb4ab]">Aggravation expected</p><div id="kAggravation" class="kpi-number">--</div></div>
-      <div class="card p-4"><p class="mono text-xs text-[#5ffbd6]">Anomalies</p><div id="kAnomalies" class="kpi-number">--</div></div>
-      <div class="card p-4"><p class="mono text-xs text-[#9aa8c7]">Stable clients</p><div id="kNew" class="kpi-number">--</div></div>
+    <!-- KPI Cards — clickable -->
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+      <div id="kpiCardAll" class="card kpi-card p-4" onclick="clearFilter()">
+        <p class="mono text-xs text-[#9aa8c7]">Clients analysés</p>
+        <div id="kTotal" class="kpi-number">--</div>
+        <p class="mono text-[10px] text-[#9aa8c7] mt-1">Voir tous</p>
+      </div>
+      <div id="kpiCardCrit" class="card kpi-card p-4" onclick="applyLevelFilter('Critique')">
+        <p class="mono text-xs text-[#ff4d6d]">Prédits critiques</p>
+        <div id="kCritical" class="kpi-number text-[#ff4d6d]">--</div>
+        <p class="mono text-[10px] text-[#ff4d6d] mt-1">Cliquer pour filtrer</p>
+      </div>
+      <div id="kpiCardNonCrit" class="card kpi-card p-4" onclick="applyCustomFilter('noncrit')">
+        <p class="mono text-xs text-[#ffd23f]">Non crit → critique</p>
+        <div id="kNonCrit" class="kpi-number text-[#ffd23f]">--</div>
+        <p class="mono text-[10px] text-[#ffd23f] mt-1">Cliquer pour filtrer</p>
+      </div>
+      <div id="kpiCardAggrav" class="card kpi-card p-4" onclick="applyCustomFilter('aggravation')">
+        <p class="mono text-xs text-[#ff4d6d]">Aggravation prévue</p>
+        <div id="kAggravation" class="kpi-number">--</div>
+        <p class="mono text-[10px] text-[#9aa8c7] mt-1">Cliquer pour filtrer</p>
+      </div>
+      <div id="kpiCardAnom" class="card kpi-card p-4" onclick="applyCustomFilter('anomaly')">
+        <p class="mono text-xs text-[#00e8ff]">Anomalies</p>
+        <div id="kAnomalies" class="kpi-number">--</div>
+        <p class="mono text-[10px] text-[#00e8ff] mt-1">Cliquer pour filtrer</p>
+      </div>
+      <div id="kpiCardStable" class="card kpi-card p-4" onclick="applyCustomFilter('stable')">
+        <p class="mono text-xs text-[#9aa8c7]">Stables</p>
+        <div id="kNew" class="kpi-number">--</div>
+        <p class="mono text-[10px] text-[#9aa8c7] mt-1">Cliquer pour filtrer</p>
+      </div>
     </div>
 
     <!-- Charts -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
       <div class="card p-4 xl:col-span-2">
-        <div class="flex items-center justify-between mb-5">
-          <h3 class="text-xl font-extrabold">Future level distribution</h3>
-          <span class="material-symbols-outlined text-[#5ffbd6]">bar_chart</span>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-extrabold">Répartition future par niveau</h3>
+          <span class="mono text-xs text-[#9aa8c7]">cliquez sur un niveau pour filtrer</span>
         </div>
-        <div id="distBars" class="space-y-5"></div>
+        <div id="distBars"></div>
       </div>
       <div class="card p-4">
-        <h3 class="text-xl font-extrabold mb-6">Future critical ratio</h3>
-        <div id="donut" class="donut">
+        <h3 class="text-xl font-extrabold mb-3">Ratio clients critiques</h3>
+        <p class="mono text-xs text-[#9aa8c7] mb-4">Cliquez pour filtrer</p>
+        <div id="donut" class="donut" style="cursor:pointer" onclick="applyLevelFilter('Critique')">
           <div class="donut-inner">
-            <p id="criticalRatio" class="text-3xl font-extrabold text-[#ffb4ab]">--%</p>
-            <p class="mono text-xs text-[#9aa8c7]">critical clients</p>
+            <p id="criticalRatio" class="text-3xl font-extrabold text-[#ff4d6d]">--%</p>
+            <p class="mono text-xs text-[#9aa8c7]">critiques</p>
           </div>
         </div>
+        <!-- Level legend — clickable -->
+        <div id="donutLegend" class="grid grid-cols-2 gap-2 mt-4 mono text-xs"></div>
       </div>
     </div>
 
+    <!-- Evolution + AI insight -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
       <div class="card p-4">
-        <h3 class="mono text-sm tracking-[.25em] text-[#5ffbd6] uppercase font-bold">Expected evolution</h3>
-        <div id="evoBars" class="mt-5 space-y-4"></div>
+        <h3 class="mono text-sm tracking-[.25em] text-[#00e8ff] uppercase font-bold mb-4">Évolution attendue</h3>
+        <div id="evoBars"></div>
       </div>
       <div class="card p-4 xl:col-span-2">
-        <h3 class="mono text-sm tracking-[.25em] text-[#5ffbd6] uppercase font-bold">AI business reading</h3>
-        <p id="aiInsight" class="mt-5 text-[#d9e2ff] leading-relaxed">Analysis in progress...</p>
+        <h3 class="mono text-sm tracking-[.25em] text-[#00e8ff] uppercase font-bold mb-4">AI Business Reading</h3>
+        <p id="aiInsight" class="text-[#d9e2ff] leading-relaxed text-sm">Analyse en cours...</p>
       </div>
     </div>
 
     <!-- Table -->
     <div class="card overflow-hidden">
-      <div class="p-4 border-b border-[#263452] flex items-center justify-between">
+      <div class="p-4 border-b border-[#263452] flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h3 class="text-xl font-extrabold">Priority clients predicted critical</h3>
-          <p class="text-sm text-[#9aa8c7]">Clients to process before they become effectively critical</p>
+          <h3 class="text-xl font-extrabold">
+            Clients prioritaires
+            <span id="tableCount" class="mono text-sm font-normal text-[#9aa8c7] ml-2"></span>
+          </h3>
+          <p id="tableSubtitle" class="text-sm text-[#9aa8c7]">Cliquez sur une barre ou un KPI pour filtrer</p>
         </div>
-        <select id="tableFilter" onchange="renderTable()"
-          class="bg-[#101b33] border border-[#263452] rounded-lg px-4 py-2.5 text-[#d9e2ff] outline-none">
-          <option value="noncrit">Non critical → critical</option>
-          <option value="critical">All predicted critical</option>
-          <option value="aggravation">Aggravation</option>
-          <option value="anomaly">Anomalies</option>
-        </select>
+        <div class="flex gap-3 items-center">
+          <select id="tableFilter" onchange="onDropdownChange()" class="bg-[#142467] border border-[#263452] rounded-lg px-4 py-2.5 text-[#d9e2ff] outline-none mono text-xs">
+            <option value="all">Tous les clients</option>
+            <option value="noncrit">Non critique → critique</option>
+            <option value="critical">Prédits critiques</option>
+            <option value="eleve">Niveau Élevé</option>
+            <option value="moyen">Niveau Moyen</option>
+            <option value="faible">Niveau Faible</option>
+            <option value="aggravation">Aggravation</option>
+            <option value="anomaly">Anomalies</option>
+            <option value="stable">Stables</option>
+          </select>
+          <button onclick="clearFilter()" class="mono text-xs text-[#9aa8c7] hover:text-[#00e8ff] transition-colors">
+            Reset
+          </button>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left">
-          <thead class="bg-[#07122a]">
+          <thead class="bg-[#060b2e]">
             <tr>
               <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">CPTE</th>
-              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Current level</th>
-              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Future level</th>
-              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Risk score</th>
-              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Evolution</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Niveau actuel</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Niveau futur</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Score actuel</th>
+              <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Évolution</th>
               <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Action</th>
             </tr>
           </thead>
           <tbody id="tableBody" class="divide-y divide-[#263452]">
-            <tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Loading...</td></tr>
+            <tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Chargement...</td></tr>
           </tbody>
         </table>
       </div>
@@ -196,21 +275,21 @@ main{margin-left:0!important}
   </section>
 </main>
 
-<!-- Modal -->
 <div id="biatModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:999999;align-items:center;justify-content:center">
-  <div style="width:min(500px,92vw);background:#101b33;border:1px solid rgba(95,251,214,.35);border-radius:16px;color:#d9e2ff;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.45)">
-    <h2 id="modalTitle" style="color:#5ffbd6;font-size:20px;font-weight:800;margin:0 0 12px"></h2>
+  <div style="width:min(500px,92vw);background:#142467;border:1px solid rgba(0,232,255,.35);border-radius:16px;color:#d9e2ff;padding:22px">
+    <h2 id="modalTitle" style="color:#00e8ff;font-size:20px;font-weight:800;margin:0 0 12px"></h2>
     <p id="modalText" style="color:#b9c6e4;line-height:1.65;white-space:pre-line;font-size:14px;margin:0"></p>
     <div style="margin-top:16px;text-align:right">
       <button onclick="document.getElementById('biatModalOverlay').style.display='none'"
-        style="background:#5ffbd6;color:#06251f;border:none;padding:8px 18px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-weight:800;cursor:pointer">Fermer</button>
+        style="background:#00e8ff;color:#06251f;border:none;padding:8px 18px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-weight:800;cursor:pointer">Fermer</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── Data store ────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────
 let ALL_ROWS = [];
+let ACTIVE_FILTER = { type: "all", label: "Tous" }; // current interactive filter
 
 function showModal(t, txt) {
   document.getElementById("modalTitle").innerText = t;
@@ -225,10 +304,9 @@ function n(v) {
 function fmt(v) { return Math.round(n(v)).toLocaleString("fr-FR"); }
 function pct(v, t) { return t ? (n(v)/t*100).toFixed(1) : "0.0"; }
 
-// ── Score from any field ──────────────────────────────────
+// ── Score ─────────────────────────────────────────────────
 function getScore(r) {
-  for (const k of ["display_risk_score_percent","risk_score_percent",
-                   "score_percent","risk_score","RISK_SCORE","score"]) {
+  for (const k of ["display_risk_score_percent","risk_score_percent","score_percent","risk_score","RISK_SCORE","score"]) {
     const v = n(r[k]);
     if (v > 1)  return Math.min(v, 95);
     if (v > 0)  return Math.min(v * 100, 95);
@@ -236,231 +314,406 @@ function getScore(r) {
   return 0;
 }
 
-// ── Level from score ──────────────────────────────────────
 function levelFromScore(s) {
   if (s >= 85) return "Critique";
   if (s >= 65) return "Élevé";
   if (s >= 40) return "Moyen";
-  if (s > 0)   return "Faible";
-  return "--";
+  return "Faible";
 }
 
-// ── Compute future level (simulate +1 month pressure) ─────
-// Uses NBRJDEP_TREND to shift risk upward if deteriorating
-function futureLevel(r) {
-  const s        = getScore(r);
-  const trend    = n(r.nbrjdep_trend ?? r.NBRJDEP_TREND ?? 0);
-  const rTrend   = n(r.risk_brut_trend ?? r.RISK_BRUT_TREND ?? 0);
-
-  // Pressure increases score if deteriorating
-  let futureScore = s;
-  if (trend > 10 || rTrend > 50000) futureScore = Math.min(s + 12, 95);
-  else if (trend > 3)               futureScore = Math.min(s + 6,  95);
-  else if (trend < -5)              futureScore = Math.max(s - 8,   0);
-
-  return { score: futureScore, level: levelFromScore(futureScore) };
+function deduplicateByBestScore(rows) {
+  const map = new Map();
+  for (const r of rows) {
+    const cpte = String(r.cpte || r.CPTE || "").trim();
+    if (!cpte) continue;
+    const s = getScore(r);
+    if (!map.has(cpte) || s > getScore(map.get(cpte))) map.set(cpte, r);
+  }
+  return Array.from(map.values());
 }
 
-// ── Evolution label ───────────────────────────────────────
-function evolutionLabel(currentLevel, futureLvl, trend) {
-  const lvlMap = { "Critique":4, "Élevé":3, "Moyen":2, "Faible":1, "--":0 };
-  const c = lvlMap[currentLevel] ?? 0;
-  const f = lvlMap[futureLvl]    ?? 0;
-  if (trend > 10)  return "Aggravation forte";
-  if (trend > 3)   return "Aggravation modérée";
-  if (f > c)       return "Aggravation";
-  if (f < c)       return "Amélioration";
+function computeFutureLevel(r, enrichMap) {
+  const cpte = String(r.cpte || r.CPTE || "").trim();
+  const curScore = getScore(r);
+  if (enrichMap.has(cpte)) {
+    const en = enrichMap.get(cpte);
+    let fs = n(en.score_futur_predit_pct ?? en.score_futur_predit ?? en.future_score_percent ?? en.future_score ?? 0);
+    if (fs > 0 && fs <= 1) fs *= 100;
+    if (fs > 0) return { score: Math.min(fs,95), level: en.niveau_futur_predit || en.future_level || levelFromScore(fs), evo: en.evolution_prevue || null };
+  }
+  const trend  = n(r.nbrjdep_trend ?? r.NBRJDEP_TREND ?? 0);
+  const rTrend = n(r.risk_brut_trend ?? r.RISK_BRUT_TREND ?? 0);
+  let fs = curScore;
+  if      (trend > 10 || rTrend > 50000) fs = Math.min(curScore+12, 95);
+  else if (trend > 3)                    fs = Math.min(curScore+6,  95);
+  else if (trend < -5)                   fs = Math.max(curScore-8,   0);
+  return { score: Math.min(fs,95), level: levelFromScore(fs), evo: null };
+}
+
+function evolutionLabel(curLvl, futLvl, trend) {
+  const m = {"Critique":4,"Élevé":3,"Moyen":2,"Faible":1};
+  const c = m[curLvl]??0, f = m[futLvl]??0;
+  if (trend > 10) return "Aggravation forte";
+  if (trend > 3)  return "Aggravation modérée";
+  if (f > c)      return "Aggravation";
+  if (f < c)      return "Amélioration";
   return "Stable";
 }
 
-// ── Render distribution bars ──────────────────────────────
-function renderDist(id, items, total) {
-  const max = Math.max(...items.map(x => x.v), 1);
-  document.getElementById(id).innerHTML = items.map(x => `
-    <div>
-      <div class="flex justify-between text-sm mb-2">
-        <span class="font-bold">${x.label}</span>
-        <span class="mono text-[#9aa8c7]">${fmt(x.v)} — ${pct(x.v, total)}%</span>
-      </div>
-      <div class="bar-bg">
-        <div class="bar-fill" style="width:${Math.max(1, x.v/max*100).toFixed(1)}%;background:${x.color}"></div>
-      </div>
-    </div>`).join("");
+function toRows(data) {
+  if (Array.isArray(data))                           return data;
+  if (Array.isArray(data?.clients))                  return data.clients;
+  if (Array.isArray(data?.data))                     return data.data;
+  if (Array.isArray(data?.top_future_risk_clients))  return data.top_future_risk_clients;
+  if (data && typeof data === "object")
+    return Object.values(data).filter(v => v && typeof v === "object");
+  return [];
+}
+
+// ── Interactive filter engine ─────────────────────────────
+function getFilteredRows() {
+  const q = (document.getElementById("searchInput")?.value || "").toLowerCase();
+  return ALL_ROWS.filter(r => {
+    const cpte = (r.cpte || r.CPTE || "").toLowerCase();
+    if (q && !cpte.includes(q)) return false;
+
+    const f = ACTIVE_FILTER.type;
+    if (f === "all")         return true;
+    if (f === "Critique")    return r._futureLvl === "Critique";
+    if (f === "Élevé")       return r._futureLvl === "Élevé";
+    if (f === "Moyen")       return r._futureLvl === "Moyen";
+    if (f === "Faible")      return r._futureLvl === "Faible";
+    if (f === "noncrit")     return r._futureLvl === "Critique" && r._curLvl !== "Critique";
+    if (f === "aggravation") return r._evo.toLowerCase().includes("aggrav");
+    if (f === "anomaly")     return r._isAnomaly;
+    if (f === "stable")      return r._evo === "Stable";
+    return true;
+  });
+}
+
+// ── Apply filter functions (called on click) ──────────────
+function applyLevelFilter(level) {
+  const colors = {"Critique":"#ff4d6d","Élevé":"#ffd23f","Moyen":"#00e8ff","Faible":"#9aa8c7"};
+  ACTIVE_FILTER = { type: level, label: "Niveau : " + level };
+  document.getElementById("tableFilter").value = level === "Critique" ? "critical"
+    : level === "Élevé" ? "eleve" : level === "Moyen" ? "moyen" : "faible";
+  updateFilterUI();
+  renderTable();
+  renderDonutFiltered();
+}
+
+function applyCustomFilter(type) {
+  const labels = {
+    noncrit: "Non critique → critique",
+    aggravation: "Aggravation prévue",
+    anomaly: "Anomalies détectées",
+    stable: "Clients stables"
+  };
+  ACTIVE_FILTER = { type, label: labels[type] || type };
+  document.getElementById("tableFilter").value = type;
+  updateFilterUI();
+  renderTable();
+  renderDonutFiltered();
+}
+
+function clearFilter() {
+  ACTIVE_FILTER = { type: "all", label: "Tous" };
+  document.getElementById("tableFilter").value = "all";
+  updateFilterUI();
+  renderTable();
+  renderDonutFiltered();
+}
+
+function onDropdownChange() {
+  const val = document.getElementById("tableFilter").value;
+  const labelMap = {
+    all: null, critical:"Critiques", noncrit:"Non crit→critique",
+    eleve:"Élevé", moyen:"Moyen", faible:"Faible",
+    aggravation:"Aggravation", anomaly:"Anomalies", stable:"Stables"
+  };
+  if (val === "all") { clearFilter(); return; }
+  const typeMap = { critical:"Critique", eleve:"Élevé", moyen:"Moyen", faible:"Faible" };
+  if (typeMap[val]) { applyLevelFilter(typeMap[val]); }
+  else { applyCustomFilter(val); }
+}
+
+function updateFilterUI() {
+  const wrap  = document.getElementById("activeFilterWrap");
+  const label = document.getElementById("activeFilterLabel");
+  const isAll = ACTIVE_FILTER.type === "all";
+  wrap.style.display = isAll ? "none" : "block";
+  label.innerText    = ACTIVE_FILTER.label;
+
+  // Highlight active KPI card
+  ["kpiCardAll","kpiCardCrit","kpiCardNonCrit","kpiCardAggrav","kpiCardAnom","kpiCardStable"]
+    .forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove("active"); });
+  if (isAll) document.getElementById("kpiCardAll")?.classList.add("active");
+  else if (ACTIVE_FILTER.type === "Critique")    document.getElementById("kpiCardCrit")?.classList.add("active");
+  else if (ACTIVE_FILTER.type === "noncrit")     document.getElementById("kpiCardNonCrit")?.classList.add("active");
+  else if (ACTIVE_FILTER.type === "aggravation") document.getElementById("kpiCardAggrav")?.classList.add("active");
+  else if (ACTIVE_FILTER.type === "anomaly")     document.getElementById("kpiCardAnom")?.classList.add("active");
+  else if (ACTIVE_FILTER.type === "stable")      document.getElementById("kpiCardStable")?.classList.add("active");
+}
+
+// ── Render donut based on current filter ──────────────────
+function renderDonutFiltered() {
+  const rows  = getFilteredRows();
+  const total = rows.length || 1;
+  const isAll = ACTIVE_FILTER.type === "all";
+
+  if (isAll) {
+    // Full distribution
+    const c = ALL_ROWS.filter(r=>r._futureLvl==="Critique").length;
+    const ratio = ALL_ROWS.length ? c/ALL_ROWS.length*100 : 0;
+    document.getElementById("criticalRatio").innerText = ratio.toFixed(1)+"%";
+    document.getElementById("donut").style.background =
+      `conic-gradient(#ff4d6d 0deg ${(ratio*3.6).toFixed(1)}deg,#263452 ${(ratio*3.6).toFixed(1)}deg 360deg)`;
+    document.getElementById("criticalRatio").style.color = "#ff4d6d";
+  } else {
+    // Show filtered count/ratio
+    const lvlCounts = {Critique:0,Élevé:0,Moyen:0,Faible:0};
+    rows.forEach(r => { if(lvlCounts[r._futureLvl]!==undefined) lvlCounts[r._futureLvl]++; });
+    const c = rows.filter(r=>r._futureLvl==="Critique").length;
+    const ratio = rows.length ? c/rows.length*100 : 0;
+    const dA = (lvlCounts["Critique"]||0)/total*360;
+    const dB = (lvlCounts["Élevé"]||0)/total*360;
+    const dC = (lvlCounts["Moyen"]||0)/total*360;
+    document.getElementById("donut").style.background =
+      `conic-gradient(#ff4d6d 0deg ${dA.toFixed(1)}deg,#ffd23f ${dA.toFixed(1)}deg ${(dA+dB).toFixed(1)}deg,#00e8ff ${(dA+dB).toFixed(1)}deg ${(dA+dB+dC).toFixed(1)}deg,#263452 0deg)`;
+    document.getElementById("criticalRatio").innerText = fmt(rows.length);
+    document.getElementById("criticalRatio").style.color = "#00e8ff";
+  }
+
+  // Update subtitle under donut
+  const subtitle = isAll ? "critiques" : ACTIVE_FILTER.label;
+  document.querySelector(".donut-inner p:last-child").innerText = subtitle;
 }
 
 // ── Render table ──────────────────────────────────────────
 function renderTable() {
-  const mode = document.getElementById("tableFilter").value;
-  const q    = (document.getElementById("searchInput")?.value || "").toLowerCase();
+  const rows = getFilteredRows().slice(0, 40);
+  const total = getFilteredRows().length;
 
-  const filtered = ALL_ROWS.filter(r => {
-    const evo   = r._evo.toLowerCase();
-    const fLvl  = r._futureLvl.toLowerCase();
-    const cLvl  = r._curLvl.toLowerCase();
-    const cpte  = (r.cpte || r.CPTE || "").toLowerCase();
+  document.getElementById("tableCount").innerText =
+    total > 0 ? `(${fmt(total)} clients)` : "";
 
-    if (q && !cpte.includes(q)) return false;
+  const label = ACTIVE_FILTER.type === "all" ? "Cliquez sur une barre ou un KPI pour filtrer" : `Filtre actif : ${ACTIVE_FILTER.label}`;
+  document.getElementById("tableSubtitle").innerText = label;
 
-    if (mode === "noncrit")    return fLvl === "critique" && cLvl !== "critique";
-    if (mode === "critical")   return fLvl === "critique";
-    if (mode === "aggravation") return evo.includes("aggrav");
-    if (mode === "anomaly")    return r._isAnomaly;
-    return true;
-  }).slice(0, 30);
-
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = filtered.map(r => {
-    const cpte  = r.cpte || r.CPTE || "--";
-    const score = r._futureScore;
-    const sColor= score >= 85 ? "#ffb4ab" : score >= 65 ? "#fbe273" : "#5ffbd6";
-    const evoColor= r._evo.includes("Aggrav") ? "#ffb4ab"
-                  : r._evo.includes("Amélio") ? "#5ffbd6" : "#d9e2ff";
-    return `<tr class="hover:bg-[#1f2942]">
+  document.getElementById("tableBody").innerHTML = rows.map(r => {
+    const cpte   = r.cpte || r.CPTE || "--";
+    const score  = r._score;
+    const sColor = score >= 85 ? "#ff4d6d" : score >= 65 ? "#ffd23f" : "#00e8ff";
+    const fColor = r._futureScore >= 85 ? "#ff4d6d" : r._futureScore >= 65 ? "#ffd23f" : "#00e8ff";
+    const evoC   = r._evo.includes("Aggrav") ? "#ff4d6d" : r._evo.includes("Amélio") ? "#00e8ff" : "#d9e2ff";
+    return `<tr class="hover:bg-[#1f2942] cursor-pointer" onclick="location.href='/client?cpte=${encodeURIComponent(cpte)}'">
       <td class="px-4 py-3 mono font-bold">${cpte}</td>
-      <td class="px-4 py-3">${r._curLvl}</td>
-      <td class="px-4 py-3 font-bold" style="color:${sColor}">${r._futureLvl}</td>
+      <td class="px-4 py-3" style="color:${sColor}">${r._curLvl}</td>
+      <td class="px-4 py-3 font-bold" style="color:${fColor}">${r._futureLvl}</td>
       <td class="px-4 py-3 mono" style="color:${sColor}">${score.toFixed(1)}%</td>
-      <td class="px-4 py-3" style="color:${evoColor}">${r._evo}</td>
+      <td class="px-4 py-3" style="color:${evoC}">${r._evo}</td>
       <td class="px-4 py-3">
-        <button onclick="location.href='/client?cpte=${encodeURIComponent(cpte)}'"
-          class="text-[#5ffbd6] mono font-bold">Open</button>
+        <button onclick="event.stopPropagation();location.href='/client?cpte=${encodeURIComponent(cpte)}'"
+          class="text-[#00e8ff] mono font-bold text-sm px-3 py-1 rounded border border-[#00e8ff]/30 hover:bg-[#00e8ff]/10">Open</button>
       </td>
     </tr>`;
-  }).join("") || `<tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">No clients found.</td></tr>`;
+  }).join("") || `<tr><td colspan="6" class="px-4 py-8 text-center text-[#9aa8c7]">
+    Aucun client pour ce filtre. <button onclick="clearFilter()" class="text-[#00e8ff] mono font-bold ml-2">Réinitialiser</button>
+  </td></tr>`;
+}
+
+// ── Render distribution bars — clickable ──────────────────
+function renderDist(id, items, total) {
+  const max = Math.max(...items.map(x=>x.v), 1);
+  document.getElementById(id).innerHTML = items.map(x => {
+    const isActive = ACTIVE_FILTER.type === x.filterKey;
+    return `<div class="dist-row${isActive?" active":""}" onclick="applyLevelFilter('${x.filterKey}')">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="font-bold flex items-center gap-2">
+          <span style="width:10px;height:10px;border-radius:50%;background:${x.color};display:inline-block;flex-shrink:0"></span>
+          ${x.label}
+        </span>
+        <span class="mono text-[#9aa8c7]">${fmt(x.v)} — ${pct(x.v,total)}%</span>
+      </div>
+      <div class="bar-bg" style="height:10px">
+        <div class="bar-fill" style="width:${Math.max(1,x.v/max*100).toFixed(1)}%;background:${x.color}"></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderEvoBars(items, total) {
+  const max = Math.max(...items.map(x=>x.v), 1);
+  document.getElementById("evoBars").innerHTML = items.map(x => `
+    <div class="dist-row${ACTIVE_FILTER.type===x.filterKey?" active":""}"
+         onclick="${x.filterKey ? `applyCustomFilter('${x.filterKey}')` : "clearFilter()"}">
+      <div class="flex justify-between text-sm mb-2">
+        <span class="font-bold">${x.label}</span>
+        <span class="mono text-[#9aa8c7]">${fmt(x.v)} — ${pct(x.v,total)}%</span>
+      </div>
+      <div class="bar-bg" style="height:8px">
+        <div class="bar-fill" style="width:${Math.max(1,x.v/max*100).toFixed(1)}%;background:${x.color}"></div>
+      </div>
+    </div>`).join("");
 }
 
 // ── CSV export ────────────────────────────────────────────
 function exportCsv() {
-  const rows = [["CPTE","Current","Future","Score","Evolution"]];
-  ALL_ROWS.forEach(r => rows.push([
+  const rows = [["CPTE","Niveau actuel","Niveau futur","Score","Évolution"]];
+  getFilteredRows().forEach(r => rows.push([
     r.cpte||r.CPTE||"", r._curLvl, r._futureLvl,
-    r._futureScore.toFixed(1)+"%", r._evo
+    r._score.toFixed(1)+"%", r._evo
   ]));
-  const csv = rows.map(r => r.map(v=>`"${v}"`).join(",")).join("\n");
-  const a   = Object.assign(document.createElement("a"),
+  const csv = rows.map(r=>r.map(v=>`"${v}"`).join(",")).join("\n");
+  const a = Object.assign(document.createElement("a"),
     {href:URL.createObjectURL(new Blob([csv],{type:"text/csv"})),
-     download:"future_predictions.csv"});
+     download:"future_predictions_filtered.csv"});
   a.click(); URL.revokeObjectURL(a.href);
 }
 
-// ── Main load ─────────────────────────────────────────────
+// ── Main loader ───────────────────────────────────────────
 async function loadFuture() {
-  document.getElementById("subtitle").innerText = "Loading real ML data...";
+  document.getElementById("subtitle").innerText = "Chargement...";
 
-  // Try sources in order
-  const sources = [
-    "/attached_assets/top_risky_clients.json",
+  let allClients = [];
+  for (const src of [
     "/attached_assets/dashboard_clients_full.json",
-  ];
-
-  let rawRows = [];
-  let srcUsed = "";
-
-  for (const src of sources) {
+    "/attached_assets/top_risky_clients.json"
+  ]) {
     try {
-      const res  = await fetch(src + "?nc=" + Date.now(), {cache:"no-store"});
+      const res = await fetch(src+"?nc="+Date.now(), {cache:"no-store"});
       if (!res.ok) continue;
-      const data = await res.json();
-
-      if (Array.isArray(data))            rawRows = data;
-      else if (Array.isArray(data.clients)) rawRows = data.clients;
-      else if (Array.isArray(data.data))   rawRows = data.data;
-
-      if (rawRows.length > 0) { srcUsed = src; break; }
+      let text = await res.text();
+      text = text.replace(/\bNaN\b/g,"null");
+      const data = JSON.parse(text);
+      const rows = toRows(data);
+      if (rows.length > 0) { allClients = rows; break; }
     } catch {}
   }
-
-  // Try anomaly data for anomaly flags
-  let anomalySet = new Set();
-  try {
-    const aRes  = await fetch("/attached_assets/anomaly_data.json?nc="+Date.now(), {cache:"no-store"});
-    const aData = await aRes.json();
-    const aList = aData.top_anomalies || aData.clients || [];
-    aList.forEach(a => { if (a.cpte || a.CPTE) anomalySet.add(String(a.cpte||a.CPTE)); });
-  } catch {}
-
-  if (!rawRows.length) {
-    document.getElementById("subtitle").innerText =
-      "Aucune donnée trouvée. Vérifiez top_risky_clients.json dans attached_assets/.";
-    document.getElementById("tableBody").innerHTML =
-      `<tr><td colspan="6" class="px-4 py-5 text-[#ffb4ab]">
-        Aucune donnée. Lancez 03_export_dashboard_data.py pour générer les fichiers JSON.
-      </td></tr>`;
+  if (!allClients.length) {
+    document.getElementById("subtitle").innerText = "Erreur : aucun fichier JSON trouvé.";
     return;
   }
 
-  // ── Enrich each row with future predictions ───────────────
-  ALL_ROWS = rawRows.map(r => {
-    const score    = getScore(r);
-    const curLvl   = levelFromScore(score);
-    const trend    = n(r.nbrjdep_trend ?? r.NBRJDEP_TREND ?? 0);
-    const {score: fScore, level: fLvl} = futureLevel(r);
-    const cpte     = String(r.cpte || r.CPTE || "");
+  const uniqueClients = deduplicateByBestScore(allClients);
+
+  // Enrichment from future_predictions.json
+  let enrichMap = new Map();
+  try {
+    const res = await fetch("/attached_assets/future_predictions.json?nc="+Date.now(), {cache:"no-store"});
+    if (res.ok) {
+      const data = JSON.parse(await res.text());
+      toRows(data).forEach(r => {
+        const cpte = String(r.cpte||r.CPTE||"").trim();
+        if (cpte) enrichMap.set(cpte, r);
+      });
+    }
+  } catch {}
+
+  // Anomaly flags
+  let anomalySet = new Set();
+  for (const src of [
+    "/attached_assets/anomaly_clients.json",
+    "/attached_assets/anomaly_data.json"
+  ]) {
+    try {
+      const res = await fetch(src+"?nc="+Date.now(), {cache:"no-store"});
+      if (!res.ok) continue;
+      const data = JSON.parse(await res.text());
+      let rows = [];
+      if (Array.isArray(data))                    rows = data;
+      else if (Array.isArray(data.clients))       rows = data.clients;
+      else if (Array.isArray(data.anomalies))     rows = data.anomalies;
+      else if (Array.isArray(data.top_anomalies)) rows = data.top_anomalies;
+      else if (typeof data === "object")
+        rows = Object.entries(data).map(([k,v]) => v&&typeof v==="object" ? {cpte:k,...v} : {cpte:k});
+      rows.forEach(r => { const c = String(r.cpte||r.CPTE||"").trim(); if(c) anomalySet.add(c); });
+      if (anomalySet.size > 0) break;
+    } catch {}
+  }
+
+  ALL_ROWS = uniqueClients.map(r => {
+    const cpte     = String(r.cpte||r.CPTE||"").trim();
+    const curScore = getScore(r);
+    const curLvl   = r.risk_band_en||r.risk_band||r.alert_level||levelFromScore(curScore);
+    const trend    = n(r.nbrjdep_trend??r.NBRJDEP_TREND??0);
+    const {score:fScore, level:fLvl, evo:fEvo} = computeFutureLevel(r, enrichMap);
     return {
       ...r,
-      _score:      score,
-      _curLvl:     curLvl,
+      _score:       curScore,
+      _curLvl:      curLvl,
       _futureScore: fScore,
-      _futureLvl:  fLvl,
-      _evo:        evolutionLabel(curLvl, fLvl, trend),
-      _isAnomaly:  anomalySet.has(cpte),
+      _futureLvl:   fLvl,
+      _evo:         fEvo || evolutionLabel(curLvl, fLvl, trend),
+      _isAnomaly:   anomalySet.has(cpte) || n(r.is_anomaly)===1 || n(r.anomaly_score)>=80,
     };
   });
 
-  // ── Compute stats ────────────────────────────────────────
-  const total     = ALL_ROWS.length;
-  const critique  = ALL_ROWS.filter(r => r._futureLvl === "Critique").length;
-  const eleve     = ALL_ROWS.filter(r => r._futureLvl === "Élevé").length;
-  const moyen     = ALL_ROWS.filter(r => r._futureLvl === "Moyen").length;
-  const faible    = ALL_ROWS.filter(r => r._futureLvl === "Faible").length;
-  const noncrit   = ALL_ROWS.filter(r => r._futureLvl === "Critique" && r._curLvl !== "Critique").length;
-  const aggrav    = ALL_ROWS.filter(r => r._evo.includes("Aggrav")).length;
-  const amelio    = ALL_ROWS.filter(r => r._evo === "Amélioration").length;
-  const stable    = ALL_ROWS.filter(r => r._evo === "Stable").length;
-  const anomalies = ALL_ROWS.filter(r => r._isAnomaly).length;
-  const ratio     = total ? critique / total * 100 : 0;
+  // Stats
+  const total    = ALL_ROWS.length;
+  const critique = ALL_ROWS.filter(r=>r._futureLvl==="Critique").length;
+  const eleve    = ALL_ROWS.filter(r=>r._futureLvl==="Élevé").length;
+  const moyen    = ALL_ROWS.filter(r=>r._futureLvl==="Moyen").length;
+  const faible   = ALL_ROWS.filter(r=>r._futureLvl==="Faible").length;
+  const noncrit  = ALL_ROWS.filter(r=>r._futureLvl==="Critique"&&r._curLvl!=="Critique").length;
+  const aggrav   = ALL_ROWS.filter(r=>r._evo.includes("Aggrav")).length;
+  const amelio   = ALL_ROWS.filter(r=>r._evo==="Amélioration").length;
+  const stable   = ALL_ROWS.filter(r=>r._evo==="Stable").length;
+  const anomalies= ALL_ROWS.filter(r=>r._isAnomaly).length;
+  const ratio    = total ? critique/total*100 : 0;
 
-  // ── Update UI ─────────────────────────────────────────────
-  document.getElementById("kTotal").innerText      = fmt(total);
-  document.getElementById("kCritical").innerText   = fmt(critique);
-  document.getElementById("kNonCrit").innerText    = fmt(noncrit);
-  document.getElementById("kAggravation").innerText= fmt(aggrav);
-  document.getElementById("kAnomalies").innerText  = fmt(anomalies || "N/A");
-  document.getElementById("kNew").innerText        = fmt(stable);
-  document.getElementById("notifBadge").innerText  = fmt(critique);
+  // KPIs
+  document.getElementById("kTotal").innerText       = fmt(total);
+  document.getElementById("kCritical").innerText    = fmt(critique);
+  document.getElementById("kNonCrit").innerText     = fmt(noncrit);
+  document.getElementById("kAggravation").innerText = fmt(aggrav);
+  document.getElementById("kAnomalies").innerText   = fmt(anomalies);
+  document.getElementById("kNew").innerText         = fmt(stable);
+  document.getElementById("notifBadge").innerText   = fmt(critique);
 
   document.getElementById("subtitle").innerText =
-    `${fmt(total)} clients analysés depuis ${srcUsed.split("/").pop()} — `+
-    `${fmt(critique)} prédits critiques à horizon 30 jours.`;
+    `${fmt(total)} clients uniques — ${fmt(critique)} prédits critiques (${ratio.toFixed(1)}%) — cliquez sur un niveau pour filtrer`;
 
-  document.getElementById("criticalRatio").innerText = ratio.toFixed(1) + "%";
+  document.getElementById("criticalRatio").innerText = ratio.toFixed(1)+"%";
   document.getElementById("donut").style.background =
-    `conic-gradient(#ffb4ab 0deg ${(ratio*3.6).toFixed(1)}deg,#263452 ${(ratio*3.6).toFixed(1)}deg 360deg)`;
+    `conic-gradient(#ff4d6d 0deg ${(ratio*3.6).toFixed(1)}deg,#263452 ${(ratio*3.6).toFixed(1)}deg 360deg)`;
+
+  // Donut legend
+  const legendItems = [
+    {label:"Critique",v:critique,color:"#ff4d6d",key:"Critique"},
+    {label:"Élevé",   v:eleve,   color:"#ffd23f",key:"Élevé"},
+    {label:"Moyen",   v:moyen,   color:"#00e8ff",key:"Moyen"},
+    {label:"Faible",  v:faible,  color:"#9aa8c7",key:"Faible"},
+  ];
+  document.getElementById("donutLegend").innerHTML = legendItems.map(x => `
+    <div onclick="applyLevelFilter('${x.key}')" style="cursor:pointer;display:flex;align-items:center;gap:4px;padding:3px 6px;border-radius:6px;transition:background .15s"
+         onmouseover="this.style.background='rgba(0,232,255,.08)'" onmouseout="this.style.background='none'">
+      <span style="width:8px;height:8px;border-radius:50%;background:${x.color};flex-shrink:0"></span>
+      <span class="mono text-xs">${x.label}</span>
+      <span class="mono text-xs ml-auto text-[#9aa8c7]">${pct(x.v,total)}%</span>
+    </div>`).join("");
 
   renderDist("distBars", [
-    {label:"Faible",  v:faible,  color:"#5ffbd6"},
-    {label:"Moyen",   v:moyen,   color:"#fbe273"},
-    {label:"Élevé",   v:eleve,   color:"#ffcf96"},
-    {label:"Critique",v:critique,color:"#ffb4ab"},
+    {label:"Faible",   v:faible,  color:"#00e8ff",filterKey:"Faible"},
+    {label:"Moyen",    v:moyen,   color:"#ffd23f",filterKey:"Moyen"},
+    {label:"Élevé",    v:eleve,   color:"#ffcf96",filterKey:"Élevé"},
+    {label:"Critique", v:critique,color:"#ff4d6d",filterKey:"Critique"},
   ], total);
 
-  renderDist("evoBars", [
-    {label:"Stable",       v:stable,  color:"#d9e2ff"},
-    {label:"Aggravation",  v:aggrav,  color:"#ffb4ab"},
-    {label:"Amélioration", v:amelio,  color:"#5ffbd6"},
+  renderEvoBars([
+    {label:"Stable",       v:stable, color:"#d9e2ff",filterKey:"stable"},
+    {label:"Aggravation",  v:aggrav, color:"#ff4d6d",filterKey:"aggravation"},
+    {label:"Amélioration", v:amelio, color:"#00e8ff",filterKey:null},
   ], total);
 
   document.getElementById("aiInsight").innerHTML =
-    `Le modèle LightGBM prédit <b>${fmt(critique)}</b> clients critiques parmi ` +
-    `<b>${fmt(total)}</b> analysés (${ratio.toFixed(1)}%). ` +
-    `<b>${fmt(noncrit)}</b> clients ne sont pas encore critiques aujourd'hui ` +
-    `mais basculeront dans les 30 prochains jours selon la tendance de leurs indicateurs. ` +
-    `<b>${fmt(aggrav)}</b> clients montrent une aggravation détectée via les champs ` +
-    `NBRJDEP_TREND et RISK_BRUT_TREND.<br><br>` +
-    `<span style="color:#fbe273">Priorité opérationnelle :</span> traiter les ` +
-    `<b>${fmt(noncrit)}</b> clients "non critiques → critiques" avant leur passage effectif.`;
+    `<b>${fmt(critique)}</b> clients prédits critiques sur <b>${fmt(total)}</b> (${ratio.toFixed(1)}%). ` +
+    `<b>${fmt(noncrit)}</b> ne sont pas encore critiques mais pourraient le devenir dans 30 jours. ` +
+    `<b>${fmt(aggrav)}</b> en aggravation détectée. <b>${fmt(anomalies)}</b> anomalies.<br><br>` +
+    `<span style="color:#ffd23f">Interactif :</span> cliquez sur une barre, un KPI ou le donut pour filtrer le tableau en temps réel.` +
+    (enrichMap.size > 0 ? `<br><span style="color:#00e8ff;font-size:12px">✓ ${enrichMap.size} clients enrichis depuis future_predictions.json</span>` : "");
 
-  renderTable();
+  clearFilter(); // start with "all"
 }
 
 loadFuture();

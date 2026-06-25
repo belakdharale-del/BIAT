@@ -1,1046 +1,571 @@
 ﻿<!DOCTYPE html>
-<html lang="fr" class="dark">
+<html class="dark" lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BIAT Risk Monitor - Clients à Notifier</title>
-
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIAT Risk Monitor - Notifications</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            background: "#07122a",
-            surface: "#0b1730",
-            card: "#101b33",
-            border: "#263452",
-            text: "#d9e2ff",
-            muted: "#9aa8c7",
-            mint: "#5ffbd6",
-            yellow: "#fbe273",
-            red: "#ffb4ab"
-          },
-          fontFamily: {
-            sans: ["Inter", "sans-serif"],
-            mono: ["JetBrains Mono", "monospace"]
-          }
-        }
-      }
+      darkMode:"class",
+      theme:{ extend:{ colors:{
+        background:"#060b2e", surface:"#060b2e",
+        "surface-container-lowest":"#030d25","surface-container-low":"#142467",
+        "surface-container":"#151f37","surface-container-high":"#1f2942",
+        "surface-container-highest":"#2a344e","surface-variant":"#2a344e",
+        "on-surface":"#d9e2ff","on-surface-variant":"#bacac3",
+        outline:"#85948e","outline-variant":"#3c4a45",
+        primary:"#ffffff","primary-container":"#00e8ff","on-primary-container":"#00382d",
+        secondary:"#b6c6ed","secondary-container":"#374767","on-secondary-container":"#d9e2ff",
+        error:"#ff4d6d","error-container":"#7a0019","on-error-container":"#ffdad6",
+        tertiary:"#ffd23f"
+      }, fontFamily:{ mono:["JetBrains Mono"], display:["Hanken Grotesk"], body:["Inter"] }}}
     };
   </script>
-
   <style>
-    body {
-      font-family: Inter, sans-serif;
-      background: #07122a;
-      color: #d9e2ff;
+    aside.fixed.left-0 {
+      background: linear-gradient(180deg, #02040b 0%, #050714 55%, #02040b 100%) !important;
+      border-right: 1px solid rgba(0, 232, 255, 0.18) !important;
+      box-shadow: 10px 0 35px rgba(0, 0, 0, 0.65) !important;
     }
-
-    .mono { font-family: "JetBrains Mono", monospace; }
-
-    .grid-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(rgba(95,251,214,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(95,251,214,.04) 1px, transparent 1px),
-        radial-gradient(circle at 80% 15%, rgba(95,251,214,.12), transparent 28%),
-        radial-gradient(circle at 75% 35%, rgba(251,226,115,.10), transparent 30%);
-      background-size: 36px 36px, 36px 36px, auto, auto;
+    aside.fixed.left-0 h1 { color: #ffffff !important; }
+    aside.fixed.left-0 p { color: rgba(220, 230, 255, 0.65) !important; }
+    aside.fixed.left-0 nav a { background: transparent !important; color: #9aa8c7 !important; border-left: 3px solid transparent !important; }
+    aside.fixed.left-0 nav a:hover { background: rgba(0, 232, 255, 0.08) !important; color: #ffffff !important; }
+    aside.fixed.left-0 nav a[href="/notifications"],
+    aside.fixed.left-0 nav a[href="/future"],
+    aside.fixed.left-0 nav a[href="/evolution"],
+    aside.fixed.left-0 nav a[href="/dashboard"],
+    aside.fixed.left-0 nav a[href="/client"],
+    aside.fixed.left-0 nav a[href="/performance"],
+    aside.fixed.left-0 nav a[href="/assistant"] { border-radius: 10px !important; }
+    aside nav a[href="/notifications"] {
+      color: #ffffff !important;
+      background: linear-gradient(90deg,rgba(0,232,255,.18),rgba(124,58,237,.08)) !important;
+      border-left-color: #00e8ff !important;
+      font-weight: 800 !important;
     }
+    aside nav a[href="/notifications"] .material-symbols-outlined { color: #00e8ff !important; }
+    aside.fixed.left-0 .bg-error-container, aside.fixed.left-0 button.bg-error-container { background: #b00020 !important; color: #ffffff !important; }
 
-    .glass {
-      background: rgba(16,27,51,.86);
-      border: 1px solid rgba(95,251,214,.14);
-      box-shadow: 0 22px 70px rgba(0,0,0,.22);
-      backdrop-filter: blur(10px);
+    body{font-family:Inter,sans-serif}
+    .mono{font-family:"JetBrains Mono",monospace}
+    .display{font-family:"Hanken Grotesk",sans-serif}
+    .glass-card{background:rgba(17,26,58,.86);backdrop-filter:blur(14px);border:1px solid rgba(0,232,255,.22);box-shadow:0 12px 35px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.04)}
+    .glass-card:hover{border-color:rgba(0,232,255,.55)}
+    .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+
+    .biat-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+      background:radial-gradient(circle at 85% 10%, rgba(124,58,237,.30) 0%, transparent 38%),
+        radial-gradient(circle at 20% 85%, rgba(0,232,255,.20) 0%, transparent 45%),
+        linear-gradient(135deg,#050714 0%,#081336 45%,#111A3A 100%)}
+    .biat-bg::before{content:"";position:absolute;inset:0;
+      background-image:linear-gradient(rgba(0,232,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,232,255,.035) 1px,transparent 1px);
+      background-size:24px 24px}
+
+    aside{backdrop-filter:blur(18px)}
+    header{background:rgba(3,7,18,.95)!important;border-bottom:1px solid rgba(0,232,255,.18)!important;backdrop-filter:blur(18px)}
+    aside,header,main,section{position:relative;z-index:2}
+
+    .biat-wm{position:fixed;right:24px;bottom:24px;z-index:1;pointer-events:none;opacity:.18;user-select:none;text-align:right}
+    .biat-wm-box{width:80px;height:68px;background:#1e3a9e;border-radius:6px;overflow:hidden;position:relative;margin-left:auto}
+    .biat-wm-box::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 130% 90% at 115% -15%,#f5921e 0%,#f5921e 42%,transparent 44%)}
+    .biat-wm-label{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:'Hanken Grotesk',sans-serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:2px}
+    .biat-wm-sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:#8090b0;letter-spacing:5px;text-transform:uppercase;margin-top:6px}
+
+    #__biatModal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
+    #__biatModal.open{display:flex}
+
+    #applyFilters, #quickAction, button.bg-primary-container {
+      background: linear-gradient(135deg, #00E8FF, #0EA5E9) !important;
+      color: #020617 !important;
+      box-shadow: 0 0 18px rgba(0, 232, 255, 0.22) !important;
     }
+    input, select, textarea { background: rgba(12, 22, 55, 0.92) !important; border-color: rgba(0, 232, 255, 0.25) !important; }
 
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      color: #b9c6e4;
-      transition: .15s ease;
-      text-decoration: none;
-    }
-
-    .nav-link:hover {
-      background: rgba(95,251,214,.08);
-      color: #ffffff;
-    }
-
-    .nav-active {
-      background: rgba(121,143,185,.35);
-      color: #ffffff;
-      font-weight: 700;
-    }
-
-    .badge-critical { background:#93000a; color:#ffdad6; }
-    .badge-warning { background:#4c3f00; color:#fbe273; }
-    .badge-medium { background:#103a4c; color:#b7eaff; }
-    .badge-low { background:#063a31; color:#5ffbd6; }
+    aside.fixed.left-0.top-0 { width: 280px !important; min-width: 280px !important; max-width: 280px !important; }
+    main.ml-\[280px\] { margin-left: 280px !important; }
   </style>
-
-<!-- BIAT_NOTIFICATIONS_LAYOUT_FIX -->
-<style id="biat-notifications-layout-fix">
-  body {
-    padding-left: 240px !important;
-    overflow-x: hidden !important;
-  }
-
-  aside {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    min-width: 240px !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-  }
-
-  main,
-  .main-content,
-  #mainContent {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-
-  header {
-    left: 240px !important;
-    width: calc(100% - 240px) !important;
-  }
-</style>
-<!-- END BIAT_NOTIFICATIONS_LAYOUT_FIX -->
-
-
-
-
 </head>
+<body class="bg-background text-on-surface min-h-screen">
 
-<body>
-<!-- BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
-<style>
-  body {
-    padding-left: 240px !important;
-  }
+<div class="biat-bg">
+  <svg style="position:absolute;top:-80px;right:-120px;width:780px;height:620px;opacity:.42" viewBox="0 0 780 620" fill="none">
+    <path d="M780 0 C590 10 310 110 100 355 C20 448 -20 535 -70 620 H780 Z" fill="#f5921e"/>
+    <path d="M780 0 C640 40 420 155 250 360 C160 470 120 555 90 620 H780 Z" fill="#1e3a9e"/>
+    <path d="M760 10 C570 55 335 180 145 410 C80 490 35 555 0 620" stroke="rgba(255,255,255,.65)" stroke-width="5"/>
+  </svg>
+</div>
 
-  .biat-sidebar {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    height: 100vh !important;
-    z-index: 99999 !important;
-    background: #071126 !important;
-    border-right: 1px solid rgba(148,163,184,.18) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 24px 14px 16px 14px !important;
-    box-sizing: border-box !important;
-  }
+<div class="biat-wm">
+  <div class="biat-wm-box"><span class="biat-wm-label">BIAT</span></div>
+  <div class="biat-wm-sub">Risk Monitor</div>
+</div>
 
-  .biat-sidebar .brand {
-    padding: 0 6px 28px 6px !important;
-  }
-
-  .biat-sidebar .brand h1 {
-    margin: 0 !important;
-    color: #f3f7ff !important;
-    font-size: 26px !important;
-    line-height: 1.14 !important;
-    font-weight: 900 !important;
-    letter-spacing: .2px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
-
-  .biat-sidebar .brand p {
-    margin: 8px 0 0 0 !important;
-    color: rgba(217,226,255,.72) !important;
-    font-size: 13px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
-
-  .biat-sidebar nav {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 7px !important;
-  }
-
-  .biat-sidebar .nav-link {
-    height: 46px !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 0 14px !important;
-    border-radius: 10px !important;
-    color: #b9c6e4 !important;
-    text-decoration: none !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-  }
-
-  .biat-sidebar .nav-link:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: #ffffff !important;
-  }
-
-  .biat-sidebar .nav-link.active {
-    background: rgba(121,143,185,.35) !important;
-    color: #ffffff !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .material-symbols-outlined {
-    font-size: 22px !important;
-    width: 24px !important;
-    min-width: 24px !important;
-    line-height: 1 !important;
-  }
-
-  .biat-sidebar .badge {
-    margin-left: auto !important;
-    background: #ffb4ab !important;
-    color: #3b0505 !important;
-    border-radius: 999px !important;
-    padding: 2px 7px !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .bottom {
-    margin-top: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    border-top: 1px solid rgba(148,163,184,.16) !important;
-    padding-top: 14px !important;
-  }
-
-  .biat-sidebar .critical-btn,
-  .biat-sidebar .bottom-btn {
-    height: 46px !important;
-    width: 100% !important;
-    border-radius: 10px !important;
-    border: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    cursor: pointer !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-  }
-
-  .biat-sidebar .critical-btn {
-    background: #b00012 !important;
-    color: white !important;
-  }
-
-  .biat-sidebar .bottom-btn {
-    background: transparent !important;
-    color: #b9c6e4 !important;
-  }
-
-  .biat-sidebar .bottom-btn:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: white !important;
-  }
-
-  main {
-    margin-left: 0 !important;
-  }
-</style>
-
-<aside class="biat-sidebar">
-  <div class="brand">
-    <h1>BIAT Risk<br>Monitor</h1>
-    <p>Vigilant Professionalism</p>
+<aside class="fixed left-0 top-0 h-screen w-[280px] border-r border-outline-variant flex flex-col z-50">
+  <div class="p-6">
+    <h1 class="display text-3xl font-bold text-primary">BIAT Risk Monitor</h1>
+    <p class="text-sm text-on-surface-variant mt-1">Vigilant Professionalism</p>
   </div>
-
-  <nav>
-    <a class="nav-link" data-route="/dashboard" href="/dashboard">
-      <span class="material-symbols-outlined">dashboard</span>
-      <span>Global Dashboard</span>
+  <nav class="flex-1 px-4 space-y-2">
+    <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+      <span class="material-symbols-outlined">dashboard</span><span class="mono text-sm">Global Dashboard</span>
     </a>
-
-    <a class="nav-link" data-route="/evolution" href="/evolution">
-      <span class="material-symbols-outlined">trending_up</span>
-      <span>Risk Evolution</span>
+    <a href="/evolution" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+      <span class="material-symbols-outlined">trending_up</span><span class="mono text-sm">Risk Evolution</span>
     </a>
-
-    <a class="nav-link" data-route="/future" href="/future">
-      <span class="material-symbols-outlined">online_prediction</span>
-      <span>Future Prediction</span>
+    <a href="/future" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+      <span class="material-symbols-outlined">online_prediction</span><span class="mono text-sm">Future Prediction</span>
     </a>
-
-    <a class="nav-link" data-route="/notifications" href="/notifications">
-      <span class="material-symbols-outlined">notifications</span>
-      <span>Notifications</span>
-      <span class="badge" id="notifBadge">4847</span>
+    <a href="/notifications" class="flex items-center gap-3 px-4 py-3 rounded-lg font-bold cursor-pointer">
+      <span class="material-symbols-outlined">notifications</span><span class="mono text-sm">Notifications</span>
     </a>
-
-    <a class="nav-link" data-route="/client" href="/client">
-      <span class="material-symbols-outlined">group</span>
-      <span>Client Profiles</span>
+    <a href="/client" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+      <span class="material-symbols-outlined">group</span><span class="mono text-sm">Client Profiles</span>
     </a>
-
-    <a class="nav-link" data-route="/performance" href="/performance">
-      <span class="material-symbols-outlined">analytics</span>
-      <span>Model Performance</span>
+    <a href="/performance" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+      <span class="material-symbols-outlined">analytics</span><span class="mono text-sm">Model Performance</span>
     </a>
-
-    <a class="nav-link" data-route="/assistant" href="/assistant">
-      <span class="material-symbols-outlined">smart_toy</span>
-      <span>AI Assistant</span>
+    <a href="/assistant" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 cursor-pointer">
+      <span class="material-symbols-outlined">smart_toy</span><span class="mono text-sm">AI Assistant</span>
     </a>
   </nav>
-
-  <div class="bottom">
-    <button type="button" class="critical-btn" id="criticalAlertsBtn">
-      <span class="material-symbols-outlined">warning</span>
-      <span>Critical Alerts</span>
+  <div class="p-4 border-t border-outline-variant/40 space-y-2">
+    <button onclick="window.location.href='/notifications'" class="w-full bg-error-container text-on-error-container py-3 rounded-lg mono text-sm font-bold flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined">warning</span>Critical Alerts
     </button>
-
-    <button type="button" class="bottom-btn" id="settingsBtn">
-      <span class="material-symbols-outlined">settings</span>
-      <span>Settings</span>
+    <button id="btnSettings" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 text-left">
+      <span class="material-symbols-outlined">settings</span><span class="mono text-sm">Settings</span>
     </button>
-
-    <button type="button" class="bottom-btn" id="supportBtn">
-      <span class="material-symbols-outlined">help</span>
-      <span>Support</span>
+    <button id="btnSupport" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 text-left">
+      <span class="material-symbols-outlined">help</span><span class="mono text-sm">Support</span>
     </button>
   </div>
 </aside>
 
-<script>
-(function () {
-  const currentPath = window.location.pathname;
+<main class="ml-[280px] h-screen overflow-y-auto">
+  <header class="sticky top-0 z-40 h-16 border-b border-outline-variant flex items-center justify-between px-6">
+    <div class="relative w-[420px]">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+      <input class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container outline-none"
+        placeholder="Search accounts, CPTE..." id="headerSearch"/>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">Quick Action</button>
+      <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+      <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+        <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+        <div><p class="mono text-sm font-bold">ALA</p><p class="mono text-xs text-on-surface-variant">Risk Officer</p></div>
+      </div>
+    </div>
+  </header>
 
-  document.querySelectorAll(".biat-sidebar .nav-link").forEach(link => {
-    const route = link.getAttribute("data-route");
+  <section class="p-6 space-y-6">
+    <div class="flex items-start justify-between flex-wrap gap-3">
+      <div>
+        <p class="mono text-xs text-primary-container uppercase tracking-widest">Operational Worklist</p>
+        <h2 class="display text-4xl font-bold mt-2">Notifications</h2>
+        <p id="subStatus" class="text-on-surface-variant mt-2 max-w-2xl">Chargement des données réelles depuis dashboard_clients_full.json...</p>
+      </div>
+      <button id="exportCsv" class="bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold flex items-center gap-2">
+        <span class="material-symbols-outlined">download</span>Export CSV
+      </button>
+    </div>
 
-    if (route === currentPath || (route === "/client" && currentPath.startsWith("/client"))) {
-      link.classList.add("active");
-    }
+    <!-- KPIs -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs text-error uppercase">Critical</p>
+        <p id="kpiCritical" class="display text-3xl font-bold text-error mt-3">—</p>
+        <p class="mono text-xs text-on-surface-variant mt-2">Action Required</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs text-tertiary uppercase">High Risk</p>
+        <p id="kpiWarning" class="display text-3xl font-bold text-tertiary mt-3">—</p>
+        <p class="mono text-xs text-on-surface-variant mt-2">Monitor Daily</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs text-on-surface-variant uppercase">Priority P1</p>
+        <p id="kpiP1" class="display text-3xl font-bold mt-3">—</p>
+        <p class="mono text-xs text-on-surface-variant mt-2">Urgent</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <p class="mono text-xs text-primary-container uppercase">Pending</p>
+        <p id="kpiPending" class="display text-3xl font-bold text-primary-container mt-3">—</p>
+        <p class="mono text-xs text-on-surface-variant mt-2">À traiter</p>
+      </div>
+    </div>
 
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = this.getAttribute("href");
-    });
-  });
-
-  const criticalBtn = document.getElementById("criticalAlertsBtn");
-  if (criticalBtn) {
-    criticalBtn.onclick = function () {
-      window.location.href = "/notifications?alert=CRITICAL";
-    };
-  }
-
-  const settingsBtn = document.getElementById("settingsBtn");
-  if (settingsBtn) {
-    settingsBtn.onclick = function () {
-      alert("Settings - BIAT Risk Monitor");
-    };
-  }
-
-  const supportBtn = document.getElementById("supportBtn");
-  if (supportBtn) {
-    supportBtn.onclick = function () {
-      alert("Support - BIAT Risk Monitor");
-    };
-  }
-})();
-</script>
-<!-- END BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
-
-
-
-
-
-  <div class="grid-bg"></div>
-
-  <div class="relative z-10 min-h-screen flex">
-    
-<!-- BIAT SHARED SIDEBAR -->
-
-
-
-<!-- END BIAT SHARED SIDEBAR -->
-
-
-    <main class="flex-1 overflow-x-hidden">
-      <header class="h-20 border-b border-border bg-[#07122a]/85 backdrop-blur flex items-center justify-between px-7 sticky top-0 z-20">
-        <div class="relative w-[440px]">
-          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted">search</span>
-          <input id="globalSearch" class="w-full bg-card border border-border rounded-xl pl-12 pr-4 py-3 text-text placeholder:text-muted outline-none focus:ring-2 focus:ring-mint/50"
-                 placeholder="Search real client CPTE, example: CPTE_008608" />
+    <!-- Filters -->
+    <div class="glass-card rounded-2xl p-5">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <div class="lg:col-span-2 relative">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+          <input id="searchInput" class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container outline-none" placeholder="Rechercher CPTE..."/>
         </div>
+        <select id="alertFilter" class="bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container outline-none">
+          <option value="">Alert Level</option>
+          <option value="CRITICAL">Critical</option><option value="WARNING">Warning</option>
+          <option value="MEDIUM">Medium</option><option value="STABLE">Stable</option>
+        </select>
+        <select id="priorityFilter" class="bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container outline-none">
+          <option value="">Priority</option>
+          <option value="1">P1</option><option value="2">P2</option>
+          <option value="3">P3</option><option value="4">P4</option><option value="5">P5</option>
+        </select>
+        <select id="statusFilter" class="bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary-container outline-none">
+          <option value="">Status</option>
+          <option value="Action Required">Action Required</option>
+          <option value="Pending">Pending</option><option value="Notified">Notified</option>
+        </select>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button id="clearFilters" class="text-on-surface-variant hover:text-primary flex items-center gap-2 mono text-sm">
+          <span class="material-symbols-outlined">filter_list_off</span>Clear
+        </button>
+      </div>
+    </div>
 
-        <div class="flex items-center gap-4">
-          <button onclick="window.location.href='/assistant'" class="bg-mint text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
-            Quick Action
+    <!-- Table -->
+    <div class="glass-card rounded-2xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-surface-container-high/50 border-b border-outline-variant">
+            <tr>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score %</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Alert</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Priority</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Evolution</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">NBRJDEP</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Action Recommandée</th>
+              <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-outline-variant/30"><tr><td colspan="8" class="px-4 py-8 text-center text-on-surface-variant">Chargement...</td></tr></tbody>
+        </table>
+        <div id="tableEmpty" class="hidden py-10 text-center mono text-sm text-on-surface-variant">Aucun client trouvé.</div>
+      </div>
+      <div class="px-4 py-4 flex justify-between items-center border-t border-outline-variant bg-surface-container-high/30">
+        <p id="showingText" class="text-sm text-on-surface-variant mono">—</p>
+        <div class="flex gap-2">
+          <button id="prevPage" class="p-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant disabled:opacity-40">
+            <span class="material-symbols-outlined">chevron_left</span>
           </button>
-          <span class="material-symbols-outlined text-muted">notifications</span>
-          <div class="flex items-center gap-3 pl-4 border-l border-border">
-            <div class="w-10 h-10 rounded-full border border-mint/40 bg-card"></div>
-            <div>
-              <p class="mono text-sm font-bold">ALA</p>
-              <p class="mono text-xs text-muted">Risk Officer</p>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section class="p-7 space-y-6">
-        <div class="flex items-start justify-between gap-5">
-          <div>
-            <p class="mono text-xs text-mint uppercase tracking-[.25em]">Operational Worklist</p>
-            <h2 class="text-4xl font-extrabold mt-2">Clients à Notifier</h2>
-            <p class="text-muted mt-2 max-w-3xl">
-              Liste opérationnelle des clients à traiter selon les scores ML, le niveau d’alerte, la priorité et le statut d’action.
-            </p>
-            <p id="loadStatus" class="mono text-xs text-muted mt-2">Chargement des clients...</p>
-          </div>
-
-          <button id="exportCsv" class="bg-mint text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold flex items-center gap-2">
-            <span class="material-symbols-outlined">download</span>
-            CSV Export List
+          <span id="pageInfo" class="px-4 py-2 mono text-sm text-on-surface-variant self-center"></span>
+          <button id="nextPage" class="p-2 border border-outline-variant rounded-lg hover:bg-surface-variant/30 text-on-surface-variant disabled:opacity-40">
+            <span class="material-symbols-outlined">chevron_right</span>
           </button>
         </div>
+      </div>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="glass rounded-2xl p-5">
-            <p class="mono text-xs text-red uppercase">Critical Clients</p>
-            <p id="kpiCritical" class="text-3xl font-extrabold text-red mt-3">0</p>
-            <p class="text-muted text-sm mt-2">Action immédiate</p>
-          </div>
-          <div class="glass rounded-2xl p-5">
-            <p class="mono text-xs text-yellow uppercase">High Risk Clients</p>
-            <p id="kpiWarning" class="text-3xl font-extrabold text-yellow mt-3">0</p>
-            <p class="text-muted text-sm mt-2">Suivi quotidien</p>
-          </div>
-          <div class="glass rounded-2xl p-5">
-            <p class="mono text-xs text-muted uppercase">Priority 1 Count</p>
-            <p id="kpiP1" class="text-3xl font-extrabold mt-3">0</p>
-            <p class="text-muted text-sm mt-2">Dossiers urgents</p>
-          </div>
-          <div class="glass rounded-2xl p-5">
-            <p class="mono text-xs text-mint uppercase">Total Pending</p>
-            <p id="kpiTotal" class="text-3xl font-extrabold text-mint mt-3">0</p>
-            <p class="text-muted text-sm mt-2">Compliance queue</p>
+    <!-- Bottom -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
+      <div class="xl:col-span-2 glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="display text-2xl font-bold">Risk Trend Analysis</h3>
+          <div class="flex items-center gap-4 mono text-xs">
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error"></span>Critical</span>
+            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary"></span>High</span>
           </div>
         </div>
-
-        <div class="glass rounded-2xl p-5">
-          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            <input id="searchInput" class="bg-card border border-border rounded-xl px-4 py-3 text-text placeholder:text-muted outline-none"
-                   placeholder="Search real CPTE account, example: CPTE_008608" />
-
-            <select id="alertFilter" class="bg-card border border-border rounded-xl px-4 py-3 text-text outline-none">
-              <option value="">Alert Level</option>
-              <option value="CRITICAL">Critical</option>
-              <option value="WARNING">High Risk</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="LOW">Low</option>
-            </select>
-
-            <select id="priorityFilter" class="bg-card border border-border rounded-xl px-4 py-3 text-text outline-none">
-              <option value="">Priority 1-5</option>
-              <option value="1">Priority 1</option>
-              <option value="2">Priority 2</option>
-              <option value="3">Priority 3</option>
-              <option value="4">Priority 4</option>
-              <option value="5">Priority 5</option>
-            </select>
-
-            <button id="clearBtn" class="border border-border rounded-xl px-4 py-3 mono font-bold hover:bg-card">
-              Clear
-            </button>
-          </div>
+        <div id="trendChart" class="h-48 flex items-end justify-between gap-6 px-4"></div>
+        <div class="mt-6 grid grid-cols-3 gap-4">
+          <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Total critiques</p><p id="statPeakCritical" class="display text-2xl font-bold text-error mt-1">—</p></div>
+          <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Total élevés</p><p id="statHighRisk" class="display text-2xl font-bold text-tertiary mt-1">—</p></div>
+          <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Exposition (P1)</p><p id="statExposure" class="display text-2xl font-bold text-error mt-1">—</p></div>
         </div>
-
-        <div class="glass rounded-2xl overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left">
-              <thead class="bg-[#15213b] border-b border-border">
-                <tr>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">CPTE Account</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score %</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Alert Level</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Priority</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">NBRJDEP</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Risk Brut</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Recommended Action</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Open</th>
-                </tr>
-              </thead>
-              <tbody id="clientRows" class="divide-y divide-border/60">
-                <tr>
-                  <td colspan="8" class="px-4 py-8 text-center text-muted">Loading clients...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="glass rounded-2xl overflow-hidden">
-          <div class="px-5 py-4 border-b border-border flex items-center justify-between">
-            <div>
-              <p class="mono text-xs text-mint uppercase tracking-[.18em]">Unsupervised Anomaly Detection</p>
-              <h3 class="text-2xl font-extrabold mt-2">Clients à comportement atypique</h3>
-              <p class="text-muted mt-1">Détection non supervisée par Isolation Forest.</p>
-            </div>
-            <div class="grid grid-cols-3 gap-3 text-center">
-              <div class="bg-card rounded-xl px-5 py-3">
-                <p class="mono text-[10px] text-muted uppercase">Anomalies</p>
-                <p id="anomCount" class="text-2xl font-bold text-red">0</p>
-              </div>
-              <div class="bg-card rounded-xl px-5 py-3">
-                <p class="mono text-[10px] text-muted uppercase">Fortes</p>
-                <p id="anomStrong" class="text-2xl font-bold text-yellow">0</p>
-              </div>
-              <div class="bg-card rounded-xl px-5 py-3">
-                <p class="mono text-[10px] text-muted uppercase">Stables suspects</p>
-                <p id="anomStable" class="text-2xl font-bold text-mint">0</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left">
-              <thead class="bg-[#15213b] border-b border-border">
-                <tr>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">CPTE</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score Anomalie</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Niveau</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Score Risque</th>
-                  <th class="px-4 py-4 mono text-xs uppercase text-muted">Diagnostic</th>
-                </tr>
-              </thead>
-              <tbody id="anomalyRows" class="divide-y divide-border/60">
-                <tr>
-                  <td colspan="5" class="px-4 py-8 text-center text-muted">Chargement des anomalies...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-
-    const state = {
-      clients: [],
-      filtered: [],
-      anomalies: []
-    };
-
-    function num(v, fallback = 0) {
-      const n = Number(String(v ?? "").replace(",", "."));
-      return Number.isFinite(n) ? n : fallback;
-    }
-
-    function fmtMoney(v) {
-      const n = num(v);
-      if (n >= 1000000) return (n / 1000000).toFixed(1) + "M TND";
-      if (n >= 1000) return Math.round(n / 1000).toLocaleString("fr-FR") + "K TND";
-      return Math.round(n).toLocaleString("fr-FR") + " TND";
-    }
-
-    function getCpte(raw) {
-      return String(raw.cpte || raw.CPTE || raw.account || raw.id || "").trim();
-    }
-
-    function scorePercent(raw) {
-      let s = raw.risk_score_percent ?? raw.display_risk_score_percent ?? raw.score_percent ?? raw.score ?? raw.risk_score ?? raw.RISK_SCORE ?? 0;
-      s = num(s);
-      if (s <= 1) s *= 100;
-      return Math.max(0, Math.min(100, s));
-    }
-
-    function alertFromScore(score) {
-      if (score >= 85) return "CRITICAL";
-      if (score >= 65) return "WARNING";
-      if (score >= 40) return "MEDIUM";
-      return "LOW";
-    }
-
-    function normalizeAlert(raw, score) {
-      const band = String(raw.alert_level || raw.risk_band || raw.level || raw.ALERT_LEVEL || "").toLowerCase();
-      if (band.includes("crit")) return "CRITICAL";
-      if (band.includes("warning") || band.includes("high") || band.includes("elev") || band.includes("élev")) return "WARNING";
-      if (band.includes("medium") || band.includes("moy")) return "MEDIUM";
-      if (band.includes("low") || band.includes("faible") || band.includes("stable")) return "LOW";
-      return alertFromScore(score);
-    }
-
-    function priorityFromClient(c) {
-      if (c.alert === "CRITICAL" && c.score >= 90) return 1;
-      if (c.alert === "CRITICAL") return 2;
-      if (c.alert === "WARNING") return 3;
-      if (c.alert === "MEDIUM") return 4;
-      return 5;
-    }
-
-    function normalizeClient(raw) {
-      const score = scorePercent(raw);
-      const cpte = getCpte(raw);
-      const alert = normalizeAlert(raw, score);
-      const risk = num(raw.risk_brut ?? raw.RISK_BRUT ?? raw.exposure ?? raw.EXPOSURE);
-      const nbrjdep = num(raw.nbrjdep ?? raw.NBRJDEP);
-      const priority = priorityFromClient({ alert, score });
-
-      let action = raw.recommended_action || raw.action || raw.ANOMALY_ACTION || "";
-      if (!action) {
-        if (alert === "CRITICAL") action = "Immediate risk officer review";
-        else if (alert === "WARNING") action = "Client call and account monitoring";
-        else if (alert === "MEDIUM") action = "Monitor daily";
-        else action = "No immediate action";
-      }
-
-      return {
-        cpte,
-        score,
-        alert,
-        priority,
-        nbrjdep,
-        risk,
-        action,
-        code_client: raw.code_client || raw.CODE_CLIENT || "",
-        raw
-      };
-    }
-
-    function badgeClass(alert) {
-      if (alert === "CRITICAL") return "badge-critical";
-      if (alert === "WARNING") return "badge-warning";
-      if (alert === "MEDIUM") return "badge-medium";
-      return "badge-low";
-    }
-
-    async function fetchJson(url, fallback) {
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return await res.json();
-      } catch (e) {
-        console.warn("Cannot load", url, e);
-        return fallback;
-      }
-    }
-
-    function extractClients(data) {
-      if (Array.isArray(data)) return data;
-      if (data && Array.isArray(data.clients)) return data.clients;
-      if (data && Array.isArray(data.data)) return data.data;
-      if (data && typeof data === "object") {
-        return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
-      }
-      return [];
-    }
-
-    async function loadClients() {
-      $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
-      const data = await fetchJson("/attached_assets/dashboard_clients_full.json", {});
-      const rawClients = extractClients(data);
-
-      state.clients = rawClients
-        .map(normalizeClient)
-        .filter(c => c.cpte)
-        .sort((a, b) => b.score - a.score || b.risk - a.risk);
-
-      $("loadStatus").innerText =
-        `${state.clients.length.toLocaleString("fr-FR")} lignes chargées — ` +
-        `${new Set(state.clients.map(c => c.cpte)).size.toLocaleString("fr-FR")} clients uniques.`;
-
-      renderAll();
-    }
-
-    async function loadAnomalies() {
-      const data = await fetchJson("/attached_assets/anomaly_clients.json", []);
-      let arr = [];
-
-      if (Array.isArray(data)) arr = data;
-      else if (data && Array.isArray(data.clients)) arr = data.clients;
-      else if (data && Array.isArray(data.anomalies)) arr = data.anomalies;
-
-      state.anomalies = arr.slice(0, 50);
-      renderAnomalies();
-    }
-
-    function getFiltered() {
-      const search = $("searchInput").value.trim().toLowerCase().replace(/\s/g, "");
-      const globalSearch = $("globalSearch").value.trim().toLowerCase().replace(/\s/g, "");
-      const q = search || globalSearch;
-      const alert = $("alertFilter").value;
-      const priority = $("priorityFilter").value;
-
-      let arr = state.clients.filter(c => c.alert === "CRITICAL" || c.alert === "WARNING");
-
-      if (alert) arr = arr.filter(c => c.alert === alert);
-      if (priority) arr = arr.filter(c => String(c.priority) === priority);
-
-      if (q) {
-        arr = arr.filter(c =>
-          c.cpte.toLowerCase().replace(/\s/g, "").includes(q) ||
-          String(c.code_client).toLowerCase().includes(q)
-        );
-      }
-
-      return arr;
-    }
-
-    function renderKpis() {
-      const critical = state.clients.filter(c => c.alert === "CRITICAL").length;
-      const warning = state.clients.filter(c => c.alert === "WARNING").length;
-      const priorityOne = state.clients.filter(c => c.priority === 1).length;
-      const total = critical + warning;
-
-      $("kpiCritical").innerText = critical.toLocaleString("fr-FR");
-      $("kpiWarning").innerText = warning.toLocaleString("fr-FR");
-      $("kpiP1").innerText = priorityOne.toLocaleString("fr-FR");
-      $("kpiTotal").innerText = total.toLocaleString("fr-FR");
-    }
-
-    function renderTable() {
-      state.filtered = getFiltered();
-
-      const rows = state.filtered.slice(0, 80).map(c => `
-        <tr class="hover:bg-white/5">
-          <td class="px-4 py-4 mono text-sm font-bold">${c.cpte}</td>
-          <td class="px-4 py-4 mono text-sm">${c.score.toFixed(1)}%</td>
-          <td class="px-4 py-4">
-            <span class="${badgeClass(c.alert)} px-3 py-1 rounded-md mono text-xs font-bold">${c.alert}</span>
-          </td>
-          <td class="px-4 py-4 mono text-sm">${c.priority}</td>
-          <td class="px-4 py-4 mono text-sm">${c.nbrjdep.toLocaleString("fr-FR")}</td>
-          <td class="px-4 py-4 mono text-sm">${fmtMoney(c.risk)}</td>
-          <td class="px-4 py-4 text-sm text-muted">${c.action}</td>
-          <td class="px-4 py-4">
-            <a href="/client?cpte=${encodeURIComponent(c.cpte)}" class="text-mint mono text-sm font-bold hover:underline">Open</a>
-          </td>
-        </tr>
-      `).join("");
-
-      $("clientRows").innerHTML = rows || `
-        <tr><td colspan="8" class="px-4 py-8 text-center text-muted">Aucun client trouvé.</td></tr>
-      `;
-    }
-
-    function renderAnomalies() {
-      $("anomCount").innerText = state.anomalies.length.toLocaleString("fr-FR");
-      $("anomStrong").innerText = state.anomalies.filter(a => num(a.anomaly_score ?? a.score_anomalie ?? a.score) < -0.1).length;
-      $("anomStable").innerText = state.anomalies.filter(a => String(a.alert_level || a.level || "").toLowerCase().includes("low")).length;
-
-      const rows = state.anomalies.slice(0, 25).map(a => {
-        const cpte = getCpte(a);
-        const scoreAnom = a.anomaly_score ?? a.score_anomalie ?? a.score ?? "";
-        const level = a.level || a.niveau || a.alert_level || "Suspect";
-        const risk = scorePercent(a);
-        const diag = a.diagnostic || a.reason || a.action || "Comportement atypique détecté";
-        return `
-          <tr class="hover:bg-white/5">
-            <td class="px-4 py-4 mono text-sm font-bold">${cpte || "N/A"}</td>
-            <td class="px-4 py-4 mono text-sm">${scoreAnom}</td>
-            <td class="px-4 py-4 mono text-sm">${level}</td>
-            <td class="px-4 py-4 mono text-sm">${risk.toFixed(1)}%</td>
-            <td class="px-4 py-4 text-sm text-muted">${diag}</td>
-          </tr>
-        `;
-      }).join("");
-
-      $("anomalyRows").innerHTML = rows || `
-        <tr><td colspan="5" class="px-4 py-8 text-center text-muted">Aucune anomalie chargée.</td></tr>
-      `;
-    }
-
-    function renderAll() {
-      renderKpis();
-      renderTable();
-    }
-
-    function exportCsv() {
-      const rows = [
-        ["cpte", "score", "alert", "priority", "nbrjdep", "risk_brut", "action"],
-        ...state.filtered.map(c => [c.cpte, c.score.toFixed(2), c.alert, c.priority, c.nbrjdep, c.risk, c.action])
-      ];
-
-      const csv = rows.map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(",")).join("\n");
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
-      a.download = "clients_a_notifier_biat.csv";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    $("searchInput").addEventListener("input", renderAll);
-    $("globalSearch").addEventListener("input", renderAll);
-    $("alertFilter").addEventListener("change", renderAll);
-    $("priorityFilter").addEventListener("change", renderAll);
-    $("clearBtn").addEventListener("click", () => {
-      $("searchInput").value = "";
-      $("globalSearch").value = "";
-      $("alertFilter").value = "";
-      $("priorityFilter").value = "";
-      renderAll();
-    });
-    $("exportCsv").addEventListener("click", exportCsv);
-    $("settingsBtn").addEventListener("click", () => alert("Settings - version locale"));
-    $("supportBtn").addEventListener("click", () => alert("Support - BIAT Risk Monitor"));
-
-    Promise.all([loadClients(), loadAnomalies()]).catch(err => {
-      console.error(err);
-      $("loadStatus").innerText = "Erreur de chargement. Ouvre F12 > Console pour le détail.";
-    });
-  </script>
-
-  <script src="/attached_assets/auth.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const routes = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Future Prediction": "/future",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
-    const text = (el.innerText || "").trim();
-
-    Object.entries(routes).forEach(function(pair) {
-      const label = pair[0];
-      const url = pair[1];
-
-      if (text.includes(label)) {
-        el.style.cursor = "pointer";
-
-        if (el.tagName === "A") {
-          el.setAttribute("href", url);
-        } else {
-          el.onclick = function () {
-            window.location.href = url;
-          };
-        }
-      }
-    });
-  });
-
-  document.querySelectorAll("button, a, div").forEach(function(el) {
-    const text = (el.innerText || "").trim();
-
-    if (text.includes("Critical Alerts")) {
-      el.style.cursor = "pointer";
-      el.onclick = function () {
-        
-      };
-    }
-  });
-});
-</script>
-
-
-<!-- BIAT SHARED SIDEBAR SCRIPT -->
-<script id="biat-shared-sidebar-script">
-document.addEventListener("DOMContentLoaded", function () {
-  const currentPath = window.location.pathname.toLowerCase();
-
-  document.querySelectorAll("#mainNav .nav-link").forEach(function(link) {
-    const route = link.getAttribute("data-route");
-    const isActive =
-      route &&
-      (
-        currentPath === route ||
-        currentPath.startsWith(route + "/") ||
-        (route === "/client" && currentPath.startsWith("/client")) ||
-        (route === "/notifications" && currentPath.startsWith("/notifications")) ||
-        (route === "/future" && currentPath.startsWith("/future")) ||
-        (route === "/evolution" && currentPath.startsWith("/evolution")) ||
-        (route === "/performance" && currentPath.startsWith("/performance")) ||
-        (route === "/assistant" && currentPath.startsWith("/assistant"))
-      );
-
-    link.classList.remove(
-      "bg-secondary-container",
-      "text-on-secondary-container",
-      "font-bold",
-      "text-on-surface-variant",
-      "hover:text-on-surface",
-      "hover:bg-surface-variant/30"
-    );
-
-    if (isActive) {
-      link.classList.add("bg-secondary-container", "text-on-secondary-container", "font-bold");
-    } else {
-      link.classList.add("text-on-surface-variant", "hover:text-on-surface", "hover:bg-surface-variant/30");
-    }
-  });
-
-  const criticalBtn = document.getElementById("criticalAlertsBtn");
-  if (criticalBtn) {
-    criticalBtn.addEventListener("click", function () {
-      
-    });
-  }
-
-  const settingsBtn = document.getElementById("settingsBtn");
-  if (settingsBtn) {
-    settingsBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      alert("Settings - BIAT Risk Monitor\\nUser: ALA\\nRole: Risk Officer");
-    });
-  }
-
-  const supportBtn = document.getElementById("supportBtn");
-  if (supportBtn) {
-    supportBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      alert("Support - BIAT Risk Monitor");
-    });
-  }
-
-  fetch("/api/future-predictions", { cache: "no-store" })
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (!data || !data.summary) return;
-      const badge = document.getElementById("notifBadge");
-      if (badge) {
-        const n = data.summary.critical_future_clients || data.summary.aggravation_clients || 0;
-        badge.innerText = Number(n).toLocaleString("fr-FR");
-      }
-    })
-    .catch(() => {});
-});
-</script>
-<!-- END BIAT SHARED SIDEBAR SCRIPT -->
-
-
-<!-- BIAT_SETTINGS_SUPPORT_FIX -->
-<style>
-  #biatModalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.58);
-    z-index: 999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #biatModalBox {
-    width: min(560px, 92vw);
-    background: #101b33;
-    border: 1px solid rgba(95,251,214,.35);
-    border-radius: 16px;
-    color: #d9e2ff;
-    padding: 22px;
-    box-shadow: 0 30px 80px rgba(0,0,0,.45);
-    font-family: Inter, Arial, sans-serif;
-  }
-
-  #biatModalBox h2 {
-    margin: 0 0 14px 0;
-    color: #5ffbd6;
-    font-size: 22px;
-    font-weight: 800;
-  }
-
-  #biatModalBox p {
-    color: #b9c6e4;
-    line-height: 1.6;
-  }
-
-  #biatModalClose {
-    margin-top: 18px;
-    background: #5ffbd6;
-    color: #06251f;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-</style>
-
-<div id="biatModalOverlay">
-  <div id="biatModalBox">
-    <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
-    <p id="biatModalText"></p>
-    <button id="biatModalClose">Fermer</button>
+      </div>
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="display text-2xl font-bold mb-5">Quick Summary</h3>
+        <div id="quickSummary" class="space-y-4"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="__biatModal">
+  <div style="width:100%;max-width:480px;background:#0d1c35;border:1px solid #2a3a5e;border-radius:16px;padding:24px;margin:16px;box-shadow:0 32px 64px rgba(0,0,0,.6)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">
+      <div>
+        <p id="__bm-cat" style="font-family:JetBrains Mono,monospace;font-size:10px;color:#00e8ff;text-transform:uppercase;letter-spacing:.1em;margin:0"></p>
+        <h3 id="__bm-title" style="font-family:'Hanken Grotesk',sans-serif;font-size:22px;font-weight:800;color:#fff;margin:4px 0 0"></h3>
+      </div>
+      <button id="__bm-x" style="background:none;border:none;color:#6a7a9a;cursor:pointer;font-size:20px;padding:4px">✕</button>
+    </div>
+    <div id="__bm-body" style="display:flex;flex-direction:column;gap:10px"></div>
+    <div style="margin-top:18px;display:flex;justify-content:flex-end">
+      <button id="__bm-ok" style="background:linear-gradient(135deg,#00e8ff,#0ea5e9);color:#020617;border:none;padding:10px 22px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-weight:700;cursor:pointer">Fermer</button>
+    </div>
   </div>
 </div>
 
 <script>
-(function () {
-  function showModal(title, text) {
-    let overlay = document.getElementById("biatModalOverlay");
-    let titleEl = document.getElementById("biatModalTitle");
-    let textEl = document.getElementById("biatModalText");
+document.addEventListener("DOMContentLoaded", () => {
 
-    if (!overlay || !titleEl || !textEl) {
-      alert(title + "\\n\\n" + text);
-      return;
+  // ════════════════════════════════════════════════════════
+  // HELPERS — mêmes conventions que le reste de la plateforme
+  // ════════════════════════════════════════════════════════
+  function n(v){ const x=Number(String(v??"").replace(",",".")); return Number.isFinite(x)?x:0; }
+  function fmtMoney(v){ const x=n(v); if(x<=0) return "Non disponible"; if(x>=1e6) return (x/1e6).toFixed(1)+"M TND"; if(x>=1000) return Math.round(x/1000)+"K TND"; return Math.round(x)+" TND"; }
+  function getField(r,keys,fb=""){ for(const k of keys) if(r[k]!==undefined&&r[k]!==null&&r[k]!=="") return r[k]; return fb; }
+  function getCpte(r){ return String(getField(r,["cpte","CPTE"],"")).trim(); }
+  function getScoreRaw(r){
+    for(const k of ["display_risk_score_percent","risk_score_percent","score_percent","risk_score","RISK_SCORE","score"]){
+      const v=n(r[k]); if(v>1) return Math.min(v,95); if(v>0) return Math.min(v*100,95);
     }
-
-    titleEl.innerText = title;
-    textEl.innerText = text;
-    overlay.style.display = "flex";
+    return 0;
+  }
+  function getExposure(r){ return n(getField(r,["risk_brut","RISK_BRUT","exposition","exposition_brute"],0)); }
+  function getTrend(r){ return n(getField(r,["nbrjdep_trend","NBRJDEP_TREND"],0)); }
+  function getNbrj(r){ return n(getField(r,["nbrjdep","NBRJDEP"],0)); }
+  function alertFromScore(s){ if(s>=85)return"CRITICAL"; if(s>=65)return"WARNING"; if(s>=40)return"MEDIUM"; return"STABLE"; }
+  function priorityFromScore(s){ if(s>=90)return 1; if(s>=85)return 1; if(s>=65)return 2; if(s>=50)return 3; if(s>=40)return 4; return 5; }
+  function actionFor(alert, nbrj, score){
+    if(alert==="CRITICAL") return nbrj>=40 ? "Immediate Intervention Today" : "Account Freezing Pending";
+    if(alert==="WARNING")  return score>=75 ? "Risk Committee Review" : "Client Phone Call";
+    if(alert==="MEDIUM")   return "Account Manager Follow-up";
+    return "Standard Notification";
   }
 
-  document.addEventListener("click", function (e) {
-    const close = e.target.closest("#biatModalClose");
-    if (close) {
-      document.getElementById("biatModalOverlay").style.display = "none";
-      return;
-    }
+  // ════════════════════════════════════════════════════════
+  // CHARGEMENT DES VRAIES DONNÉES
+  // ════════════════════════════════════════════════════════
+  let CLIENTS = [];   // données réelles transformées
+  const statusOverride = {}; // cpte -> status (toggle manuel conservé en mémoire de session)
 
-    const settings = e.target.closest("#settingsBtn, .side-btn, button, a");
-    if (settings && String(settings.innerText || "").toLowerCase().includes("settings")) {
-      e.preventDefault();
-      showModal(
-        "Settings",
-        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, synchronisation portefeuille, seuils de risque et préférences d'affichage. Cette version utilise les données locales du projet."
-      );
-      return;
-    }
+  async function loadData(){
+    try{
+      document.getElementById("subStatus").innerText = "Chargement de dashboard_clients_full.json...";
+      const res = await fetch("/attached_assets/dashboard_clients_full.json?nc="+Date.now(), {cache:"no-store"});
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      let text = await res.text();
+      text = text.replace(/\bNaN\b/g,"null");
+      const data = JSON.parse(text);
+      let rows = Array.isArray(data)?data:Array.isArray(data.clients)?data.clients:Array.isArray(data.data)?data.data:[];
+      if(!rows.length && typeof data==="object") rows = Object.values(data).filter(v=>v&&typeof v==="object");
 
-    const support = e.target.closest("#supportBtn, .side-btn, button, a");
-    if (support && String(support.innerText || "").toLowerCase().includes("support")) {
-      e.preventDefault();
-      showModal(
-        "Support",
-        "Aide rapide : Dashboard pour la vue globale, Risk Evolution pour les transitions, Future Prediction pour les clients qui vont devenir critiques, Notifications pour la liste opérationnelle, Client Profiles pour les fiches individuelles, AI Assistant pour les questions métier."
-      );
-      return;
+      // Déduplique par CPTE, garde le meilleur score
+      const map = new Map();
+      rows.forEach(r=>{
+        const cpte=getCpte(r); if(!cpte) return;
+        const s=getScoreRaw(r);
+        if(!map.has(cpte) || s>getScoreRaw(map.get(cpte))) map.set(cpte,r);
+      });
+
+      const unique = Array.from(map.values());
+
+      // Ne garde que les clients à notifier : CRITICAL + WARNING + MEDIUM (score >= 40)
+      CLIENTS = unique
+        .map(r=>{
+          const score = getScoreRaw(r);
+          const alert = alertFromScore(score);
+          const trend = getTrend(r);
+          const nbrj  = getNbrj(r);
+          const priority = priorityFromScore(score);
+          const action = actionFor(alert, nbrj, score);
+          const cpte = getCpte(r);
+          return {
+            cpte, score, alert, priority,
+            evolution: (trend>=0?"+":"")+trend.toFixed(1)+"%",
+            evoUp: trend>=0,
+            nbrjdep: nbrj,
+            exposure: getExposure(r),
+            action,
+            status: statusOverride[cpte] || (alert==="CRITICAL" ? "Action Required" : alert==="WARNING" ? "Pending" : "Notified")
+          };
+        })
+        .filter(c => c.score >= 40)         // seuil de notification : Moyen et au-dessus
+        .sort((a,b)=>b.score-a.score);
+
+      document.getElementById("subStatus").innerText =
+        `${unique.length.toLocaleString("fr-FR")} clients uniques analysés — ${CLIENTS.length.toLocaleString("fr-FR")} clients à notifier (score ≥ 40%).`;
+
+      page = 1;
+      updateKpis();
+      renderTrendChart();
+      renderQuickSummary();
+      render();
+    } catch(err){
+      console.error("[Notifications] Erreur:", err);
+      document.getElementById("subStatus").innerText = "Erreur de chargement : " + err.message;
+      document.getElementById("tableBody").innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-error">${err.message}</td></tr>`;
     }
-  }, true);
-})();
+  }
+
+  let page = 1;
+  const PER_PAGE = 10;
+
+  const aC = a => a==="CRITICAL"?"bg-red-500/20 text-red-300 border border-red-400/30":
+                  a==="WARNING" ?"bg-yellow-500/20 text-yellow-300 border border-yellow-400/30":
+                  a==="MEDIUM"  ?"bg-orange-500/20 text-orange-300 border border-orange-400/30":
+                                 "bg-slate-500/20 text-slate-300 border border-slate-400/30";
+  const sC = s => s==="Action Required"?"bg-emerald-500/10 text-emerald-300 border border-emerald-400/30":
+                  s==="Pending"        ?"bg-slate-500/30 text-slate-200":
+                                        "bg-blue-500/10 text-blue-300 border border-blue-400/30";
+
+  function filtered(){
+    const q = document.getElementById("searchInput").value.trim().toLowerCase();
+    const a = document.getElementById("alertFilter").value;
+    const p = document.getElementById("priorityFilter").value;
+    const s = document.getElementById("statusFilter").value;
+    return CLIENTS.filter(c=>
+      (!q||c.cpte.toLowerCase().includes(q))&&(!a||c.alert===a)&&(!p||String(c.priority)===p)&&(!s||c.status===s));
+  }
+
+  function updateKpis(){
+    document.getElementById("kpiCritical").innerText = CLIENTS.filter(c=>c.alert==="CRITICAL").length.toLocaleString("fr-FR");
+    document.getElementById("kpiWarning").innerText  = CLIENTS.filter(c=>c.alert==="WARNING").length.toLocaleString("fr-FR");
+    document.getElementById("kpiP1").innerText       = CLIENTS.filter(c=>c.priority===1).length.toLocaleString("fr-FR");
+    document.getElementById("kpiPending").innerText  = CLIENTS.filter(c=>c.status==="Pending").length.toLocaleString("fr-FR");
+  }
+
+  function render(){
+    const data = filtered();
+    const pages = Math.max(1, Math.ceil(data.length/PER_PAGE));
+    if(page>pages) page=pages;
+    const start = (page-1)*PER_PAGE;
+    const slice = data.slice(start, start+PER_PAGE);
+    const tbody = document.getElementById("tableBody");
+    const empty = document.getElementById("tableEmpty");
+    tbody.innerHTML = "";
+    empty.classList.toggle("hidden", slice.length>0);
+    slice.forEach(c=>{
+      const tr=document.createElement("tr");
+      tr.className="hover:bg-surface-variant/10 transition-colors cursor-pointer";
+      tr.onclick = (e) => { if(!e.target.closest(".statusBtn")) window.location.href = "/client?cpte="+encodeURIComponent(c.cpte); };
+      tr.innerHTML=`
+        <td class="px-4 py-4 mono text-sm font-bold text-primary">${c.cpte}</td>
+        <td class="px-4 py-4 mono text-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-14 h-1 bg-surface-container-high rounded-full overflow-hidden">
+              <div class="h-full bg-red-300 rounded-full" style="width:${c.score}%"></div>
+            </div>${c.score.toFixed(1)}%
+          </div>
+        </td>
+        <td class="px-4 py-4"><span class="px-2 py-1 rounded text-xs font-bold ${aC(c.alert)}">${c.alert}</span></td>
+        <td class="px-4 py-4 mono text-sm font-bold">P${c.priority}</td>
+        <td class="px-4 py-4 mono text-sm ${c.evoUp?'text-red-300':'text-emerald-300'}">${c.evolution}</td>
+        <td class="px-4 py-4 mono text-sm">${c.nbrjdep}</td>
+        <td class="px-4 py-4 text-sm">${c.action}</td>
+        <td class="px-4 py-4">
+          <button class="statusBtn px-3 py-1.5 rounded-full text-xs font-semibold ${sC(c.status)}" data-cpte="${c.cpte}">${c.status}</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById("showingText").innerText = data.length===0?"Aucun résultat":`${start+1}–${Math.min(start+slice.length,data.length)} / ${data.length.toLocaleString("fr-FR")} clients`;
+    document.getElementById("pageInfo").innerText = `Page ${page} / ${pages}`;
+    document.getElementById("prevPage").disabled = page<=1;
+    document.getElementById("nextPage").disabled = page>=pages;
+    document.querySelectorAll(".statusBtn").forEach(btn=>{
+      btn.onclick=(e)=>{
+        e.stopPropagation();
+        const c=CLIENTS.find(x=>x.cpte===btn.dataset.cpte); if(!c) return;
+        c.status=c.status==="Action Required"?"Pending":c.status==="Pending"?"Notified":"Action Required";
+        statusOverride[c.cpte] = c.status;
+        render(); updateKpis();
+      };
+    });
+  }
+
+  function renderTrendChart(){
+    // Tendance réelle : répartition Critique/Élevé par tranche de score (proxy temporel faute d'historique daté)
+    const buckets = [[85,89],[89,92],[92,95],[95,100],[100,101]];
+    const wrap = document.getElementById("trendChart");
+    wrap.innerHTML = "";
+    const labels = ["S1","S2","S3","S4","S5"];
+
+    const counts = buckets.map(([lo,hi])=>({
+      c: CLIENTS.filter(x=>x.alert==="CRITICAL" && x.score>=lo && x.score<hi).length,
+      h: CLIENTS.filter(x=>x.alert==="WARNING" && x.score>=lo-20 && x.score<hi-20).length
+    }));
+    const maxVal = Math.max(...counts.map(b=>Math.max(b.c,b.h)), 1);
+    const MAX_PX = 150; // hauteur max d'une barre, en pixels
+
+    counts.forEach((b,i)=>{
+      const hc = Math.max(4, Math.round(b.c/maxVal*MAX_PX));
+      const hh = Math.max(4, Math.round(b.h/maxVal*MAX_PX));
+      const w=document.createElement("div"); w.className="flex-1 flex flex-col items-center justify-end gap-2";
+      w.innerHTML=`<div class="flex items-end gap-1" style="height:${MAX_PX}px">
+        <div class="w-6 rounded-t-md bg-error/80 self-end" style="height:${hc}px" title="${b.c} critiques"></div>
+        <div class="w-6 rounded-t-md bg-tertiary/80 self-end" style="height:${hh}px" title="${b.h} élevés"></div>
+      </div><span class="mono text-xs text-on-surface-variant">${labels[i]}</span>`;
+      wrap.appendChild(w);
+    });
+
+    const totalCrit = CLIENTS.filter(c=>c.alert==="CRITICAL").length;
+    const totalHigh = CLIENTS.filter(c=>c.alert==="WARNING").length;
+    const expoP1 = CLIENTS.filter(c=>c.priority===1).reduce((s,c)=>s+c.exposure,0);
+    document.getElementById("statPeakCritical").innerText = totalCrit.toLocaleString("fr-FR");
+    document.getElementById("statHighRisk").innerText = totalHigh.toLocaleString("fr-FR");
+    document.getElementById("statExposure").innerText = fmtMoney(expoP1);
+  }
+
+  function renderQuickSummary(){
+    const p1 = CLIENTS.filter(c=>c.priority===1).length;
+    const pendingPct = CLIENTS.length ? Math.round(CLIENTS.filter(c=>c.status!=="Pending").length / CLIENTS.length * 100) : 0;
+    const highExpo = CLIENTS.filter(c=>c.exposure>1000000 && c.nbrjdep>30).length;
+    document.getElementById("quickSummary").innerHTML = `
+      <div class="flex gap-4">
+        <div class="w-10 h-10 rounded-xl bg-error/10 text-error flex items-center justify-center shrink-0"><span class="material-symbols-outlined">priority_high</span></div>
+        <div><p class="mono font-bold text-sm">Priority 1 Surge</p><p class="text-sm text-on-surface-variant mt-1">${p1.toLocaleString("fr-FR")} clients en priorité P1 nécessitent un traitement immédiat.</p></div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-10 h-10 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center shrink-0"><span class="material-symbols-outlined">check_circle</span></div>
+        <div><p class="mono font-bold text-sm">Traitement en cours</p><p class="text-sm text-on-surface-variant mt-1">${pendingPct}% des notifications déjà traitées ou notifiées.</p></div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-10 h-10 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center shrink-0"><span class="material-symbols-outlined">auto_awesome</span></div>
+        <div><p class="mono font-bold text-sm">AI Recommandation</p><p class="text-sm text-on-surface-variant mt-1">Prioriser les ${highExpo.toLocaleString("fr-FR")} clients avec exposition &gt; 1M TND et NBRJDEP &gt; 30.</p></div>
+      </div>`;
+  }
+
+  // Events
+  ["searchInput","alertFilter","priorityFilter","statusFilter"].forEach(id=>{
+    document.getElementById(id).addEventListener(id==="searchInput"?"input":"change",()=>{ page=1; render(); });
+  });
+  document.getElementById("clearFilters").onclick=()=>{
+    document.getElementById("searchInput").value="";
+    ["alertFilter","priorityFilter","statusFilter"].forEach(id=>document.getElementById(id).value="");
+    page=1; render();
+  };
+  document.getElementById("prevPage").onclick=()=>{ page--; render(); };
+  document.getElementById("nextPage").onclick=()=>{ page++; render(); };
+  document.getElementById("exportCsv").onclick=()=>{
+    const rows=[["CPTE","Score","Alert","Priority","Evolution","NBRJDEP","Exposition","Action","Status"],
+      ...filtered().map(c=>[c.cpte,c.score.toFixed(1),c.alert,c.priority,c.evolution,c.nbrjdep,c.exposure,c.action,c.status])];
+    const csv=rows.map(r=>r.map(v=>`"${v}"`).join(",")).join("\n");
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+    a.download="biat_notifications.csv"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+  document.getElementById("headerSearch").addEventListener("keydown", e=>{
+    if(e.key==="Enter" && e.target.value.trim()) window.location.href = "/client?cpte="+encodeURIComponent(e.target.value.trim());
+  });
+
+  // Settings / Support
+  const modal=document.getElementById("__biatModal");
+  const closeM=()=>modal.classList.remove("open");
+  document.getElementById("__bm-x").onclick=closeM;
+  document.getElementById("__bm-ok").onclick=closeM;
+  modal.addEventListener("click",e=>{ if(e.target===modal) closeM(); });
+  const card=(l,t)=>`<div style="background:#0f1c35;border-radius:10px;padding:14px;border-left:3px solid #00e8ff"><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#00e8ff;text-transform:uppercase;letter-spacing:.07em">${l}</p><p style="margin-top:6px;font-size:13px;color:#d9e2ff;line-height:1.65">${t}</p></div>`;
+  const openM=type=>{
+    document.getElementById("__bm-cat").innerText=type==="settings"?"Configuration":"Assistance";
+    document.getElementById("__bm-title").innerText=type==="settings"?"Paramètres":"Support";
+    document.getElementById("__bm-body").innerHTML=type==="settings"
+      ?card("Interface","Mode sombre professionnel activé. Thème BIAT appliqué.")+card("Seuil de notification","Score ≥ 40% (Moyen, Élevé, Critique). Les clients Faible ne sont pas notifiés.")+card("Source","dashboard_clients_full.json — données réelles du portefeuille BIAT.")
+      :card("Documentation","Scoring ML, alertes critiques, évolution du risque et profils clients.")+card("FAQ","Pourquoi LightGBM ? Comment lire ROC-AUC, KS et Gini ?")+`<button onclick="window.location.href='/assistant'" style="width:100%;background:#1e3a9e;color:#fff;border:none;padding:12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;cursor:pointer">Ouvrir AI Assistant</button>`;
+    modal.classList.add("open");
+  };
+  document.getElementById("btnSettings").onclick=()=>openM("settings");
+  document.getElementById("btnSupport").onclick=()=>openM("support");
+
+  loadData();
+});
 </script>
-<!-- END BIAT_SETTINGS_SUPPORT_FIX -->
-
-<script src="/attached_assets/sidebar.js"></script>
 </body>
 </html>

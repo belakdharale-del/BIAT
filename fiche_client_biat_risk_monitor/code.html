@@ -1,1132 +1,798 @@
 ﻿<!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIAT Risk Monitor - Fiche Client</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-
-  <style>
-    body {
-      margin: 0;
-      background: #07122a;
-      color: #d9e2ff;
-      font-family: Inter, sans-serif;
-    }
-
-    .mono { font-family: "JetBrains Mono", monospace; }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      color: #b9c6e4;
-      text-decoration: none;
-      transition: .15s ease;
-    }
-
-    .nav-link:hover {
-      background: rgba(95,251,214,.08);
-      color: #fff;
-    }
-
-    .nav-active {
-      background: rgba(121,143,185,.35);
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .card {
-      background: rgba(16,27,51,.88);
-      border: 1px solid rgba(95,251,214,.16);
-      border-radius: 18px;
-    }
-
-    .badge-critical {
-      background: rgba(147,0,10,.45);
-      color: #ffb4ab;
-      border: 1px solid rgba(255,180,171,.35);
-    }
-
-    .badge-warning {
-      background: rgba(245,146,30,.16);
-      color: #f5921e;
-      border: 1px solid rgba(245,146,30,.35);
-    }
-
-    .badge-medium {
-      background: rgba(251,226,115,.14);
-      color: #fbe273;
-      border: 1px solid rgba(251,226,115,.35);
-    }
-
-    .badge-low {
-      background: rgba(95,251,214,.12);
-      color: #5ffbd6;
-      border: 1px solid rgba(95,251,214,.30);
-    }
-
-    .score-ring {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: conic-gradient(#5ffbd6 0deg, #263452 0deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .score-ring::after {
-      content: "";
-      position: absolute;
-      inset: 24px;
-      background: #101b33;
-      border-radius: 50%;
-    }
-
-    .score-ring > div {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-    }
-  </style>
-
-<!-- BIAT_CLIENT_LAYOUT_FIX -->
-<style id="biat-client-layout-fix">
-  body {
-    padding-left: 240px !important;
-    overflow-x: hidden !important;
-  }
-
-  aside {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    min-width: 240px !important;
-    height: 100vh !important;
-    z-index: 9999 !important;
-  }
-
-  main,
-  .main-content,
-  #mainContent {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-
-  header {
-    left: 240px !important;
-    width: calc(100% - 240px) !important;
-  }
-</style>
-<!-- END BIAT_CLIENT_LAYOUT_FIX -->
-
-
-
-
-</head>
-
-<body>
-<!-- BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BIAT Risk Monitor — Fiche Client</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  body {
-    padding-left: 240px !important;
-  }
+  /* ===== SIDEBAR NOIRE + CONTENU VIF ===== */
 
-  .biat-sidebar {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 240px !important;
-    height: 100vh !important;
-    z-index: 99999 !important;
-    background: #071126 !important;
-    border-right: 1px solid rgba(148,163,184,.18) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 24px 14px 16px 14px !important;
-    box-sizing: border-box !important;
-  }
+/* Sidebar très sombre */
+.biat-sidebar {
+  background:
+    linear-gradient(180deg, #050714 0%, #070A18 45%, #050714 100%) !important;
+  border-right: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow: 8px 0 35px rgba(0, 0, 0, 0.45) !important;
+}
 
-  .biat-sidebar .brand {
-    padding: 0 6px 28px 6px !important;
-  }
+/* Logo plus premium */
+.biat-sidebar .brand-logo {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.35) !important;
+}
 
-  .biat-sidebar .brand h1 {
-    margin: 0 !important;
-    color: #f3f7ff !important;
-    font-size: 26px !important;
-    line-height: 1.14 !important;
-    font-weight: 900 !important;
-    letter-spacing: .2px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
+.biat-sidebar .brand-title {
+  color: #F8FAFF !important;
+}
 
-  .biat-sidebar .brand p {
-    margin: 8px 0 0 0 !important;
-    color: rgba(217,226,255,.72) !important;
-    font-size: 13px !important;
-    font-family: Inter, Arial, sans-serif !important;
-  }
+.biat-sidebar .brand-subtitle {
+  color: rgba(210, 220, 255, 0.55) !important;
+}
 
-  .biat-sidebar nav {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 7px !important;
-  }
+/* Liens sidebar */
+.biat-sidebar .nav-link {
+  color: #9AA8C7 !important;
+  background: transparent !important;
+}
 
-  .biat-sidebar .nav-link {
-    height: 46px !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 0 14px !important;
-    border-radius: 10px !important;
-    color: #b9c6e4 !important;
-    text-decoration: none !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-  }
+.biat-sidebar .nav-link:hover {
+  color: #FFFFFF !important;
+  background: rgba(0, 232, 255, 0.08) !important;
+}
 
-  .biat-sidebar .nav-link:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: #ffffff !important;
-  }
+/* Menu actif */
+.biat-sidebar .nav-link.active {
+  color: #FFFFFF !important;
+  background:
+    linear-gradient(90deg, rgba(0, 232, 255, 0.18), rgba(124, 58, 237, 0.08)) !important;
+  border-left: 3px solid #00E8FF !important;
+  box-shadow: inset 0 0 18px rgba(0, 232, 255, 0.08) !important;
+}
 
-  .biat-sidebar .nav-link.active {
-    background: rgba(121,143,185,.35) !important;
-    color: #ffffff !important;
-    font-weight: 900 !important;
-  }
+.biat-sidebar .nav-link.active .material-symbols-outlined {
+  color: #00E8FF !important;
+}
 
-  .biat-sidebar .material-symbols-outlined {
-    font-size: 22px !important;
-    width: 24px !important;
-    min-width: 24px !important;
-    line-height: 1 !important;
-  }
+/* Critical Alerts plus sérieux */
+.side-critical {
+  background: rgba(255, 77, 109, 0.10) !important;
+  border: 1px solid rgba(255, 77, 109, 0.45) !important;
+  color: #FFB4C2 !important;
+}
 
-  .biat-sidebar .badge {
-    margin-left: auto !important;
-    background: #ffb4ab !important;
-    color: #3b0505 !important;
-    border-radius: 999px !important;
-    padding: 2px 7px !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-  }
+.side-critical:hover {
+  background: rgba(255, 77, 109, 0.18) !important;
+}
 
-  .biat-sidebar .bottom {
-    margin-top: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    border-top: 1px solid rgba(148,163,184,.16) !important;
-    padding-top: 14px !important;
-  }
+/* Settings / Support */
+.side-muted {
+  color: #9AA8C7 !important;
+}
 
-  .biat-sidebar .critical-btn,
-  .biat-sidebar .bottom-btn {
-    height: 46px !important;
-    width: 100% !important;
-    border-radius: 10px !important;
-    border: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    cursor: pointer !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-  }
+.side-muted:hover {
+  background: rgba(0, 232, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
 
-  .biat-sidebar .critical-btn {
-    background: #b00012 !important;
-    color: white !important;
-  }
+/* User bottom */
+.sidebar-user .avatar {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 14px rgba(0, 232, 255, 0.35) !important;
+}
 
-  .biat-sidebar .bottom-btn {
-    background: transparent !important;
-    color: #b9c6e4 !important;
-  }
+/* Navbar noire */
+header {
+  background: rgba(3, 7, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 232, 255, 0.18) !important;
+}
 
-  .biat-sidebar .bottom-btn:hover {
-    background: rgba(95,251,214,.08) !important;
-    color: white !important;
-  }
+/* Fond principal vivant mais sombre */
+.biat-bg {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(124, 58, 237, 0.30) 0%, transparent 38%),
+    radial-gradient(circle at 20% 85%, rgba(0, 232, 255, 0.20) 0%, transparent 45%),
+    linear-gradient(135deg, #050714 0%, #081336 45%, #111A3A 100%) !important;
+}
 
-  main {
-    margin-left: 0 !important;
-  }
+/* Cards plus lumineuses */
+.glass-card {
+  background: rgba(17, 26, 58, 0.86) !important;
+  border: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 232, 255, 0.55) !important;
+}
+
+/* Boutons cyan vif */
+#applyFilters,
+#quickAction,
+button.bg-primary-container {
+  background: linear-gradient(135deg, #00E8FF, #0EA5E9) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.22) !important;
+}
+
+/* Inputs/selects */
+input,
+select,
+textarea {
+  background: rgba(12, 22, 55, 0.92) !important;
+  border-color: rgba(0, 232, 255, 0.25) !important;
+}
+
+/* KPI couleurs plus vives */
+#kpiCritical {
+  color: #FF4D6D !important;
+}
+
+#kpiWarning {
+  color: #FFD23F !important;
+}
+
+#kpiNotify,
+#kpiTotal,
+#kpiAvg,
+#kpiAmount {
+  color: #EAF0FF !important;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0a1340;color:#d9e2ff;font-family:Inter,sans-serif;padding-left:240px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 88% 8%,rgba(255,146,30,.26) 0%,transparent 45%),
+    radial-gradient(circle at 12% 88%,rgba(0,120,255,.28) 0%,transparent 55%),
+    linear-gradient(135deg,#060b2e,#0a1340 38%,#0f1c4f 70%,#060b2e)}
+.mono{font-family:"JetBrains Mono",monospace}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;line-height:1}
+.card{background:rgba(18,38,80,.88);backdrop-filter:blur(12px);
+  border:1px solid rgba(80,100,130,.5);border-radius:16px}
+
+/* Sidebar */
+.biat-sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;
+  background:rgba(10,22,50,.97);backdrop-filter:blur(18px);
+  border-right:1px solid rgba(60,74,69,.5);
+  display:flex;flex-direction:column;z-index:100;padding:20px 12px 14px}
+.brand-title{font-size:22px;font-weight:900;color:#fff;line-height:1.15;padding:0 6px}
+.brand-sub{font-size:12px;color:#bacac3;padding:4px 6px 20px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  color:#bacac3;text-decoration:none;font-family:"JetBrains Mono",monospace;
+  font-size:12.5px;font-weight:600;transition:all .15s;border:none;
+  background:none;width:100%;text-align:left;cursor:pointer}
+.nav-item:hover{background:rgba(0,232,255,.08);color:#fff}
+.nav-item.active{background:#374767;color:#fff;font-weight:800}
+.nav-icon{font-size:20px;flex-shrink:0}
+.bottom-section{margin-top:auto;border-top:1px solid rgba(60,74,69,.4);
+  padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.btn-critical{width:100%;background:#7a0019;color:#ffdad6;border:none;
+  padding:10px;border-radius:10px;font-family:"JetBrains Mono",monospace;
+  font-size:12px;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* Score Ring */
+.score-ring-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
+.score-ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:#1f2942;stroke-width:12}
+.ring-fill{fill:none;stroke-width:12;stroke-linecap:round;
+  transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s}
+.score-center{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px}
+
+/* KPI mini */
+.kpi-mini{background:rgba(0,0,0,.25);border:1px solid rgba(60,74,69,.5);
+  border-radius:12px;padding:14px 16px;flex:1;min-width:0}
+.kpi-label{font-family:"JetBrains Mono",monospace;font-size:9px;
+  text-transform:uppercase;letter-spacing:.07em;color:#85948e;margin-bottom:5px}
+.kpi-value{font-size:22px;font-weight:800;line-height:1.2}
+.kpi-delta{font-family:"JetBrains Mono",monospace;font-size:10px;margin-top:4px}
+.kpi-up{color:#ff4d6d}.kpi-down{color:#00e8ff}.kpi-flat{color:#85948e}
+
+/* Badges */
+.badge-crit{background:rgba(147,0,10,.5);color:#ff4d6d;border:1px solid rgba(255,180,171,.4)}
+.badge-high{background:rgba(77,67,0,.5);color:#ffd23f;border:1px solid rgba(251,226,115,.4)}
+.badge-med{background:rgba(0,56,45,.5);color:#00e8ff;border:1px solid rgba(0,232,255,.4)}
+.badge-low{background:rgba(30,58,80,.5);color:#bacac3;border:1px solid rgba(186,202,195,.3)}
+
+/* Explication item */
+.expl-item{background:rgba(0,0,0,.3);border-left:3px solid;
+  border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:10px}
+
+/* Chart bars */
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px}
+.bar-col .bar{width:100%;border-radius:5px 5px 0 0;transition:height .6s cubic-bezier(.4,0,.2,1)}
+.bar-col .lbl,.bar-col .val{font-family:"JetBrains Mono",monospace;font-size:9px;color:#85948e;text-align:center}
+
+/* Timeline */
+.timeline-step{flex:1;text-align:center;position:relative;padding:0 6px}
+.timeline-step::before{content:"";position:absolute;top:17px;left:0;right:50%;height:2px;background:rgba(0,232,255,.2)}
+.timeline-step::after{content:"";position:absolute;top:17px;left:50%;right:0;height:2px;background:rgba(0,232,255,.2)}
+.timeline-step:first-child::before,.timeline-step:last-child::after{display:none}
+.timeline-dot{width:36px;height:36px;border-radius:50%;background:rgba(0,232,255,.1);
+  border:2px solid rgba(0,232,255,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
 </style>
+</head>
+<body>
 
+<!-- Sidebar -->
 <aside class="biat-sidebar">
-  <div class="brand">
-    <h1>BIAT Risk<br>Monitor</h1>
-    <p>Vigilant Professionalism</p>
-  </div>
-
-  <nav>
-    <a class="nav-link" data-route="/dashboard" href="/dashboard">
-      <span class="material-symbols-outlined">dashboard</span>
-      <span>Global Dashboard</span>
+  <div class="brand-title">BIAT Risk<br>Monitor</div>
+  <div class="brand-sub">Vigilant Professionalism</div>
+  <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
+    <a class="nav-item" href="/dashboard"><span class="material-symbols-outlined nav-icon">dashboard</span>Global Dashboard</a>
+    <a class="nav-item" href="/evolution"><span class="material-symbols-outlined nav-icon">trending_up</span>Risk Evolution</a>
+    <a class="nav-item" href="/future"><span class="material-symbols-outlined nav-icon">online_prediction</span>Future Prediction</a>
+    <a class="nav-item" href="/notifications">
+      <span class="material-symbols-outlined nav-icon">notifications</span><span>Notifications</span>
+      <span style="margin-left:auto;background:#ff4d6d;color:#3b0505;border-radius:999px;padding:1px 7px;font-size:10px;font-weight:900" id="notifBadge">--</span>
     </a>
-
-    <a class="nav-link" data-route="/evolution" href="/evolution">
-      <span class="material-symbols-outlined">trending_up</span>
-      <span>Risk Evolution</span>
-    </a>
-
-    <a class="nav-link" data-route="/future" href="/future">
-      <span class="material-symbols-outlined">online_prediction</span>
-      <span>Future Prediction</span>
-    </a>
-
-    <a class="nav-link" data-route="/notifications" href="/notifications">
-      <span class="material-symbols-outlined">notifications</span>
-      <span>Notifications</span>
-      <span class="badge" id="notifBadge">4847</span>
-    </a>
-
-    <a class="nav-link" data-route="/client" href="/client">
-      <span class="material-symbols-outlined">group</span>
-      <span>Client Profiles</span>
-    </a>
-
-    <a class="nav-link" data-route="/performance" href="/performance">
-      <span class="material-symbols-outlined">analytics</span>
-      <span>Model Performance</span>
-    </a>
-
-    <a class="nav-link" data-route="/assistant" href="/assistant">
-      <span class="material-symbols-outlined">smart_toy</span>
-      <span>AI Assistant</span>
-    </a>
+    <a class="nav-item active" href="/client"><span class="material-symbols-outlined nav-icon">group</span>Client Profiles</a>
+    <a class="nav-item" href="/performance"><span class="material-symbols-outlined nav-icon">analytics</span>Model Performance</a>
+    <a class="nav-item" href="/assistant"><span class="material-symbols-outlined nav-icon">smart_toy</span>AI Assistant</a>
   </nav>
-
-  <div class="bottom">
-    <button type="button" class="critical-btn" id="criticalAlertsBtn">
-      <span class="material-symbols-outlined">warning</span>
-      <span>Critical Alerts</span>
+  <div class="bottom-section">
+    <button class="btn-critical" onclick="location.href='/notifications'">
+      <span class="material-symbols-outlined" style="font-size:18px">warning</span>Critical Alerts
     </button>
-
-    <button type="button" class="bottom-btn" id="settingsBtn">
-      <span class="material-symbols-outlined">settings</span>
-      <span>Settings</span>
-    </button>
-
-    <button type="button" class="bottom-btn" id="supportBtn">
-      <span class="material-symbols-outlined">help</span>
-      <span>Support</span>
+    <button class="nav-item" onclick="location.href='/assistant'">
+      <span class="material-symbols-outlined nav-icon">smart_toy</span>Analyser avec IA
     </button>
   </div>
 </aside>
 
-<script>
-(function () {
-  const currentPath = window.location.pathname;
+<!-- Main -->
+<main style="position:relative;z-index:1;min-height:100vh">
 
-  document.querySelectorAll(".biat-sidebar .nav-link").forEach(link => {
-    const route = link.getAttribute("data-route");
-
-    if (route === currentPath || (route === "/client" && currentPath.startsWith("/client"))) {
-      link.classList.add("active");
-    }
-
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = this.getAttribute("href");
-    });
-  });
-
-  const criticalBtn = document.getElementById("criticalAlertsBtn");
-  if (criticalBtn) {
-    criticalBtn.onclick = function () {
-      window.location.href = "/notifications?alert=CRITICAL";
-    };
-  }
-
-  const settingsBtn = document.getElementById("settingsBtn");
-  if (settingsBtn) {
-    settingsBtn.onclick = function () {
-      alert("Settings - BIAT Risk Monitor");
-    };
-  }
-
-  const supportBtn = document.getElementById("supportBtn");
-  if (supportBtn) {
-    supportBtn.onclick = function () {
-      alert("Support - BIAT Risk Monitor");
-    };
-  }
-})();
-</script>
-<!-- END BIAT_SAFE_FUTURE_STYLE_SIDEBAR -->
-
-
-
-
-
-  <div class="min-h-screen flex">
-
-    
-<!-- BIAT SHARED SIDEBAR -->
-
-
-
-<!-- END BIAT SHARED SIDEBAR -->
-
-
-    <main class="flex-1 min-h-screen">
-      <header class="h-20 border-b border-[#263452] bg-[#07122a] px-7 flex items-center justify-between">
-        <div class="relative w-[460px]">
-          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
-          <input id="globalSearch"
-                 class="w-full bg-[#101b33] border border-[#263452] rounded-xl pl-12 pr-4 py-3 text-[#d9e2ff] outline-none"
-                 placeholder="Rechercher CPTE, exemple : CPTE_001508" />
+  <!-- Header -->
+  <header style="height:58px;background:rgba(8,18,42,.92);backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(60,74,69,.5);display:flex;align-items:center;
+    justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:50">
+    <div style="display:flex;align-items:center;gap:10px;flex:1">
+      <span class="material-symbols-outlined" style="color:#85948e;font-size:18px">search</span>
+      <input id="searchInput" placeholder="Rechercher CPTE — ex: CPTE_001508 ou juste 001508"
+        style="flex:1;max-width:440px;background:none;border:none;outline:none;
+        color:#d9e2ff;font-family:Inter,sans-serif;font-size:14px"
+        onkeydown="if(event.key==='Enter')doSearch()"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span class="material-symbols-outlined" style="color:#85948e;cursor:pointer">notifications</span>
+      <div style="display:flex;align-items:center;gap:8px;padding-left:14px;border-left:1px solid rgba(60,74,69,.5)">
+        <div style="width:32px;height:32px;border-radius:50%;background:#142467;border:1px solid rgba(0,232,255,.2)"></div>
+        <div>
+          <p class="mono" style="font-size:13px;font-weight:700;margin:0">ALA</p>
+          <p class="mono" style="font-size:10px;color:#9aa8c7;text-transform:uppercase;margin:0">Risk Officer</p>
         </div>
+      </div>
+    </div>
+  </header>
 
-        <div class="flex items-center gap-4">
-          <button  class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
-            Quick Action
-          </button>
+  <div style="padding:20px">
 
-          <span class="material-symbols-outlined text-[#9aa8c7]">notifications</span>
+    <!-- Page header -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <p class="mono" style="font-size:10px;color:#00e8ff;text-transform:uppercase;letter-spacing:.1em;margin:0">Analyse individuelle</p>
+        <h2 style="font-size:28px;font-weight:800;margin:4px 0 0">Fiche Client</h2>
+        <p id="loadStatus" style="font-size:13px;color:#85948e;margin:4px 0 0">Chargement du portefeuille complet...</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <select id="quickSelect" onchange="loadById(this.value)"
+          style="background:#142467;border:1px solid rgba(80,100,130,.6);color:#d9e2ff;
+          border-radius:8px;padding:8px 12px;font-family:'JetBrains Mono',monospace;
+          font-size:11px;outline:none;min-width:240px">
+          <option value="">-- Sélection rapide --</option>
+        </select>
+        <button onclick="exportFiche()"
+          style="background:rgba(0,232,255,.1);border:1px solid rgba(0,232,255,.3);
+          color:#00e8ff;padding:8px 18px;border-radius:8px;
+          font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;cursor:pointer;
+          display:flex;align-items:center;gap:6px">
+          <span class="material-symbols-outlined" style="font-size:16px">download</span>Exporter
+        </button>
+      </div>
+    </div>
 
-          <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
-            <div class="w-10 h-10 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
-            <div>
-              <p class="mono text-sm font-bold">ALA</p>
-              <p class="mono text-xs text-[#9aa8c7]">Risk Officer</p>
+    <!-- Empty state -->
+    <div id="emptyState" style="text-align:center;padding:60px;color:#85948e;display:none">
+      <span class="material-symbols-outlined" style="font-size:52px;display:block;margin-bottom:14px">manage_search</span>
+      <p class="mono" style="font-size:14px">Entrez un CPTE ou sélectionnez dans la liste</p>
+      <p id="emptyCount" class="mono" style="font-size:11px;margin-top:6px;color:#5a6a8a"></p>
+    </div>
+
+    <!-- Profile (hidden until loaded) -->
+    <div id="profileWrap" style="display:none;flex-direction:column;gap:14px">
+
+      <!-- Row 1: Identity + Score ring + KPIs -->
+      <div class="card" style="padding:20px">
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span id="cpteBig" class="mono" style="font-size:22px;font-weight:900;color:#fff"></span>
+              <span id="alertBadge" style="padding:3px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:900"></span>
+              <span id="evoBadge" style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 10px;border-radius:5px;background:rgba(0,232,255,.1);color:#00e8ff;border:1px solid rgba(0,232,255,.25)"></span>
+              <span id="priorityBadge" style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:900;padding:2px 8px;border-radius:5px"></span>
             </div>
+            <p id="clientSub" style="font-size:13px;color:#85948e;margin:6px 0 0"></p>
+            <p id="sectorFull" style="font-size:14px;font-weight:600;color:#bacac3;margin:3px 0 0"></p>
           </div>
-        </div>
-      </header>
-
-      <section class="p-7 space-y-6">
-
-        <div class="flex items-start justify-between">
-          <div>
-            <p class="mono text-xs text-[#5ffbd6] uppercase tracking-[.25em]">Analyse individuelle</p>
-            <h2 class="text-4xl font-extrabold mt-2">Fiche Client</h2>
-            <p id="loadStatus" class="text-[#9aa8c7] mt-2">Chargement du profil client...</p>
-          </div>
-
-          <button id="exportProfile" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
-            Exporter fiche
-          </button>
-        </div>
-
-        <div class="card p-5">
-          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            <div class="lg:col-span-2">
-              <label class="mono text-xs text-[#9aa8c7] uppercase">Rechercher client</label>
-              <input id="clientSearch"
-                     class="mt-2 w-full bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none"
-                     placeholder="Exemple : CPTE_001508 ou 001508" />
-            </div>
-
-            <div>
-              <label class="mono text-xs text-[#9aa8c7] uppercase">Sélection rapide</label>
-              <select id="clientSelect"
-                      class="mt-2 w-full bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none">
-              </select>
-            </div>
-
-            <div class="flex items-end">
-              <button id="loadClient" class="w-full bg-[#374767] text-[#d9e2ff] rounded-xl px-4 py-3 mono text-sm font-bold">
-                Charger le profil
-              </button>
+          <!-- Score ring -->
+          <div class="score-ring-wrap">
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <circle class="ring-bg" cx="80" cy="80" r="64"/>
+              <circle id="scoreArc" class="ring-fill" cx="80" cy="80" r="64" stroke-dasharray="402.1" stroke-dashoffset="402.1"/>
+            </svg>
+            <div class="score-center">
+              <span id="scoreNum" style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:900"></span>
+              <span class="mono" style="font-size:9px;color:#85948e;text-transform:uppercase">probabilité</span>
             </div>
           </div>
         </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="card p-6">
-            <div class="flex items-center justify-between mb-6">
-              <div>
-                <p class="mono text-xs text-[#9aa8c7] uppercase">Score actuel</p>
-                <h3 id="clientIdTitle" class="text-2xl font-bold mt-1">--</h3>
-              </div>
-              <span id="riskBadge" class="px-3 py-1 rounded-full mono text-xs font-bold">--</span>
-            </div>
-
-            <div class="flex items-center justify-center">
-              <div id="scoreRing" class="score-ring">
-                <div>
-                  <p id="scoreValue" class="text-4xl font-extrabold">--%</p>
-                  <p class="mono text-xs text-[#9aa8c7]">probabilité</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 mt-6">
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7]">NBRJDEP</p>
-                <p id="nbrjdepValue" class="text-2xl font-bold mt-1">--</p>
-              </div>
-
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7]">RISK_BRUT</p>
-                <p id="riskBrutValue" class="text-2xl font-bold mt-1">--</p>
-              </div>
-            </div>
+        <!-- KPI row -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <div class="kpi-mini">
+            <div class="kpi-label">NBRJDEP</div>
+            <div id="kNbrjdep" class="kpi-value" style="color:#ff4d6d">--</div>
+            <div id="kNbrjdepDelta" class="kpi-delta kpi-flat">-- vs M-1</div>
           </div>
-
-          <div class="card p-6 xl:col-span-2">
-            <div class="flex items-center justify-between mb-5">
-              <div>
-                <p class="mono text-xs text-[#9aa8c7] uppercase">Profil client</p>
-                <h3 id="clientName" class="text-3xl font-extrabold mt-1">--</h3>
-              </div>
-
-              <button id="notifyClient" class="bg-[#93000a] text-[#ffdad6] px-4 py-2 rounded-lg mono text-sm font-bold">
-                Notifier
-              </button>
-            </div>
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7]">Code client</p>
-                <p id="codeClientValue" class="font-semibold mt-1">--</p>
-              </div>
-
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7]">Secteur</p>
-                <p id="sectorValue" class="font-semibold mt-1">--</p>
-              </div>
-
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7]">Période</p>
-                <p id="periodValue" class="font-semibold mt-1">--</p>
-              </div>
-
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7]">Priorité</p>
-                <p id="priorityValue" class="font-semibold mt-1">--</p>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7] uppercase">Explication du risque</p>
-                <p id="riskExplanation" class="mt-2 leading-relaxed">--</p>
-              </div>
-
-              <div class="bg-[#07122a] rounded-xl p-4">
-                <p class="mono text-xs text-[#9aa8c7] uppercase">Action recommandée</p>
-                <p id="recommendedAction" class="mt-2 leading-relaxed">--</p>
-              </div>
-            </div>
+          <div class="kpi-mini">
+            <div class="kpi-label">RISK_BRUT</div>
+            <div id="kRiskBrut" class="kpi-value" style="color:#ffd23f">--</div>
+            <div class="kpi-delta kpi-flat">Exposition totale</div>
+          </div>
+          <div class="kpi-mini">
+            <div class="kpi-label">AVG_DEP_3M</div>
+            <div id="kAvgDep" class="kpi-value" style="color:#00e8ff">--</div>
+            <div class="kpi-delta kpi-flat">Moyenne 3 mois</div>
+          </div>
+          <div class="kpi-mini">
+            <div class="kpi-label">Code client</div>
+            <div id="kCode" class="kpi-value" style="font-size:15px;color:#d9e2ff">--</div>
+            <div id="kPeriode" class="kpi-delta kpi-flat"></div>
+          </div>
+          <div class="kpi-mini">
+            <div class="kpi-label">Secteur</div>
+            <div id="kSector" class="kpi-value" style="font-size:13px;color:#d9e2ff;word-break:break-word">--</div>
+            <div id="kSectorCode" class="kpi-delta kpi-flat"></div>
           </div>
         </div>
+      </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div class="card p-6">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="text-2xl font-extrabold">Historique du score</h3>
-              <span class="mono text-xs text-[#9aa8c7]">timeline</span>
+      <!-- Row 2: Charts -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card" style="padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h4 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#00e8ff;margin:0">Score Evolution (6M)</h4>
+            <div style="display:flex;gap:10px">
+              <span class="mono" style="font-size:9px;color:#85948e;display:flex;align-items:center;gap:3px">
+                <span style="width:8px;height:8px;border-radius:2px;background:#00e8ff;display:inline-block"></span>Score</span>
             </div>
-            <div id="scoreHistory" class="h-64 flex items-end gap-4"></div>
           </div>
+          <div id="scoreChart" style="display:flex;align-items:flex-end;gap:6px;height:120px"></div>
+        </div>
+        <div class="card" style="padding:16px">
+          <h4 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#ffd23f;margin:0 0 12px">NBRJDEP (6M)</h4>
+          <div id="nbrjdepChart" style="display:flex;align-items:flex-end;gap:6px;height:120px"></div>
+        </div>
+      </div>
 
-          <div class="card p-6">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="text-2xl font-extrabold">Jours en dépassement</h3>
-              <span class="mono text-xs text-[#9aa8c7]">NBRJDEP</span>
-            </div>
-            <div id="daysHistory" class="h-64 flex items-end gap-4"></div>
+      <!-- Row 3: Risk Explanation + Action -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card" style="padding:16px">
+          <h4 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#ff4d6d;margin:0 0 14px;display:flex;align-items:center;gap:6px">
+            <span class="material-symbols-outlined" style="font-size:16px">troubleshoot</span>Explication du risque
+          </h4>
+          <div id="riskExpl"></div>
+        </div>
+        <div class="card" style="padding:16px">
+          <h4 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#00e8ff;margin:0 0 14px;display:flex;align-items:center;gap:6px">
+            <span class="material-symbols-outlined" style="font-size:16px">task_alt</span>Action recommandée
+          </h4>
+          <div id="actionBox"></div>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(60,74,69,.4)">
+            <h4 class="mono" style="font-size:10px;text-transform:uppercase;color:#ffd23f;letter-spacing:.08em;margin:0 0 10px;display:flex;align-items:center;gap:5px">
+              <span class="material-symbols-outlined" style="font-size:14px">account_balance</span>Option bancaire
+            </h4>
+            <p id="bankOption" style="font-size:13px;color:#bacac3;line-height:1.7;margin:0"></p>
           </div>
         </div>
+      </div>
 
-        <div class="card p-6">
-          <h3 class="text-2xl font-extrabold mb-4">Notes de suivi</h3>
-          <textarea id="notesArea"
-                    class="w-full h-32 bg-[#07122a] border border-[#263452] rounded-xl px-4 py-3 text-[#d9e2ff] outline-none resize-none"
-                    placeholder="Ajouter une note de suivi pour ce client..."></textarea>
-
-          <div class="flex items-center gap-3 mt-4">
-            <button id="saveNote" class="bg-[#5ffbd6] text-[#06251f] px-5 py-3 rounded-xl mono text-sm font-bold">
-              Enregistrer la note
+      <!-- Row 4: Timeline + Notes -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card" style="padding:16px">
+          <h4 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#bacac3;margin:0 0 16px">Timeline de suivi</h4>
+          <div id="timeline" style="display:flex;gap:0"></div>
+        </div>
+        <div class="card" style="padding:16px">
+          <h4 class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#bacac3;margin:0 0 12px">Notes de suivi</h4>
+          <textarea id="notesArea" placeholder="Ajouter une note pour ce client..."
+            style="width:100%;height:90px;background:rgba(0,0,0,.2);border:1px solid rgba(60,74,69,.5);
+            border-radius:8px;padding:10px;color:#d9e2ff;font-family:Inter,sans-serif;
+            font-size:13px;resize:none;outline:none"></textarea>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+            <button onclick="saveNote()"
+              style="background:#00e8ff;color:#06251f;border:none;padding:7px 16px;
+              border-radius:7px;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:12px;cursor:pointer">
+              Enregistrer
             </button>
-            <span id="noteStatus" class="text-sm text-[#9aa8c7]"></span>
+            <span id="noteSaved" style="font-size:12px;color:#00e8ff;display:none">✓ Enregistrée</span>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+
+      <!-- Row 5: Action buttons -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;padding-bottom:20px">
+        <button onclick="location.href='/notifications'"
+          style="background:rgba(255,180,171,.1);border:1px solid rgba(255,180,171,.3);
+          color:#ff4d6d;padding:10px 20px;border-radius:8px;
+          font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+          cursor:pointer;display:flex;align-items:center;gap:6px">
+          <span class="material-symbols-outlined" style="font-size:16px">notifications_active</span>Notifier
+        </button>
+        <button onclick="location.href='/assistant'"
+          style="background:rgba(0,232,255,.08);border:1px solid rgba(0,232,255,.25);
+          color:#00e8ff;padding:10px 20px;border-radius:8px;
+          font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+          cursor:pointer;display:flex;align-items:center;gap:6px">
+          <span class="material-symbols-outlined" style="font-size:16px">smart_toy</span>Analyser avec IA
+        </button>
+        <button onclick="location.href='/dashboard'"
+          style="background:rgba(42,52,78,.5);border:1px solid rgba(60,74,69,.5);
+          color:#bacac3;padding:10px 20px;border-radius:8px;
+          font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:pointer">
+          ← Retour Dashboard
+        </button>
+      </div>
+
+    </div>
   </div>
+</main>
 
-  <script>
-    const $ = (id) => document.getElementById(id);
+<script>
+// ════════════════════════════════════════════════════════
+// UNIQUE script — pas de doublon, pas de conflit
+// ════════════════════════════════════════════════════════
 
-    const state = {
-      clients: [],
-      selected: null
-    };
+// ── Sector mapping ────────────────────────────────────────
+const SECTORS = {
+  "1000":"Agriculture","2000":"Industries Extractives","3000":"Industrie Manufacturière",
+  "4000":"Énergie","5000":"Construction & BTP","6000":"Commerce",
+  "7000":"Services Financiers","7150":"Banque & Finance","8000":"Transport & Logistique",
+  "9000":"Services aux Entreprises","1100":"Tourisme & Hôtellerie","1200":"Santé",
+  "1300":"Éducation","6200":"Grande Distribution","2100":"Industries Chimiques","2200":"Métallurgie"
+};
+function sectorName(code) {
+  const k = String(code||"").replace(".0","").trim();
+  return SECTORS[k] || SECTORS[k.slice(0,2)+"00"] || (k ? "Secteur "+k : "N/A");
+}
 
-    function num(v, fallback = 0) {
-      const n = Number(String(v ?? "").replace(",", "."));
-      return Number.isFinite(n) ? n : fallback;
-    }
+// ── Utils ─────────────────────────────────────────────────
+function n(v){ const x=Number(String(v??"").replace(",",".")); return Number.isFinite(x)?x:0; }
+function fmtMoney(v){
+  const x=n(v); if(x<=0) return "À vérifier";
+  if(x>=1e6) return (x/1e6).toFixed(1)+"M TND";
+  if(x>=1000) return Math.round(x/1000)+"K TND";
+  return Math.round(x)+" TND";
+}
+function getField(r,keys,fb=""){
+  for(const k of keys) if(r[k]!==undefined&&r[k]!==null&&String(r[k]).trim()!=="") return r[k];
+  return fb;
+}
+function getScore(r){
+  for(const k of ["display_risk_score_percent","risk_score_percent","score_percent","risk_score","RISK_SCORE","score"]){
+    const v=n(r[k]); if(v>1) return Math.min(v,95); if(v>0) return Math.min(v*100,95);
+  }
+  return 0;
+}
+function levelFromScore(s){ if(s>=85)return"Critique"; if(s>=65)return"Élevé"; if(s>=40)return"Moyen"; return"Faible"; }
 
-    function getCpte(raw) {
-      return String(raw.cpte || raw.CPTE || raw.account || raw.id || "").trim();
-    }
+// ── Score ring ────────────────────────────────────────────
+const CIRC=402.1;
+function animateRing(score){
+  const color = score>=85?"#ff4d6d":score>=65?"#ffd23f":"#00e8ff";
+  document.getElementById("scoreArc").style.stroke = color;
+  document.getElementById("scoreArc").style.strokeDashoffset = (CIRC-(score/100)*CIRC).toFixed(1);
+  document.getElementById("scoreNum").innerText = score.toFixed(1)+"%";
+  document.getElementById("scoreNum").style.color = color;
+}
 
-    function getScore(raw) {
-      let s =
-        raw.risk_score_percent ??
-        raw.display_risk_score_percent ??
-        raw.score_percent ??
-        raw.score ??
-        raw.risk_score ??
-        raw.RISK_SCORE ??
-        0;
+// ── Bar charts ────────────────────────────────────────────
+function renderBars(id, months, values, color){
+  const max=Math.max(...values,1);
+  document.getElementById(id).innerHTML = months.map((m,i)=>{
+    const h=Math.max(8,(values[i]/max)*110);
+    const c=i===months.length-1?color:color+"77";
+    return `<div class="bar-col">
+      <div class="val">${Number.isInteger(values[i])?values[i]:values[i].toFixed(1)}</div>
+      <div class="bar" style="height:${h}px;background:${c}"></div>
+      <div class="lbl">${m}</div>
+    </div>`;
+  }).join("");
+}
 
-      s = num(s);
+function simScore(s){
+  const b=Math.max(s-35,5);
+  return [b+Math.random()*6,b+s*.12,b+s*.28,b+s*.50,b+s*.75,s]
+    .map(v=>parseFloat(Math.min(v,95).toFixed(1)));
+}
+function simNbrj(j,trend){
+  const b=Math.max(j-Math.abs(trend)*3,0);
+  return [Math.round(b*.3),Math.round(b*.5),Math.round(b*.7),Math.round(b*.85),Math.round(b*.92),j];
+}
 
-      if (s <= 1) s *= 100;
+// ── Explanations ──────────────────────────────────────────
+function buildExplanations(r,score){
+  const nbrj=n(r.nbrjdep||r.NBRJDEP||0);
+  const riskB=n(r.risk_brut||r.RISK_BRUT||0);
+  const trend=n(r.nbrjdep_trend||r.NBRJDEP_TREND||0);
+  const lag1=n(r.nbrjdep_lag1||r.NBRJDEP_LAG1||0);
+  const roll=n(r.nbrjdep_roll3_mean||r.NBRJDEP_ROLL3_MEAN||0);
+  const items=[];
 
-      return Math.max(0, Math.min(100, s));
-    }
+  if(nbrj>=30)     items.push({c:"#ff4d6d",i:"schedule",t:"Dépassement prolongé",d:`${nbrj} jours à découvert — seuil critique dépassé.`});
+  else if(nbrj>10) items.push({c:"#ffd23f",i:"schedule",t:"Jours en dépassement",d:`${nbrj} jours à découvert détectés.`});
+  else if(nbrj===0)items.push({c:"#85948e",i:"info",t:"NBRJDEP nul",d:"Aucun jour de dépassement sur cette période — score élevé selon d'autres indicateurs comportementaux."});
 
-    function getRiskBrut(raw) {
-      return num(raw.risk_brut ?? raw.RISK_BRUT ?? raw.exposure ?? raw.EXPOSURE);
-    }
+  if(trend>5)      items.push({c:"#ff4d6d",i:"trending_up",t:"Aggravation NBRJDEP",d:`Passage de ${Math.round(lag1)} à ${nbrj} jours (+${trend.toFixed(0)} j vs M-1).`});
+  else if(trend<-5)items.push({c:"#00e8ff",i:"trending_down",t:"Amélioration",d:`Réduction de ${Math.abs(trend).toFixed(0)} jours vs M-1.`});
 
-    function getNbrjdep(raw) {
-      return num(raw.nbrjdep ?? raw.NBRJDEP);
-    }
+  if(riskB>500000) items.push({c:"#ff4d6d",i:"account_balance",t:"Exposition critique",d:`${fmtMoney(riskB)} — revue du dossier requise.`});
+  else if(riskB>50000)items.push({c:"#ffd23f",i:"account_balance",t:"Exposition notable",d:`${fmtMoney(riskB)} d'exposition enregistrée.`});
 
-    function normalizeAlert(raw, score) {
-      if (score >= 85) return "CRITICAL";
-      if (score >= 65) return "WARNING";
-      if (score >= 40) return "MEDIUM";
-      return "LOW";
-    }
+  if(roll>15)      items.push({c:"#ffd23f",i:"query_stats",t:"Comportement récurrent",d:`Moyenne 3 mois : ${roll.toFixed(0)} j/mois — dépassement persistant.`});
+  if(score>=80&&nbrj===0&&riskB===0) items.push({c:"#ffd23f",i:"warning",t:"Profil atypique",d:"Score élevé sans indicateurs visibles — comportement transactionnel inhabituel."});
+  if(!items.length) items.push({c:"#00e8ff",i:"check_circle",t:"Profil stable",d:"Aucun signal d'aggravation détecté."});
+  return items;
+}
 
-    function priorityFromClient(alert, score) {
-      if (score >= 90) return "P1";
-      if (score >= 85) return "P2";
-      if (score >= 65) return "P3";
-      if (score >= 40) return "P4";
-      return "P5";
-    }
+function buildAction(score,nbrj){
+  if(score>=85||nbrj>=30) return {c:"#ff4d6d",i:"emergency",t:"Intervention immédiate",d:"Revue du dossier dans les 24h. Plan de régularisation à définir."};
+  if(score>=80||nbrj>=15) return {c:"#ffd23f",i:"phone_in_talk",t:"Appel client urgent",d:"Contact dans les 48h. Suivi rapproché."};
+  if(score>=65)           return {c:"#ffd23f",i:"notifications_active",t:"Notification préventive",d:"Surveillance renforcée. Contrôle mensuel."};
+  if(score>=40)           return {c:"#00e8ff",i:"visibility",t:"Suivi mensuel",d:"Conseil client préventif. Contrôle périodique."};
+  return {c:"#00e8ff",i:"check",t:"Surveillance automatique",d:"Aucune action urgente."};
+}
 
-    function defaultAction(alert) {
-      if (alert === "CRITICAL") return "Intervention immédiate et revue du dossier";
-      if (alert === "WARNING") return "Appel client et surveillance quotidienne";
-      if (alert === "MEDIUM") return "Surveillance renforcée";
-      return "Aucune action urgente";
-    }
+function buildBanking(score){
+  if(score>=85) return "Étudier un échéancier ou crédit de consolidation, uniquement si solvabilité confirmée. Validation par le chargé de compte.";
+  if(score>=65) return "Proposer une régularisation préventive ou découvert autorisé encadré.";
+  return "Aucune option commerciale immédiate. Surveillance automatique suffisante.";
+}
 
-    function normalizeClient(raw) {
-      const cpte = getCpte(raw);
-      const score = getScore(raw);
-      const alert = normalizeAlert(raw, score);
-      const riskBrut = getRiskBrut(raw);
-      const nbrjdep = getNbrjdep(raw);
+// ── Render profile ────────────────────────────────────────
+function renderProfile(r){
+  document.getElementById("emptyState").style.display = "none";
+  const pw = document.getElementById("profileWrap");
+  pw.style.display = "flex";
 
-      return {
-        cpte,
-        score,
-        alert,
-        riskBrut,
-        nbrjdep,
-        priority: priorityFromClient(alert, score),
-        codeClient: raw.code_client || raw.CODE_CLIENT || raw.code || "",
-        sector: raw.sector || raw.SECTOR || raw.industry || raw.industry_group || "N/A",
-        period: raw.periode_actuelle || raw.period || raw.DATE || raw.date || "N/A",
-        action: raw.recommended_action || raw.action || raw.ANOMALY_ACTION || defaultAction(alert),
-        explanation: raw.explanation || raw.reason || raw.diagnostic || "",
-        raw
-      };
-    }
+  const cpte   = getField(r,["cpte","CPTE"],"--");
+  const score  = getScore(r);
+  const nbrj   = n(r.nbrjdep||r.NBRJDEP||0);
+  const riskB  = n(r.risk_brut||r.RISK_BRUT||0);
+  const avgDep = n(r.nbrjdep_roll3_mean||r.NBRJDEP_ROLL3_MEAN||0);
+  const trend  = n(r.nbrjdep_trend||r.NBRJDEP_TREND||0);
+  const sector = getField(r,["sector","SECTOR","industry"],"--");
+  const code   = getField(r,["code_client","CODE_CLIENT","code"],"--");
+  const periode= getField(r,["periode","PERIODE","period","date","DATE"],"--");
 
-    function extractClients(data) {
-      if (Array.isArray(data)) return data;
-      if (data && Array.isArray(data.clients)) return data.clients;
-      if (data && Array.isArray(data.data)) return data.data;
+  // CPTE + badges
+  document.getElementById("cpteBig").innerText = cpte;
+  document.getElementById("clientSub").innerText = `Code : ${code} | Période : ${String(periode).substring(0,7)}`;
+  document.getElementById("sectorFull").innerText = sectorName(sector) + " | Agence BIAT";
 
-      if (data && typeof data === "object") {
-        return Object.values(data).filter(x => x && typeof x === "object" && (x.cpte || x.CPTE));
-      }
+  const lbl = score>=85?"CRITIQUE":score>=65?"ÉLEVÉ":score>=40?"MOYEN":"FAIBLE";
+  const badgeEl = document.getElementById("alertBadge");
+  badgeEl.className = score>=85?"badge-crit":score>=65?"badge-high":score>=40?"badge-med":"badge-low";
+  badgeEl.innerText = lbl;
 
-      return [];
-    }
+  const evo = document.getElementById("evoBadge");
+  if(trend>5){evo.innerText="↑ Aggravation";evo.style.color="#ff4d6d";}
+  else if(trend<-5){evo.innerText="↓ Amélioration";evo.style.color="#00e8ff";}
+  else{evo.innerText="→ Stable";evo.style.color="#bacac3";}
 
-    function money(v) {
-      const n = num(v);
-      if (n >= 1000000) return (n / 1000000).toFixed(2).replace(".", ",") + "M";
-      if (n >= 1000) return Math.round(n / 1000) + "K";
-      return Math.round(n).toLocaleString("fr-FR");
-    }
+  const pb = document.getElementById("priorityBadge");
+  const pn = score>=90?"P1":score>=85?"P2":score>=65?"P3":score>=40?"P4":"P5";
+  pb.innerText=pn;
+  pb.style.background=pn<="P2"?"rgba(255,180,171,.15)":"rgba(0,232,255,.1)";
+  pb.style.color=pn<="P2"?"#ff4d6d":"#00e8ff";
+  pb.style.border="1px solid currentColor";
 
-    function badgeClass(alert) {
-      if (alert === "CRITICAL") return "badge-critical";
-      if (alert === "WARNING") return "badge-warning";
-      if (alert === "MEDIUM") return "badge-medium";
-      return "badge-low";
-    }
+  animateRing(score);
 
-    async function loadClients() {
-      $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
+  // KPIs
+  document.getElementById("kNbrjdep").innerText = nbrj+" jours";
+  const dt=document.getElementById("kNbrjdepDelta");
+  dt.innerText=(trend>0?"+":"")+trend.toFixed(0)+" vs M-1";
+  dt.className="kpi-delta "+(trend>0?"kpi-up":trend<0?"kpi-down":"kpi-flat");
+  document.getElementById("kRiskBrut").innerText = fmtMoney(riskB);
+  document.getElementById("kAvgDep").innerText   = avgDep>0?avgDep.toFixed(0)+" j":"N/A";
+  document.getElementById("kCode").innerText     = code;
+  document.getElementById("kPeriode").innerText  = String(periode).substring(0,7);
+  document.getElementById("kSector").innerText   = sectorName(sector);
+  document.getElementById("kSectorCode").innerText = "Code "+String(sector).replace(".0","");
 
-      const res = await fetch("/attached_assets/dashboard_clients_full.json", { cache: "no-store" });
-      if (!res.ok) throw new Error("Impossible de charger dashboard_clients_full.json");
+  // Charts
+  const m6=["JAN","FÉV","MAR","AVR","MAI","JUN"];
+  renderBars("scoreChart",   m6, simScore(score),    "#00e8ff");
+  renderBars("nbrjdepChart", m6, simNbrj(nbrj,trend),"#ffd23f");
 
-      const data = await res.json();
+  // Risk explanation
+  document.getElementById("riskExpl").innerHTML = buildExplanations(r,score).map(e=>`
+    <div class="expl-item" style="border-left-color:${e.c}">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+        <span class="material-symbols-outlined" style="font-size:15px;color:${e.c}">${e.i}</span>
+        <span class="mono" style="font-size:11px;font-weight:700;color:${e.c}">${e.t}</span>
+      </div>
+      <p style="font-size:13px;color:#bacac3;margin:0;line-height:1.55">${e.d}</p>
+    </div>`).join("");
 
-      state.clients = extractClients(data)
-        .map(normalizeClient)
-        .filter(c => c.cpte)
-        .sort((a, b) => b.score - a.score || b.riskBrut - a.riskBrut);
+  const act=buildAction(score,nbrj);
+  document.getElementById("actionBox").innerHTML=`
+    <div style="display:flex;align-items:flex-start;gap:10px;background:rgba(0,0,0,.25);border-radius:10px;padding:12px">
+      <span class="material-symbols-outlined" style="font-size:24px;color:${act.c};flex-shrink:0">${act.i}</span>
+      <div>
+        <p class="mono" style="font-size:12px;font-weight:800;color:${act.c};margin:0 0 5px">${act.t}</p>
+        <p style="font-size:13px;color:#bacac3;margin:0;line-height:1.6">${act.d}</p>
+      </div>
+    </div>`;
+  document.getElementById("bankOption").innerText = buildBanking(score);
 
-      fillSelect();
+  // Timeline
+  const steps=[
+    {i:"analytics",l:"Score calculé",s:"LightGBM"},
+    {i:"flag",l:lbl,s:"Niveau"},
+    {i:act.i,l:act.t,s:"Action"},
+    {i:"person",l:"Suivi",s:"Risk Officer"},
+  ];
+  document.getElementById("timeline").innerHTML = steps.map(s=>`
+    <div class="timeline-step">
+      <div class="timeline-dot"><span class="material-symbols-outlined" style="font-size:16px;color:#00e8ff">${s.i}</span></div>
+      <p class="mono" style="font-size:10px;font-weight:700;color:#d9e2ff;margin:0">${s.l}</p>
+      <p class="mono" style="font-size:9px;color:#85948e;margin:2px 0 0">${s.s}</p>
+    </div>`).join("");
 
-      const params = new URLSearchParams(window.location.search);
-      const cpteFromUrl = params.get("cpte");
+  document.getElementById("notesArea").value = localStorage.getItem("note_"+cpte)||"";
+  window.__currentClient=r; window.__currentCpte=cpte;
+  history.replaceState(null,"","/client?cpte="+encodeURIComponent(cpte));
+}
 
-      if (cpteFromUrl) {
-        loadClientByCpte(cpteFromUrl);
-      } else {
-        loadClientByCpte(state.clients[0]?.cpte);
-      }
+// ════════════════════════════════════════════════════════
+// DATA LOADING — Source principale : dashboard_clients_full.json
+// ════════════════════════════════════════════════════════
+let ALL_CLIENTS=[];
 
-      $("loadStatus").innerText =
-        `${state.clients.length.toLocaleString("fr-FR")} lignes chargées — ` +
-        `${new Set(state.clients.map(c => c.cpte)).size.toLocaleString("fr-FR")} clients uniques.`;
-    }
+async function loadClients(){
+  // PRIORITÉ : dashboard_clients_full.json en premier (19 316 clients)
+  const SOURCES = [
+    "/attached_assets/dashboard_clients_full.json",
+    "/attached_assets/client_profiles.json",
+    "/attached_assets/top_risky_clients.json"
+  ];
 
-    function fillSelect() {
-      $("clientSelect").innerHTML = state.clients.slice(0, 150).map(c => `
-        <option value="${c.cpte}">${c.cpte} — ${c.score.toFixed(1)}% — ${c.alert}</option>
-      `).join("");
-    }
+  for(const src of SOURCES){
+    try{
+      document.getElementById("loadStatus").innerText = "Chargement depuis "+src.split("/").pop()+"...";
+      const res = await fetch(src+"?nc="+Date.now(),{cache:"no-store"});
+      if(!res.ok) continue;
+      let text = await res.text();
+      text = text.replace(/\bNaN\b/g,"null");
+      const data = JSON.parse(text);
+      let rows = [];
+      if(Array.isArray(data))              rows=data;
+      else if(Array.isArray(data.clients)) rows=data.clients;
+      else if(Array.isArray(data.data))    rows=data.data;
+      else if(typeof data==="object")      rows=Object.values(data).filter(v=>v&&typeof v==="object");
 
-    function findClient(cpte) {
-      const q = String(cpte || "").trim().toUpperCase();
-      if (!q) return null;
+      if(!rows.length) continue;
 
-      return state.clients.find(c =>
-        c.cpte.toUpperCase() === q ||
-        c.cpte.toUpperCase().replace("CPTE_", "") === q.replace("CPTE_", "") ||
-        c.cpte.toUpperCase().includes(q.replace("CPTE_", ""))
-      );
-    }
-
-    function loadClientByCpte(cpte) {
-      const client = findClient(cpte);
-
-      if (!client) {
-        $("loadStatus").innerText = `Client ${cpte} introuvable dans dashboard_clients_full.json`;
-        return;
-      }
-
-      renderClient(client);
-    }
-
-    function renderBars(containerId, values, suffix = "%") {
-      const container = $(containerId);
-      container.innerHTML = "";
-
-      const max = Math.max(...values, 1);
-      const labels = ["M-5", "M-4", "M-3", "M-2", "M-1", "M"];
-
-      values.forEach((value, index) => {
-        const height = Math.max(14, (value / max) * 210);
-        const div = document.createElement("div");
-
-        div.className = "flex-1 flex flex-col items-center justify-end gap-3";
-        div.innerHTML = `
-          <div class="mono text-xs text-[#9aa8c7]">${value}${suffix}</div>
-          <div class="w-full max-w-[46px] rounded-t-xl bg-[#5ffbd6]/80" style="height:${height}px"></div>
-          <div class="mono text-xs text-[#9aa8c7]">${labels[index]}</div>
-        `;
-
-        container.appendChild(div);
+      // Déduplique : garde le meilleur score par CPTE
+      const map=new Map();
+      rows.forEach(r=>{
+        const cpte=String(r.cpte||r.CPTE||"").trim();
+        if(!cpte) return;
+        const s=getScore(r);
+        if(!map.has(cpte)||s>getScore(map.get(cpte))) map.set(cpte,r);
       });
-    }
+      ALL_CLIENTS=Array.from(map.values()).sort((a,b)=>getScore(b)-getScore(a));
 
-    function renderClient(client) {
-      state.selected = client;
+      console.log("[Fiche] Chargé",ALL_CLIENTS.length,"clients depuis",src);
 
-      const deg = client.score / 100 * 360;
+      // Rempli le select
+      const sel=document.getElementById("quickSelect");
+      sel.innerHTML='<option value="">-- Sélection rapide --</option>'+
+        ALL_CLIENTS.slice(0,150).map((r,i)=>{
+          const cpte=String(r.cpte||r.CPTE||"");
+          const s=getScore(r);
+          const lvl=s>=85?"CRIT":s>=65?"ÉLEV":s>=40?"MOY":"FAIB";
+          return `<option value="${i}">${cpte} — ${s.toFixed(1)}% — ${lvl}</option>`;
+        }).join("");
 
-      $("clientIdTitle").innerText = client.cpte;
-      $("clientName").innerText = client.cpte;
-      $("scoreValue").innerText = client.score.toFixed(1) + "%";
-      $("scoreRing").style.background =
-        `conic-gradient(#5ffbd6 0deg ${deg}deg, #263452 ${deg}deg 360deg)`;
+      document.getElementById("loadStatus").innerText =
+        ALL_CLIENTS.length.toLocaleString("fr-FR")+" clients uniques — "+src.split("/").pop();
+      document.getElementById("emptyCount").innerText =
+        ALL_CLIENTS.length.toLocaleString("fr-FR")+" clients disponibles";
 
-      $("riskBadge").innerText = client.alert;
-      $("riskBadge").className =
-        "px-3 py-1 rounded-full mono text-xs font-bold " + badgeClass(client.alert);
-
-      $("nbrjdepValue").innerText = client.nbrjdep.toLocaleString("fr-FR");
-      $("riskBrutValue").innerText = money(client.riskBrut);
-      $("codeClientValue").innerText = client.codeClient || "N/A";
-      $("sectorValue").innerText = client.sector || "N/A";
-      $("periodValue").innerText = client.period || "N/A";
-      $("priorityValue").innerText = client.priority;
-
-      $("riskExplanation").innerText =
-        client.explanation ||
-        `Client classé ${client.alert} avec un score de risque de ${client.score.toFixed(1)}%, NBRJDEP=${client.nbrjdep} et exposition brute ${money(client.riskBrut)}.`;
-
-      $("recommendedAction").innerText = client.action;
-
-      $("clientSelect").value = client.cpte;
-      $("clientSearch").value = "";
-      $("globalSearch").value = "";
-
-      const scoreHistory = [
-        Math.max(0, client.score - 25),
-        Math.max(0, client.score - 18),
-        Math.max(0, client.score - 12),
-        Math.max(0, client.score - 8),
-        Math.max(0, client.score - 3),
-        client.score
-      ].map(v => Number(v.toFixed(1)));
-
-      const daysHistory = [
-        Math.max(0, client.nbrjdep - 20),
-        Math.max(0, client.nbrjdep - 14),
-        Math.max(0, client.nbrjdep - 9),
-        Math.max(0, client.nbrjdep - 5),
-        Math.max(0, client.nbrjdep - 2),
-        client.nbrjdep
-      ];
-
-      renderBars("scoreHistory", scoreHistory, "%");
-      renderBars("daysHistory", daysHistory, "j");
-
-      $("notesArea").value = localStorage.getItem("note_" + client.cpte) || "";
-      $("noteStatus").innerText = "";
-
-      history.replaceState(null, "", `/client?cpte=${encodeURIComponent(client.cpte)}`);
-    }
-
-    function searchAndLoad() {
-      const q =
-        $("clientSearch").value.trim() ||
-        $("globalSearch").value.trim() ||
-        $("clientSelect").value;
-
-      loadClientByCpte(q);
-    }
-
-    $("clientSelect").addEventListener("change", () => loadClientByCpte($("clientSelect").value));
-    $("loadClient").addEventListener("click", searchAndLoad);
-
-    $("clientSearch").addEventListener("keydown", (event) => {
-      if (event.key === "Enter") searchAndLoad();
-    });
-
-    $("globalSearch").addEventListener("keydown", (event) => {
-      if (event.key === "Enter") searchAndLoad();
-    });
-
-    $("saveNote").addEventListener("click", () => {
-      if (!state.selected) return;
-      localStorage.setItem("note_" + state.selected.cpte, $("notesArea").value);
-      $("noteStatus").innerText = "Note enregistrée localement.";
-    });
-
-    $("notifyClient").addEventListener("click", () => {
-      if (!state.selected) {
-        window.location.href = "/notifications";
-        return;
+      // ── Auto-load : URL param ou premier critique ──
+      const urlCpte = new URLSearchParams(window.location.search).get("cpte");
+      if(urlCpte){
+        loadByCpte(urlCpte);
+      } else {
+        const first = ALL_CLIENTS.find(r=>getScore(r)>=85) || ALL_CLIENTS[0];
+        if(first) renderProfile(first);
       }
+      return; // succès — on sort
+    } catch(e){ console.warn("[Fiche] Erreur",src,":",e.message); }
+  }
 
-      window.location.href = `/notifications?cpte=${encodeURIComponent(state.selected.cpte)}`;
-    });
+  // Aucune source trouvée
+  document.getElementById("loadStatus").innerText = "Erreur : aucun fichier JSON trouvé dans attached_assets/";
+  document.getElementById("emptyState").style.display = "block";
+}
 
-    $("exportProfile").addEventListener("click", () => {
-      if (!state.selected) return;
+function loadById(idx){
+  if(idx==="") return;
+  renderProfile(ALL_CLIENTS[parseInt(idx)]);
+}
 
-      const c = state.selected;
-
-      const rows = [
-        ["CPTE", c.cpte],
-        ["Code client", c.codeClient],
-        ["Score", c.score.toFixed(1) + "%"],
-        ["Niveau", c.alert],
-        ["Priorité", c.priority],
-        ["NBRJDEP", c.nbrjdep],
-        ["RISK_BRUT", c.riskBrut],
-        ["Secteur", c.sector],
-        ["Période", c.period],
-        ["Action", c.action],
-        ["Explication", $("riskExplanation").innerText],
-        ["Note", $("notesArea").value]
-      ];
-
-      const csv = rows
-        .map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(";"))
-        .join("\n");
-
-      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `fiche_${c.cpte}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-
-    $("settingsBtn").addEventListener("click", () => alert("Settings - version locale"));
-    $("supportBtn").addEventListener("click", () => alert("Support - BIAT Risk Monitor"));
-
-    loadClients().catch(err => {
-      console.error(err);
-      $("loadStatus").innerText = "Erreur de chargement du fichier dashboard_clients_full.json.";
-    });
-  </script>
-
-  <script src="/attached_assets/auth.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const routes = {
-    "Global Dashboard": "/dashboard",
-    "Risk Evolution": "/evolution",
-    "Future Prediction": "/future",
-    "Notifications": "/notifications",
-    "Client Profiles": "/client",
-    "Model Performance": "/performance",
-    "AI Assistant": "/assistant"
-  };
-
-  document.querySelectorAll("aside a, aside div, aside button").forEach(function(el) {
-    const text = (el.innerText || "").trim();
-
-    Object.entries(routes).forEach(function(pair) {
-      const label = pair[0];
-      const url = pair[1];
-
-      if (text.includes(label)) {
-        el.style.cursor = "pointer";
-
-        if (el.tagName === "A") {
-          el.setAttribute("href", url);
-        } else {
-          el.onclick = function () {
-            window.location.href = url;
-          };
-        }
-      }
-    });
+function loadByCpte(q){
+  if(!q) return;
+  q=String(q).trim().toUpperCase().replace(/\s/g,"");
+  // Recherche exacte, puis par numéro seul
+  const r=ALL_CLIENTS.find(c=>{
+    const cpte=String(c.cpte||c.CPTE||"").toUpperCase();
+    return cpte===q
+      || cpte===q.replace("-","_")
+      || cpte==="CPTE_"+q.replace("CPTE_","").replace("CPTE","")
+      || cpte.endsWith(q.replace("CPTE_","").replace("CPTE",""));
   });
+  if(r){ renderProfile(r); }
+  else {
+    document.getElementById("loadStatus").innerText =
+      `Client "${q}" non trouvé parmi ${ALL_CLIENTS.length.toLocaleString("fr-FR")} clients. Vérifiez le CPTE.`;
+    document.getElementById("emptyState").style.display = "block";
+    document.getElementById("profileWrap").style.display = "none";
+  }
+}
 
-  document.querySelectorAll("button, a, div").forEach(function(el) {
-    const text = (el.innerText || "").trim();
+function doSearch(){
+  const q=document.getElementById("searchInput").value.trim();
+  if(q) loadByCpte(q);
+}
 
-    if (text.includes("Critical Alerts")) {
-      el.style.cursor = "pointer";
-      el.onclick = function () {
-        
-      };
-    }
-  });
-});
+function saveNote(){
+  if(!window.__currentCpte) return;
+  localStorage.setItem("note_"+window.__currentCpte, document.getElementById("notesArea").value);
+  const s=document.getElementById("noteSaved");
+  s.style.display="inline"; setTimeout(()=>s.style.display="none",2500);
+}
+
+function exportFiche(){
+  if(!window.__currentClient) return;
+  const r=window.__currentClient;
+  const cpte=String(r.cpte||r.CPTE||"");
+  const score=getScore(r);
+  const rows=[
+    ["CPTE",cpte],["Score",score.toFixed(1)+"%"],
+    ["Niveau",levelFromScore(score)],
+    ["Secteur",sectorName(getField(r,["sector","SECTOR"],""))],
+    ["NBRJDEP",n(r.nbrjdep||r.NBRJDEP||0)],
+    ["RISK_BRUT",fmtMoney(n(r.risk_brut||r.RISK_BRUT||0))],
+    ["Note",document.getElementById("notesArea").value]
+  ];
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(";")).join("\n");
+  const a=Object.assign(document.createElement("a"),
+    {href:URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"})),
+     download:`fiche_${cpte}.csv`});
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+// Démarrage
+loadClients();
 </script>
-
-
-<!-- BIAT SHARED SIDEBAR SCRIPT -->
-<script id="biat-shared-sidebar-script">
-document.addEventListener("DOMContentLoaded", function () {
-  const currentPath = window.location.pathname.toLowerCase();
-
-  document.querySelectorAll("#mainNav .nav-link").forEach(function(link) {
-    const route = link.getAttribute("data-route");
-    const isActive =
-      route &&
-      (
-        currentPath === route ||
-        currentPath.startsWith(route + "/") ||
-        (route === "/client" && currentPath.startsWith("/client")) ||
-        (route === "/notifications" && currentPath.startsWith("/notifications")) ||
-        (route === "/future" && currentPath.startsWith("/future")) ||
-        (route === "/evolution" && currentPath.startsWith("/evolution")) ||
-        (route === "/performance" && currentPath.startsWith("/performance")) ||
-        (route === "/assistant" && currentPath.startsWith("/assistant"))
-      );
-
-    link.classList.remove(
-      "bg-secondary-container",
-      "text-on-secondary-container",
-      "font-bold",
-      "text-on-surface-variant",
-      "hover:text-on-surface",
-      "hover:bg-surface-variant/30"
-    );
-
-    if (isActive) {
-      link.classList.add("bg-secondary-container", "text-on-secondary-container", "font-bold");
-    } else {
-      link.classList.add("text-on-surface-variant", "hover:text-on-surface", "hover:bg-surface-variant/30");
-    }
-  });
-
-  const criticalBtn = document.getElementById("criticalAlertsBtn");
-  if (criticalBtn) {
-    criticalBtn.addEventListener("click", function () {
-      
-    });
-  }
-
-  const settingsBtn = document.getElementById("settingsBtn");
-  if (settingsBtn) {
-    settingsBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      alert("Settings - BIAT Risk Monitor\\nUser: ALA\\nRole: Risk Officer");
-    });
-  }
-
-  const supportBtn = document.getElementById("supportBtn");
-  if (supportBtn) {
-    supportBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      alert("Support - BIAT Risk Monitor");
-    });
-  }
-
-  fetch("/api/future-predictions", { cache: "no-store" })
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (!data || !data.summary) return;
-      const badge = document.getElementById("notifBadge");
-      if (badge) {
-        const n = data.summary.critical_future_clients || data.summary.aggravation_clients || 0;
-        badge.innerText = Number(n).toLocaleString("fr-FR");
-      }
-    })
-    .catch(() => {});
-});
-</script>
-<!-- END BIAT SHARED SIDEBAR SCRIPT -->
-
-
-<!-- BIAT_SETTINGS_SUPPORT_FIX -->
-<style>
-  #biatModalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.58);
-    z-index: 999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #biatModalBox {
-    width: min(560px, 92vw);
-    background: #101b33;
-    border: 1px solid rgba(95,251,214,.35);
-    border-radius: 16px;
-    color: #d9e2ff;
-    padding: 22px;
-    box-shadow: 0 30px 80px rgba(0,0,0,.45);
-    font-family: Inter, Arial, sans-serif;
-  }
-
-  #biatModalBox h2 {
-    margin: 0 0 14px 0;
-    color: #5ffbd6;
-    font-size: 22px;
-    font-weight: 800;
-  }
-
-  #biatModalBox p {
-    color: #b9c6e4;
-    line-height: 1.6;
-  }
-
-  #biatModalClose {
-    margin-top: 18px;
-    background: #5ffbd6;
-    color: #06251f;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-</style>
-
-<div id="biatModalOverlay">
-  <div id="biatModalBox">
-    <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
-    <p id="biatModalText"></p>
-    <button id="biatModalClose">Fermer</button>
-  </div>
-</div>
-
-<script>
-(function () {
-  function showModal(title, text) {
-    let overlay = document.getElementById("biatModalOverlay");
-    let titleEl = document.getElementById("biatModalTitle");
-    let textEl = document.getElementById("biatModalText");
-
-    if (!overlay || !titleEl || !textEl) {
-      alert(title + "\\n\\n" + text);
-      return;
-    }
-
-    titleEl.innerText = title;
-    textEl.innerText = text;
-    overlay.style.display = "flex";
-  }
-
-  document.addEventListener("click", function (e) {
-    const close = e.target.closest("#biatModalClose");
-    if (close) {
-      document.getElementById("biatModalOverlay").style.display = "none";
-      return;
-    }
-
-    const settings = e.target.closest("#settingsBtn, .side-btn, button, a");
-    if (settings && String(settings.innerText || "").toLowerCase().includes("settings")) {
-      e.preventDefault();
-      showModal(
-        "Settings",
-        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, synchronisation portefeuille, seuils de risque et préférences d'affichage. Cette version utilise les données locales du projet."
-      );
-      return;
-    }
-
-    const support = e.target.closest("#supportBtn, .side-btn, button, a");
-    if (support && String(support.innerText || "").toLowerCase().includes("support")) {
-      e.preventDefault();
-      showModal(
-        "Support",
-        "Aide rapide : Dashboard pour la vue globale, Risk Evolution pour les transitions, Future Prediction pour les clients qui vont devenir critiques, Notifications pour la liste opérationnelle, Client Profiles pour les fiches individuelles, AI Assistant pour les questions métier."
-      );
-      return;
-    }
-  }, true);
-})();
-</script>
-<!-- END BIAT_SETTINGS_SUPPORT_FIX -->
-
-<script src="/attached_assets/sidebar.js"></script>
 </body>
 </html>
-

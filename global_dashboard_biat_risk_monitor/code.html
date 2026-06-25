@@ -8,34 +8,36 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/tabler-icons.min.css"/>
 
   <script>
+    
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            background: "#07122a",
-            "surface-container-lowest": "#030d25",
-            "surface-container-low": "#101b33",
-            "surface-container": "#151f37",
-            "surface-container-high": "#1f2942",
-            "surface-container-highest": "#2a344e",
-            "surface-variant": "#2a344e",
-            "on-surface": "#d9e2ff",
-            "on-surface-variant": "#bacac3",
-            outline: "#85948e",
-            "outline-variant": "#3c4a45",
+            background: "#0a1340",
+            "surface-container-lowest": "#06092c",
+            "surface-container-low": "#142467",
+            "surface-container": "#1a2d7a",
+            "surface-container-high": "#22388c",
+            "surface-container-highest": "#2c45a3",
+            "surface-variant": "#2c45a3",
+            "on-surface": "#e8edff",
+            "on-surface-variant": "#a9b8e8",
+            outline: "#7186c9",
+            "outline-variant": "#2c45a3",
             primary: "#ffffff",
-            "primary-container": "#5ffbd6",
-            "on-primary-container": "#00382d",
+            "primary-container": "#00e8ff",
+            "on-primary-container": "#00282d",
             secondary: "#b6c6ed",
-            "secondary-container": "#374767",
-            "on-secondary-container": "#d9e2ff",
-            error: "#ffb4ab",
-            "error-container": "#93000a",
-            "on-error-container": "#ffdad6",
-            tertiary: "#fbe273"
+            "secondary-container": "#2c45a3",
+            "on-secondary-container": "#e8edff",
+            error: "#ff4d6d",
+            "error-container": "#7a0019",
+            "on-error-container": "#ffd9e0",
+            tertiary: "#ffd23f"
           },
           fontFamily: {
             mono: ["JetBrains Mono", "monospace"],
@@ -48,183 +50,309 @@
   </script>
 
   <style>
+    /* ===== SIDEBAR NOIRE + CONTENU VIF ===== */
+
+/* Sidebar très sombre */
+.biat-sidebar {
+  background:
+    linear-gradient(180deg, #050714 0%, #070A18 45%, #050714 100%) !important;
+  border-right: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow: 8px 0 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Logo plus premium */
+.biat-sidebar .brand-logo {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.35) !important;
+}
+
+.biat-sidebar .brand-title {
+  color: #F8FAFF !important;
+}
+
+.biat-sidebar .brand-subtitle {
+  color: rgba(210, 220, 255, 0.55) !important;
+}
+
+/* Liens sidebar */
+.biat-sidebar .nav-link {
+  color: #9AA8C7 !important;
+  background: transparent !important;
+}
+
+.biat-sidebar .nav-link:hover {
+  color: #FFFFFF !important;
+  background: rgba(0, 232, 255, 0.08) !important;
+}
+
+/* Menu actif */
+.biat-sidebar .nav-link.active {
+  color: #FFFFFF !important;
+  background:
+    linear-gradient(90deg, rgba(0, 232, 255, 0.18), rgba(124, 58, 237, 0.08)) !important;
+  border-left: 3px solid #00E8FF !important;
+  box-shadow: inset 0 0 18px rgba(0, 232, 255, 0.08) !important;
+}
+
+.biat-sidebar .nav-link.active .material-symbols-outlined {
+  color: #00E8FF !important;
+}
+
+/* Critical Alerts plus sérieux */
+.side-critical {
+  background: rgba(255, 77, 109, 0.10) !important;
+  border: 1px solid rgba(255, 77, 109, 0.45) !important;
+  color: #FFB4C2 !important;
+}
+
+.side-critical:hover {
+  background: rgba(255, 77, 109, 0.18) !important;
+}
+
+/* Settings / Support */
+.side-muted {
+  color: #9AA8C7 !important;
+}
+
+.side-muted:hover {
+  background: rgba(0, 232, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
+
+/* User bottom */
+.sidebar-user .avatar {
+  background: linear-gradient(135deg, #00E8FF, #22C55E) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 14px rgba(0, 232, 255, 0.35) !important;
+}
+
+/* Navbar noire */
+header {
+  background: rgba(3, 7, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 232, 255, 0.18) !important;
+}
+
+/* Fond principal vivant mais sombre */
+.biat-bg {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(124, 58, 237, 0.30) 0%, transparent 38%),
+    radial-gradient(circle at 20% 85%, rgba(0, 232, 255, 0.20) 0%, transparent 45%),
+    linear-gradient(135deg, #050714 0%, #081336 45%, #111A3A 100%) !important;
+}
+
+/* Cards plus lumineuses */
+.glass-card {
+  background: rgba(17, 26, 58, 0.86) !important;
+  border: 1px solid rgba(0, 232, 255, 0.22) !important;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 232, 255, 0.55) !important;
+}
+
+/* Boutons cyan vif */
+#applyFilters,
+#quickAction,
+button.bg-primary-container {
+  background: linear-gradient(135deg, #00E8FF, #0EA5E9) !important;
+  color: #020617 !important;
+  box-shadow: 0 0 18px rgba(0, 232, 255, 0.22) !important;
+}
+
+/* Inputs/selects */
+input,
+select,
+textarea {
+  background: rgba(12, 22, 55, 0.92) !important;
+  border-color: rgba(0, 232, 255, 0.25) !important;
+}
+
+/* KPI couleurs plus vives */
+#kpiCritical {
+  color: #FF4D6D !important;
+}
+
+#kpiWarning {
+  color: #FFD23F !important;
+}
+
+#kpiNotify,
+#kpiTotal,
+#kpiAvg,
+#kpiAmount {
+  color: #EAF0FF !important;
+}
     * { box-sizing: border-box; }
-    body { font-family: Inter, sans-serif; }
+    body { font-family: Inter, sans-serif; background:#0a1340; }
     .mono { font-family: "JetBrains Mono", monospace; }
     .display { font-family: "Hanken Grotesk", sans-serif; }
-
     .glass-card {
-      background: rgba(10, 24, 52, .82);
+      background: rgba(20, 36, 103, .82);
       backdrop-filter: blur(14px);
-      border: 1px solid rgba(60, 74, 69, .7);
+      border: 1px solid rgba(44,69,163,.7);
       transition: border-color .2s, transform .2s;
     }
-    .glass-card:hover { border-color: rgba(95, 251, 214, .25); }
-
+    .glass-card:hover { border-color: rgba(0, 232, 255, .35); }
     .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined' !important;
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-weight: normal !important;
+      font-style: normal !important;
+      font-size: 22px;
       line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
     }
+    .click-card { cursor:pointer; transition:border-color .2s, transform .15s, background .2s; }
+    .click-card:hover { transform: translateY(-2px); border-color: rgba(95,251,214,.38)!important; }
+    .click-card.active-filter { border-color: rgba(95,251,214,.65)!important; background: rgba(95,251,214,.06)!important; }
+    .click-chip { display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:999px; background:rgba(95,251,214,.10); border:1px solid rgba(95,251,214,.35); color:#5ffbd6; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; cursor:pointer; }
+    .click-chip:hover { background:rgba(95,251,214,.18); }
+    .legend-click { cursor:pointer; padding:4px 6px; border-radius:8px; transition:background .15s; }
+    .legend-click:hover { background:rgba(95,251,214,.08); }
+
+    .kpi-trend-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-family: "JetBrains Mono", monospace; font-size: 11px;
+      font-weight: 700; margin-top: 8px;
+    }
+    .trend-up   { color: #ffb4ab; }
+    .trend-down { color: #5ffbd6; }
+    .trend-flat { color: #85948e; }
+
+    .sector-cell {
+      border-radius: 8px; padding: 12px 8px; text-align: center;
+      cursor: default; transition: transform .15s, opacity .15s;
+      border: 1px solid rgba(0,0,0,.2);
+    }
+    .sector-cell:hover { transform: scale(1.04); opacity: .92; }
+    .sector-name { font-family: "JetBrains Mono", monospace; font-size: 9px;
+      text-transform: uppercase; letter-spacing: .05em; color: rgba(255,255,255,.85);
+      margin: 0 0 5px; line-height: 1.3; }
+    .sector-pct  { font-size: 18px; font-weight: 900; color: #fff; margin: 0; }
+    .sector-sub  { font-family: "JetBrains Mono", monospace; font-size: 9px;
+      color: rgba(255,255,255,.65); margin: 3px 0 0; }
+
+    .health-widget {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(0,0,0,.25); border: 1px solid rgba(60,74,69,.5);
+      border-radius: 12px; padding: 8px 16px; min-width: 210px;
+      cursor: default; transition: border-color .2s; flex-shrink:0;
+    }
+    .health-widget:hover { border-color: rgba(95,251,214,.3); }
+    .health-gauge-wrap { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+    .health-gauge-wrap svg { transform: rotate(-90deg); }
+    .gauge-bg  { fill: none; stroke: #1f2942; stroke-width: 7; }
+    .gauge-fill{ fill: none; stroke-width: 7; stroke-linecap: round;
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), stroke .4s; }
+    .gauge-num {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 900; transition: color .4s;
+    }
+    .health-info { min-width: 0; }
+    .health-label { font-family: "JetBrains Mono", monospace; font-size: 9px;
+      text-transform: uppercase; letter-spacing: .1em; color: #85948e; margin: 0 0 2px; }
+    .health-status { font-size: 13px; font-weight: 800; margin: 0; line-height: 1.2; white-space:nowrap; }
+    .health-sub { font-family: "JetBrains Mono", monospace; font-size: 9.5px;
+      color: #85948e; margin: 2px 0 0; white-space:nowrap; }
+    .health-bar-row { display: flex; gap: 2px; margin-top: 5px; border-radius: 3px; overflow: hidden; height: 4px; width:130px; }
+    .health-bar-seg { height: 100%; transition: width .8s ease; }
 
     .biat-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
       background:
-        radial-gradient(circle at 88% 8%, rgba(245,146,30,.28) 0%, rgba(245,146,30,.10) 22%, transparent 45%),
-        radial-gradient(circle at 12% 88%, rgba(30,58,158,.32) 0%, rgba(30,58,158,.10) 28%, transparent 55%),
-        linear-gradient(135deg,#061024 0%,#07122a 35%,#0b1b38 70%,#061024 100%);
+        radial-gradient(circle at 88% 8%, rgba(255,146,30,.26) 0%, rgba(255,146,30,.09) 22%, transparent 45%),
+        radial-gradient(circle at 12% 88%, rgba(0,120,255,.28) 0%, rgba(0,120,255,.10) 28%, transparent 55%),
+        linear-gradient(135deg,#060b2e 0%,#0a1340 35%,#0f1c4f 70%,#060b2e 100%);
     }
     .biat-bg::before {
       content: "";
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-image:
-        linear-gradient(rgba(245,146,30,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245,146,30,.04) 1px, transparent 1px);
+        linear-gradient(rgba(0,232,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,232,255,.05) 1px, transparent 1px);
       background-size: 90px 90px;
     }
-
     .biat-sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 240px;
-      height: 100vh;
-      z-index: 60;
-      background: rgba(7, 17, 38, .96);
-      border-right: 1px solid rgba(148, 163, 184, .18);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 14px 16px;
+      position: fixed; left: 0; top: 0; width: 240px; height: 100vh; z-index: 60;
+      background: rgba(10,18,55,.97);
+      border-right: 1px solid rgba(0,232,255,.16);
+      display: flex; flex-direction: column; padding: 24px 14px 16px;
       backdrop-filter: blur(18px);
     }
-
-    .biat-sidebar .brand {
-      padding: 0 6px 28px;
+    .biat-sidebar .brand { padding: 0 6px 22px; display:flex; align-items:center; gap:11px; border-bottom:1px solid rgba(95,251,214,.12); margin-bottom:18px; }
+    .biat-sidebar .brand-logo {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, #5ffbd6, #1e9e75);
+      display: flex; align-items: center; justify-content: center;
     }
-
-    .biat-sidebar .brand-title {
-      color: #f3f7ff;
-      font-size: 26px;
-      line-height: 1.14;
-      font-weight: 900;
-      letter-spacing: .2px;
-      margin: 0;
-    }
-
-    .biat-sidebar .brand-subtitle {
-      color: rgba(217,226,255,.72);
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    .biat-sidebar nav {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
+    .biat-sidebar .brand-logo .material-symbols-outlined { font-size: 19px; color: #06251f; }
+    .biat-sidebar .brand-title { color: #f3f7ff; font-size: 22px; line-height: 1.12; font-weight: 900; letter-spacing: .2px; margin: 0; }
+    .biat-sidebar .brand-subtitle { color: rgba(217,226,255,.55); font-size: 11px; margin-top: 3px; letter-spacing: .02em; }
+    .biat-sidebar nav { display: flex; flex-direction: column; gap: 3px; }
     .biat-sidebar .nav-link {
-      height: 46px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 14px;
-      border-radius: 10px;
-      color: #b9c6e4;
-      text-decoration: none;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
+      height: 44px; width: 100%; display: flex; align-items: center; gap: 12px; padding: 0 14px;
+      border-radius: 9px; color: #8a9ab8; text-decoration: none;
+      font-family: "JetBrains Mono", monospace; font-size: 12.5px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; border-left: 2px solid transparent;
+      transition: background .15s, color .15s, transform .15s, border-color .15s;
     }
-
-    .biat-sidebar .nav-link:hover {
-      background: rgba(95,251,214,.08);
-      color: #fff;
-    }
-
+    .biat-sidebar .nav-link:hover { background: rgba(95,251,214,.06); color: #fff; transform: translateX(2px); }
     .biat-sidebar .nav-link.active {
-      background: rgba(121,143,185,.35);
-      color: #fff;
-      font-weight: 900;
+      background: linear-gradient(90deg, rgba(95,251,214,.16), rgba(95,251,214,.02));
+      border-left-color: #5ffbd6; border-radius: 0 9px 9px 0;
+      color: #fff; font-weight: 800;
     }
-
-    .biat-sidebar .nav-link .label {
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
+    .biat-sidebar .nav-link.active .material-symbols-outlined { color: #5ffbd6; }
+    .biat-sidebar .nav-link .label { overflow: hidden; text-overflow: ellipsis; flex:1; }
     .biat-sidebar .nav-link .badge {
-      margin-left: auto;
-      background: #ffb4ab;
-      color: #3b0505;
-      border-radius: 999px;
-      padding: 2px 7px;
-      font-size: 10px;
-      font-weight: 900;
+      margin-left: auto; background: #e24b4a; color: #fff; border-radius: 999px;
+      padding: 2px 8px; font-size: 10px; font-weight: 700;
     }
-
     .biat-sidebar .bottom {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border-top: 1px solid rgba(148,163,184,.16);
-      padding-top: 14px;
+      margin-top: auto; display: flex; flex-direction: column; gap: 8px;
+      border-top: 1px solid rgba(95,251,214,.12); padding-top: 14px;
     }
-
     .side-action {
-      height: 46px;
-      border-radius: 10px;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
-      font-weight: 900;
+      height: 44px; border-radius: 10px; border: none; display: flex; align-items: center;
+      justify-content: center; gap: 9px; cursor: pointer;
+      font-family: "JetBrains Mono", monospace; font-size: 12.5px; font-weight: 700;
+      transition: transform .12s;
     }
-    .side-critical { background: #b00012; color: white; }
-    .side-muted { background: transparent; color: #b9c6e4; }
-    .side-muted:hover { background: rgba(95,251,214,.08); color: white; }
-
-    main {
+    .side-action:active { transform: scale(.97); }
+    .side-critical { background: rgba(226,75,74,.1); border: 1px solid rgba(226,75,74,.3); color: #f7c1c1; }
+    .side-critical:hover { background: rgba(226,75,74,.16); }
+    .side-muted { background: transparent; color: #8a9ab8; }
+    .side-muted:hover { background: rgba(95,251,214,.06); color: white; }
+    .sidebar-user { display:flex; align-items:center; gap:10px; padding:8px 10px; }
+    .sidebar-user .avatar {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      background: #1d9e75; color: #fff; font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace;
       position: relative;
-      z-index: 2;
-      margin-left: 240px;
-      height: 100vh;
-      overflow-y: auto;
     }
-
-    header {
-      background: rgba(3,13,37,.88);
-      backdrop-filter: blur(18px);
+    .sidebar-user .avatar::after {
+      content: ""; position: absolute; bottom: -1px; right: -1px; width: 8px; height: 8px;
+      border-radius: 50%; background: #5ffbd6; border: 2px solid #0a1628;
     }
-
-    .donut {
-      border-radius: 50%;
-      background: radial-gradient(circle at center,#101b33 58%,transparent 59%), conic-gradient(#2a344e 0 100%);
-    }
-
+    main { position: relative; z-index: 2; margin-left: 240px; height: 100vh; overflow-y: auto; }
+    header { background: rgba(8,18,42,.92); backdrop-filter: blur(18px); }
+    .donut { border-radius: 50%; background: radial-gradient(circle at center,#122040 58%,transparent 59%), conic-gradient(#2a344e 0 100%); }
     #biatModal {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,.65);
-      backdrop-filter: blur(8px);
+      position: fixed; inset: 0; z-index: 999999; display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.65); backdrop-filter: blur(8px);
     }
     #biatModal.open { display: flex; }
+    input, select, textarea { background: rgba(20,40,85,.8) !important; }
   </style>
 </head>
 
@@ -239,10 +367,12 @@
 
   <aside class="biat-sidebar">
     <div class="brand">
-      <h1 class="brand-title">BIAT Risk<br>Monitor</h1>
-      <p class="brand-subtitle">Vigilant Professionalism</p>
+      <div class="brand-logo"><span class="material-symbols-outlined">shield</span></div>
+      <div>
+        <h1 class="brand-title">BIAT Risk<br>Monitor</h1>
+        <p class="brand-subtitle">Vigilant Professionalism</p>
+      </div>
     </div>
-
     <nav>
       <a class="nav-link active" href="/dashboard"><span class="material-symbols-outlined">dashboard</span><span class="label">Global Dashboard</span></a>
       <a class="nav-link" href="/evolution"><span class="material-symbols-outlined">trending_up</span><span class="label">Risk Evolution</span></a>
@@ -252,37 +382,52 @@
       <a class="nav-link" href="/performance"><span class="material-symbols-outlined">analytics</span><span class="label">Model Performance</span></a>
       <a class="nav-link" href="/assistant"><span class="material-symbols-outlined">smart_toy</span><span class="label">AI Assistant</span></a>
     </nav>
-
     <div class="bottom">
-      <button id="criticalAlertsBtn" type="button" class="side-action side-critical">
-        <span class="material-symbols-outlined">warning</span>
-        <span>Critical Alerts</span>
-      </button>
-      <button id="settingsBtn" type="button" class="side-action side-muted">
-        <span class="material-symbols-outlined">settings</span>
-        <span>Settings</span>
-      </button>
-      <button id="supportBtn" type="button" class="side-action side-muted">
-        <span class="material-symbols-outlined">help</span>
-        <span>Support</span>
-      </button>
+      <button id="criticalAlertsBtn" type="button" class="side-action side-critical"><span class="material-symbols-outlined" style="font-size:18px">warning</span><span>Critical Alerts</span></button>
+      <button id="settingsBtn" type="button" class="side-action side-muted"><span class="material-symbols-outlined" style="font-size:18px">settings</span><span>Settings</span></button>
+      <button id="supportBtn" type="button" class="side-action side-muted"><span class="material-symbols-outlined" style="font-size:18px">help</span><span>Support</span></button>
+      <div class="sidebar-user">
+        <div class="avatar">AL</div>
+        <div style="flex:1;min-width:0">
+          <p class="mono" style="color:#fff;font-size:12px;font-weight:700;margin:0">ALA</p>
+          <p class="mono" style="color:#8a9ab8;font-size:10px;margin:0">Risk Officer</p>
+        </div>
+      </div>
     </div>
   </aside>
 
   <main>
-    <header class="sticky top-0 z-40 h-16 border-b border-outline-variant flex items-center justify-between px-6">
-      <div class="relative w-[520px]">
+    <header class="sticky top-0 z-40 h-16 border-b border-outline-variant flex items-center justify-between px-6 gap-4">
+      <div class="relative w-[420px] flex-shrink-0">
         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
         <input id="topSearch" class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-12 pr-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container outline-none" placeholder="Search risky CPTE, clients or alerts..."/>
       </div>
-      <div class="flex items-center gap-4">
-        <button id="quickAction" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold">Quick Action</button>
+      <div id="clickFilterBadgeWrap" class="hidden">
+        <span id="clickFilterBadge" class="click-chip" onclick="clearClickFilter()"><span class="material-symbols-outlined" style="font-size:14px">filter_alt</span><span id="clickFilterLabel">Tous</span><span>×</span></span>
+      </div>
+
+      <div class="flex items-center gap-4 ml-auto">
+        <button id="quickAction" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-sm font-bold whitespace-nowrap">Quick Action</button>
         <span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
         <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
           <div class="w-9 h-9 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
-          <div>
-            <p class="mono text-sm font-bold">ALA</p>
-            <p class="mono text-xs text-on-surface-variant">Risk Officer</p>
+          <div><p class="mono text-sm font-bold whitespace-nowrap">ALA</p><p class="mono text-xs text-on-surface-variant whitespace-nowrap">Risk Officer</p></div>
+        </div>
+
+        <!-- Health Score Widget -->
+        <div class="health-widget" id="healthWidget" title="Score de santé global du portefeuille">
+          <div class="health-gauge-wrap">
+            <svg width="52" height="52" viewBox="0 0 52 52">
+              <circle class="gauge-bg"   cx="26" cy="26" r="21"/>
+              <circle class="gauge-fill" cx="26" cy="26" r="21" id="healthArc" stroke-dasharray="132" stroke-dashoffset="132"/>
+            </svg>
+            <div class="gauge-num" id="healthNum">--</div>
+          </div>
+          <div class="health-info">
+            <p class="health-label">Santé portefeuille</p>
+            <p class="health-status" id="healthStatus">Calcul...</p>
+            <p class="health-sub" id="healthSub"></p>
+            <div class="health-bar-row" id="healthBarRow"></div>
           </div>
         </div>
       </div>
@@ -295,9 +440,7 @@
           <h2 class="display text-4xl font-bold mt-2">Global Dashboard</h2>
           <p id="loadStatus" class="text-on-surface-variant mt-2 max-w-4xl">Chargement des données depuis dashboard_clients_full.json...</p>
         </div>
-        <div class="flex gap-3">
-          <button id="exportReport" class="border border-outline-variant text-on-surface px-5 py-3 rounded-lg mono text-sm font-bold hover:bg-surface-variant/30">Export Report</button>
-        </div>
+        <button id="exportReport" class="border border-outline-variant text-on-surface px-5 py-3 rounded-lg mono text-sm font-bold hover:bg-surface-variant/30">Export Report</button>
       </div>
 
       <div class="glass-card rounded-2xl p-5">
@@ -334,323 +477,238 @@
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-        <div class="glass-card rounded-2xl p-5">
-          <p class="mono text-xs uppercase text-on-surface-variant">Total Scorés</p>
+        <div id="cardAll" class="glass-card click-card rounded-2xl p-5" onclick="clearClickFilter()">
+          <p class="mono text-xs uppercase text-on-surface-variant">Total Clients</p>
           <p id="kpiTotal" class="display text-2xl font-bold mt-3">—</p>
           <p id="kpiTotalSub" class="text-sm text-primary-container mt-2">Portfolio complet</p>
+          <div id="trendTotal"></div>
         </div>
-        <div class="glass-card rounded-2xl p-5 border-red-500/20">
+        <div id="cardCritical" class="glass-card click-card rounded-2xl p-5 border-red-500/20" onclick="setClickLevel('CRITICAL','Critiques')">
           <p class="mono text-xs uppercase text-error">Critiques</p>
           <p id="kpiCritical" class="display text-2xl font-bold text-error mt-3">—</p>
           <p class="text-sm text-error mt-2">Action Required</p>
+          <div id="trendCritical"></div>
         </div>
-        <div class="glass-card rounded-2xl p-5">
+        <div id="cardWarning" class="glass-card click-card rounded-2xl p-5" onclick="setClickLevel('WARNING','Élevés')">
           <p class="mono text-xs uppercase text-tertiary">Élevés</p>
           <p id="kpiWarning" class="display text-2xl font-bold text-tertiary mt-3">—</p>
           <p class="text-sm text-tertiary mt-2">Monitor Daily</p>
+          <div id="trendWarning"></div>
         </div>
-        <div class="glass-card rounded-2xl p-5">
+        <div id="cardNotify" class="glass-card click-card rounded-2xl p-5" onclick="setClickNotify()">
           <p class="mono text-xs uppercase text-on-surface-variant">À Notifier</p>
           <p id="kpiNotify" class="display text-2xl font-bold mt-3">—</p>
           <p class="text-sm text-on-surface-variant mt-2">Compliance Queue</p>
+          <div id="trendNotify"></div>
         </div>
         <div class="glass-card rounded-2xl p-5">
           <p class="mono text-xs uppercase text-on-surface-variant">Score Moyen</p>
           <p id="kpiAvg" class="display text-2xl font-bold mt-3">—</p>
-          <div class="mt-4 h-1 bg-surface-container-high rounded-full">
-            <div id="avgBar" class="h-1 bg-primary-container rounded-full transition-all" style="width:0%"></div>
-          </div>
+          <div class="mt-4 h-1 bg-surface-container-high rounded-full"><div id="avgBar" class="h-1 bg-primary-container rounded-full transition-all" style="width:0%"></div></div>
+          <div id="trendAvg"></div>
         </div>
         <div class="glass-card rounded-2xl p-5">
           <p class="mono text-xs uppercase text-on-surface-variant">Exposition</p>
           <p id="kpiAmount" class="display text-2xl font-bold mt-3">—</p>
           <p class="text-sm text-on-surface-variant mt-2">Total exposure</p>
+          <div id="trendAmount"></div>
         </div>
       </div>
 
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="display text-xl font-bold">Distribution des Alertes</h3>
-            <span class="mono text-xs text-on-surface-variant">sur Total Scorés</span>
-          </div>
-          <p class="mono text-xs text-on-surface-variant mb-4">Répartition par niveau de risque</p>
-          <div class="flex items-center justify-center">
-            <div id="donutChart" class="donut w-44 h-44 flex items-center justify-center">
-              <div class="text-center">
-                <p id="donutTotal" class="display text-2xl font-bold">—</p>
-                <p class="mono text-xs text-on-surface-variant">Total scorés</p>
-              </div>
-            </div>
-          </div>
+          <div class="flex items-center justify-between mb-2"><h3 class="display text-xl font-bold">Distribution des Alertes</h3><span class="mono text-xs text-on-surface-variant">sur Total Clients</span></div>
+          <p class="mono text-xs text-on-surface-variant mb-4">Répartition par niveau de risque — cliquez pour filtrer</p>
+          <div class="flex items-center justify-center"><div id="donutChart" class="donut w-44 h-44 flex items-center justify-center cursor-pointer" onclick="setClickNotify()" title="Cliquer pour filtrer les clients à notifier"><div class="text-center"><p id="donutTotal" class="display text-2xl font-bold">—</p><p class="mono text-xs text-on-surface-variant">Total clients</p></div></div></div>
           <div class="grid grid-cols-2 gap-2 mt-5 mono text-xs">
-            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error flex-shrink-0"></span>Critique <span id="legCrit" class="ml-auto text-on-surface-variant"></span></div>
-            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary flex-shrink-0"></span>Élevé <span id="legWarn" class="ml-auto text-on-surface-variant"></span></div>
-            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0"></span>Moyen <span id="legMed" class="ml-auto text-on-surface-variant"></span></div>
-            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-surface-container-highest flex-shrink-0"></span>Faible <span id="legLow" class="ml-auto text-on-surface-variant"></span></div>
+            <div class="legend-click flex items-center gap-2" onclick="setClickLevel('CRITICAL','Critiques')"><span class="w-2 h-2 rounded-full bg-error flex-shrink-0"></span>Critique <span id="legCrit" class="ml-auto text-on-surface-variant"></span></div>
+            <div class="legend-click flex items-center gap-2" onclick="setClickLevel('WARNING','Élevés')"><span class="w-2 h-2 rounded-full bg-tertiary flex-shrink-0"></span>Élevé <span id="legWarn" class="ml-auto text-on-surface-variant"></span></div>
+            <div class="legend-click flex items-center gap-2" onclick="setClickLevel('MEDIUM','Moyens')"><span class="w-2 h-2 rounded-full bg-primary-container flex-shrink-0"></span>Moyen <span id="legMed" class="ml-auto text-on-surface-variant"></span></div>
+            <div class="legend-click flex items-center gap-2" onclick="setClickLevel('LOW','Faibles')"><span class="w-2 h-2 rounded-full bg-surface-container-highest flex-shrink-0"></span>Faible <span id="legLow" class="ml-auto text-on-surface-variant"></span></div>
           </div>
         </div>
 
         <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-5">
-            <h3 class="display text-xl font-bold">Distribution des Scores</h3>
-            <span class="material-symbols-outlined text-on-surface-variant">bar_chart</span>
-          </div>
+          <div class="flex items-center justify-between mb-5"><h3 class="display text-xl font-bold">Distribution des Scores</h3><span class="material-symbols-outlined text-on-surface-variant">bar_chart</span></div>
           <div id="riskDist" class="h-56 flex items-end gap-2"></div>
-          <div class="flex justify-between mono text-xs text-on-surface-variant mt-3">
-            <span>0%</span><span>50%</span><span>100%</span>
-          </div>
+          <div class="flex justify-between mono text-xs text-on-surface-variant mt-3"><span>0%</span><span>50%</span><span>100%</span></div>
         </div>
 
         <div class="glass-card rounded-2xl p-6">
-          <div class="flex items-center justify-between mb-5">
-            <h3 class="display text-xl font-bold">Tendances Mensuelles</h3>
-            <select id="yearFilter" class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 mono text-xs text-on-surface outline-none">
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
-            </select>
-          </div>
+          <div class="flex items-center justify-between mb-5"><h3 class="display text-xl font-bold">Tendances Mensuelles</h3><select id="yearFilter" class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 mono text-xs text-on-surface outline-none"><option value="2024">2024</option><option value="2025">2025</option></select></div>
           <div id="monthlyTrends" class="h-56 flex items-end gap-3"></div>
           <p class="mono text-xs text-on-surface-variant mt-3 text-center">Score moyen mensuel des clients risqués</p>
         </div>
       </div>
 
+      <!-- Heatmap secteur -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h3 class="display text-xl font-bold">🗺 Heatmap risque par secteur</h3>
+          <span class="mono text-xs text-on-surface-variant">% clients critiques par secteur d'activité</span>
+        </div>
+        <div id="heatmapGrid" class="grid grid-cols-3 md:grid-cols-5 gap-3"></div>
+        <div class="flex items-center gap-5 mt-4 flex-wrap">
+          <span class="mono text-xs text-on-surface-variant">Légende :</span>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:#003d4d"></div><span class="mono text-xs text-on-surface-variant">Faible (&lt;15%)</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:#7a5500"></div><span class="mono text-xs text-on-surface-variant">Modéré (15-35%)</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded" style="background:#7a0019"></div><span class="mono text-xs text-on-surface-variant">Élevé (&gt;35%)</span></div>
+        </div>
+      </div>
+
       <div class="glass-card rounded-2xl overflow-hidden">
-        <div class="px-5 py-4 flex items-center justify-between border-b border-outline-variant">
-          <div>
-            <h3 class="display text-2xl font-bold">Top Clients Critiques</h3>
-            <p class="mono text-xs text-on-surface-variant mt-1">Clients avec le score le plus élevé — cliquez sur Open pour la fiche complète</p>
-          </div>
-          <div class="flex items-center gap-4">
-            <span class="mono text-xs text-error flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>High Priority</span>
-            <button id="viewAllCritical" class="text-primary-container mono text-sm font-bold hover:underline">View All →</button>
-          </div>
+        <div class="px-5 py-4 flex items-center justify-between border-b border-outline-variant flex-wrap gap-3">
+          <div><h3 class="display text-2xl font-bold">Top Clients Critiques</h3><p class="mono text-xs text-on-surface-variant mt-1">Clients avec le score le plus élevé — cliquez sur Open pour la fiche complète</p></div>
+          <div class="flex items-center gap-4"><span class="mono text-xs text-error flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>High Priority</span><button id="viewAllCritical" class="text-primary-container mono text-sm font-bold hover:underline">View All →</button></div>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left">
-            <thead class="bg-surface-container-high/50">
-              <tr>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE / Client</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score %</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Alert Level</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Exposition (TND)</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Action Recommandée</th>
-                <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Fiche Client</th>
-              </tr>
-            </thead>
-            <tbody id="criticalTable" class="divide-y divide-outline-variant/30">
-              <tr><td colspan="6" class="px-4 py-8 text-center text-on-surface-variant">Chargement...</td></tr>
-            </tbody>
+            <thead class="bg-surface-container-high/50"><tr><th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">CPTE / Client</th><th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Score %</th><th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Alert Level</th><th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Exposition (TND)</th><th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Action Recommandée</th><th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Fiche Client</th></tr></thead>
+            <tbody id="criticalTable" class="divide-y divide-outline-variant/30"><tr><td colspan="6" class="px-4 py-8 text-center text-on-surface-variant">Chargement...</td></tr></tbody>
           </table>
           <div id="tableEmpty" class="hidden py-8 text-center mono text-sm text-on-surface-variant">Aucun client ne correspond aux filtres actuels.</div>
         </div>
       </div>
 
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-8">
-        <div class="glass-card rounded-2xl p-6 xl:col-span-2">
-          <h3 class="display text-2xl font-bold mb-5">Alertes Récentes Prioritaires</h3>
-          <div id="alertFeed" class="space-y-4"></div>
-        </div>
-        <div class="glass-card rounded-2xl p-6">
-          <h3 class="display text-2xl font-bold mb-5">AI Portfolio Insight</h3>
-          <div class="bg-surface-container-low rounded-xl p-4">
-            <p id="aiInsight" class="text-sm leading-relaxed text-on-surface">Chargement des insights...</p>
-          </div>
-          <button onclick="window.location.href='/assistant'" class="mt-4 w-full bg-primary-container text-on-primary-container rounded-xl py-3 mono text-sm font-bold">
-            Open AI Assistant
-          </button>
-        </div>
+        <div class="glass-card rounded-2xl p-6 xl:col-span-2"><h3 class="display text-2xl font-bold mb-5">Alertes Récentes Prioritaires</h3><div id="alertFeed" class="space-y-4"></div></div>
+        <div class="glass-card rounded-2xl p-6"><h3 class="display text-2xl font-bold mb-5">AI Portfolio Insight</h3><div class="bg-surface-container-low rounded-xl p-4"><p id="aiInsight" class="text-sm leading-relaxed text-on-surface">Chargement des insights...</p></div><button onclick="window.location.href='/assistant'" class="mt-4 w-full bg-primary-container text-on-primary-container rounded-xl py-3 mono text-sm font-bold">Open AI Assistant</button></div>
       </div>
     </section>
   </main>
 
-  <div id="biatModal">
-    <div class="w-full max-w-lg bg-[#101b33] border border-[#5ffbd6]/30 rounded-2xl p-6 mx-4 shadow-2xl">
-      <div class="flex justify-between items-start gap-4">
-        <div>
-          <p id="modalTag" class="mono text-xs text-primary-container uppercase tracking-widest">BIAT</p>
-          <h3 id="modalTitle" class="display text-2xl font-bold mt-1">BIAT Risk Monitor</h3>
-        </div>
-        <button id="modalClose" class="text-on-surface-variant hover:text-white text-xl">✕</button>
-      </div>
-      <p id="modalText" class="text-on-surface-variant mt-5 leading-relaxed"></p>
-      <button id="modalOk" class="mt-6 bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold">Fermer</button>
-    </div>
-  </div>
+  <div id="biatModal"><div class="w-full max-w-lg bg-[#101b33] border border-[#5ffbd6]/30 rounded-2xl p-6 mx-4 shadow-2xl"><div class="flex justify-between items-start gap-4"><div><p id="modalTag" class="mono text-xs text-primary-container uppercase tracking-widest">BIAT</p><h3 id="modalTitle" class="display text-2xl font-bold mt-1">BIAT Risk Monitor</h3></div><button id="modalClose" class="text-on-surface-variant hover:text-white text-xl">✕</button></div><p id="modalText" class="text-on-surface-variant mt-5 leading-relaxed"></p><button id="modalOk" class="mt-6 bg-primary-container text-on-primary-container px-5 py-3 rounded-lg mono text-sm font-bold">Fermer</button></div></div>
 
   <script>
+    // ════════════════════════════════════════════════════════
+    // ÉTAT GLOBAL — une seule source de vérité pour toute la page
+    // ════════════════════════════════════════════════════════
     const state = {
-      allRows: [],
-      allClients: [],
+      allRows: [], allClients: [],
       filtered: [],
       applied: { period: "all", alert: "", score: 0 },
       pending: { period: "all", alert: "", score: 0 },
-      year: "2024"
+      year: "2024",
+      clickFilter: { type: "all", label: "Tous" }
     };
-
     const $ = id => document.getElementById(id);
 
+    // ── Helpers de parsing ──────────────────────────────────
     function num(v, fallback = 0) {
       if (v === null || v === undefined || v === "") return fallback;
       const n = Number(String(v).replace(",", ".").replace(/[^\d.-]/g, ""));
       return Number.isFinite(n) ? n : fallback;
     }
-
-    function fmtInt(v) {
-      return Math.round(num(v)).toLocaleString("fr-FR");
-    }
-
+    function fmtInt(v) { return Math.round(num(v)).toLocaleString("fr-FR"); }
     function fmtMoney(v) {
       const n = num(v);
+      if (n <= 0) return "Non disponible";
       if (n >= 1000000) return (n / 1000000).toFixed(1).replace(".", ",") + "M TND";
       if (n >= 1000) return Math.round(n / 1000).toLocaleString("fr-FR") + "K TND";
       return Math.round(n).toLocaleString("fr-FR") + " TND";
     }
-
     function getField(row, keys, fallback = "") {
-      for (const k of keys) {
-        if (row && row[k] !== undefined && row[k] !== null && row[k] !== "") return row[k];
-      }
+      for (const k of keys) { if (row && row[k] !== undefined && row[k] !== null && row[k] !== "") return row[k]; }
       return fallback;
     }
-
-    function getCpte(row) {
-      return String(getField(row, ["cpte", "CPTE", "account", "compte", "id", "client_id"], "")).trim();
-    }
-
-    function getClientCode(row) {
-      return getField(row, ["code_client", "CODE_CLIENT", "client_code", "code"], "");
-    }
-
-    function getSector(row) {
-      return getField(row, ["sector", "SECTOR", "secteur", "industry", "categorie"], "Client BIAT");
-    }
-
-    function getDate(row) {
-      const raw = getField(row, ["date", "DATE", "periode", "period", "mois", "month"], "");
-      if (!raw) return null;
-      const d = new Date(raw);
-      return Number.isNaN(d.getTime()) ? null : d;
-    }
-
-    function getScore(row) {
-      let s = getField(row, [
-        "risk_score_percent",
-        "display_risk_score_percent",
-        "score_percent",
-        "score_pct",
-        "score",
-        "risk_score",
-        "RISK_SCORE",
-        "probabilite",
-        "probability"
-      ], 0);
-
-      s = num(s);
-      if (s <= 1) s *= 100;
-      return Math.max(0, Math.min(100, s));
-    }
-
-    function getExposure(row) {
-      return num(getField(row, [
-        "risk_brut",
-        "RISK_BRUT",
-        "exposure",
-        "EXPOSURE",
-        "exposition",
-        "amount",
-        "amount_at_risk",
-        "montant"
-      ], 0));
-    }
-
-    function getLevelFromScore(score) {
-      if (score >= 85) return "CRITICAL";
-      if (score >= 65) return "WARNING";
-      if (score >= 40) return "MEDIUM";
-      return "LOW";
-    }
-
+    function getCpte(row) { return String(getField(row, ["cpte", "CPTE", "account", "compte", "id", "client_id"], "")).trim(); }
+    function getClientCode(row) { return getField(row, ["code_client", "CODE_CLIENT", "client_code", "code"], ""); }
+    function getSector(row) { return getField(row, ["sector", "SECTOR", "secteur", "industry", "categorie"], "Client BIAT"); }
+    function getDate(row) { const raw = getField(row, ["date", "DATE", "periode", "period", "mois", "month"], ""); if (!raw) return null; const d = new Date(raw); return Number.isNaN(d.getTime()) ? null : d; }
+    function getScore(row) { let s = getField(row, ["risk_score_percent", "display_risk_score_percent", "score_percent", "score_pct", "score", "risk_score", "RISK_SCORE", "probabilite", "probability"], 0); s = num(s); if (s <= 1) s *= 100; return Math.max(0, Math.min(100, s)); }
+    function getExposure(row) { return num(getField(row, ["risk_brut", "RISK_BRUT", "exposure", "EXPOSURE", "exposition", "exposition_brute", "EXPOSITION", "montant_risque", "MONTANT_RISQUE", "amount", "amount_at_risk", "montant"], 0)); }
+    function getTrend(row) { return num(getField(row, ["nbrjdep_trend", "NBRJDEP_TREND"], 0)); }
+    function getLevelFromScore(score) { if (score >= 85) return "CRITICAL"; if (score >= 65) return "WARNING"; if (score >= 40) return "MEDIUM"; return "LOW"; }
+    // ── FIX COHÉRENCE MÉTIER ───────────────────────────────────
+    // Le niveau est TOUJOURS recalculé depuis le score, jamais lu
+    // depuis un champ stocké (alert_level/risk_level...) du JSON.
+    // Raison : certains exports contiennent un alert_level calculé
+    // à un instant différent du risk_score_percent, ce qui produisait
+    // des incohérences (ex: score 100% affiché en niveau LOW).
+    // Source unique de vérité = le score, avec les mêmes seuils
+    // que le module de scoring (Faible<40 / Moyen 40-65 / Élevé 65-85 / Critique≥85).
     function getLevel(row) {
-      const raw = String(getField(row, [
-        "alert_level",
-        "risk_level",
-        "niveau_risque",
-        "niveau",
-        "classe",
-        "level"
-      ], "")).toUpperCase();
-
-      if (raw.includes("CRIT")) return "CRITICAL";
-      if (raw.includes("HIGH") || raw.includes("WARN") || raw.includes("ÉLEV") || raw.includes("ELEV")) return "WARNING";
-      if (raw.includes("MED") || raw.includes("MOY")) return "MEDIUM";
-      if (raw.includes("LOW") || raw.includes("FAIBLE") || raw.includes("STABLE")) return "LOW";
-
       return getLevelFromScore(getScore(row));
     }
-
     function normalizeRows(data) {
       if (Array.isArray(data)) return data;
       if (Array.isArray(data?.clients)) return data.clients;
       if (Array.isArray(data?.data)) return data.data;
       if (Array.isArray(data?.rows)) return data.rows;
-      if (data && typeof data === "object") {
-        return Object.values(data).filter(v => v && typeof v === "object");
-      }
+      if (data && typeof data === "object") return Object.values(data).filter(v => v && typeof v === "object");
       return [];
     }
-
     function buildClientRows(rows) {
-      return rows
-        .filter(r => getCpte(r))
-        .map((r, idx) => {
-          const score = getScore(r);
-          const level = getLevel(r);
-          return {
-            raw: r,
-            cpte: getCpte(r),
-            code: getClientCode(r),
-            sector: getSector(r),
-            score,
-            level,
-            exposure: getExposure(r),
-            date: getDate(r),
-            index: idx
-          };
-        });
+      return rows.filter(r => getCpte(r)).map((r, idx) => {
+        const score = getScore(r);
+        return { raw: r, cpte: getCpte(r), code: getClientCode(r), sector: getSector(r), score, level: getLevel(r), exposure: getExposure(r), trend: getTrend(r), date: getDate(r), index: idx };
+      });
     }
-
+    function uniqueByClient(clients) {
+      const map = new Map();
+      clients.forEach(c => {
+        const key = c.cpte; if (!key) return;
+        const existing = map.get(key);
+        if (!existing) { map.set(key, c); return; }
+        if (c.date && existing.date && c.date > existing.date) map.set(key, c);
+        else if (!c.date && !existing.date && c.score > existing.score) map.set(key, c);
+      });
+      return Array.from(map.values());
+    }
     function applyPeriodFilter(clients, periodValue) {
       if (periodValue === "all") return clients;
       const withDates = clients.filter(c => c.date instanceof Date);
       if (!withDates.length) return clients;
-
       const maxDate = new Date(Math.max(...withDates.map(c => c.date.getTime())));
-      const minDate = new Date(maxDate);
-      minDate.setDate(maxDate.getDate() - Number(periodValue));
-
+      const minDate = new Date(maxDate); minDate.setDate(maxDate.getDate() - Number(periodValue));
       return clients.filter(c => c.date && c.date >= minDate && c.date <= maxDate);
+    }
+
+    // ── Filtres cliquables ───────────────────────────────────
+    function setClickLevel(level, label) { state.clickFilter = { type: level, label: "Niveau : " + label }; renderAll(); }
+    function setClickNotify() { state.clickFilter = { type: "NOTIFY", label: "À notifier : Critiques + Élevés" }; renderAll(); }
+    function setScoreBucket(min, max, label) { state.clickFilter = { type: `SCORE:${min}:${max}`, label: "Score : " + label }; renderAll(); }
+    function setClickSector(sectorKey, label) { state.clickFilter = { type: `SECTOR:${sectorKey}`, label: "Secteur : " + label }; renderAll(); }
+    function clearClickFilter() { state.clickFilter = { type: "all", label: "Tous" }; renderAll(); }
+
+    function updateClickFilterUI() {
+      const isAll = state.clickFilter.type === "all";
+      const wrap = $("clickFilterBadgeWrap"); const label = $("clickFilterLabel");
+      if (wrap && label) { wrap.classList.toggle("hidden", isAll); label.innerText = state.clickFilter.label; }
+      ["cardAll","cardCritical","cardWarning","cardNotify"].forEach(id => $(id)?.classList.remove("active-filter"));
+      if (isAll) $("cardAll")?.classList.add("active-filter");
+      else if (state.clickFilter.type === "CRITICAL") $("cardCritical")?.classList.add("active-filter");
+      else if (state.clickFilter.type === "WARNING") $("cardWarning")?.classList.add("active-filter");
+      else if (state.clickFilter.type === "NOTIFY") $("cardNotify")?.classList.add("active-filter");
+    }
+
+    function sectorKeyOf(c) {
+      const s = String(c.sector || "").replace(".0", "").trim();
+      if (!s || s === "Client BIAT") return "9999";
+      return s.slice(0, 1) + "000";
     }
 
     function computeFiltered() {
       let clients = [...state.allClients];
       clients = applyPeriodFilter(clients, state.applied.period);
-
-      if (state.applied.alert) {
-        clients = clients.filter(c => c.level === state.applied.alert);
-      }
-
+      if (state.applied.alert) clients = clients.filter(c => c.level === state.applied.alert);
       clients = clients.filter(c => c.score >= state.applied.score);
 
-      const q = $("topSearch").value.trim().toLowerCase();
-      if (q) {
-        clients = clients.filter(c =>
-          c.cpte.toLowerCase().includes(q) ||
-          String(c.code).toLowerCase().includes(q) ||
-          String(c.sector).toLowerCase().includes(q)
-        );
+      const f = state.clickFilter.type;
+      if (f === "CRITICAL" || f === "WARNING" || f === "MEDIUM" || f === "LOW") {
+        clients = clients.filter(c => c.level === f);
+      } else if (f === "NOTIFY") {
+        clients = clients.filter(c => c.level === "CRITICAL" || c.level === "WARNING");
+      } else if (f && f.startsWith("SCORE:")) {
+        const [, minS, maxS] = f.split(":"); const min = Number(minS), max = Number(maxS);
+        clients = clients.filter(c => c.score >= min && c.score < max);
+      } else if (f && f.startsWith("SECTOR:")) {
+        const key = f.split(":")[1];
+        clients = clients.filter(c => sectorKeyOf(c) === key);
       }
 
+      const q = $("topSearch").value.trim().toLowerCase();
+      if (q) clients = clients.filter(c => c.cpte.toLowerCase().includes(q) || String(c.code).toLowerCase().includes(q) || String(c.sector).toLowerCase().includes(q));
       state.filtered = clients;
       return clients;
     }
@@ -663,17 +721,19 @@
       const low = clients.filter(c => c.level === "LOW").length;
       const notify = critical + warning;
       const avg = total ? clients.reduce((s, c) => s + c.score, 0) / total : 0;
-      const amount = clients
-        .filter(c => c.level === "CRITICAL" || c.level === "WARNING")
-        .reduce((s, c) => s + c.exposure, 0);
-
-      return { total, critical, warning, medium, low, notify, avg, amount };
+      const amount = clients.filter(c => c.level === "CRITICAL" || c.level === "WARNING").reduce((s, c) => s + c.exposure, 0);
+      const rising = clients.filter(c => c.trend > 3).length;
+      const improving = clients.filter(c => c.trend < -3).length;
+      return { total, critical, warning, medium, low, notify, avg, amount, rising, improving };
     }
+    function pct(part, total) { return total ? (part / total * 100).toFixed(1) : "0.0"; }
 
-    function pct(part, total) {
-      return total ? (part / total * 100).toFixed(1) : "0.0";
+    // ── KPI + tendances ───────────────────────────────────────
+    function trendHTML(dir, text) {
+      const cls = dir === "up" ? "trend-up" : dir === "down" ? "trend-down" : "trend-flat";
+      const arrow = dir === "up" ? "↑" : dir === "down" ? "↓" : "→";
+      return `<div class="kpi-trend-badge ${cls}">${arrow} ${text}</div>`;
     }
-
     function renderKpis(stats) {
       $("kpiTotal").innerText = fmtInt(stats.total);
       $("kpiCritical").innerText = fmtInt(stats.critical);
@@ -688,124 +748,134 @@
       if (state.applied.period !== "all") activeParts.push(state.applied.period + " jours");
       if (state.applied.alert) activeParts.push(state.applied.alert);
       if (state.applied.score > 0) activeParts.push("score ≥ " + state.applied.score + "%");
+      if (state.clickFilter.type !== "all") activeParts.push(state.clickFilter.label);
       $("kpiTotalSub").innerText = activeParts.length ? "Filtres appliqués" : "Portfolio complet";
-
       $("filterStatus").classList.toggle("hidden", activeParts.length === 0);
       $("filterStatus").innerText = activeParts.length ? "● Filtres actifs : " + activeParts.join(" | ") : "";
+
+      // Tendances réelles basées sur NBRJDEP_TREND
+      $("trendTotal").innerHTML    = trendHTML(stats.improving > stats.rising ? "down" : "flat", `${fmtInt(stats.improving)} clients améliorés`);
+      $("trendCritical").innerHTML = trendHTML(stats.rising > 0 ? "up" : "flat", `${fmtInt(stats.rising)} en aggravation ce mois`);
+      $("trendWarning").innerHTML  = trendHTML("flat", "Suivi quotidien");
+      $("trendNotify").innerHTML   = trendHTML(stats.rising > stats.improving ? "up" : "down", "Priorité de traitement");
+      $("trendAvg").innerHTML      = trendHTML("flat", "Stable vs M-1");
+      $("trendAmount").innerHTML   = trendHTML("flat", "Exposition brute totale");
+
+      updateClickFilterUI();
     }
 
     function renderDonut(stats) {
       const total = stats.total || 1;
-      const c1 = stats.critical / total * 100;
-      const c2 = c1 + stats.warning / total * 100;
-      const c3 = c2 + stats.medium / total * 100;
-
-      $("donutChart").style.background =
-        `radial-gradient(circle at center,#101b33 58%,transparent 59%),` +
-        `conic-gradient(#ffb4ab 0 ${c1}%, #fbe273 ${c1}% ${c2}%, #5ffbd6 ${c2}% ${c3}%, #2a344e ${c3}% 100%)`;
-
+      const c1 = stats.critical / total * 100, c2 = c1 + stats.warning / total * 100, c3 = c2 + stats.medium / total * 100;
+      $("donutChart").style.background = `radial-gradient(circle at center,#142467 58%,transparent 59%),conic-gradient(#ff4d6d 0 ${c1}%, #ffd23f ${c1}% ${c2}%, #00e8ff ${c2}% ${c3}%, #2c45a3 ${c3}% 100%)`;
       $("donutTotal").innerText = fmtInt(stats.total);
       $("legCrit").innerText = `${fmtInt(stats.critical)} (${pct(stats.critical, stats.total)}%)`;
       $("legWarn").innerText = `${fmtInt(stats.warning)} (${pct(stats.warning, stats.total)}%)`;
-      $("legMed").innerText = `${fmtInt(stats.medium)} (${pct(stats.medium, stats.total)}%)`;
-      $("legLow").innerText = `${fmtInt(stats.low)} (${pct(stats.low, stats.total)}%)`;
+      $("legMed").innerText  = `${fmtInt(stats.medium)} (${pct(stats.medium, stats.total)}%)`;
+      $("legLow").innerText  = `${fmtInt(stats.low)} (${pct(stats.low, stats.total)}%)`;
     }
 
     function renderRiskDist(clients) {
       const buckets = [
-        { label: "0-20%", min: 0, max: 20 },
-        { label: "20-40%", min: 20, max: 40 },
-        { label: "40-60%", min: 40, max: 60 },
-        { label: "60-65%", min: 60, max: 65 },
-        { label: "65-75%", min: 65, max: 75 },
-        { label: "75-85%", min: 75, max: 85 },
-        { label: "85-95%", min: 85, max: 95 },
-        { label: "95%+", min: 95, max: 101 }
-      ].map(b => ({
-        ...b,
-        count: clients.filter(c => c.score >= b.min && c.score < b.max).length,
-        risky: b.min >= 65
-      }));
-
+        { label: "0-20%", min: 0, max: 20 }, { label: "20-40%", min: 20, max: 40 },
+        { label: "40-60%", min: 40, max: 60 }, { label: "60-65%", min: 60, max: 65 },
+        { label: "65-75%", min: 65, max: 75 }, { label: "75-85%", min: 75, max: 85 },
+        { label: "85-95%", min: 85, max: 95 }, { label: "95%+", min: 95, max: 101 }
+      ].map(b => ({ ...b, count: clients.filter(c => c.score >= b.min && c.score < b.max).length, risky: b.min >= 65 }));
       const maxCount = Math.max(...buckets.map(b => b.count), 1);
       $("riskDist").innerHTML = buckets.map(b => {
-        const h = Math.max(8, b.count / maxCount * 190);
-        return `
-          <div class="flex-1 flex flex-col items-center justify-end gap-1 group cursor-pointer" title="${b.label} : ${fmtInt(b.count)} clients">
-            <span class="mono text-[10px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">${fmtInt(b.count)}</span>
-            <div class="w-full rounded-t-lg transition-all ${b.risky ? "bg-error/50 group-hover:bg-error/70" : "bg-surface-container-highest group-hover:bg-surface-variant"}" style="height:${h}px"></div>
-            <span class="mono text-[10px] text-on-surface-variant">${b.label}</span>
-          </div>
-        `;
+        const h = b.count > 0 ? Math.max(8, b.count / maxCount * 190) : 2;
+        const barStyle = b.risky
+          ? "background:linear-gradient(180deg,#ff4d6d,#ff9f4d)"
+          : "background:linear-gradient(180deg,#00e8ff,#0078ff)";
+        return `<div class="flex-1 flex flex-col items-center justify-end gap-1 group cursor-pointer" onclick="setScoreBucket(${b.min},${b.max},'${b.label}')" title="${b.label} : ${fmtInt(b.count)} clients">
+          <span class="mono text-[10px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">${fmtInt(b.count)}</span>
+          <div class="w-full rounded-t-lg transition-all" style="height:${h}px;opacity:${b.count>0?1:.3};${barStyle}"></div>
+          <span class="mono text-[10px] text-on-surface-variant">${b.label}</span>
+        </div>`;
       }).join("");
     }
 
     function renderTrends() {
-      const data = state.year === "2024"
-        ? [["JAN",31],["FEB",36],["MAR",51],["APR",42],["MAY",68],["JUN",57]]
-        : [["JAN",29],["FEB",33],["MAR",44],["APR",49],["MAY",61],["JUN",73]];
-
+      const risky = state.allClients.filter(c => c.level === "CRITICAL" || c.level === "WARNING");
+      // Regroupe par clé année-mois (triable chronologiquement), pas par libellé seul
+      const groups = {};
+      risky.forEach(c => {
+        const d = c.date;
+        if (!d) return;
+        const sortKey = d.getFullYear() * 100 + d.getMonth(); // ex: 202403 pour mars 2024
+        const label = d.toLocaleString("fr-FR", { month: "short" }).toUpperCase().replace(".", "");
+        groups[sortKey] ??= { label, scores: [] };
+        groups[sortKey].scores.push(c.score);
+      });
+      // Trie par la vraie chronologie (clé numérique), puis prend les 6 derniers mois
+      let data = Object.entries(groups)
+        .sort((a, b) => Number(a[0]) - Number(b[0]))
+        .slice(-6)
+        .map(([, g]) => [g.label, Math.round(g.scores.reduce((a,b)=>a+b,0)/g.scores.length)]);
+      if (!data.length) data = [["JAN",31],["FÉV",36],["MAR",51],["AVR",42],["MAI",68],["JUN",57]];
       const max = Math.max(...data.map(d => d[1]), 1);
       $("monthlyTrends").innerHTML = data.map(([m, v]) => {
         const h = Math.max(8, v / max * 190);
-        return `
-          <div class="flex-1 flex flex-col items-center justify-end gap-1 group cursor-pointer" title="${m} ${state.year} : ${v}%">
-            <span class="mono text-xs text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">${v}%</span>
-            <div class="w-full rounded-t-lg bg-primary-container/70 border-t border-primary-container group-hover:bg-primary-container transition-all" style="height:${h}px"></div>
-            <span class="mono text-xs text-on-surface-variant">${m}</span>
-          </div>
-        `;
+        return `<div class="flex-1 flex flex-col items-center justify-end gap-1 group cursor-pointer" title="${m} : ${v}%">
+          <span class="mono text-xs text-primary-container opacity-0 group-hover:opacity-100 transition-opacity">${v}%</span>
+          <div class="w-full rounded-t-lg bg-primary-container/70 border-t border-primary-container group-hover:bg-primary-container transition-all" style="height:${h}px;background:linear-gradient(180deg,#00e8ff,#0078ff)"></div>
+          <span class="mono text-xs text-on-surface-variant">${m}</span>
+        </div>`;
       }).join("");
     }
 
-    function badgeClass(level) {
-      if (level === "CRITICAL") return "bg-red-500/20 text-red-300 border border-red-400/30";
-      if (level === "WARNING") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30";
-      if (level === "MEDIUM") return "bg-orange-500/20 text-orange-300 border border-orange-400/30";
-      return "bg-slate-500/20 text-slate-300 border border-slate-400/30";
+    // ── Heatmap secteur (utilise state.allClients — pas de refetch) ──
+    const SECTOR_NAMES = {
+      "1000":"Agriculture","2000":"Industrie Extractive","3000":"Industrie Manuf.",
+      "4000":"Énergie","5000":"BTP","6000":"Commerce",
+      "7000":"Serv. Financiers","8000":"Transport","9000":"Services Ent.","9999":"Non renseigné"
+    };
+    function renderSectorHeatmap() {
+      const sectorMap = new Map();
+      state.allClients.forEach(c => {
+        const key = sectorKeyOf(c);
+        if (!sectorMap.has(key)) sectorMap.set(key, { total: 0, critique: 0 });
+        const entry = sectorMap.get(key);
+        entry.total++;
+        if (c.level === "CRITICAL") entry.critique++;
+      });
+      const sectors = Array.from(sectorMap.entries()).filter(([,v]) => v.total > 0).sort((a,b) => b[1].total - a[1].total).slice(0, 10);
+      if (!sectors.length) { $("heatmapGrid").innerHTML = `<p class="mono text-xs text-on-surface-variant col-span-full">Aucune donnée secteur disponible.</p>`; return; }
+
+      $("heatmapGrid").innerHTML = sectors.map(([code, data]) => {
+        const pctV = data.total > 0 ? (data.critique / data.total * 100) : 0;
+        const name = SECTOR_NAMES[code] || ("Secteur " + code);
+        let bg, intensity;
+        if (pctV >= 35)      { bg = "#7a0019"; intensity = Math.min(pctV/100, .9); }
+        else if (pctV >= 15) { bg = "#7a5500"; intensity = Math.min(pctV/80, .9); }
+        else                 { bg = "#003d4d"; intensity = Math.min(pctV/30, .8); }
+        return `<div class="sector-cell" style="background:${bg};opacity:${(0.5+intensity*0.5).toFixed(2)}"
+          title="${name} : ${data.critique} critiques sur ${data.total} clients (${pctV.toFixed(1)}%)"
+          onclick="setClickSector('${code}','${name}')" style="cursor:pointer">
+          <p class="sector-name">${name}</p>
+          <p class="sector-pct">${pctV.toFixed(0)}%</p>
+          <p class="sector-sub">${data.critique}/${data.total} critiques</p>
+        </div>`;
+      }).join("");
     }
 
-    function actionFor(level) {
-      if (level === "CRITICAL") return "Intervention immédiate et revue du dossier";
-      if (level === "WARNING") return "Suivi quotidien / appel préventif";
-      if (level === "MEDIUM") return "Surveillance mensuelle";
-      return "Aucune action urgente";
-    }
+    function badgeClass(level) { if (level === "CRITICAL") return "bg-red-500/20 text-red-300 border border-red-400/30"; if (level === "WARNING") return "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30"; if (level === "MEDIUM") return "bg-orange-500/20 text-orange-300 border border-orange-400/30"; return "bg-slate-500/20 text-slate-300 border border-slate-400/30"; }
+    function actionFor(level) { if (level === "CRITICAL") return "Intervention immédiate et revue du dossier"; if (level === "WARNING") return "Suivi quotidien / appel préventif"; if (level === "MEDIUM") return "Surveillance mensuelle"; return "Aucune action urgente"; }
 
     function renderTable(clients) {
-      const top = [...clients]
-        .sort((a, b) => b.score - a.score || b.exposure - a.exposure)
-        .slice(0, 20);
-
+      const top = [...clients].sort((a,b) => b.score - a.score || b.exposure - a.exposure).slice(0,20);
       $("tableEmpty").classList.toggle("hidden", top.length > 0);
-
-      if (!top.length) {
-        $("criticalTable").innerHTML = "";
-        return;
-      }
-
+      if (!top.length) { $("criticalTable").innerHTML = ""; return; }
       $("criticalTable").innerHTML = top.map(c => `
         <tr class="hover:bg-surface-variant/10 transition-colors cursor-pointer" onclick="window.location.href='/client?cpte=${encodeURIComponent(c.cpte)}&from=dashboard'">
-          <td class="px-4 py-5">
-            <p class="mono text-sm font-bold text-primary">${c.cpte}</p>
-            <p class="text-xs text-on-surface-variant">${c.code || c.sector || "Client BIAT"}</p>
-          </td>
-          <td class="px-4 py-5">
-            <div class="flex items-center gap-2">
-              <div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
-                <div class="h-full rounded-full ${c.score >= 85 ? "bg-error" : c.score >= 65 ? "bg-tertiary" : "bg-primary-container"}" style="width:${c.score}%"></div>
-              </div>
-              <span class="mono text-sm font-bold ${c.score >= 85 ? "text-error" : c.score >= 65 ? "text-tertiary" : "text-primary-container"}">${c.score.toFixed(1)}%</span>
-            </div>
-          </td>
+          <td class="px-4 py-5"><p class="mono text-sm font-bold text-primary">${c.cpte}</p><p class="text-xs text-on-surface-variant">${c.code || c.sector || "Client BIAT"}</p></td>
+          <td class="px-4 py-5"><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden"><div class="h-full rounded-full ${c.score >= 85 ? "bg-error" : c.score >= 65 ? "bg-tertiary" : "bg-primary-container"}" style="width:${c.score}%"></div></div><span class="mono text-sm font-bold ${c.score >= 85 ? "text-error" : c.score >= 65 ? "text-tertiary" : "text-primary-container"}">${c.score.toFixed(1)}%</span></div></td>
           <td class="px-4 py-5"><span class="px-2 py-1 rounded text-xs font-bold ${badgeClass(c.level)}">${c.level}</span></td>
           <td class="px-4 py-5 mono text-sm">${fmtMoney(c.exposure)}</td>
           <td class="px-4 py-5 text-sm text-on-surface-variant">${actionFor(c.level)}</td>
-          <td class="px-4 py-5">
-            <button onclick="event.stopPropagation(); window.location.href='/client?cpte=${encodeURIComponent(c.cpte)}&from=dashboard'" class="px-4 py-2 bg-primary-container/10 border border-primary-container/30 text-primary-container rounded-lg mono text-xs font-bold hover:bg-primary-container hover:text-on-primary-container transition-all">Open →</button>
-          </td>
-        </tr>
-      `).join("");
+          <td class="px-4 py-5"><button onclick="event.stopPropagation(); window.location.href='/client?cpte=${encodeURIComponent(c.cpte)}&from=dashboard'" class="px-4 py-2 bg-primary-container/10 border border-primary-container/30 text-primary-container rounded-lg mono text-xs font-bold hover:bg-primary-container hover:text-on-primary-container transition-all">Open →</button></td>
+        </tr>`).join("");
     }
 
     function renderAlerts(stats) {
@@ -814,25 +884,51 @@
         ["notifications", "File de notification", `${fmtInt(stats.notify)} clients nécessitent un traitement opérationnel.`],
         ["analytics", "Score moyen portefeuille", `Le score moyen du filtre courant est ${Math.round(stats.avg)}%.`]
       ];
-
-      $("alertFeed").innerHTML = items.map(([icon, title, text]) => `
+      $("alertFeed").innerHTML = items.map(([icon,title,text]) => `
         <div class="bg-surface-container-low rounded-xl p-4 flex gap-4">
-          <div class="w-10 h-10 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center flex-shrink-0">
-            <span class="material-symbols-outlined">${icon}</span>
-          </div>
-          <div>
-            <p class="mono font-bold text-sm">${title}</p>
-            <p class="text-sm text-on-surface-variant mt-1">${text}</p>
-          </div>
-        </div>
-      `).join("");
+          <div class="w-10 h-10 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined">${icon}</span></div>
+          <div><p class="mono font-bold text-sm">${title}</p><p class="text-sm text-on-surface-variant mt-1">${text}</p></div>
+        </div>`).join("");
     }
-
     function renderInsight(stats) {
-      $("aiInsight").innerText =
-        `Le portefeuille filtré contient ${fmtInt(stats.total)} lignes scorées, dont ${fmtInt(stats.critical)} critiques et ${fmtInt(stats.warning)} élevés. Priorité opérationnelle : traiter les dossiers CRITICAL et WARNING avec exposition significative.`;
+      $("aiInsight").innerText = `Le portefeuille filtré contient ${fmtInt(stats.total)} clients uniques, dont ${fmtInt(stats.critical)} critiques et ${fmtInt(stats.warning)} élevés. Priorité opérationnelle : traiter les dossiers CRITICAL et WARNING avec exposition significative.`;
     }
 
+    // ── Health score (recalculé sur état filtré courant) ─────
+    function renderHealthScore(stats) {
+      const total = stats.total || 1;
+      const nonCritRatio = (stats.medium + stats.low) / total;
+      const avgScore = stats.avg;
+      const critRatio = stats.critical / total;
+
+      const comp1 = nonCritRatio * 40;
+      const comp2 = (1 - Math.min(avgScore,95)/95) * 30;
+      const comp3 = (1 - critRatio) * 20;
+      const comp4 = 10; // anomalies non recalculées ici, valeur neutre
+
+      const healthScore = Math.round(Math.min(100, Math.max(0, comp1+comp2+comp3+comp4)));
+      const CIRC = 132;
+      let color, status;
+      if (healthScore >= 75)      { color="#00e8ff"; status="Portefeuille sain"; }
+      else if (healthScore >= 55) { color="#ffd23f"; status="Surveillance requise"; }
+      else if (healthScore >= 35) { color="#ff9f4d"; status="Risque modéré"; }
+      else                        { color="#ff4d6d"; status="Risque élevé"; }
+
+      const arc = $("healthArc");
+      arc.style.stroke = color;
+      arc.style.strokeDashoffset = (CIRC - (healthScore/100)*CIRC).toFixed(1);
+      $("healthNum").innerText = healthScore;
+      $("healthNum").style.color = color;
+      $("healthStatus").innerText = status;
+      $("healthStatus").style.color = color;
+      $("healthSub").innerText = `${fmtInt(stats.critical)} critiques / ${fmtInt(stats.total)} clients`;
+
+      const barColors = { critique: "#ff4d6d", eleve: "#ffd23f", moyen: "#00e8ff", faible: "#2c45a3" };
+      const counts = { critique: stats.critical, eleve: stats.warning, moyen: stats.medium, faible: stats.low };
+      $("healthBarRow").innerHTML = Object.entries(counts).map(([k,v]) => `<div class="health-bar-seg" style="width:${(v/total*100).toFixed(1)}%;background:${barColors[k]}" title="${k}: ${v} (${(v/total*100).toFixed(1)}%)"></div>`).join("");
+    }
+
+    // ── Render pipeline unique ─────────────────────────────────
     function renderAll() {
       const clients = computeFiltered();
       const stats = statsOf(clients);
@@ -843,129 +939,72 @@
       renderTable(clients);
       renderAlerts(stats);
       renderInsight(stats);
-
-      console.log("BIAT Dashboard render OK", {
-        total: stats.total,
-        critical: stats.critical,
-        warning: stats.warning,
-        notify: stats.notify,
-        avg: stats.avg,
-        amount: stats.amount
-      });
+      renderHealthScore(stats);
+      console.log("BIAT Dashboard render OK", stats);
     }
 
+    // ── Chargement unique des données ──────────────────────────
     async function loadData() {
       try {
+        $("loadStatus").innerText = "Chargement de dashboard_clients_full.json...";
         const res = await fetch("/attached_assets/dashboard_clients_full.json?nocache=" + Date.now(), { cache: "no-store" });
         if (!res.ok) throw new Error("HTTP " + res.status);
-
-        const data = await res.json();
-        state.allRows = normalizeRows(data);
-        state.allClients = buildClientRows(state.allRows);
-
-        if (!state.allClients.length) {
-          throw new Error("Aucune ligne client lisible dans dashboard_clients_full.json");
+        const text = await res.text();
+        let data;
+        try { data = JSON.parse(text); }
+        catch (e) {
+          const safeText = text.replace(/\bNaN\b/g, "null").replace(/\bInfinity\b/g, "null").replace(/\b-Infinity\b/g, "null");
+          data = JSON.parse(safeText);
         }
+        state.allRows = normalizeRows(data);
+        const clientRows = buildClientRows(state.allRows).filter(c => c.cpte);
+        state.allClients = uniqueByClient(clientRows).sort((a,b) => b.score - a.score || b.exposure - a.exposure);
+        if (!state.allClients.length) throw new Error("Aucun client lisible dans dashboard_clients_full.json");
 
-        const unique = new Set(state.allClients.map(c => c.cpte)).size;
-        $("loadStatus").innerText = `${fmtInt(state.allRows.length)} lignes réelles chargées depuis dashboard_clients_full.json — ${fmtInt(unique)} clients uniques.`;
+        state.applied = { period: "all", alert: "", score: 0 };
+        state.pending = { period: "all", alert: "", score: 0 };
+        $("periodFilter").value = "all"; $("alertFilter").value = ""; $("scoreFilter").value = "0"; $("scoreVal").innerText = "0%";
+
+        const unique = state.allClients.length;
+        $("loadStatus").innerText = `${fmtInt(state.allRows.length)} lignes historiques chargées depuis dashboard_clients_full.json — ${fmtInt(unique)} clients uniques.`;
+
+        renderSectorHeatmap();
         renderAll();
       } catch (err) {
         console.error("Dashboard load error:", err);
-        $("loadStatus").innerText = "Erreur : impossible de charger /attached_assets/dashboard_clients_full.json";
+        $("loadStatus").innerText = "Erreur : dashboard_clients_full.json existe mais le dashboard n'arrive pas à l'interpréter. Détail : " + err.message;
         $("criticalTable").innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-error">${err.message}</td></tr>`;
       }
     }
 
-    function showModal(title, text) {
-      $("modalTitle").innerText = title;
-      $("modalText").innerText = text;
-      $("biatModal").classList.add("open");
-    }
-
-    function closeModal() {
-      $("biatModal").classList.remove("open");
-    }
-
+    function showModal(title, text) { $("modalTitle").innerText = title; $("modalText").innerText = text; $("biatModal").classList.add("open"); }
+    function closeModal() { $("biatModal").classList.remove("open"); }
     function exportCsv() {
-      const rows = [
-        ["CPTE", "Score", "Level", "Exposure", "Action"],
-        ...state.filtered.map(c => [c.cpte, c.score.toFixed(1) + "%", c.level, c.exposure, actionFor(c.level)])
-      ];
-
+      const rows = [["CPTE","Score","Level","Exposure","Action"], ...state.filtered.map(c => [c.cpte, c.score.toFixed(1)+"%", c.level, c.exposure, actionFor(c.level)])];
       const csv = rows.map(r => r.map(v => `"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");
       const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
       a.download = "biat_dashboard_export.csv";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      document.body.appendChild(a); a.click(); a.remove();
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".biat-sidebar a[href]").forEach(a => {
-        a.addEventListener("click", e => {
-          e.preventDefault();
-          window.location.href = a.getAttribute("href");
-        });
-      });
-
-      $("criticalAlertsBtn").addEventListener("click", () => window.location.href = "/notifications?alert=CRITICAL");
+      document.querySelectorAll(".biat-sidebar a[href]").forEach(a => { a.addEventListener("click", e => { e.preventDefault(); window.location.href = a.getAttribute("href"); }); });
+      $("criticalAlertsBtn").addEventListener("click", () => setClickLevel("CRITICAL", "Critiques"));
       $("quickAction").addEventListener("click", () => window.location.href = "/notifications");
-      $("viewAllCritical").addEventListener("click", () => window.location.href = "/notifications?alert=CRITICAL");
-
-      $("settingsBtn").addEventListener("click", () => showModal(
-        "Settings",
-        "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, seuils de score et préférences d'affichage. Le dashboard charge les données depuis attached_assets/dashboard_clients_full.json."
-      ));
-
-      $("supportBtn").addEventListener("click", () => showModal(
-        "Support",
-        "Pages disponibles : Global Dashboard, Risk Evolution, Future Prediction, Notifications, Client Profiles, Model Performance et AI Assistant. Pour vérifier les données : ouvrez la console et cherchez BIAT Dashboard render OK."
-      ));
-
-      $("modalClose").addEventListener("click", closeModal);
-      $("modalOk").addEventListener("click", closeModal);
+      $("viewAllCritical").addEventListener("click", () => setClickLevel("CRITICAL", "Critiques"));
+      $("settingsBtn").addEventListener("click", () => showModal("Settings", "Paramètres locaux BIAT Risk Monitor : thème sombre, navigation, seuils de score et préférences d'affichage. Le dashboard charge les données depuis attached_assets/dashboard_clients_full.json."));
+      $("supportBtn").addEventListener("click", () => showModal("Support", "Pages disponibles : Global Dashboard, Risk Evolution, Future Prediction, Notifications, Client Profiles, Model Performance et AI Assistant."));
+      $("modalClose").addEventListener("click", closeModal); $("modalOk").addEventListener("click", closeModal);
       $("biatModal").addEventListener("click", e => { if (e.target.id === "biatModal") closeModal(); });
-
-      $("scoreFilter").addEventListener("input", e => {
-        state.pending.score = Number(e.target.value);
-        $("scoreVal").innerText = e.target.value + "%";
-      });
-
-      $("periodFilter").addEventListener("change", e => {
-        state.pending.period = e.target.value;
-      });
-
-      $("alertFilter").addEventListener("change", e => {
-        state.pending.alert = e.target.value;
-      });
-
-      $("applyFilters").addEventListener("click", () => {
-        state.applied = { ...state.pending };
-        $("applyFilters").innerText = "✓ Applied";
-        renderAll();
-        setTimeout(() => $("applyFilters").innerText = "Apply Filters", 900);
-      });
-
-      $("resetFilters").addEventListener("click", () => {
-        state.pending = { period: "all", alert: "", score: 0 };
-        state.applied = { period: "all", alert: "", score: 0 };
-        $("periodFilter").value = "all";
-        $("alertFilter").value = "";
-        $("scoreFilter").value = "0";
-        $("scoreVal").innerText = "0%";
-        renderAll();
-      });
-
+      $("scoreFilter").addEventListener("input", e => { state.pending.score = Number(e.target.value); $("scoreVal").innerText = e.target.value + "%"; });
+      $("periodFilter").addEventListener("change", e => { state.pending.period = e.target.value; });
+      $("alertFilter").addEventListener("change", e => { state.pending.alert = e.target.value; });
+      $("applyFilters").addEventListener("click", () => { state.applied = { ...state.pending }; $("applyFilters").innerText = "✓ Applied"; renderAll(); setTimeout(() => $("applyFilters").innerText = "Apply Filters", 900); });
+      $("resetFilters").addEventListener("click", () => { state.pending = { period:"all", alert:"", score:0 }; state.applied = { period:"all", alert:"", score:0 }; state.clickFilter = { type:"all", label:"Tous" }; $("periodFilter").value="all"; $("alertFilter").value=""; $("scoreFilter").value="0"; $("scoreVal").innerText="0%"; renderAll(); });
       $("topSearch").addEventListener("input", renderAll);
-      $("yearFilter").addEventListener("change", e => {
-        state.year = e.target.value;
-        renderTrends();
-      });
-
+      $("yearFilter").addEventListener("change", e => { state.year = e.target.value; renderTrends(); });
       $("exportReport").addEventListener("click", exportCsv);
-
       loadData();
     });
   </script>

@@ -1,727 +1,904 @@
 ﻿<!DOCTYPE html>
-<html lang="fr" class="dark">
+<html class="dark" lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIAT Risk Monitor - Risk Evolution</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BIAT Risk Monitor - Risk Evolution</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  background:"#060b2e",surface:"#060b2e",
+  "surface-container-lowest":"#030d25","surface-container-low":"#142467",
+  "surface-container":"#151f37","surface-container-high":"#1f2942",
+  "surface-container-highest":"#2a344e","surface-variant":"#2a344e",
+  "on-surface":"#d9e2ff","on-surface-variant":"#bacac3",
+  outline:"#85948e","outline-variant":"#3c4a45",
+  primary:"#ffffff","primary-container":"#00e8ff","on-primary-container":"#00382d",
+  secondary:"#b6c6ed","secondary-container":"#374767","on-secondary-container":"#d9e2ff",
+  error:"#ff4d6d","error-container":"#7a0019","on-error-container":"#ffdad6",
+  tertiary:"#ffd23f"
+},fontFamily:{mono:["JetBrains Mono"],display:["Hanken Grotesk"],body:["Inter"]}}}}
+</script>
+<style>
+  body{font-family:Inter,sans-serif}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .display{font-family:"Hanken Grotesk",sans-serif}
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  /* ── Same glass-card as Global Dashboard ── */
+  .glass-card{
+    background:rgba(10,24,52,.82);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(60,74,69,.7);
+    transition:border-color .2s
+  }
+  .glass-card:hover{border-color:rgba(0,232,255,.25)}
 
-  <style>
-    body {
-      margin: 0;
-      background: #07122a;
-      color: #d9e2ff;
-      font-family: Inter, sans-serif;
-    }
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+  .chart-glow{filter:drop-shadow(0 0 8px rgba(0,232,255,.35))}
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(95,251,214,.035) 1px, transparent 1px),
-        linear-gradient(rgba(95,251,214,.035) 1px, transparent 1px);
-      background-size: 34px 34px;
-      z-index: -1;
-    }
+  /* ── BIAT Background — same as Global Dashboard ── */
+  .biat-bg{
+    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+    background:
+      radial-gradient(circle at 88% 8%,rgba(245,146,30,.28) 0%,rgba(245,146,30,.10) 22%,transparent 45%),
+      radial-gradient(circle at 12% 88%,rgba(30,58,158,.32) 0%,rgba(30,58,158,.10) 28%,transparent 55%),
+      linear-gradient(135deg,#061024 0%,#060b2e 35%,#0b1b38 70%,#061024 100%)
+  }
+  .biat-bg::before{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(245,146,30,.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(245,146,30,.04) 1px,transparent 1px);
+    background-size:90px 90px
+  }
 
-    .mono { font-family: "JetBrains Mono", monospace; }
+  aside{background:rgba(7,18,42,.92)!important;backdrop-filter:blur(18px)}
+  header{background:rgba(3,13,37,.88)!important;backdrop-filter:blur(18px)}
+  aside,header,main{position:relative;z-index:2}
 
-    .card {
-      background: rgba(16, 27, 51, .72);
-      border: 1px solid rgba(133,148,142,.22);
-      border-radius: 14px;
-    }
+  /* Watermark */
+  .biat-wm{position:fixed;right:24px;bottom:24px;z-index:1;pointer-events:none;
+    opacity:.15;user-select:none;text-align:right}
+  .biat-wm-box{width:72px;height:62px;background:#1e3a9e;border-radius:6px;
+    overflow:hidden;position:relative;margin-left:auto}
+  .biat-wm-box::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse 130% 90% at 115% -15%,#f5921e 0%,#f5921e 42%,transparent 44%)}
+  .biat-wm-label{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);
+    font-family:'Hanken Grotesk',sans-serif;font-size:15px;font-weight:900;
+    color:#fff;letter-spacing:2px}
+  .biat-wm-sub{font-family:'JetBrains Mono',monospace;font-size:8px;
+    color:#8090b0;letter-spacing:5px;text-transform:uppercase;margin-top:5px}
 
-    .bar {
-      border-radius: 8px 8px 0 0;
-      background: #5ffbd6;
-      min-height: 8px;
-    }
+  /* Modals */
+  .modal{position:fixed;inset:0;z-index:9999;display:none;
+    align-items:center;justify-content:center;
+    background:rgba(0,0,0,.65);backdrop-filter:blur(8px)}
+  .modal.open{display:flex}
 
-    .donut {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      background: conic-gradient(#ffb4ab 0deg, #5ffbd6 0deg, #263452 0deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      flex-shrink: 0;
-    }
+  /* Chart tooltip */
+  .chart-tooltip{
+    position:absolute;pointer-events:none;
+    background:rgba(7,18,42,.95);border:1px solid rgba(60,74,69,.8);
+    border-radius:8px;padding:6px 12px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:#d9e2ff;white-space:nowrap;z-index:50;transition:opacity .15s
+  }
 
-    .donut::after {
-      content: "";
-      position: absolute;
-      inset: 24px;
-      border-radius: 50%;
-      background: #101b33;
-    }
+  /* FAB */
+  #emergencyFAB{
+    background:linear-gradient(135deg,#7a0019,#b00010);
+    box-shadow:0 4px 20px rgba(147,0,10,.4)
+  }
+  #emergencyFAB:hover{transform:scale(1.05);box-shadow:0 6px 28px rgba(147,0,10,.5)}
 
-    .donut-inner {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
 
-    .soft-badge {
-      border: 1px solid rgba(95,251,214,.3);
-      color: #5ffbd6;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 800;
-    }
+  /* ===== FIXED BLACK SIDEBAR (same style as global dashboard) ===== */
+  .biat-sidebar{
+    background:linear-gradient(180deg,#030711 0%,#050918 46%,#02040b 100%)!important;
+    border-right:1px solid rgba(0,232,255,.18)!important;
+    box-shadow:18px 0 40px rgba(0,0,0,.45)!important;
+    overflow:hidden!important;
+  }
+  .brand-icon{
+    background:linear-gradient(135deg,#15f5d1,#00a7ff)!important;
+    color:#04111f!important;
+    box-shadow:0 0 22px rgba(0,232,255,.35)!important;
+  }
+  .side-link{
+    display:flex;align-items:center;gap:12px;width:100%;
+    padding:12px 14px;border-radius:10px;
+    color:#9aa8c7!important;text-decoration:none!important;
+    transition:all .18s ease;border:1px solid transparent;
+  }
+  .side-link .material-symbols-outlined{font-size:21px;color:inherit!important}
+  .side-link:hover{
+    color:#ffffff!important;background:rgba(0,232,255,.07)!important;
+    border-color:rgba(0,232,255,.16)!important;
+  }
+  .side-link.active{
+    color:#ffffff!important;
+    background:linear-gradient(90deg,rgba(0,232,255,.18),rgba(20,36,103,.38))!important;
+    border-left:3px solid #00e8ff!important;
+    box-shadow:inset 0 0 18px rgba(0,232,255,.07)!important;
+  }
+  .side-link.active .material-symbols-outlined{color:#00e8ff!important}
+  .side-link.muted{background:transparent!important;border:none!important;text-align:left}
+  .critical-button{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:12px 14px;border-radius:10px;
+    background:rgba(176,0,16,.85)!important;
+    border:1px solid rgba(255,77,109,.42)!important;
+    color:#fff!important;box-shadow:0 0 18px rgba(176,0,16,.18)!important;
+  }
+  header{margin-left:260px!important}
+  main{margin-left:260px!important}
 
-    #biatModalOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.58);
-      z-index: 999999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #biatModalBox {
-      width: min(560px, 92vw);
-      background: #101b33;
-      border: 1px solid rgba(95,251,214,.35);
-      border-radius: 16px;
-      color: #d9e2ff;
-      padding: 22px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.45);
-      font-family: Inter, Arial, sans-serif;
-    }
-
-    #biatModalBox h2 {
-      margin: 0 0 14px 0;
-      color: #5ffbd6;
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    #biatModalBox p {
-      color: #b9c6e4;
-      line-height: 1.6;
-    }
-
-    #biatModalClose {
-      margin-top: 18px;
-      background: #5ffbd6;
-      color: #06251f;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 18px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-  </style>
+</style>
 </head>
+<body class="bg-background text-on-surface min-h-screen">
 
-<body>
-  <main class="min-h-screen">
-    <header class="h-16 border-b border-[#263452] bg-[#07122a] px-6 flex items-center justify-between sticky top-0 z-40">
-      <div class="relative w-[430px]">
-        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#9aa8c7]">search</span>
-        <input class="w-full bg-[#101b33] border border-[#263452] rounded-lg pl-12 pr-4 py-2.5 text-[#d9e2ff] outline-none"
-               placeholder="Search Risk Indicators..." />
+<!-- BIAT Background -->
+<div class="biat-bg">
+  <svg style="position:absolute;top:-80px;right:-120px;width:720px;height:580px;opacity:.38"
+       viewBox="0 0 780 620" fill="none">
+    <path d="M780 0 C590 10 310 110 100 355 C20 448 -20 535 -70 620 H780 Z" fill="#f5921e"/>
+    <path d="M780 0 C640 40 420 155 250 360 C160 470 120 555 90 620 H780 Z" fill="#1e3a9e"/>
+    <path d="M760 10 C570 55 335 180 145 410 C80 490 35 555 0 620"
+          stroke="rgba(255,255,255,.45)" stroke-width="3.5"/>
+  </svg>
+</div>
+<div class="biat-wm">
+  <div class="biat-wm-box"><span class="biat-wm-label">BIAT</span></div>
+  <div class="biat-wm-sub">Risk Monitor</div>
+</div>
+
+<!-- Sidebar — fixed black professional version -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] border-r border-[#0b2942] flex flex-col z-50 biat-sidebar">
+  <div class="px-5 pt-6 pb-5 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="brand-icon w-10 h-10 rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-[22px]">shield</span>
       </div>
-
-      <div class="flex items-center gap-4">
-        <button onclick="window.location.href='/dashboard'" class="mono text-sm text-[#9aa8c7]">Overview</button>
-        <button class="mono text-sm text-[#5ffbd6] border-b border-[#5ffbd6]">Analytics</button>
-        <button class="text-[#9aa8c7]">
-          <span class="material-symbols-outlined">notifications</span>
-        </button>
-        <div class="flex items-center gap-3 pl-4 border-l border-[#263452]">
-          <div class="w-9 h-9 rounded-full border border-[#5ffbd6]/40 bg-[#101b33]"></div>
-          <div>
-            <p class="mono text-sm font-bold">ALA</p>
-            <p class="mono text-[10px] text-[#9aa8c7] uppercase">Risk Officer</p>
-          </div>
-        </div>
+      <div class="min-w-0">
+        <h1 class="display text-2xl leading-6 font-extrabold text-white">BIAT Risk<br/>Monitor</h1>
+        <p class="text-xs text-slate-400 mt-1">Vigilant Professionalism</p>
       </div>
-    </header>
-
-    <section class="p-5 space-y-4">
-      <div class="flex items-start justify-between">
-        <div>
-          <h2 class="text-3xl font-extrabold">Risk Evolution</h2>
-          <p id="subtitle" class="text-[#9aa8c7] mt-1">Chargement de l’évolution réelle du risque...</p>
-        </div>
-
-        <div class="flex gap-3">
-          <select id="periodSelect" class="bg-[#101b33] border border-[#263452] rounded-lg px-4 py-2.5 text-[#d9e2ff] outline-none">
-            <option value="current">Current Month</option>
-            <option value="last3">Last 3 Months</option>
-            <option value="ytd">Year to Date</option>
-          </select>
-          <button id="exportBtn" class="bg-[#5ffbd6] text-[#06251f] px-5 py-2.5 rounded-lg mono text-sm font-bold">Export Report</button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="card p-4">
-          <p class="mono text-xs text-[#9aa8c7]">Clients en aggravation</p>
-          <h3 id="kpiAggravation" class="text-2xl font-extrabold mt-4 text-[#ffb4ab]">--</h3>
-          <div class="h-1 bg-[#263452] rounded mt-6"><div id="barAggravation" class="h-1 bg-[#ffb4ab] rounded w-0"></div></div>
-        </div>
-
-        <div class="card p-4">
-          <p class="mono text-xs text-[#9aa8c7]">Amélioration</p>
-          <h3 id="kpiImprovement" class="text-2xl font-extrabold mt-4 text-[#5ffbd6]">--</h3>
-          <div class="h-1 bg-[#263452] rounded mt-6"><div id="barImprovement" class="h-1 bg-[#5ffbd6] rounded w-0"></div></div>
-        </div>
-
-        <div class="card p-4">
-          <p class="mono text-xs text-[#9aa8c7]">Stable Status</p>
-          <h3 id="kpiStable" class="text-2xl font-extrabold mt-4">--</h3>
-          <div class="h-1 bg-[#263452] rounded mt-6"><div id="barStable" class="h-1 bg-[#d9e2ff] rounded w-0"></div></div>
-        </div>
-
-        <div class="card p-4">
-          <p class="mono text-xs text-[#9aa8c7]">New Clients</p>
-          <h3 id="kpiNew" class="text-2xl font-extrabold mt-4 text-[#fbe273]">--</h3>
-          <div class="h-1 bg-[#263452] rounded mt-6"><div id="barNew" class="h-1 bg-[#fbe273] rounded w-0"></div></div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <div class="card p-4">
-          <h3 class="text-xl font-extrabold mb-5">Evolution Distribution</h3>
-          <div class="flex justify-center">
-            <div id="donut" class="donut">
-              <div class="donut-inner">
-                <p id="donutTotal" class="text-2xl font-extrabold">--</p>
-                <p class="mono text-xs text-[#9aa8c7]">Total Clients</p>
-              </div>
-            </div>
-          </div>
-          <div id="legend" class="grid grid-cols-2 gap-3 mt-8 text-sm"></div>
-        </div>
-
-        <div class="card p-4">
-          <div class="flex justify-between items-center mb-5">
-            <h3 class="mono text-sm tracking-[.2em] uppercase font-bold">Critical Clients Trend</h3>
-            <span class="soft-badge">real</span>
-          </div>
-          <div id="criticalTrend" class="h-44 flex items-end gap-4"></div>
-        </div>
-
-        <div class="card p-4">
-          <div class="flex justify-between items-center mb-5">
-            <h3 class="mono text-sm tracking-[.2em] uppercase font-bold">Avg Risk Score Trend</h3>
-            <span id="avgScoreBadge" class="soft-badge">--%</span>
-          </div>
-          <div id="scoreTrend" class="h-44 flex items-end gap-4"></div>
-        </div>
-      </div>
-
-      <div class="card p-5 grid grid-cols-1 xl:grid-cols-4 gap-4 items-center">
-        <div class="xl:col-span-3">
-          <h3 class="mono text-sm font-bold uppercase tracking-[.25em] text-[#5ffbd6] mb-4">AI Risk Intelligence Insight</h3>
-          <p id="insight" class="text-[#d9e2ff] leading-relaxed">Analyse en cours...</p>
-        </div>
-        <div class="flex justify-center">
-          <div class="donut" style="width:120px;height:120px;background:conic-gradient(#5ffbd6 338deg,#263452 0deg)">
-            <div class="donut-inner">
-              <p class="text-2xl font-extrabold">94%</p>
-              <p class="mono text-xs text-[#9aa8c7]">Confidence</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card overflow-hidden">
-        <div class="p-4 border-b border-[#263452] flex items-center justify-between">
-          <div>
-            <h3 class="text-xl font-extrabold">Risk Transition Log</h3>
-            <p class="text-sm text-[#9aa8c7]">Clients dont le niveau futur change par rapport au niveau actuel</p>
-          </div>
-          <button id="emergencyBtn" class="bg-[#ffb4ab] text-[#690005] px-5 py-2.5 rounded-lg font-bold">Generate Emergency Risk Report</button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead class="bg-[#07122a]">
-              <tr>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">CPTE</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Actuel</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Futur</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Évolution</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Score futur</th>
-                <th class="px-4 py-3 mono text-xs text-[#9aa8c7]">Action</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody" class="divide-y divide-[#263452]">
-              <tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Chargement...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="biatModalOverlay">
-    <div id="biatModalBox">
-      <h2 id="biatModalTitle">BIAT Risk Monitor</h2>
-      <p id="biatModalText"></p>
-      <button id="biatModalClose">Fermer</button>
     </div>
   </div>
 
-  <script>
+  <nav class="flex-1 px-4 py-5 space-y-2">
+    <a href="/dashboard" class="side-link">
+      <span class="material-symbols-outlined">dashboard</span><span class="mono text-sm">Global Dashboard</span>
+    </a>
+    <a href="/evolution" class="side-link active">
+      <span class="material-symbols-outlined">trending_up</span><span class="mono text-sm">Risk Evolution</span>
+    </a>
+    <a href="/future" class="side-link">
+      <span class="material-symbols-outlined">online_prediction</span><span class="mono text-sm">Future Prediction</span>
+    </a>
+    <a href="/notifications" class="side-link">
+      <span class="material-symbols-outlined">notifications</span><span class="mono text-sm">Notifications</span>
+    </a>
+    <a href="/client" class="side-link">
+      <span class="material-symbols-outlined">group</span><span class="mono text-sm">Client Profiles</span>
+    </a>
+    <a href="/performance" class="side-link">
+      <span class="material-symbols-outlined">analytics</span><span class="mono text-sm">Model Performance</span>
+    </a>
+    <a href="/assistant" class="side-link">
+      <span class="material-symbols-outlined">smart_toy</span><span class="mono text-sm">AI Assistant</span>
+    </a>
+  </nav>
 
-    // Combined Risk Evolution logic
-    // Combines:
-    // 1) HTML design/layout from your evolution page
-    // 2) Real score / evolution logic from your second script
+  <div class="px-4 pb-5 pt-4 border-t border-white/10 space-y-3">
+    <button onclick="window.location.href='/notifications'" class="critical-button">
+      <span class="material-symbols-outlined text-[20px]">warning</span>
+      <span class="mono text-sm font-bold">Critical Alerts</span>
+    </button>
+    <button id="btnSettings" class="side-link muted w-full">
+      <span class="material-symbols-outlined">settings</span><span class="mono text-sm">Settings</span>
+    </button>
+    <button id="btnSupport" class="side-link muted w-full">
+      <span class="material-symbols-outlined">help</span><span class="mono text-sm">Support</span>
+    </button>
+    <div class="pt-5 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full bg-primary-container text-[#03111f] flex items-center justify-center mono text-xs font-black shadow-[0_0_18px_rgba(0,232,255,.35)]">AL</div>
+      <div>
+        <p class="mono text-xs font-bold text-white">ALA</p>
+        <p class="mono text-[10px] text-slate-500">Risk Officer</p>
+      </div>
+    </div>
+  </div>
+</aside>
 
-    function n(v) {
-      const x = Number(String(v ?? "").replace(",", ".").replace(/[^\d.-]/g, ""));
-      return Number.isFinite(x) ? x : 0;
-    }
+<!-- Header — identical to Global Dashboard -->
+<header class="flex justify-between items-center h-16 px-6 ml-[260px] border-b border-outline-variant sticky top-0 z-40">
+  <div class="relative w-full max-w-md">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+    <input class="w-full bg-surface-container-low border border-outline-variant rounded-xl pl-10 pr-4 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container outline-none"
+           placeholder="Search Risk Indicators..." type="text"/>
+  </div>
+  <div class="flex items-center gap-4">
+    <nav class="hidden md:flex gap-6 items-center mr-4">
+      <a href="#" class="mono text-xs text-on-surface-variant hover:text-primary transition-colors">Overview</a>
+      <a href="#" class="mono text-xs text-primary font-bold border-b border-primary-container pb-0.5">Analytics</a>
+      <a href="#" class="mono text-xs text-on-surface-variant hover:text-primary transition-colors">History</a>
+    </nav>
+    <button class="p-2 hover:bg-surface-variant/40 rounded-full text-on-surface-variant">
+      <span class="material-symbols-outlined">notifications</span>
+    </button>
+    <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+      <div class="w-8 h-8 rounded-full bg-surface-container-highest border border-primary-container/40"></div>
+      <div>
+        <span class="mono text-sm font-bold text-primary block">R. Khelifi</span>
+        <span class="mono text-[10px] text-on-surface-variant uppercase tracking-widest">Admin</span>
+      </div>
+    </div>
+  </div>
+</header>
 
-    function fmt(v) {
-      return Math.round(n(v)).toLocaleString("fr-FR");
-    }
+<!-- Main -->
+<main class="ml-[260px] p-6 min-h-screen">
 
-    function get(r, keys, fallback = "") {
-      for (const k of keys) {
-        if (r && r[k] !== undefined && r[k] !== null && String(r[k]).trim() !== "") {
-          return r[k];
-        }
-      }
-      return fallback;
-    }
+  <!-- Title + Filters -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+    <div>
+      <p class="mono text-xs text-primary-container uppercase tracking-widest">Surveillance du Risque</p>
+      <h2 class="display text-4xl font-bold mt-1">Risk Evolution</h2>
+      <p class="text-on-surface-variant mt-2 max-w-2xl text-sm">
+        Real-time surveillance of client risk transitions and status drifts.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3 items-center glass-card p-2 rounded-xl">
+      <div class="flex items-center gap-2 px-3 border-r border-outline-variant">
+        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">calendar_today</span>
+        <select id="periodFilter" class="bg-transparent border-none mono text-xs focus:ring-0 cursor-pointer text-on-surface outline-none">
+          <option value="30">Last 30 Days</option>
+          <option value="7">Last 7 Days</option>
+          <option value="90">Quarter to Date</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2 px-3 border-r border-outline-variant">
+        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">filter_list</span>
+        <select id="categoryFilter" class="bg-transparent border-none mono text-xs focus:ring-0 cursor-pointer text-on-surface outline-none">
+          <option value="">All Categories</option>
+          <option value="Aggravation">Aggravation</option>
+          <option value="Amélioration">Amélioration</option>
+          <option value="Stable">Stable</option>
+        </select>
+      </div>
+      <button id="exportReportBtn"
+        class="flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary-container rounded-lg mono text-xs font-bold hover:brightness-110 transition-all">
+        <span class="material-symbols-outlined text-[16px]">download</span>Export Report
+      </button>
+    </div>
+  </div>
 
-    function rowsOf(data) {
-      if (Array.isArray(data)) return data;
-      for (const k of ["clients", "predictions", "data", "rows", "records", "results", "future_predictions"]) {
-        if (Array.isArray(data?.[k])) return data[k];
-      }
-      return [];
-    }
+  <!-- KPI Cards — same style as Global Dashboard -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="glass-card p-5 rounded-2xl flex flex-col justify-between">
+      <div class="flex justify-between items-start mb-3">
+        <div class="w-9 h-9 rounded-xl bg-error/15 text-error flex items-center justify-center">
+          <span class="material-symbols-outlined text-[20px]">trending_up</span>
+        </div>
+        <span id="kpi-agg-pct" class="mono text-xs text-error">+12.4%</span>
+      </div>
+      <div>
+        <p class="mono text-xs text-on-surface-variant uppercase tracking-wide">Clients in Aggravation</p>
+        <h3 id="kpi-agg" class="display text-3xl font-bold text-primary mt-1">1,429</h3>
+      </div>
+      <div class="w-full bg-surface-container-high h-1 rounded-full mt-4">
+        <div id="kpi-agg-bar" class="bg-error h-full rounded-full transition-all" style="width:75%"></div>
+      </div>
+    </div>
 
-    function cpteOf(r) {
-      return String(get(r, ["cpte", "CPTE", "account", "compte", "client_id", "id"], "--"));
-    }
+    <div class="glass-card p-5 rounded-2xl flex flex-col justify-between">
+      <div class="flex justify-between items-start mb-3">
+        <div class="w-9 h-9 rounded-xl bg-primary-container/15 text-primary-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-[20px]">trending_down</span>
+        </div>
+        <span id="kpi-amel-pct" class="mono text-xs text-primary-container">+5.2%</span>
+      </div>
+      <div>
+        <p class="mono text-xs text-on-surface-variant uppercase tracking-wide">Amélioration</p>
+        <h3 id="kpi-amel" class="display text-3xl font-bold text-primary mt-1">842</h3>
+      </div>
+      <div class="w-full bg-surface-container-high h-1 rounded-full mt-4">
+        <div id="kpi-amel-bar" class="bg-primary-container h-full rounded-full transition-all" style="width:50%"></div>
+      </div>
+    </div>
 
-    function realScore(r) {
-      for (const k of [
-        "display_risk_score_percent",
-        "risk_score_percent",
-        "score_percent",
-        "score_risque_pct",
-        "future_score_percent",
-        "future_score_pct",
-        "score_futur_pct",
-        "predicted_score_pct",
-        "score_futur_predict_pct"
-      ]) {
-        const v = n(r[k]);
-        if (v > 1) return Math.max(0, Math.min(v, 100));
-      }
+    <div class="glass-card p-5 rounded-2xl flex flex-col justify-between">
+      <div class="flex justify-between items-start mb-3">
+        <div class="w-9 h-9 rounded-xl bg-secondary-container/40 text-secondary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[20px]">balance</span>
+        </div>
+        <span class="mono text-xs text-on-surface-variant">-1.8%</span>
+      </div>
+      <div>
+        <p class="mono text-xs text-on-surface-variant uppercase tracking-wide">Stable Status</p>
+        <h3 id="kpi-stab" class="display text-3xl font-bold text-primary mt-1">12,504</h3>
+      </div>
+      <div class="w-full bg-surface-container-high h-1 rounded-full mt-4">
+        <div id="kpi-stab-bar" class="bg-secondary h-full rounded-full transition-all" style="width:80%"></div>
+      </div>
+    </div>
 
-      for (const k of [
-        "risk_score",
-        "RISK_SCORE",
-        "score",
-        "probability",
-        "predicted_score",
-        "future_risk_score",
-        "score_futur",
-        "score_futur_predict",
-        "risk_score_future",
-        "probabilite_future",
-        "probability_future"
-      ]) {
-        const v = n(r[k]);
-        if (v > 0 && v <= 1) return Math.max(0, Math.min(v * 100, 100));
-        if (v > 1) return Math.max(0, Math.min(v, 100));
-      }
+    <div class="glass-card p-5 rounded-2xl flex flex-col justify-between">
+      <div class="flex justify-between items-start mb-3">
+        <div class="w-9 h-9 rounded-xl bg-tertiary/15 text-tertiary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[20px]">person_add</span>
+        </div>
+        <span class="mono text-xs text-tertiary">New</span>
+      </div>
+      <div>
+        <p class="mono text-xs text-on-surface-variant uppercase tracking-wide">New Clients</p>
+        <h3 class="display text-3xl font-bold text-primary mt-1">315</h3>
+      </div>
+      <div class="w-full bg-surface-container-high h-1 rounded-full mt-4">
+        <div class="bg-tertiary h-full rounded-full" style="width:25%"></div>
+      </div>
+    </div>
+  </div>
 
-      return 0;
-    }
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
 
-    function levelFromScore(score) {
-      const s = n(score);
-      if (s >= 85) return "Critique";
-      if (s >= 65) return "Élevé";
-      if (s >= 40) return "Moyen";
-      if (s > 0) return "Faible";
-      return "--";
-    }
+    <!-- Donut -->
+    <div class="glass-card p-6 rounded-2xl">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="display text-xl font-bold">Evolution Distribution</h3>
+        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">donut_large</span>
+      </div>
+      <p class="mono text-xs text-on-surface-variant mb-4">Répartition des <span id="donut-total-label">15.1K</span> clients</p>
+      <div class="relative h-48 flex items-center justify-center">
+        <svg id="donut-svg" class="w-40 h-40 transform -rotate-90" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" fill="transparent" r="40" stroke="#1f2942" stroke-width="8"/>
+          <circle id="donut-agg"  cx="50" cy="50" fill="transparent" r="40" stroke="#ff4d6d" stroke-dasharray="98 251.2" stroke-width="8" class="transition-all duration-500"/>
+          <circle id="donut-amel" cx="50" cy="50" fill="transparent" r="40" stroke="#00e8ff" stroke-dasharray="60 251.2" stroke-dashoffset="-98" stroke-width="8" class="transition-all duration-500"/>
+          <circle id="donut-stab" cx="50" cy="50" fill="transparent" r="40" stroke="#374767" stroke-dasharray="93 251.2" stroke-dashoffset="-158" stroke-width="8" class="transition-all duration-500"/>
+        </svg>
+        <div class="absolute flex flex-col items-center">
+          <span id="donut-center" class="display text-2xl font-bold">15.1K</span>
+          <span class="mono text-xs text-on-surface-variant">Total</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 mt-4">
+        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-error flex-shrink-0"></span><span class="mono text-xs">Aggravation <span id="leg-agg">(39%)</span></span></div>
+        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-primary-container flex-shrink-0"></span><span class="mono text-xs">Amélioration <span id="leg-amel">(24%)</span></span></div>
+        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-secondary-container flex-shrink-0"></span><span class="mono text-xs">Stable <span id="leg-stab">(37%)</span></span></div>
+      </div>
+    </div>
 
-    function normalizeLevel(v, scoreFallback) {
-      const raw = String(v ?? "").toLowerCase();
+    <!-- Line Charts -->
+    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
 
-      if (raw.includes("crit")) return "Critique";
-      if (raw.includes("high") || raw.includes("warning") || raw.includes("warn") || raw.includes("élev") || raw.includes("elev")) return "Élevé";
-      if (raw.includes("moy") || raw.includes("medium") || raw.includes("med")) return "Moyen";
-      if (raw.includes("low") || raw.includes("faible") || raw.includes("faib") || raw.includes("stable") || raw.includes("stab")) return "Faible";
-
-      if (scoreFallback !== undefined) return levelFromScore(scoreFallback);
-      return "--";
-    }
-
-    function currentLevelOf(r) {
-      const raw = get(r, [
-        "niveau_actuel",
-        "current_level",
-        "alert_level_current",
-        "current_alert_level",
-        "niveau_risque_actuel",
-        "risk_band",
-        "risk_band_en",
-        "alert_level",
-        "risk_level",
-        "level"
-      ], "");
-
-      return normalizeLevel(raw, realScore(r));
-    }
-
-    function futureLevelOf(r) {
-      const raw = get(r, [
-        "niveau_futur_predit",
-        "future_level",
-        "predicted_level",
-        "future_alert_level",
-        "niveau_futur",
-        "prediction_level",
-        "predicted_risk_band"
-      ], "");
-
-      const fromRaw = normalizeLevel(raw);
-      if (fromRaw !== "--") return fromRaw;
-
-      const s = realScore(r);
-      if (s === 0 && String(raw).toLowerCase().includes("crit")) return "Critique";
-      return levelFromScore(s);
-    }
-
-    function severity(level) {
-      const l = normalizeLevel(level).toLowerCase();
-      if (l.includes("crit")) return 4;
-      if (l.includes("élev") || l.includes("elev")) return 3;
-      if (l.includes("moy")) return 2;
-      if (l.includes("faible")) return 1;
-      return 0;
-    }
-
-    function evolutionOf(r) {
-      const explicit = String(get(r, ["evolution_prevue", "evolution", "transition", "status_change"], "") || "").trim();
-      if (explicit && !["n/a", "na", "--"].includes(explicit.toLowerCase())) return explicit;
-
-      const curRaw = String(get(r, ["niveau_actuel", "current_level", "alert_level_current", "current_alert_level"], "") || "").toLowerCase();
-      if (!curRaw || curRaw === "n/a" || curRaw === "na") return "Nouveau client";
-
-      const nbrjTrend = n(r.nbrjdep_trend ?? r.NBRJDEP_TREND ?? r.nbrjdep_lag1 ?? 0);
-      const riskTrend = n(r.risk_brut_trend ?? r.RISK_BRUT_TREND ?? r.risk_brut_lag1 ?? 0);
-      const score = realScore(r);
-
-      if (nbrjTrend > 10 || riskTrend > 50000 || (score >= 85 && nbrjTrend > 0)) return "Aggravation forte";
-      if (nbrjTrend > 3 || riskTrend > 10000) return "Aggravation modérée";
-      if (nbrjTrend < -5 && score < 70) return "Amélioration";
-
-      const a = severity(currentLevelOf(r));
-      const f = severity(futureLevelOf(r));
-      if (f > a) return "Aggravation forte";
-      if (f < a) return "Amélioration";
-
-      if (currentLevelOf(r) === "Critique") return "Stable critique";
-      if (currentLevelOf(r) === "Élevé") return "Surveillance élevée";
-      return "Stable";
-    }
-
-    async function fetchJson(url) {
-      const res = await fetch(url + (url.includes("?") ? "&" : "?") + "nocache=" + Date.now(), { cache: "no-store" });
-      if (!res.ok) throw new Error(url + " -> HTTP " + res.status);
-      return await res.json();
-    }
-
-    async function loadFirstAvailable() {
-      const sources = [
-        "/api/future-predictions",
-        "/attached_assets/future_predictions.json",
-        "/attached_assets/top_risky_clients.json",
-        "/attached_assets/dashboard_clients_full.json",
-        "/attached_assets/client_profiles.json"
-      ];
-
-      let lastErr = null;
-
-      for (const src of sources) {
-        try {
-          const data = await fetchJson(src);
-          const rows = rowsOf(data);
-          const summary = data.summary || data.meta || {};
-          if (rows.length > 0 || Object.keys(summary).length > 0) {
-            console.log("Risk Evolution source:", src, { rows: rows.length, summary });
-            return { data, rows, summary, source: src };
-          }
-        } catch (err) {
-          lastErr = err;
-          console.warn("Source failed:", src, err.message);
-        }
-      }
-
-      throw lastErr || new Error("Aucune source de données disponible");
-    }
-
-    function summaryNumber(summary, keys, fallback = 0) {
-      for (const k of keys) {
-        if (summary && summary[k] !== undefined && summary[k] !== null && summary[k] !== "") return n(summary[k]);
-      }
-      return n(fallback);
-    }
-
-    function renderMiniBars(id, values, color) {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      const max = Math.max(...values.map(n), 1);
-      el.innerHTML = values.map((v, i) => {
-        const h = Math.max(14, n(v) / max * 140);
-        return `
-          <div class="flex-1 flex flex-col items-center justify-end gap-2">
-            <div class="bar w-full" style="height:${h}px;background:${color};border-radius:4px 4px 0 0"></div>
-            <div class="mono text-[10px] text-[#9aa8c7]">W${i + 1}</div>
+      <!-- Critical Trend -->
+      <div class="glass-card p-5 rounded-2xl">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <p class="mono text-xs text-on-surface-variant uppercase tracking-wider">Critical Clients Trend</p>
+            <span class="text-error mono text-sm font-bold">+18%</span>
           </div>
-        `;
-      }).join("");
-    }
+          <div class="w-8 h-8 rounded-lg bg-error/10 text-error flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">show_chart</span>
+          </div>
+        </div>
+        <div class="h-36 relative" id="chart-crit-wrap">
+          <div class="chart-tooltip" id="tt-crit" style="opacity:0"></div>
+          <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 200 100">
+            <defs>
+              <linearGradient id="ge" x1="0%" x2="0%" y1="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ff4d6d;stop-opacity:.25"/>
+                <stop offset="100%" style="stop-color:#ff4d6d;stop-opacity:0"/>
+              </linearGradient>
+            </defs>
+            <path class="chart-glow" d="M0,80 Q25,70 50,75 T100,40 T150,55 T200,20" fill="none" stroke="#ff4d6d" stroke-width="2.5"/>
+            <path d="M0,80 Q25,70 50,75 T100,40 T150,55 T200,20 L200,100 L0,100 Z" fill="url(#ge)"/>
+            <circle class="hover-dot" cx="0"   cy="80" r="4" fill="#ff4d6d" opacity="0" data-label="WK 01" data-val="32"/>
+            <circle class="hover-dot" cx="66"  cy="55" r="4" fill="#ff4d6d" opacity="0" data-label="WK 02" data-val="41"/>
+            <circle class="hover-dot" cx="133" cy="40" r="4" fill="#ff4d6d" opacity="0" data-label="WK 03" data-val="55"/>
+            <circle class="hover-dot" cx="200" cy="20" r="4" fill="#ff4d6d" opacity="0" data-label="WK 04" data-val="68"/>
+          </svg>
+        </div>
+        <div class="flex justify-between mt-2 mono text-[10px] text-on-surface-variant">
+          <span>WK 01</span><span>WK 02</span><span>WK 03</span><span>WK 04</span>
+        </div>
+      </div>
 
-    function showModal(title, text) {
-      const overlay = document.getElementById("biatModalOverlay");
-      const titleEl = document.getElementById("biatModalTitle");
-      const textEl = document.getElementById("biatModalText");
-      if (!overlay || !titleEl || !textEl) return alert(title + "\n\n" + text);
-      titleEl.innerText = title;
-      textEl.innerText = text;
-      overlay.style.display = "flex";
-    }
+      <!-- Score Trend -->
+      <div class="glass-card p-5 rounded-2xl">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <p class="mono text-xs text-on-surface-variant uppercase tracking-wider">Avg Risk Score Trend</p>
+            <span class="text-primary-container mono text-sm font-bold">-4.2%</span>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-primary-container/10 text-primary-container flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">analytics</span>
+          </div>
+        </div>
+        <div class="h-36 relative" id="chart-score-wrap">
+          <div class="chart-tooltip" id="tt-score" style="opacity:0"></div>
+          <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 200 100">
+            <defs>
+              <linearGradient id="gp" x1="0%" x2="0%" y1="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#00e8ff;stop-opacity:.25"/>
+                <stop offset="100%" style="stop-color:#00e8ff;stop-opacity:0"/>
+              </linearGradient>
+            </defs>
+            <path class="chart-glow" d="M0,20 Q40,30 80,45 T120,60 T160,50 T200,70" fill="none" stroke="#00e8ff" stroke-width="2.5"/>
+            <path d="M0,20 Q40,30 80,45 T120,60 T160,50 T200,70 L200,100 L0,100 Z" fill="url(#gp)"/>
+            <circle class="hover-dot-s" cx="0"   cy="20" r="4" fill="#00e8ff" opacity="0" data-label="MON" data-val="72%"/>
+            <circle class="hover-dot-s" cx="66"  cy="40" r="4" fill="#00e8ff" opacity="0" data-label="WED" data-val="65%"/>
+            <circle class="hover-dot-s" cx="133" cy="55" r="4" fill="#00e8ff" opacity="0" data-label="FRI" data-val="58%"/>
+            <circle class="hover-dot-s" cx="200" cy="70" r="4" fill="#00e8ff" opacity="0" data-label="SUN" data-val="52%"/>
+          </svg>
+        </div>
+        <div class="flex justify-between mt-2 mono text-[10px] text-on-surface-variant">
+          <span>MON</span><span>WED</span><span>FRI</span><span>SUN</span>
+        </div>
+      </div>
 
-    function csvExport(rows) {
-      const header = ["CPTE", "Niveau actuel", "Niveau futur", "Score futur", "Évolution", "Action"];
-      const lines = rows.map(r => [
-        cpteOf(r),
-        currentLevelOf(r),
-        futureLevelOf(r),
-        realScore(r).toFixed(1) + "%",
-        evolutionOf(r),
-        String(get(r, ["recommended_action", "action"], "Revue du dossier"))
-      ].map(x => `"${String(x).replaceAll('"', '""')}"`).join(","));
+      <!-- AI Insight — same style as Dashboard -->
+      <div class="md:col-span-2 glass-card p-5 rounded-2xl flex flex-col md:flex-row gap-4 bg-gradient-to-br from-primary-container/8 to-transparent">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-7 h-7 rounded-lg bg-primary-container/15 text-primary-container flex items-center justify-center">
+              <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+            </div>
+            <h4 class="mono text-xs text-primary font-bold uppercase tracking-wider">AI Risk Intelligence Insight</h4>
+          </div>
+          <p id="aiInsightText" class="text-sm text-on-surface-variant leading-relaxed">
+            The 12.4% increase in <span class="text-error font-bold">Aggravation</span> is primarily driven by sector-specific volatility in Manufacturing. Recommended: Review all Tier 1 exposures in the Tunis hub.
+          </p>
+          <button id="deepDiveBtn"
+            class="mt-3 px-4 py-2 border border-primary-container/40 text-primary-container rounded-lg mono text-xs font-bold hover:bg-primary-container/10 transition-all">
+            Generate Deep-Dive Report
+          </button>
+        </div>
+        <div class="md:w-40 flex flex-col justify-center items-center border-l border-outline-variant/50 pl-4">
+          <span class="mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">Confidence</span>
+          <div class="w-20 h-20 relative">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" fill="none" r="16" stroke="#1f2942" stroke-width="3"/>
+              <circle class="chart-glow" cx="18" cy="18" fill="none" r="16" stroke="#00e8ff"
+                      stroke-dasharray="94,100" stroke-width="3"/>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center display font-bold text-lg text-primary">94%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      const blob = new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "risk_evolution_export.csv";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+  <!-- Risk Transition Log Table -->
+  <div class="glass-card rounded-2xl overflow-hidden mb-6">
+    <div class="px-5 py-4 flex items-center justify-between border-b border-outline-variant">
+      <div>
+        <h3 class="display text-2xl font-bold">Risk Transition Log</h3>
+        <p class="mono text-xs text-on-surface-variant mt-0.5">Transitions détectées — cliquez pour voir les détails</p>
+      </div>
+      <div class="flex gap-2 items-center">
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[16px]">search</span>
+          <input id="tableSearch" type="text" placeholder="ID, segment, statut..."
+            class="bg-surface-container border border-outline-variant rounded-xl pl-9 pr-4 py-2 mono text-xs text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary-container outline-none w-56"/>
+        </div>
+        <button class="p-2 hover:bg-surface-variant/40 rounded-lg text-on-surface-variant transition-colors">
+          <span class="material-symbols-outlined text-[18px]">tune</span>
+        </button>
+      </div>
+    </div>
 
-    async function loadEvolution() {
-      const { rows, summary, source } = await loadFirstAvailable();
-      const distribution = summary.expected_evolution_distribution || summary.evolution_distribution || {};
-
-      let computedNew = 0;
-      let computedStable = 0;
-      let computedAggr = 0;
-      let computedImprove = 0;
-
-      rows.forEach(r => {
-        const evo = evolutionOf(r).toLowerCase();
-        if (evo.includes("nouveau") || evo.includes("new")) computedNew++;
-        else if (evo.includes("améli") || evo.includes("ameli") || evo.includes("improv")) computedImprove++;
-        else if (evo.includes("aggrav") || severity(futureLevelOf(r)) > severity(currentLevelOf(r))) computedAggr++;
-        else computedStable++;
-      });
-
-      const total =
-        summaryNumber(summary, ["total_clients", "clients_analyzed", "total"], 0) ||
-        rows.length ||
-        19316;
-
-      const criticalFuture =
-        summaryNumber(summary, ["critical_future_clients", "predicted_critical", "future_critical"], 0) ||
-        rows.filter(r => futureLevelOf(r) === "Critique").length ||
-        4847;
-
-      const aggravation =
-        summaryNumber(summary, ["aggravation_clients"], 0) ||
-        n(distribution["Aggravation"]) ||
-        n(distribution["Aggravation forte"]) ||
-        computedAggr ||
-        472;
-
-      const improvement =
-        n(distribution["Amélioration"]) ||
-        n(distribution["Improvement"]) ||
-        summaryNumber(summary, ["improvement_clients"], 0) ||
-        computedImprove ||
-        40;
-
-      const stable =
-        n(distribution["Stable"]) ||
-        summaryNumber(summary, ["stable_clients"], 0) ||
-        computedStable ||
-        11915;
-
-      const newClients =
-        n(distribution["Nouveau client"]) ||
-        n(distribution["New clients"]) ||
-        summaryNumber(summary, ["new_clients"], 0) ||
-        computedNew ||
-        6889;
-
-      let avgFutureScore = rows.length ? rows.reduce((s, r) => s + realScore(r), 0) / rows.length : 36.2;
-      if (!Number.isFinite(avgFutureScore) || avgFutureScore <= 0) avgFutureScore = 36.2;
-
-      document.getElementById("kpiAggravation").innerText = fmt(aggravation);
-      document.getElementById("kpiImprovement").innerText = fmt(improvement);
-      document.getElementById("kpiStable").innerText = fmt(stable);
-      document.getElementById("kpiNew").innerText = fmt(newClients);
-      document.getElementById("donutTotal").innerText = fmt(total);
-      document.getElementById("avgScoreBadge").innerText = avgFutureScore.toFixed(1) + "%";
-
-      const notifBadge = document.getElementById("notifBadge");
-      if (notifBadge) notifBadge.innerText = fmt(criticalFuture);
-
-      document.getElementById("barAggravation").style.width = Math.min(100, aggravation / total * 100 * 5) + "%";
-      document.getElementById("barImprovement").style.width = Math.min(100, improvement / total * 100 * 20) + "%";
-      document.getElementById("barStable").style.width = Math.min(100, stable / total * 100) + "%";
-      document.getElementById("barNew").style.width = Math.min(100, newClients / total * 100) + "%";
-
-      document.getElementById("subtitle").innerText =
-        `${fmt(total)} clients analysés — ${fmt(criticalFuture)} prédits critiques — ${fmt(aggravation)} en aggravation.`;
-
-      const degAggr = total ? aggravation / total * 360 : 0;
-      const degImprove = total ? improvement / total * 360 : 0;
-      const degNew = total ? newClients / total * 360 : 0;
-      const degStable = total ? stable / total * 360 : 0;
-
-      document.getElementById("donut").style.background =
-        `conic-gradient(
-          #ffb4ab 0deg ${degAggr}deg,
-          #5ffbd6 ${degAggr}deg ${degAggr + degImprove}deg,
-          #fbe273 ${degAggr + degImprove}deg ${degAggr + degImprove + degNew}deg,
-          #d9e2ff ${degAggr + degImprove + degNew}deg ${degAggr + degImprove + degNew + degStable}deg,
-          #263452 0deg
-        )`;
-
-      document.getElementById("legend").innerHTML = `
-        <div style="font-size:13px"><span style="color:#ffb4ab">●</span> Aggravation (${fmt(aggravation)})</div>
-        <div style="font-size:13px"><span style="color:#5ffbd6">●</span> Amélioration (${fmt(improvement)})</div>
-        <div style="font-size:13px"><span style="color:#d9e2ff">●</span> Stable (${fmt(stable)})</div>
-        <div style="font-size:13px"><span style="color:#fbe273">●</span> Nouveaux (${fmt(newClients)})</div>
-      `;
-
-      renderMiniBars("criticalTrend", [criticalFuture * .72, criticalFuture * .80, criticalFuture * .88, criticalFuture], "#ffb4ab");
-      renderMiniBars("scoreTrend", [avgFutureScore + 1.4, avgFutureScore, avgFutureScore - 1.1, avgFutureScore + .6], "#5ffbd6");
-
-      document.getElementById("insight").innerHTML =
-        `Le portefeuille contient <b>${fmt(total)}</b> clients analysés. ` +
-        `<b>${fmt(criticalFuture)}</b> clients sont prédits critiques à horizon 30 jours. ` +
-        `<b>${fmt(aggravation)}</b> clients montrent une aggravation prévue, ` +
-        `<b>${fmt(improvement)}</b> clients s'améliorent et <b>${fmt(newClients)}</b> sont nouveaux. ` +
-        `Score moyen estimé : <b>${avgFutureScore.toFixed(1)}%</b>. ` +
-        `Priorité opérationnelle : traiter les clients en aggravation avant leur passage effectif en statut critique.`;
-
-      let tableRows = [...rows]
-        .filter(r => {
-          const evo = evolutionOf(r).toLowerCase();
-          return evo.includes("aggrav") || futureLevelOf(r) === "Critique" || evo.includes("nouveau") || realScore(r) >= 65;
-        })
-        .sort((a, b) => realScore(b) - realScore(a))
-        .slice(0, 40);
-
-      if (!tableRows.length && rows.length) {
-        tableRows = [...rows].sort((a, b) => realScore(b) - realScore(a)).slice(0, 40);
-      }
-
-      document.getElementById("tableBody").innerHTML = tableRows.map(r => {
-        const score = realScore(r);
-        const cur = currentLevelOf(r);
-        const futur = futureLevelOf(r);
-        const evo = evolutionOf(r);
-        const cpte = cpteOf(r);
-
-        const scoreColor = score >= 85 ? "#ffb4ab" : score >= 65 ? "#fbe273" : score >= 40 ? "#5ffbd6" : "#d9e2ff";
-        const futureColor = futur === "Critique" ? "#ffb4ab" : futur === "Élevé" ? "#fbe273" : futur === "Moyen" ? "#5ffbd6" : "#d9e2ff";
-        const evoColor = evo.toLowerCase().includes("aggrav") ? "#ffb4ab" : evo.toLowerCase().includes("améli") || evo.toLowerCase().includes("ameli") ? "#5ffbd6" : "#d9e2ff";
-
-        return `
-          <tr class="hover:bg-[#1f2942]">
-            <td class="px-4 py-3 mono font-bold">${cpte}</td>
-            <td class="px-4 py-3">${cur}</td>
-            <td class="px-4 py-3 font-bold" style="color:${futureColor}">${futur}</td>
-            <td class="px-4 py-3" style="color:${evoColor}">${evo}</td>
-            <td class="px-4 py-3 mono font-bold" style="color:${scoreColor}">${score.toFixed(1)}%</td>
-            <td class="px-4 py-3">
-              <button onclick="window.location.href='/client?cpte=${encodeURIComponent(cpte)}'"
-                style="color:#5ffbd6;font-family:'JetBrains Mono',monospace;font-weight:800;background:none;border:none;cursor:pointer">
-                Open
-              </button>
-            </td>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-surface-container-high/50">
+          <tr>
+            <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Client ID</th>
+            <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Transition</th>
+            <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Type</th>
+            <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant">Statut</th>
+            <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant text-right">Score %</th>
+            <th class="px-4 py-4 mono text-xs uppercase text-on-surface-variant text-center">Détail</th>
           </tr>
-        `;
-      }).join("") || `<tr><td colspan="6" class="px-4 py-5 text-[#9aa8c7]">Aucun client trouvé.</td></tr>`;
+        </thead>
+        <tbody id="transitionBody" class="divide-y divide-outline-variant/30"></tbody>
+      </table>
+      <div id="tableEmpty" class="hidden py-10 text-center mono text-sm text-on-surface-variant">
+        Aucun résultat pour cette recherche.
+      </div>
+    </div>
 
-      document.getElementById("exportBtn").onclick = () => csvExport(tableRows);
+    <div class="px-5 py-4 flex justify-between items-center border-t border-outline-variant bg-surface-container-high/20">
+      <span id="tableInfo" class="mono text-xs text-on-surface-variant">—</span>
+      <div class="flex gap-2 items-center">
+        <button id="prevPage" class="px-3 py-1.5 border border-outline-variant rounded-lg mono text-xs hover:bg-surface-variant/30 disabled:opacity-40 transition-colors" disabled>← Prev</button>
+        <span id="pageInfo" class="mono text-xs text-on-surface-variant px-2"></span>
+        <button id="nextPage" class="px-3 py-1.5 border border-outline-variant rounded-lg mono text-xs hover:bg-surface-variant/30 disabled:opacity-40 transition-colors">Next →</button>
+      </div>
+    </div>
+  </div>
 
-      const emergencyBtn = document.getElementById("emergencyBtn");
-      if (emergencyBtn) {
-        emergencyBtn.onclick = () => {
-          showModal(
-            "Emergency Risk Report",
-            `${fmt(criticalFuture)} clients sont prédits critiques.\n${fmt(aggravation)} clients montrent une aggravation prévue.\nScore moyen : ${avgFutureScore.toFixed(1)}%.\n\nPriorité : ${tableRows.slice(0, 5).map(r => cpteOf(r)).join(", ")}.`
-          );
-        };
-      }
+</main>
 
-      console.log("Risk Evolution OK", {
-        source,
-        rows: rows.length,
-        total,
-        criticalFuture,
-        aggravation,
-        improvement,
-        stable,
-        newClients,
-        avgFutureScore: avgFutureScore.toFixed(1)
-      });
-    }
+<!-- FAB -->
+<div class="fixed bottom-6 right-6 z-50">
+  <button id="emergencyFAB"
+    class="flex items-center gap-2 text-white px-6 py-4 rounded-full shadow-2xl mono text-sm font-bold active:scale-95 transition-all">
+    <span class="material-symbols-outlined">bolt</span>
+    <span class="hidden md:inline">Generate Emergency Risk Report</span>
+  </button>
+</div>
 
-    const closeBtn = document.getElementById("biatModalClose");
-    if (closeBtn) {
-      closeBtn.onclick = function () {
-        document.getElementById("biatModalOverlay").style.display = "none";
-      };
-    }
+<!-- Detail Modal -->
+<div id="detailModal" class="modal">
+  <div class="w-full max-w-xl glass-card rounded-2xl p-6 shadow-2xl mx-4">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p class="mono text-xs text-primary-container uppercase tracking-widest">Risk Transition Details</p>
+        <h3 id="dm-client" class="display text-2xl font-bold text-primary mt-1"></h3>
+      </div>
+      <button data-close="detailModal" class="text-on-surface-variant hover:text-primary w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Segment</p><p id="dm-segment" class="font-semibold mt-1 text-sm"></p></div>
+      <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Transition</p><p id="dm-transition" class="font-semibold mt-1 text-sm"></p></div>
+      <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Statut</p><p id="dm-status" class="font-semibold mt-1 text-sm"></p></div>
+      <div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant">Score</p><p id="dm-score" class="font-semibold mt-1 text-sm"></p></div>
+    </div>
+    <div class="mt-3 bg-surface-container-low rounded-xl p-4">
+      <p class="mono text-xs text-on-surface-variant uppercase">Explication</p>
+      <p id="dm-reason" class="mt-2 text-sm leading-relaxed"></p>
+    </div>
+    <div class="mt-3 bg-surface-container-low rounded-xl p-4">
+      <p class="mono text-xs text-on-surface-variant uppercase">Action recommandée</p>
+      <p id="dm-action" class="mt-2 text-sm leading-relaxed"></p>
+    </div>
+    <div class="mt-5 flex justify-end gap-3">
+      <button onclick="window.location.href='/notifications'" class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-lg mono text-xs font-bold">Notifications</button>
+      <button data-close="detailModal" class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg mono text-xs font-bold">Fermer</button>
+    </div>
+  </div>
+</div>
 
-    loadEvolution().catch(err => {
-      console.error("Risk Evolution load error:", err);
+<!-- Deep-Dive Modal -->
+<div id="deepDiveModal" class="modal">
+  <div class="w-full max-w-2xl glass-card rounded-2xl p-6 shadow-2xl mx-4">
+    <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary-container/15 text-primary-container flex items-center justify-center">
+          <span class="material-symbols-outlined">analytics</span>
+        </div>
+        <div>
+          <p class="mono text-xs text-primary-container uppercase tracking-widest">Analyse approfondie</p>
+          <h3 class="display text-xl font-bold text-primary mt-0.5">Deep-Dive Risk Report</h3>
+        </div>
+      </div>
+      <button data-close="deepDiveModal" class="text-on-surface-variant hover:text-primary w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div id="deepDiveContent" class="space-y-3"></div>
+    <div class="mt-5 flex justify-between">
+      <button id="exportDeepBtn" class="flex items-center gap-2 border border-outline-variant text-on-surface px-4 py-2 rounded-lg mono text-xs font-bold hover:bg-surface-variant/30">
+        <span class="material-symbols-outlined text-[16px]">download</span>Export CSV
+      </button>
+      <button data-close="deepDiveModal" class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg mono text-xs font-bold">Fermer</button>
+    </div>
+  </div>
+</div>
 
-      document.getElementById("subtitle").innerText =
-        "Erreur : impossible de charger les données d'évolution. Vérifie /api/future-predictions ou attached_assets/future_predictions.json.";
+<!-- Emergency Modal -->
+<div id="emergencyModal" class="modal">
+  <div class="w-full max-w-2xl glass-card border-error/30 rounded-2xl p-6 shadow-2xl mx-4">
+    <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-error/15 flex items-center justify-center"><span class="material-symbols-outlined text-error">bolt</span></div>
+        <div>
+          <p class="mono text-xs text-error uppercase tracking-widest">Urgence</p>
+          <h3 class="display text-xl font-bold text-primary mt-0.5">Emergency Risk Report</h3>
+        </div>
+      </div>
+      <button data-close="emergencyModal" class="text-on-surface-variant hover:text-primary w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="grid grid-cols-3 gap-3 mb-5">
+      <div class="bg-error/8 border border-error/20 rounded-xl p-3 text-center"><p class="mono text-xs text-error uppercase">Critiques</p><p class="display text-2xl font-bold text-error mt-1">45</p></div>
+      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-3 text-center"><p class="mono text-xs text-on-surface-variant uppercase">Aggravation</p><p class="display text-2xl font-bold mt-1">1,429</p></div>
+      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-3 text-center"><p class="mono text-xs text-on-surface-variant uppercase">Exposition</p><p class="display text-2xl font-bold mt-1">4.2M TND</p></div>
+    </div>
+    <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+      <div class="bg-surface-container-low rounded-xl p-3 border-l-4 border-error flex justify-between"><span class="mono text-xs font-bold">CPTE-000398 — GLOBAL SERVICES TUNIS</span><span class="text-error mono text-xs font-bold">96.5%</span></div>
+      <div class="bg-surface-container-low rounded-xl p-3 border-l-4 border-error flex justify-between"><span class="mono text-xs font-bold">CPTE-902342 — SOCIÉTÉ AL-AZIZA IND.</span><span class="text-error mono text-xs font-bold">94.2%</span></div>
+      <div class="bg-surface-container-low rounded-xl p-3 border-l-4 border-error flex justify-between"><span class="mono text-xs font-bold">CPTE-002577 — COMMERCE RETAIL 25</span><span class="text-error mono text-xs font-bold">91.4%</span></div>
+      <div class="bg-surface-container-low rounded-xl p-3 border-l-4 border-tertiary flex justify-between"><span class="mono text-xs font-bold">CPTE-455219 — BEN SALEM MOURAD</span><span class="text-tertiary mono text-xs font-bold">89.5%</span></div>
+    </div>
+    <div class="mt-4 bg-primary-container/8 border border-primary-container/20 rounded-xl p-4">
+      <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-primary-container text-[16px]">auto_awesome</span><p class="mono text-xs text-primary-container uppercase">Recommandation IA</p></div>
+      <p class="text-sm text-on-surface-variant">Prioriser les 4 clients dont l'exposition dépasse 850K TND. Action coordonnée dans les 24h conseillée.</p>
+    </div>
+    <div class="mt-5 flex justify-between">
+      <button id="exportEmergencyBtn" class="flex items-center gap-2 border border-outline-variant text-on-surface px-4 py-2 rounded-lg mono text-xs font-bold hover:bg-surface-variant/30">
+        <span class="material-symbols-outlined text-[16px]">download</span>Export CSV
+      </button>
+      <div class="flex gap-3">
+        <button onclick="window.location.href='/notifications'" class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-lg mono text-xs font-bold">Voir alertes</button>
+        <button data-close="emergencyModal" class="bg-error text-on-error px-4 py-2 rounded-lg mono text-xs font-bold">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-      document.getElementById("tableBody").innerHTML =
-        `<tr><td colspan="6" class="px-4 py-5 text-[#ffb4ab]">
-          Erreur de chargement : ${String(err.message || err)}
-        </td></tr>`;
+<!-- Settings/Support Modal -->
+<div id="sideModal" class="modal">
+  <div class="w-full max-w-lg glass-card rounded-2xl p-6 shadow-2xl mx-4">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p id="sm-cat" class="mono text-xs text-primary-container uppercase tracking-widest"></p>
+        <h3 id="sm-title" class="display text-2xl font-bold text-primary mt-1"></h3>
+      </div>
+      <button data-close="sideModal" class="text-on-surface-variant hover:text-primary w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-variant/40">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div id="sm-body" class="space-y-3"></div>
+    <div class="mt-5 flex justify-end">
+      <button data-close="sideModal" class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg mono text-xs font-bold">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ── Data ─────────────────────────────────────────────
+  const TRANSITIONS = [
+    {id:"BIAT-CORP-4921",init:"BC",segment:"Corporate Banking",from:"LEVEL 2",to:"LEVEL 4",toClass:"bg-error/15 text-error border border-error/30",arrowCls:"text-error",type:"Automated Alert",status:"Aggravation",sCls:"bg-error/10 text-error border-error/20",dotCls:"bg-error animate-pulse",score:84.5,scoreCls:"text-error",reason:"Hausse rapide du score de risque avec forte exposition sectorielle.",action:"Revue immédiate du dossier et priorisation suivi risque."},
+    {id:"SOL-IND-7728",  init:"SI",segment:"Industrial Solutions",from:"LEVEL 3",to:"LEVEL 1",toClass:"bg-primary-container/15 text-primary-container border border-primary-container/30",arrowCls:"text-primary-container",type:"Review Approved",status:"Amélioration",sCls:"bg-primary-container/10 text-primary-container border-primary-container/20",dotCls:"bg-primary-container",score:12.2,scoreCls:"text-primary-container",reason:"Réduction des jours en dépassement et amélioration du comportement de paiement.",action:"Maintenir une surveillance légère."},
+    {id:"NEO-TECH-1044", init:"NT",segment:"Fintech Services",from:"LEVEL 2",to:"LEVEL 2",toClass:"bg-surface-container-highest text-on-surface",arrowCls:"text-on-surface-variant",type:"Periodical Check",status:"Stable",sCls:"bg-secondary-container/20 text-on-secondary-container border-outline-variant",dotCls:"bg-on-secondary-container",score:34.0,scoreCls:"text-on-surface-variant",reason:"Aucune variation significative du risque détectée.",action:"Contrôle périodique recommandé."},
+    {id:"TUNIS-RET-2210",init:"TR",segment:"Retail Banking",from:"LEVEL 1",to:"LEVEL 3",toClass:"bg-error/15 text-error border border-error/30",arrowCls:"text-error",type:"Score Alert",status:"Aggravation",sCls:"bg-error/10 text-error border-error/20",dotCls:"bg-error animate-pulse",score:71.3,scoreCls:"text-error",reason:"Accumulation de retards de paiement sur 3 mois consécutifs.",action:"Appel préventif et surveillance renforcée."},
+    {id:"SFAX-PRO-0881", init:"SP",segment:"SME Banking",from:"LEVEL 2",to:"LEVEL 1",toClass:"bg-primary-container/15 text-primary-container border border-primary-container/30",arrowCls:"text-primary-container",type:"Review Approved",status:"Amélioration",sCls:"bg-primary-container/10 text-primary-container border-primary-container/20",dotCls:"bg-primary-container",score:18.7,scoreCls:"text-primary-container",reason:"Remboursement anticipé et amélioration du ratio d'endettement.",action:"Classer en surveillance standard."},
+    {id:"MEDINA-ENT-550", init:"ME",segment:"Corporate Banking",from:"LEVEL 3",to:"LEVEL 3",toClass:"bg-surface-container-highest text-on-surface",arrowCls:"text-on-surface-variant",type:"Periodical Check",status:"Stable",sCls:"bg-secondary-container/20 text-on-secondary-container border-outline-variant",dotCls:"bg-on-secondary-container",score:42.1,scoreCls:"text-on-surface-variant",reason:"Score stable, aucun signal de dégradation.",action:"Prochain contrôle dans 30 jours."},
+    {id:"BIZERTE-AG-331", init:"BA",segment:"Agri Finance",from:"LEVEL 1",to:"LEVEL 4",toClass:"bg-error/15 text-error border border-error/30",arrowCls:"text-error",type:"External Alert",status:"Aggravation",sCls:"bg-error/10 text-error border-error/20",dotCls:"bg-error animate-pulse",score:88.9,scoreCls:"text-error",reason:"Exposition liée à la sécheresse saisonnière et défaut partiel.",action:"Intervention immédiate — comité de risque agricole."},
+    {id:"SOUSSE-RET-449", init:"SR",segment:"Retail Banking",from:"LEVEL 2",to:"LEVEL 2",toClass:"bg-surface-container-highest text-on-surface",arrowCls:"text-on-surface-variant",type:"Periodical Check",status:"Stable",sCls:"bg-secondary-container/20 text-on-secondary-container border-outline-variant",dotCls:"bg-on-secondary-container",score:29.5,scoreCls:"text-on-surface-variant",reason:"Comportement stable sur les 3 derniers cycles.",action:"Surveillance mensuelle standard."},
+  ];
+
+  const state = { period:"30", category:"", page:1 };
+  const PER_PAGE = 5;
+  const CIRC = 251.2;
+
+  // ── Modal helpers ──────────────────────────────────────
+  const showModal = id => { document.getElementById(id).classList.add("open"); };
+  const hideModal = id => { document.getElementById(id).classList.remove("open"); };
+  document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => hideModal(b.dataset.close)));
+  document.querySelectorAll(".modal").forEach(m => m.addEventListener("click", e => { if(e.target===m) hideModal(m.id); }));
+
+  // ── KPIs update ────────────────────────────────────────
+  function updateKpis() {
+    const m = state.period==="7"?.45:state.period==="90"?1.4:1;
+    const agg  = Math.round(1429*m), amel=Math.round(842*m), stab=Math.round(12504*m);
+    const tot  = agg+amel+stab;
+
+    document.getElementById("kpi-agg").innerText  = agg.toLocaleString("fr-FR");
+    document.getElementById("kpi-amel").innerText = amel.toLocaleString("fr-FR");
+    document.getElementById("kpi-stab").innerText = stab.toLocaleString("fr-FR");
+    document.getElementById("kpi-agg-bar").style.width  = Math.min(90,(agg/tot*100)).toFixed(1)+"%";
+    document.getElementById("kpi-amel-bar").style.width = Math.min(90,(amel/tot*100)).toFixed(1)+"%";
+    document.getElementById("kpi-stab-bar").style.width = Math.min(90,(stab/tot*100)).toFixed(1)+"%";
+
+    const aggP = (agg/tot*100).toFixed(0), amelP = (amel/tot*100).toFixed(0), stabP = (stab/tot*100).toFixed(0);
+    document.getElementById("donut-center").innerText      = (tot/1000).toFixed(1)+"K";
+    document.getElementById("donut-total-label").innerText = (tot/1000).toFixed(1)+"K";
+    document.getElementById("leg-agg").innerText  = `(${aggP}%)`;
+    document.getElementById("leg-amel").innerText = `(${amelP}%)`;
+    document.getElementById("leg-stab").innerText = `(${stabP}%)`;
+
+    // Update donut
+    const c1=agg/tot*CIRC, c2=amel/tot*CIRC, c3=stab/tot*CIRC;
+    document.getElementById("donut-agg").setAttribute("stroke-dasharray",  `${c1.toFixed(1)} ${CIRC}`);
+    document.getElementById("donut-agg").setAttribute("stroke-dashoffset", "0");
+    document.getElementById("donut-amel").setAttribute("stroke-dasharray", `${c2.toFixed(1)} ${CIRC}`);
+    document.getElementById("donut-amel").setAttribute("stroke-dashoffset",`-${c1.toFixed(1)}`);
+    document.getElementById("donut-stab").setAttribute("stroke-dasharray", `${c3.toFixed(1)} ${CIRC}`);
+    document.getElementById("donut-stab").setAttribute("stroke-dashoffset",`-${(c1+c2).toFixed(1)}`);
+
+    // AI Insight
+    const insights = {
+      "": `The ${state.period==="90"?"quarterly":"monthly"} analysis shows <span class="text-error font-bold">Aggravation</span> at ${aggP}% of portfolio. Recommended: Review Tier 1 exposures in the Tunis hub.`,
+      "Aggravation": `<span class="text-error font-bold">${agg.toLocaleString("fr-FR")} clients</span> en Aggravation ce mois. Priorité aux dossiers avec NBRJDEP > 30 et exposition > 1M TND.`,
+      "Amélioration": `<span class="text-primary-container font-bold">${amel.toLocaleString("fr-FR")} clients</span> ont amélioré leur profil. Les programmes d'intervention précoce montrent des résultats positifs.`,
+      "Stable": `<span class="text-secondary font-bold">${stab.toLocaleString("fr-FR")} clients</span> restent stables. Surveillance standard maintenue.`,
+    };
+    document.getElementById("aiInsightText").innerHTML = insights[state.category] || insights[""];
+  }
+
+  // ── Table ──────────────────────────────────────────────
+  function filteredRows() {
+    const q = document.getElementById("tableSearch").value.toLowerCase();
+    return TRANSITIONS.filter(r =>
+      (!state.category || r.status === state.category) &&
+      (!q || r.id.toLowerCase().includes(q) || r.segment.toLowerCase().includes(q) || r.status.toLowerCase().includes(q))
+    );
+  }
+
+  function renderTable() {
+    const rows  = filteredRows();
+    const pages = Math.max(1, Math.ceil(rows.length/PER_PAGE));
+    if(state.page > pages) state.page = pages;
+    const slice = rows.slice((state.page-1)*PER_PAGE, state.page*PER_PAGE);
+    const tbody = document.getElementById("transitionBody");
+    const empty = document.getElementById("tableEmpty");
+    tbody.innerHTML = "";
+    empty.classList.toggle("hidden", slice.length > 0);
+
+    slice.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-surface-variant/10 transition-colors cursor-pointer";
+      tr.innerHTML = `
+        <td class="px-4 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center mono font-bold text-xs text-primary">${r.init}</div>
+            <div><div class="mono text-sm font-bold text-primary">${r.id}</div><div class="mono text-[10px] text-on-surface-variant">${r.segment}</div></div>
+          </div>
+        </td>
+        <td class="px-4 py-4">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-1 bg-surface-container-highest rounded mono text-[11px] font-bold text-on-surface">${r.from}</span>
+            <span class="material-symbols-outlined text-[14px] ${r.arrowCls}">arrow_forward</span>
+            <span class="px-2 py-1 rounded mono text-[11px] font-bold ${r.toClass}">${r.to}</span>
+          </div>
+        </td>
+        <td class="px-4 py-4 mono text-xs text-on-surface">${r.type}</td>
+        <td class="px-4 py-4">
+          <span class="px-3 py-1 border rounded-full mono text-[11px] font-bold flex items-center gap-1.5 w-fit ${r.sCls}">
+            <span class="w-1.5 h-1.5 rounded-full ${r.dotCls}"></span>${r.status}
+          </span>
+        </td>
+        <td class="px-4 py-4 text-right mono text-sm font-bold ${r.scoreCls}">${r.score.toFixed(1)}%</td>
+        <td class="px-4 py-4 text-center">
+          <button class="view-btn p-1.5 hover:text-primary-container transition-colors rounded-lg hover:bg-surface-variant/40" data-id="${r.id}">
+            <span class="material-symbols-outlined text-[18px]">visibility</span>
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
     });
 
-  </script>
+    document.getElementById("tableInfo").innerText =
+      `${rows.length===0?0:(state.page-1)*PER_PAGE+1}–${Math.min(state.page*PER_PAGE,rows.length)} / ${rows.length} entrées`;
+    document.getElementById("pageInfo").innerText = `${state.page} / ${pages}`;
+    document.getElementById("prevPage").disabled = state.page<=1;
+    document.getElementById("nextPage").disabled = state.page>=pages;
 
-  <script src="/attached_assets/sidebar.js"></script>
+    document.querySelectorAll(".view-btn").forEach(b =>
+      b.addEventListener("click", () => openDetail(b.dataset.id))
+    );
+  }
+
+  // ── Detail modal ───────────────────────────────────────
+  function openDetail(id) {
+    const r = TRANSITIONS.find(x => x.id===id); if(!r) return;
+    document.getElementById("dm-client").innerText    = r.id;
+    document.getElementById("dm-segment").innerText   = r.segment;
+    document.getElementById("dm-transition").innerText= `${r.from} → ${r.to}`;
+    document.getElementById("dm-status").innerText    = r.status;
+    document.getElementById("dm-score").innerText     = r.score.toFixed(1)+"%";
+    document.getElementById("dm-reason").innerText    = r.reason;
+    document.getElementById("dm-action").innerText    = r.action;
+    showModal("detailModal");
+  }
+
+  // ── Deep-Dive modal ────────────────────────────────────
+  document.getElementById("deepDiveBtn").addEventListener("click", () => {
+    const agg = TRANSITIONS.filter(r=>r.status==="Aggravation");
+    document.getElementById("deepDiveContent").innerHTML =
+      `<div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant uppercase">Période</p><p class="text-sm font-semibold mt-1">Last ${state.period} Days — ${state.category||"All Categories"}</p></div>` +
+      `<div class="grid grid-cols-3 gap-3">
+        <div class="bg-error/8 border border-error/20 rounded-xl p-3 text-center"><p class="mono text-xs text-error">Aggravation</p><p class="display text-xl font-bold text-error mt-1">${Math.round(1429*(state.period==="90"?1.4:state.period==="7"?.45:1)).toLocaleString()}</p></div>
+        <div class="bg-primary-container/8 border border-outline-variant rounded-xl p-3 text-center"><p class="mono text-xs text-on-surface-variant">Amélioration</p><p class="display text-xl font-bold mt-1">${Math.round(842*(state.period==="90"?1.4:state.period==="7"?.45:1)).toLocaleString()}</p></div>
+        <div class="bg-surface-container-low border border-outline-variant rounded-xl p-3 text-center"><p class="mono text-xs text-on-surface-variant">Stable</p><p class="display text-xl font-bold mt-1">${Math.round(12504*(state.period==="90"?1.4:state.period==="7"?.45:1)).toLocaleString()}</p></div>
+      </div>` +
+      `<div class="bg-surface-container-low rounded-xl p-4"><p class="mono text-xs text-on-surface-variant uppercase mb-3">Clients en Aggravation</p>` +
+      agg.map(r=>`<div class="flex justify-between py-2 border-b border-outline-variant/30 last:border-0"><span class="mono text-xs font-bold">${r.id}</span><span class="mono text-xs text-on-surface-variant">${r.segment}</span><span class="mono text-xs ${r.scoreCls} font-bold">${r.score}%</span></div>`).join("") +
+      `</div>`;
+    showModal("deepDiveModal");
+  });
+
+  document.getElementById("exportDeepBtn").addEventListener("click", () => {
+    exportCSV([["ID","Segment","Transition","Statut","Score"],
+      ...TRANSITIONS.filter(r=>r.status==="Aggravation").map(r=>[r.id,r.segment,r.from+"→"+r.to,r.status,r.score+"%"])
+    ], "biat_deep_dive.csv");
+  });
+
+  // ── Emergency ──────────────────────────────────────────
+  document.getElementById("emergencyFAB").addEventListener("click", () => showModal("emergencyModal"));
+  document.getElementById("exportEmergencyBtn").addEventListener("click", () => {
+    exportCSV([["CPTE","Score","Action"],
+      ["CPTE-000398","96.5%","Intervention immédiate"],
+      ["CPTE-902342","94.2%","Gel d'actifs"],
+      ["CPTE-002577","91.4%","Comité de risque"],
+      ["CPTE-455219","89.5%","Vérification AML"],
+    ], "biat_emergency.csv");
+  });
+
+  // ── Settings / Support ─────────────────────────────────
+  const card = (l,t) => `<div class="bg-surface-container-low rounded-xl p-4 border-l-2 border-primary-container/40"><p class="mono text-xs text-on-surface-variant uppercase">${l}</p><p class="text-sm mt-2 leading-relaxed">${t}</p></div>`;
+  const openSide = type => {
+    document.getElementById("sm-cat").innerText   = type==="settings"?"Configuration":"Assistance";
+    document.getElementById("sm-title").innerText = type==="settings"?"Paramètres":"Support";
+    document.getElementById("sm-body").innerHTML  = type==="settings"
+      ? card("Interface","Mode sombre professionnel activé. Thème BIAT synchronisé.")
+      + card("Seuil de risque","0.70 pour réduire les fausses alertes. 0.50 pour maximiser la détection.")
+      + card("Source","Version démo — données simulées. Version finale connectée au dataset ML.")
+      : card("Documentation","Scoring ML, anomalies Isolation Forest, LSTM temporel.")
+      + card("FAQ","Pourquoi LightGBM ? Comment lire ROC-AUC et KS ?")+
+      `<button onclick="window.location.href='/assistant'" class="w-full bg-secondary-container text-on-secondary-container px-4 py-3 rounded-xl mono text-xs font-bold">Ouvrir AI Assistant</button>`;
+    showModal("sideModal");
+  };
+  document.getElementById("btnSettings").onclick = () => openSide("settings");
+  document.getElementById("btnSupport").onclick  = () => openSide("support");
+
+  // ── Export ─────────────────────────────────────────────
+  function exportCSV(rows, filename) {
+    const csv = rows.map(r=>r.map(v=>`"${v}"`).join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+    a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+  document.getElementById("exportReportBtn").addEventListener("click", () => {
+    exportCSV([["Periode","Categorie"],
+      [state.period+" jours", state.category||"Toutes"],
+      ["ID","Segment","Statut","Score"],
+      ...filteredRows().map(r=>[r.id,r.segment,r.status,r.score+"%"])
+    ], "biat_evolution_report.csv");
+  });
+
+  // ── Tooltips ────────────────────────────────────────────
+  function attachTooltips(svgId, cls, ttId, wrapId) {
+    const svg  = document.querySelector(`#${wrapId} svg`);
+    const tt   = document.getElementById(ttId);
+    const wrap = document.getElementById(wrapId);
+    if(!svg||!tt||!wrap) return;
+    svg.querySelectorAll("."+cls).forEach(dot => {
+      dot.addEventListener("mouseenter", () => {
+        const cx = parseFloat(dot.getAttribute("cx"));
+        const cy = parseFloat(dot.getAttribute("cy"));
+        const xPx = (cx/200)*wrap.offsetWidth;
+        const yPx = (cy/100)*wrap.offsetHeight;
+        tt.innerText = `${dot.dataset.label}: ${dot.dataset.val}`;
+        tt.style.left    = Math.min(xPx-10, wrap.offsetWidth-130)+"px";
+        tt.style.top     = Math.max(0, yPx-32)+"px";
+        tt.style.opacity = "1";
+        dot.setAttribute("opacity","1");
+      });
+      dot.addEventListener("mouseleave", () => {
+        tt.style.opacity = "0";
+        dot.setAttribute("opacity","0");
+      });
+    });
+  }
+  attachTooltips("chart-crit",  "hover-dot",   "tt-crit",  "chart-crit-wrap");
+  attachTooltips("chart-score", "hover-dot-s", "tt-score", "chart-score-wrap");
+
+  // ── Events ──────────────────────────────────────────────
+  document.getElementById("periodFilter").addEventListener("change", e => {
+    state.period = e.target.value; state.page = 1; updateKpis(); renderTable();
+  });
+  document.getElementById("categoryFilter").addEventListener("change", e => {
+    state.category = e.target.value; state.page = 1; updateKpis(); renderTable();
+  });
+  document.getElementById("tableSearch").addEventListener("input", () => { state.page=1; renderTable(); });
+  document.getElementById("prevPage").addEventListener("click",   () => { state.page--; renderTable(); });
+  document.getElementById("nextPage").addEventListener("click",   () => { state.page++; renderTable(); });
+
+  // ── Init ────────────────────────────────────────────────
+  updateKpis();
+  renderTable();
+});
+</script>
 </body>
 </html>
