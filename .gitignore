@@ -1,0 +1,11 @@
+*_backup*.html
+*backup_before*
+_archive_scripts/
+*.csv
+*.xlsx
+*.pkl
+*.keras
+ml_outputs/
+biat_risk_project/outputs/
+biat_risk_project/data/
+*.png
